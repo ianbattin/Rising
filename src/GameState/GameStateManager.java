@@ -8,8 +8,8 @@ public class GameStateManager
 	private static ArrayList<GameState> gameStates;
 	private static int currentState;
 	
-	public static final int MENUSTATE = 0; //Menu
-	public static final int SPLASHSTATE = 1;
+	public static final int SPLASHSTATE = 0; //Splash screen
+	public static final int MENUSTATE = 1; //Menu
 	public static final int CONTROLSSTATE = 2; //Lists controls
 	public static final int INTROSTATE = 3; //Planes crash/background story
 	public static final int PLAYSTATE = 4; //Actually playing

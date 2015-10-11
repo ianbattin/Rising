@@ -31,14 +31,22 @@ public class SplashState extends GameState
 	public void update() 
 	{
 		
-		if(GamePanel.getTotalTime() < 3 * 1000000) { bg.update(); }
+		if(GamePanel.getTotalTime() < 3 * 1000000) 
+		{
+			bg.update(); 
+		}
 		else
 			gsm.setState(gsm.MENUSTATE);
 	}
 
 	public void draw(Graphics2D g) 
 	{
-		bg.draw(g);
+		if(GamePanel.getTotalTime() < 3 * 1000000) 
+		{
+			bg.draw(g); 
+		}
+		else
+			gsm.setState(gsm.MENUSTATE);
 	}
 
 	public void keyPressed(int k) 
