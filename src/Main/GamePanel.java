@@ -22,6 +22,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	//run
 	private Thread thread;
 	private boolean running = false;
+	private static long totalTime;
 	
 	private final int FPS = 60; //game will update 60 times per second
 	private double averageFPS;
@@ -71,7 +72,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 		long startTime;
 		long URDTimeMillis;
 		long waitTime;
-		long totalTime = 0;
+		totalTime = 0;
 		
 		int frameCount = 0;
 		
@@ -143,12 +144,17 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 		return averageFPS;
 	}
 	
+	public static long getTotalTime()
+	{
+		return totalTime;
+	}
+	
 	//processes key presses
 	public void keyPressed(KeyEvent key) 
 	{
 		gsm.keyPressed(key.getKeyCode());
 		
-		if(key.equals(KeyEvent.VK_F1));
+		if(key.equals(KeyEvent.VK_1));
 		{
 			if(displayFPS) displayFPS = false;
 			else displayFPS = true;

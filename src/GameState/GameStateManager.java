@@ -8,16 +8,18 @@ public class GameStateManager
 	private static ArrayList<GameState> gameStates;
 	private static int currentState;
 	
-	private static final int MENUSTATE = 0; //Menu
-	private static final int CONTROLSSTATE = 1; //Lists controls
-	private static final int INTROSTATE = 2; //Planes crash/background story
-	private static final int PLAYSTATE = 3; //Actually playing
+	public static final int MENUSTATE = 0; //Menu
+	public static final int SPLASHSTATE = 1;
+	public static final int CONTROLSSTATE = 2; //Lists controls
+	public static final int INTROSTATE = 3; //Planes crash/background story
+	public static final int PLAYSTATE = 4; //Actually playing
 
 	//Constructor, adds all the gamestates to this gamestate arraylist
 	public GameStateManager()
 	{
 		gameStates = new ArrayList<GameState>();
-		currentState = MENUSTATE;
+		currentState = SPLASHSTATE;
+		gameStates.add(new SplashState(this));
 		gameStates.add(new MenuState(this));
 		//gameStates.add(new ControlsState(this));
 		//gameStates.add(new IntroState(this));
