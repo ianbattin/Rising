@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import GameState.GameStateManager;
+
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable, KeyListener
 {
@@ -28,7 +30,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	//image
 	private BufferedImage image;
 	private Graphics2D g;
-	public Font font = new Font("Century Gothic", Font.BOLD, 15);
+	private Font font = new Font("Century Gothic", Font.BOLD, 15);
 	
 	//game state (Level 1 State, Menu State, etc.)
 	private GameStateManager gsm;
@@ -136,6 +138,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 		g2.dispose();
 	}
 
+	//processes key presses
 	public void keyPressed(KeyEvent key) 
 	{
 		gsm.keyPressed(key.getKeyCode());
