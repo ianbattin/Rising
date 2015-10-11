@@ -1,7 +1,6 @@
 package Main;
 
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -26,11 +25,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	
 	private final int FPS = 60; //game will update 60 times per second
 	private double averageFPS;
+	private boolean displayFPS = false;
 	
 	//image
 	private BufferedImage image;
 	private Graphics2D g;
-	private Font font = new Font("Century Gothic", Font.BOLD, 15);
 	
 	//game state (Level 1 State, Menu State, etc.)
 	private GameStateManager gsm;
@@ -135,13 +134,25 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	{
 		Graphics g2 = this.getGraphics();
 		g2.drawImage(image, 0 , 0, WIDTH, HEIGHT, null);
+		if(displayFPS) g2.drawString("" + (int)averageFPS, 2, 10);
 		g2.dispose();
 	}
 
+	public double averageFPS()
+	{
+		return averageFPS;
+	}
+	
 	//processes key presses
 	public void keyPressed(KeyEvent key) 
 	{
 		gsm.keyPressed(key.getKeyCode());
+		
+		if(key.equals(KeyEvent.VK_F1));
+		{
+			if(displayFPS) displayFPS = false;
+			else displayFPS = true;
+		}
 	}
 
 	public void keyReleased(KeyEvent key) 

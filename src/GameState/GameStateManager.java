@@ -35,7 +35,7 @@ public class GameStateManager
 		gameStates.get(currentState).update();
 	}
 	
-	public void draw(java.awt.Graphics2D g)
+	public void draw(Graphics2D g)
 	{
 		gameStates.get(currentState).draw(g);
 	}
