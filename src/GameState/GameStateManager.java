@@ -21,9 +21,9 @@ public class GameStateManager
 		currentState = SPLASHSTATE;
 		gameStates.add(new SplashState(this));
 		gameStates.add(new MenuState(this));
-		//gameStates.add(new ControlsState(this));
-		//gameStates.add(new IntroState(this));
-		//gameStates.add(new PlayState(this));
+		gameStates.add(new ControlsState(this));
+		gameStates.add(new IntroState(this));
+		gameStates.add(new PlayState(this));
 	}
 	
 	public void setState(int state)
