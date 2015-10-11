@@ -23,6 +23,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	private Thread thread;
 	private boolean running = false;
 	private static long totalTime;
+	private static long elapsedTime;
 	
 	private final int FPS = 60; //game will update 60 times per second
 	private double averageFPS;
@@ -73,6 +74,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 		long URDTimeMillis;
 		long waitTime;
 		totalTime = 0;
+		elapsedTime = 0;
 		
 		int frameCount = 0;
 		
@@ -108,6 +110,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 			}
 			
 			totalTime += System.nanoTime() - startTime;
+			elapsedTime += System.nanoTime() - startTime;
 			frameCount++;
 			if(frameCount == maxFrameCount)
 			{
@@ -147,6 +150,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	public static long getTotalTime()
 	{
 		return totalTime;
+	}
+	public static long getElapsedTime()
+	{
+		return elapsedTime;
 	}
 	
 	//processes key presses
