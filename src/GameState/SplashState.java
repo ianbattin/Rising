@@ -31,7 +31,7 @@ public class SplashState extends GameState
 	public void update() 
 	{
 		
-		if(GamePanel.getTotalTime() < 3 * 1000000) 
+		if(GamePanel.getElapsedTime() < 800000000.0) 
 		{
 			bg.update(); 
 		}
@@ -41,14 +41,10 @@ public class SplashState extends GameState
 
 	public void draw(Graphics2D g) 
 	{
-		if(GamePanel.getTotalTime() < 3 * 1000000) 
-		{
-			bg.draw(g); 
-		}
-		else
-			gsm.setState(gsm.MENUSTATE);
-	}
 
+		bg.draw(g); 
+		
+	}
 	public void keyPressed(int k) 
 	{
 		
