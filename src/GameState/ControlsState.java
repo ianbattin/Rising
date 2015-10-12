@@ -79,7 +79,7 @@ public class ControlsState extends GameState {
 		//click enter to escape the controls
 		if(k == KeyEvent.VK_ENTER)
 		{
-			gsm.setState(gsm.MENUSTATE);
+			gsm.setState(GameStateManager.MENUSTATE);
 		}
 		
 	}

@@ -37,7 +37,7 @@ public class SplashState extends GameState
 			bg.update(); 
 		}
 		else
-			gsm.setState(gsm.MENUSTATE);
+			gsm.setState(GameStateManager.MENUSTATE);
 	}
 
 	public void draw(Graphics2D g) 
