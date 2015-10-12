@@ -45,7 +45,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 		requestFocus(); //does the above
 	}
 	
-	//Used to constantly run our game for frames - Runnable
+	//Ran automatically through java.awt
 	public void addNotify()
 	{
 		super.addNotify();
