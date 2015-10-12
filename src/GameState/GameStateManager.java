@@ -10,9 +10,11 @@ public class GameStateManager
 	
 	public static final int SPLASHSTATE = 0; //Splash screen
 	public static final int MENUSTATE = 1; //Menu
-	public static final int CONTROLSSTATE = 2; //Lists controls
-	public static final int INTROSTATE = 3; //Planes crash/background story
-	public static final int PLAYSTATE = 4; //Actually playing
+	public static final int CONTROLSTATE = 2; //Lists controls
+	public static final int CREDITSTATE = 3; //Show credits
+	public static final int INTROSTATE = 4; //Planes crash/background story
+	public static final int PLAYSTATE = 5; //Actually playing
+	
 
 	//Constructor, adds all the gamestates to this gamestate arraylist
 	public GameStateManager()
@@ -22,8 +24,10 @@ public class GameStateManager
 		gameStates.add(new SplashState(this));
 		gameStates.add(new MenuState(this));
 		gameStates.add(new ControlsState(this));
+		gameStates.add(new CreditState(this));
 		gameStates.add(new IntroState(this));
 		gameStates.add(new PlayState(this));
+
 	}
 	
 	public void setState(int state)

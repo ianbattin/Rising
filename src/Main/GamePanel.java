@@ -151,6 +151,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	{
 		return totalTime;
 	}
+	
 	public static long getElapsedTime()
 	{
 		return elapsedTime;

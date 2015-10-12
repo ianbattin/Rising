@@ -85,11 +85,11 @@ public class MenuState extends GameState
 		}
 		if(currentChoice == 1)
 		{
-			//gsm.setCurrentState(gsm.CONTROLSTATE);
+			gsm.setCurrentState(gsm.CONTROLSTATE);
 		}
 		if(currentChoice == 2)
 		{
-			//gsm.setCurrentState(gsm.CREDITSTATE);
+			gsm.setCurrentState(gsm.CREDITSTATE);
 		}
 		if(currentChoice == 3)
 		{

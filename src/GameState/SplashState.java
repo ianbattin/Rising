@@ -25,6 +25,7 @@ public class SplashState extends GameState
 	
 	public void init() 
 	{
+		
 	}
 
 
