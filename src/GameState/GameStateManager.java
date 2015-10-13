@@ -1,6 +1,7 @@
 package GameState;
 
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class GameStateManager 
@@ -14,6 +15,15 @@ public class GameStateManager
 	public static final int CREDITSTATE = 3; //Show credits
 	public static final int INTROSTATE = 4; //Planes crash/background story
 	public static final int PLAYSTATE = 5; //Actually playing
+	
+	
+	//these are the controls. Need to be set up here so that they are accessible gamewide.
+	//TODO: is public the right way to go? or do i need setter and getters for each?
+	public static int UP = KeyEvent.VK_W;
+	public static int DOWN = KeyEvent.VK_S;
+	public static int RIGHT = KeyEvent.VK_D;
+	public static int LEFT = KeyEvent.VK_A;
+	public static int GLIDE = KeyEvent.VK_SPACE;
 	
 
 	//Constructor, adds all the gamestates to this gamestate arraylist
