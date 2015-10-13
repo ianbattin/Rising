@@ -26,7 +26,6 @@ public class CreditState extends GameState {
 		titleFont = new Font("RussellSquare", Font.BOLD, 40);
 		optionsFont = new Font("RusselSquare", Font.PLAIN, 20);
 		subTextFont = new Font("RusselSquare", Font.PLAIN, 17);
-		
 	}
 	
 	//nothing to init
