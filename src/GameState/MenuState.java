@@ -105,7 +105,7 @@ public class MenuState extends GameState
 		}
 		
 		//If you press the up key, the selected option go up
-		if(k == GameStateManager.UP)
+		if(k == GameStateManager.up)
 		{
 			currentChoice--;
 			//Unless you reach the top in which case it loops back to the bottom
@@ -116,7 +116,7 @@ public class MenuState extends GameState
 		}
 		
 		//If you press the down key, the selected option goes down
-		if(k == GameStateManager.DOWN)
+		if(k == GameStateManager.down)
 		{
 			currentChoice++;
 			//Unless you reach the bottom in which case it loops back to the top

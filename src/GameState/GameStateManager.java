@@ -19,11 +19,11 @@ public class GameStateManager
 	
 	//these are the controls. Need to be set up here so that they are accessible gamewide.
 	//TODO: is public the right way to go? or do i need setter and getters for each?
-	public static int UP = KeyEvent.VK_W;
-	public static int DOWN = KeyEvent.VK_S;
-	public static int RIGHT = KeyEvent.VK_D;
-	public static int LEFT = KeyEvent.VK_A;
-	public static int GLIDE = KeyEvent.VK_SPACE;
+	public static int up = KeyEvent.VK_W;
+	public static int down = KeyEvent.VK_S;
+	public static int right = KeyEvent.VK_D;
+	public static int left = KeyEvent.VK_A;
+	public static int glide = KeyEvent.VK_SPACE;
 	
 
 	//Constructor, adds all the gamestates to this gamestate arraylist
@@ -37,7 +37,6 @@ public class GameStateManager
 		gameStates.add(new CreditState(this));
 		gameStates.add(new IntroState(this));
 		gameStates.add(new PlayState(this));
-
 	}
 	
 	public void setState(int state)
