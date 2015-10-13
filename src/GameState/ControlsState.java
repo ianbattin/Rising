@@ -32,7 +32,7 @@ public class ControlsState extends GameState {
 		isListeningToKey = false;
 		
 		titleColor = new Color(255, 60 ,0);
-		titleFont = new Font("RussellSquare", Font.BOLD, 50);
+		titleFont = new Font("RussellSquare", Font.BOLD, 40);
 		optionsFont = new Font("RusselSquare", Font.PLAIN, 24);
 		subTextFont = new Font("RusselSquare", Font.PLAIN, 20);
 	}
@@ -51,13 +51,12 @@ public class ControlsState extends GameState {
 	//draw the controls. Will create the way you can actually edit the controls later.
 	public void draw(Graphics2D g) {
 		// TODO Auto-generated method stub
-		
 		bg.draw(g); //draw the background
 		
 		//set the style of the title of the page
 		g.setColor(titleColor);
 		g.setFont(titleFont);
-		g.drawString("CONTROLS", GamePanel.WIDTH/4, GamePanel.HEIGHT/4);
+		g.drawString("CONTROLS", GamePanel.WIDTH/4+40, GamePanel.HEIGHT/4);
 		
 		g.setColor(Color.WHITE);
 		g.setFont(optionsFont);
@@ -111,20 +110,30 @@ public class ControlsState extends GameState {
 		}
 	}
 	
-	//when the program is listening to the next keystroke, it will run this to set the key
-	public void setKey(int k)
-	{
+	//when the program is listening to the next keystroke, it will run this to set the key. 
+	//Also ensures that you do not have a single key for multiple items
+	public void setKey(int k){
 		for (int i = 0; i < movementTypes.length; i++)
 		{
 			if (selection == i && movementKeys[i].equals(">>> Press <<<"))
 			{
-				movementKeys[i] = KeyEvent.getKeyText(k);
 				isListeningToKey = false;
+				for (int j = 0; j < movementKeys.length; j++)
+				{
+					if (KeyEvent.getKeyText(k).equals(movementKeys[j]) && selection != j)
+					{
+						selection = j;
+						movementKeys[j] = ">>> Press <<<";
+						isListeningToKey = true;
+					}
+				}
+				movementKeys[i] = KeyEvent.getKeyText(k);
 				if (i == 0) GameStateManager.up = k;
 				else if (i == 1) GameStateManager.down = k;
 				else if (i == 2) GameStateManager.right = k;
 				else if (i == 3) GameStateManager.left = k;
 				else if (i == 4) GameStateManager.glide = k;
+				break;
 			} 
 		}
 	}
@@ -136,7 +145,6 @@ public class ControlsState extends GameState {
 			if(k == KeyEvent.VK_ENTER)
 			{
 				this.selection();
-				
 			} 
 			else if (k == GameStateManager.up)
 			{
