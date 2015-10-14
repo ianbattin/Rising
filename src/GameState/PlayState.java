@@ -1,6 +1,8 @@
 package GameState;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.lang.Object.*;
 
@@ -13,8 +15,8 @@ import TileMap.TileMap;
 public class PlayState extends GameState
 {
 	private Background bg;
-	public TileMap tileMap;
-	public int scroll;
+	private TileMap tileMap;
+	private boolean start = false;
 	
 	public PlayState(GameStateManager gsm)
 	{
@@ -23,7 +25,6 @@ public class PlayState extends GameState
 		try
 		{
 			bg = new Background("/Backgrounds/menubackground.gif", 1);
-			bg.setVector(0, -5.0);
 		}
 		catch(Exception e)
 		{
@@ -34,28 +35,36 @@ public class PlayState extends GameState
 	public void init() 
 	{
 		tileMap = new TileMap("level1.txt");
-		//player = new Player(tileMap);
-		//player.setPosition(GamePanel.WIDTH/2, GamePanel.HEIGHT/2);
 	}
 
 	public void update()
 	{
-		tileMap.update();
-		//player.update();
-		//bg.setVector(player.getX()*100, 0);
-		bg.update();
+		if(start)
+		{
+			bg.update();
+			tileMap.update();
+		}
 	}
 
 	public void draw(Graphics2D g)
 	{
 		bg.draw(g);
 		tileMap.draw(g);
-		//player.draw(g);
+		g.setColor(Color.WHITE);
+		if(!start) g.drawString("PRESS ENTER TO START", GamePanel.centerStringX("PRESS ENTER TO START", 0, 600), 400);
 	}
 	
 	public void keyPressed(int k) 
 	{
-		//player.keyPressed(k);
+		if(k == KeyEvent.VK_ENTER)
+		{
+			if(!start)
+			{
+				start = true;
+				tileMap.setVector(0, 1);
+				bg.setVector(0, -5.0);
+			}
+		}
 	}
 
 	public void keyReleased(int k) 

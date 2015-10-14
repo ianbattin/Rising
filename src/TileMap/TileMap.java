@@ -15,6 +15,8 @@ public class TileMap
 {
 	private int x;
 	private int y;
+	private int dx;
+	private int dy;
 	
 	private int width; //total width in tiles
 	private int height; //total height in tiles
@@ -64,8 +66,7 @@ public class TileMap
 				int tile = map[row][col];
 				if(tile == 0) 
 				{
-					tiles.add(new Tile(col * tileSize, row * tileSize, (col * tileSize), (col * tileSize) + tileSize - 1, 
-							(row * tileSize), (row * tileSize) + tileSize - 1, tile, tileSize));
+					tiles.add(new Tile(col * tileSize, row * tileSize - height * tileSize + GamePanel.HEIGHT, tile, tileSize));
 				}
 			}
 		}
@@ -73,6 +74,12 @@ public class TileMap
 	
 	public void update()
 	{	
+		x += dx;
+		y += dy;
+		for(Tile t: tiles)
+		{
+			t.update();
+		}
 	}
 	
 	public void draw(Graphics2D g)
@@ -81,7 +88,16 @@ public class TileMap
 		for(Tile t: tiles)
 		{
 			t.draw(g);
-			t.update();
+		}
+	}
+	
+	public void setVector(int dx, int dy)
+	{
+		this.dx = dx;
+		this.dy = dy;
+		for(Tile t: tiles)
+		{
+			t.setVector(dx, dy);
 		}
 	}
 	

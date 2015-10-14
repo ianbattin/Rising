@@ -48,7 +48,7 @@ public class ControlsState extends GameState {
 		bg.update();
 	}
 
-	//draw the controls. Will create the way you can actually edit the controls later.
+	//draw the controls
 	public void draw(Graphics2D g) 
 	{
 		bg.draw(g); //draw the background

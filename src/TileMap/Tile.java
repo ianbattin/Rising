@@ -24,16 +24,16 @@ public class Tile
 	private static final int NORMAL = 1; //able to pass through
 	private static final int BLOCKED = 0; //collision enabled
 	
-	public Tile(int x, int y, int left, int right, int top, int bottom, int type, int size)
+	public Tile(int x, int y, int type, int size)
 	{
 		this.x = x;
 		this.y = y;
 		
 		//these are for collision
-		this.left = left;
-		this.right = right;
-		this.top = top;
-		this.bottom = bottom;
+		left = x;
+		right = x + size;
+		top = y;
+		bottom = y + size;
 		
 		this.type = type;
 		this.size = size;
@@ -44,6 +44,11 @@ public class Tile
 		//for when we have to move the tiles as the player ascends
 		x += dx;
 		y += dy;
+		
+		left = x;
+		right = x + size;
+		top = y;
+		bottom = y + size;
 	}
 	
 	public void draw(Graphics2D g)
@@ -59,6 +64,13 @@ public class Tile
 			g.drawLine(right, bottom, left, bottom);
 			g.drawLine(left, bottom, left, top);
 		}
+	}
+	
+	//moves the tilemap in a direction
+	public void setVector(int dx, int dy)
+	{
+		this.dx = dx;
+		this.dy = dy;
 	}
 	
 	public int getType() {	return type;	}
