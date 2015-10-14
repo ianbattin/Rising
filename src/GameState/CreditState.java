@@ -24,8 +24,8 @@ public class CreditState extends GameState
 		bg.setVector(0, -5.0); //moves the background
 		titleColor = new Color(255, 60 ,0);
 		titleFont = new Font("RussellSquare", Font.BOLD, 40);
-		optionsFont = new Font("RusselSquare", Font.PLAIN, 20);
-		subTextFont = new Font("RusselSquare", Font.PLAIN, 17);
+		optionsFont = new Font("RusselSquare", Font.PLAIN, 24);
+		subTextFont = new Font("RusselSquare", Font.PLAIN, 20);
 	}
 	
 	//nothing to init
@@ -56,7 +56,8 @@ public class CreditState extends GameState
 		}
 		
 		g.setFont(subTextFont);
-		g.drawString("Press ENTER to return to Main Menu", GamePanel.centerStringX("Press ENTER to return to Main Menu", 0, 600), GamePanel.HEIGHT-100);
+		g.setColor(new Color(255,150,0));
+		g.drawString("Return to Menu", GamePanel.centerStringX("Return to Menu", 0, 600), GamePanel.HEIGHT-100);
 	}
 
 	//handle press of key

@@ -19,7 +19,7 @@ public class ControlsState extends GameState {
 	private int selection;
 	private boolean isListeningToKey; //true if next key press will set controls
 	private String[] movementTypes = {"Jump:", "Drop:", "Right:", "Left:", "Glide:"};
-	private String[] movementKeys = {"W", "S", "D", "A", "Space"};
+	private String[] movementKeys = {KeyEvent.getKeyText(GameStateManager.up), KeyEvent.getKeyText(GameStateManager.down), KeyEvent.getKeyText(GameStateManager.right), KeyEvent.getKeyText(GameStateManager.left), KeyEvent.getKeyText(GameStateManager.glide)};
 	
 	public ControlsState(GameStateManager gsm)
 	{
