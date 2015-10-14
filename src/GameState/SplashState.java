@@ -15,7 +15,7 @@ public class SplashState extends GameState
 		this.gsm = gsm;
 		try
 		{
-			bg = new Background("/BackGrounds/splashscreen.jpg", 1);
+			bg = new Background("/Backgrounds/splashscreen.jpg", 1);
 		}
 		catch(Exception e)
 		{

@@ -52,6 +52,19 @@ public class Background
 		y += (dy * moveScale) % GamePanel.HEIGHT;
 	}
 	
+	//Change the image of the background
+	public void setNewImage(String s)
+	{
+		try
+		{
+			image = ImageIO.read(getClass().getResourceAsStream(s));
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	/* Draws the background in new locations
 	 * if the x/y position is off the screen to the left, right, up, or down, it
 	 * copys and draws a second background to the right, left, up or down
