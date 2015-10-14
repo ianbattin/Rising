@@ -14,7 +14,7 @@ import GameState.GameStateManager;
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable, KeyListener
 {
-	//window size (Now crudely scalable to any resolution)
+	//window size TODO: Allow the user to edit the SCALEWIDTH and SCALEHEIGHT, and also set the default to be based on their screen size
 	public static final double SCALEWIDTH = 1;
 	public static final double SCALEHEIGHT = 1;
 	public static final int WIDTH = 600;

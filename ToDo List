@@ -5,4 +5,5 @@ TODO:
 -Create Sprite sheets with basic colored boxes that fill the entire space (20x60? for Characters) (25x25 for tiles) in rainbow colored order
 	-Modify the tile class to be able to read a sprite from this sheet and set the tile to that image
 -Apply the center string method to the Controls arrays in a way that looks good
+-Allow the user to edit the SCALEWIDTH and SCALEHEIGHT, and also set the default to be based on their screen size
 -Add rest of the code from Ian's code (Animation, Player, MapObject)

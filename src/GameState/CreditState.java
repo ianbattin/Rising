@@ -56,7 +56,8 @@ public class CreditState extends GameState
 		}
 		
 		g.setFont(subTextFont);
-		g.drawString("Press " + KeyEvent.getKeyText(GameStateManager.reset) + " to return to Main Menu", GamePanel.centerStringX("Press " + KeyEvent.getKeyText(GameStateManager.reset) + " to return to Main Menu", 0, 600), GamePanel.HEIGHT-100);
+		g.drawString("Press " + KeyEvent.getKeyText(GameStateManager.reset) + " to return to Main Menu", 
+				GamePanel.centerStringX("Press " + KeyEvent.getKeyText(GameStateManager.reset) + " to return to Main Menu", 0, 600), GamePanel.HEIGHT-100);
 	}
 
 	//handle press of key
