@@ -55,15 +55,21 @@ public class CreditState extends GameState
 			g.drawString(creditsNames[i], GamePanel.centerStringX(creditsNames[i], 0, 600), GamePanel.HEIGHT/2+(i*30)-75);
 		}
 		
+		//trying to keep it looking & functioning the same as in the control state. Harmony = better esthetics.
 		g.setFont(subTextFont);
+		g.setColor(new Color(255,150,0));
+		g.drawString("Return to Menu", GamePanel.centerStringX("Return to Menu", 0, 600), GamePanel.HEIGHT-100);
+		/*
 		g.drawString("Press " + KeyEvent.getKeyText(GameStateManager.reset) + " to return to Main Menu", 
 				GamePanel.centerStringX("Press " + KeyEvent.getKeyText(GameStateManager.reset) + " to return to Main Menu", 0, 600), GamePanel.HEIGHT-100);
+		 */
 	}
 
 	//handle press of key
 	public void keyPressed(int k) 
 	{
-		if (k == GameStateManager.reset)
+		//if (k == GameStateManager.reset)
+		if (k == GameStateManager.select)
 		{
 			gsm.setState(GameStateManager.MENUSTATE);		
 		}	

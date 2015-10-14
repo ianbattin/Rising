@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.awt.Toolkit;
 
 import javax.swing.JPanel;
 
@@ -15,8 +16,8 @@ import GameState.GameStateManager;
 public class GamePanel extends JPanel implements Runnable, KeyListener
 {
 	//window size TODO: Allow the user to edit the SCALEWIDTH and SCALEHEIGHT, and also set the default to be based on their screen size
-	public static final double SCALEWIDTH = 1;
-	public static final double SCALEHEIGHT = 1;
+	public static final double SCALEWIDTH = Math.min(((Toolkit.getDefaultToolkit().getScreenSize().height-50.0)/GamePanel.HEIGHT), 1);
+	public static final double SCALEHEIGHT = Math.min(((Toolkit.getDefaultToolkit().getScreenSize().height-50.0)/GamePanel.HEIGHT), 1);
 	public static final int WIDTH = 600;
 	public static final int HEIGHT = 800;
 	public static final int widthScaled = (int)(WIDTH * SCALEWIDTH);
