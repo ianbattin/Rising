@@ -56,13 +56,13 @@ public class CreditState extends GameState
 		}
 		
 		g.setFont(subTextFont);
-		g.drawString("Press ENTER to return to Main Menu", GamePanel.centerStringX("Press ENTER to return to Main Menu", 0, 600), GamePanel.HEIGHT-100);
+		g.drawString("Press " + KeyEvent.getKeyText(GameStateManager.reset) + " to return to Main Menu", GamePanel.centerStringX("Press " + KeyEvent.getKeyText(GameStateManager.reset) + " to return to Main Menu", 0, 600), GamePanel.HEIGHT-100);
 	}
 
 	//handle press of key
 	public void keyPressed(int k) 
 	{
-		if (k == KeyEvent.VK_ENTER)
+		if (k == GameStateManager.reset)
 		{
 			gsm.setState(GameStateManager.MENUSTATE);		
 		}	

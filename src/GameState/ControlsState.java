@@ -18,8 +18,8 @@ public class ControlsState extends GameState {
 	
 	private int selection;
 	private boolean isListeningToKey; //true if next key press will set controls
-	private String[] movementTypes = {"Jump:", "Drop:", "Right:", "Left:", "Glide:"};
-	private String[] movementKeys = {"W", "S", "D", "A", "Space"};
+	private String[] movementTypes = {"Jump:", "Drop:", "Right:", "Left:", "Glide:", "Select:", "Reset:"};
+	private String[] movementKeys = {"W", "S", "D", "A", "Space", "Enter", "Backspace"};
 	
 	public ControlsState(GameStateManager gsm)
 	{
@@ -130,6 +130,8 @@ public class ControlsState extends GameState {
 				else if (i == 2) GameStateManager.right = k;
 				else if (i == 3) GameStateManager.left = k;
 				else if (i == 4) GameStateManager.glide = k;
+				else if (i == 5) GameStateManager.select = k;
+				else if (i == 6) GameStateManager.reset = k;
 				break;
 			} 
 		}
@@ -139,7 +141,7 @@ public class ControlsState extends GameState {
 	{
 		if(!isListeningToKey)
 		{
-			if(k == KeyEvent.VK_ENTER)
+			if(k == GameStateManager.select)
 			{
 				this.selection();
 			} 

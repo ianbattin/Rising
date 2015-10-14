@@ -24,6 +24,8 @@ public class GameStateManager
 	public static int right = KeyEvent.VK_D;
 	public static int left = KeyEvent.VK_A;
 	public static int glide = KeyEvent.VK_SPACE;
+	public static int select = KeyEvent.VK_ENTER;
+	public static int reset = KeyEvent.VK_BACK_SPACE;
 	
 
 	//Constructor, adds all the gamestates to this gamestate arraylist
@@ -63,6 +65,20 @@ public class GameStateManager
 	public void setCurrentState(int state)
 	{
 		currentState = state;
+	}
+	
+	//Resets a state by deleting and re adding a new version of a state
+	public void resetState(int state)
+	{
+		setState(MENUSTATE);
+		GameState stateAtPos = gameStates.get(state);
+		gameStates.remove(state);
+		if(stateAtPos instanceof SplashState) gameStates.add(state, new SplashState(this));
+		else if(stateAtPos instanceof MenuState) gameStates.add(state, new MenuState(this));
+		else if(stateAtPos instanceof ControlsState) gameStates.add(state, new ControlsState(this));
+		else if(stateAtPos instanceof CreditState) gameStates.add(state, new CreditState(this));
+		else if(stateAtPos instanceof IntroState) gameStates.add(state, new IntroState(this));
+		else if(stateAtPos instanceof PlayState) gameStates.add(state, new PlayState(this));
 	}
 	
 	public void keyPressed(int k)

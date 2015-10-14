@@ -16,12 +16,13 @@ public class PlayState extends GameState
 {
 	private Background bg;
 	private TileMap tileMap;
-	private boolean start = false;
+	private boolean start;
 	
 	public PlayState(GameStateManager gsm)
 	{
 		init();
 		this.gsm = gsm;
+		start = false;
 		try
 		{
 			bg = new Background("/Backgrounds/menubackground.gif", 1);
@@ -51,12 +52,17 @@ public class PlayState extends GameState
 		bg.draw(g);
 		tileMap.draw(g);
 		g.setColor(Color.WHITE);
-		if(!start) g.drawString("PRESS ENTER TO START", GamePanel.centerStringX("PRESS ENTER TO START", 0, 600), 400);
+		if(!start) 
+		{
+			String[] notStarted = {"PRESS ENTER TO START", "PRESS BACKSPACE TO RETURN TO MENU" };
+			for(int i = 0; i < notStarted.length; i++)
+				g.drawString(notStarted[i], GamePanel.centerStringX(notStarted[i], 0, 600), 400  + (40 * i));
+		}
 	}
 	
 	public void keyPressed(int k) 
 	{
-		if(k == KeyEvent.VK_ENTER)
+		if(k == GameStateManager.select)
 		{
 			if(!start)
 			{
@@ -64,6 +70,10 @@ public class PlayState extends GameState
 				tileMap.setVector(0, 1);
 				bg.setVector(0, -5.0);
 			}
+		}
+		if(k == GameStateManager.reset)
+		{
+			gsm.resetState(GameStateManager.PLAYSTATE);
 		}
 	}
 

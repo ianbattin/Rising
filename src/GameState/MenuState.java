@@ -99,7 +99,7 @@ public class MenuState extends GameState
 	
 	public void keyPressed(int k) 
 	{
-		if(k == KeyEvent.VK_ENTER)
+		if(k == GameStateManager.select)
 		{
 			select();
 		}
