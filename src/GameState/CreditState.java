@@ -8,14 +8,14 @@ import java.awt.event.KeyEvent;
 import Main.GamePanel;
 import TileMap.Background;
 
-public class CreditState extends GameState {
-
+public class CreditState extends GameState 
+{
 	private GameStateManager gsm;
 	private Background bg;
 	private Color titleColor;
 	private Font titleFont, optionsFont, subTextFont;
-	private String[] creditsNames = {"Ian Battin - Progammer", "Maxence Weyrich - Programmer", "Xavier Graham - Progammer", "Sarah MacDougall - Programmer", "Rhea Bae - Art and Design", "Taage Storey - Design and Storyline"};
-
+	private String[] creditsNames = {"Ian Battin - Progammer", "Maxence Weyrich - Programmer", "Xavier Graham - Progammer", 
+									"Sarah MacDougall - Programmer", "Rhea Bae - Art and Design", "Taage Storey - Design and Storyline"};
 	
 	public CreditState(GameStateManager gsm)
 	{
@@ -46,17 +46,17 @@ public class CreditState extends GameState {
 
 		g.setColor(titleColor);
 		g.setFont(titleFont);
-		g.drawString("CREDITS", GamePanel.WIDTH/2-100, GamePanel.HEIGHT/4); //This probably shouldn't be coded, but instead part of the background or an actual image
+		g.drawString("CREDITS", GamePanel.centerStringX("CREDITS", 0, 600), GamePanel.HEIGHT/4); //This probably shouldn't be coded, but instead part of the background or an actual image
 
 		g.setColor(Color.WHITE);
 		g.setFont(optionsFont);
 		for (int i = 0; i < creditsNames.length; i++)
 		{
-			g.drawString(creditsNames[i],  GamePanel.WIDTH/4, GamePanel.HEIGHT/2+(i*30)-75);
+			g.drawString(creditsNames[i], GamePanel.centerStringX(creditsNames[i], 0, 600), GamePanel.HEIGHT/2+(i*30)-75);
 		}
 		
 		g.setFont(subTextFont);
-		g.drawString("Press ENTER to return to Main Menu", GamePanel.WIDTH/4, GamePanel.HEIGHT-100);
+		g.drawString("Press ENTER to return to Main Menu", GamePanel.centerStringX("Press ENTER to return to Main Menu", 0, 600), GamePanel.HEIGHT-100);
 	}
 
 	//handle press of key

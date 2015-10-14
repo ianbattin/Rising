@@ -21,29 +21,27 @@ public class Tile
 	private int size;
 	
 	private int type;
-	private static final int NORMAL = 1;
-	private static final int BLOCKED = 0;
+	private static final int NORMAL = 1; //able to pass through
+	private static final int BLOCKED = 0; //collision enabled
 	
-	public Tile(int x, int y, int left, int right, int top, int bottom, int type)
+	public Tile(int x, int y, int left, int right, int top, int bottom, int type, int size)
 	{
 		this.x = x;
 		this.y = y;
 		
+		//these are for collision
 		this.left = left;
 		this.right = right;
 		this.top = top;
 		this.bottom = bottom;
 		
 		this.type = type;
-		
-		if(type == NORMAL || type == BLOCKED)
-		{
-			size = 10;
-		}
+		this.size = size;
 	}
 	
 	public void update()
 	{
+		//for when we have to move the tiles as the player ascends
 		x += dx;
 		y += dy;
 	}
@@ -52,8 +50,14 @@ public class Tile
 	{
 		if(type == 0)
 		{
+			//TODO Set an image, not just a color, from an image sprite sheet
 			g.setColor(Color.BLACK);
 			g.fillRect(x, y, size, size);
+			g.setColor(Color.RED);
+			g.drawLine(left, top, right, top);
+			g.drawLine(right, top, right, bottom);
+			g.drawLine(right, bottom, left, bottom);
+			g.drawLine(left, bottom, left, top);
 		}
 	}
 	

@@ -1,6 +1,7 @@
 package TileMap;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.*;
 
 import javax.imageio.ImageIO;
@@ -9,7 +10,7 @@ import Main.GamePanel;
 
 public class Background 
 {
-	private BufferedImage image;
+	private Image image;
 	
 	private double x; //xPosition
 	private double y; //yPosition

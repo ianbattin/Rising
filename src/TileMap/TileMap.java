@@ -13,32 +13,32 @@ import Main.GamePanel;
 
 public class TileMap
 {
-	public int x;
-	public int y;
+	private int x;
+	private int y;
 	
-	public static int width;
-	public static int height;
-	public static int[][] map;
+	private int width; //total width in tiles
+	private int height; //total height in tiles
+	private int[][] map; //our 2d array of tiles
 	
-	public static int tileSize;
+	private int tileSize; //width and height of individual tiles
 	
-	public ArrayList<Tile> tiles;
+	private ArrayList<Tile> tiles;
 	
-	public TileMap(String s, int tileSize)
+	public TileMap(String s)
 	{
-		this.tileSize = tileSize;
 		try
 		{
 			BufferedReader br = new BufferedReader(new FileReader(s));
+			tileSize = Integer.parseInt(br.readLine());
+			width = Integer.parseInt(br.readLine()); //reads line 1 of the file for the width
+			height = Integer.parseInt(br.readLine()); //reads line 2 of the files for the height
 		
-			width = Integer.parseInt(br.readLine());
-			height = Integer.parseInt(br.readLine());
-		
-			map = new int[height][width];
+			map = new int[height][width]; //sets map to a new int[][] with width and height
 			tiles = new ArrayList<Tile>();
 			
-			String delimeters = " ";
+			String delimeters = " "; //spaces will be ignored
 			
+			//reads each line row by row, and assigns the numbers into the 2d array map
 			for(int row = 0; row < height; row++)
 			{
 				String line = br.readLine();
@@ -54,8 +54,9 @@ public class TileMap
 			e.printStackTrace();
 		}
 		
-		tiles = new ArrayList<Tile>();
+		tiles = new ArrayList<Tile>();//basically map[][] but in ArrayList form cause they're easier
 
+		//takes all of the values in map[][] and adds a new tile with their location to tiles
 		for(int row = 0; row < height; row++)
 		{
 			for(int col = 0; col < width; col++)
@@ -63,8 +64,8 @@ public class TileMap
 				int tile = map[row][col];
 				if(tile == 0) 
 				{
-					tiles.add(new Tile(col * tileSize, row * tileSize, (col * tileSize) - tileSize, (col * tileSize) + tileSize, 
-							(row * tileSize) - tileSize, (row * tileSize) + tileSize, tile));
+					tiles.add(new Tile(col * tileSize, row * tileSize, (col * tileSize), (col * tileSize) + tileSize - 1, 
+							(row * tileSize), (row * tileSize) + tileSize - 1, tile, tileSize));
 				}
 			}
 		}
@@ -76,6 +77,7 @@ public class TileMap
 	
 	public void draw(Graphics2D g)
 	{
+		//instead of drawing the tiles in this class, each tile draws itself
 		for(Tile t: tiles)
 		{
 			t.draw(g);

@@ -14,10 +14,13 @@ import GameState.GameStateManager;
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable, KeyListener
 {
-	//window size
-	public static final double SCALE = 1;
-	public static final int WIDTH = (int)(600*SCALE);
-	public static final int HEIGHT = (int)(800*SCALE);
+	//window size (Now crudely scalable to any resolution)
+	public static final double SCALEWIDTH = 1;
+	public static final double SCALEHEIGHT = 1;
+	public static final int WIDTH = 600;
+	public static final int HEIGHT = 800;
+	private static final int widthScaled = (int)(WIDTH * SCALEWIDTH);
+	private static final int heightScaled = (int)(HEIGHT * SCALEHEIGHT);
 	
 	//run
 	private Thread thread;
@@ -31,7 +34,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	
 	//image
 	private BufferedImage image;
-	private Graphics2D g;
+	private static Graphics2D g;
 	
 	//game state (Level 1 State, Menu State, etc.)
 	private GameStateManager gsm;
@@ -40,7 +43,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	public GamePanel()
 	{
 		super(); //used since it extends/implements JPanel, Runnable, and KeyListener so it will be able to access their methods
-		setPreferredSize(new Dimension(WIDTH, HEIGHT)); //sets the size of the GamePanel
+		setPreferredSize(new Dimension(widthScaled, heightScaled)); //sets the size of the GamePanel
 		setFocusable(true); //like when you click the window, allows for key inputs
 		requestFocus(); //does the above
 	}
@@ -60,8 +63,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	//initialize the game
 	public void init()
 	{
-		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+		image = new BufferedImage(widthScaled, heightScaled, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D) image.getGraphics(); //do graphics stuff
+		g.scale(SCALEWIDTH, SCALEHEIGHT);
 		gsm = new GameStateManager(); //create new GameStateManager
 		running = true; //game initialized, so running is true
 	}
@@ -137,14 +141,25 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	public void gameDrawToScreen()
 	{
 		Graphics g2 = this.getGraphics();
-		g2.drawImage(image, 0 , 0, WIDTH, HEIGHT, null);
+		g2.drawImage(image, 0 , 0, widthScaled, heightScaled, null);
 		if(displayFPS) g2.drawString("" + (int)averageFPS, 2, 10);
 		g2.dispose();
 	}
 
-	public double averageFPS()
+	public double getAverageFPS()
 	{
 		return averageFPS;
+	}
+	
+	//centers string between the xPos and endPos x coordinates
+	//probably shouldn't be in the GamePanel class but i wanted all classes to have access
+	//TODO Maybe we create a class for methods we want everything to have that the GameState class extends?
+	public static int centerStringX(String s, int xPos, int endPos)
+	{
+        int stringLen = (int)g.getFontMetrics().getStringBounds(s, g).getWidth();
+        int width = endPos - xPos;
+        int start = width/2 - stringLen/2;
+        return start + xPos;
 	}
 	
 	public static long getTotalTime()
@@ -160,13 +175,14 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	//processes key presses
 	public void keyPressed(KeyEvent key) 
 	{
-		gsm.keyPressed(key.getKeyCode());
-		
-		if(key.equals(KeyEvent.VK_1));
+		if(key.getKeyCode() == KeyEvent.VK_F1)
 		{
 			if(displayFPS) displayFPS = false;
 			else displayFPS = true;
 		}
+		else
+			displayFPS = false;
+		gsm.keyPressed(key.getKeyCode());
 	}
 
 	public void keyReleased(KeyEvent key) 
@@ -174,7 +190,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 		gsm.keyReleased(key.getKeyCode());
 	}
 
-	public void keyTyped(KeyEvent arg0) 
+	public void keyTyped(KeyEvent key) 
 	{
 		
 	}

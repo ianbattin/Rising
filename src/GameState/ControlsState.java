@@ -18,7 +18,7 @@ public class ControlsState extends GameState {
 	
 	private int selection;
 	private boolean isListeningToKey; //true if next key press will set controls
-	private String[] movementTypes = {"Jump", "Drop", "Right", "Left", "Glide"};
+	private String[] movementTypes = {"Jump:", "Drop:", "Right:", "Left:", "Glide:"};
 	private String[] movementKeys = {"W", "S", "D", "A", "Space"};
 	
 	public ControlsState(GameStateManager gsm)
@@ -49,14 +49,14 @@ public class ControlsState extends GameState {
 	}
 
 	//draw the controls. Will create the way you can actually edit the controls later.
-	public void draw(Graphics2D g) {
-		// TODO Auto-generated method stub
+	public void draw(Graphics2D g) 
+	{
 		bg.draw(g); //draw the background
 		
 		//set the style of the title of the page
 		g.setColor(titleColor);
 		g.setFont(titleFont);
-		g.drawString("CONTROLS", GamePanel.WIDTH/4+40, GamePanel.HEIGHT/4);
+		g.drawString("CONTROLS", GamePanel.centerStringX("CONTROLS", 0, 600), GamePanel.HEIGHT/4);
 		
 		g.setColor(Color.WHITE);
 		g.setFont(optionsFont);
@@ -64,17 +64,14 @@ public class ControlsState extends GameState {
 		for (int i = 0; i < movementTypes.length; i++)
 		{
 			if (i == selection)
-			{
 				g.setColor(new Color(255,150,0));
-			}
 			else 
-			{
 				g.setColor(Color.WHITE);
-			}
 			
-			g.drawString(movementKeys[i],  GamePanel.WIDTH/2, GamePanel.HEIGHT/2+(i*40)-75);
+			//TODO Figure out how to apply the centerStringX() method to this?
+			g.drawString(movementKeys[i],  GamePanel.WIDTH/2+20, 50+GamePanel.HEIGHT/4+(i*40));
 			g.setColor(Color.WHITE);
-			g.drawString(movementTypes[i], GamePanel.WIDTH/2-80, GamePanel.HEIGHT/2+(i*40)-75);
+			g.drawString(movementTypes[i], GamePanel.WIDTH/2-60, 50+GamePanel.HEIGHT/4+(i*40));
 		}
 		
 		if (selection == movementTypes.length)
@@ -87,7 +84,7 @@ public class ControlsState extends GameState {
 		}
 		
 		g.setFont(subTextFont);
-		g.drawString("Return to Menu", GamePanel.WIDTH/3+20, GamePanel.HEIGHT-100);
+		g.drawString("Return to Menu", GamePanel.centerStringX("Return to Menu", 0, 600), GamePanel.HEIGHT-100);
 	}
 	
 	//when you select something, it changes to press so that you can set the controls

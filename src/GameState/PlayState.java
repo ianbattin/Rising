@@ -22,7 +22,8 @@ public class PlayState extends GameState
 		this.gsm = gsm;
 		try
 		{
-			bg = new Background("/Backgrounds/menubackground.gif", 0.0);
+			bg = new Background("/Backgrounds/menubackground.gif", 1);
+			bg.setVector(0, -5.0);
 		}
 		catch(Exception e)
 		{
@@ -32,7 +33,7 @@ public class PlayState extends GameState
 
 	public void init() 
 	{
-		tileMap = new TileMap("level1.txt", 10);
+		tileMap = new TileMap("level1.txt");
 		//player = new Player(tileMap);
 		//player.setPosition(GamePanel.WIDTH/2, GamePanel.HEIGHT/2);
 	}
