@@ -13,16 +13,16 @@ public class Tile
 	private int dx;
 	private int dy;
 	
-	private int left;
-	private int right;
-	private int top;
-	private int bottom;
+	public int left;
+	public int right;
+	public int top;
+	public int bottom;
 	
 	private int size;
 	
 	private int type;
-	private static final int NORMAL = 1; //able to pass through
-	private static final int BLOCKED = 0; //collision enabled
+	public static final int NORMAL = 1; //able to pass through
+	public static final int BLOCKED = 0; //collision enabled
 	
 	public Tile(int x, int y, int type, int size)
 	{
@@ -39,7 +39,7 @@ public class Tile
 		this.size = size;
 	}
 	
-	public void update()
+	public void update(int dx, int dy)
 	{
 		//for when we have to move the tiles as the player ascends
 		x += dx;

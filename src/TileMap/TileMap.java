@@ -24,7 +24,7 @@ public class TileMap
 	
 	private int tileSize; //width and height of individual tiles
 	
-	private ArrayList<Tile> tiles;
+	public ArrayList<Tile> tiles;
 	
 	public TileMap(String s)
 	{
@@ -74,11 +74,9 @@ public class TileMap
 	
 	public void update()
 	{	
-		x += dx;
-		y += dy;
 		for(Tile t: tiles)
 		{
-			t.update();
+			t.update(dx, dy);
 		}
 	}
 	
@@ -99,6 +97,11 @@ public class TileMap
 		{
 			t.setVector(dx, dy);
 		}
+	}
+	
+	public int getTileSize()
+	{
+		return tileSize;
 	}
 	
 	public int getType(int row, int col)

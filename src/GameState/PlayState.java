@@ -5,7 +5,10 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.lang.Object.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import Entities.Player;
 //import Entities.Player;
 import Main.GamePanel;
 import TileMap.Background;
@@ -16,11 +19,13 @@ public class PlayState extends GameState
 {
 	private Background bg;
 	private TileMap tileMap;
+	Player player;
 	private boolean start;
 	
 	public PlayState(GameStateManager gsm)
 	{
 		init();
+		player.setPosition(300, 700);
 		this.gsm = gsm;
 		start = false;
 		try
@@ -36,6 +41,7 @@ public class PlayState extends GameState
 	public void init() 
 	{
 		tileMap = new TileMap("level1.txt");
+		player = new Player(tileMap);
 	}
 
 	public void update()
@@ -44,6 +50,7 @@ public class PlayState extends GameState
 		{
 			bg.update();
 			tileMap.update();
+			player.update();
 		}
 	}
 
@@ -51,6 +58,7 @@ public class PlayState extends GameState
 	{
 		bg.draw(g);
 		tileMap.draw(g);
+		player.draw(g);
 		g.setColor(Color.WHITE);
 		if(!start) 
 		{
@@ -62,13 +70,22 @@ public class PlayState extends GameState
 	
 	public void keyPressed(int k) 
 	{
+		player.keyPressed(k);
 		if(k == GameStateManager.select)
 		{
 			if(!start)
 			{
 				start = true;
-				tileMap.setVector(0, 1);
 				bg.setVector(0, -5.0);
+				Timer timer = new Timer();
+				timer.schedule(new TimerTask()
+				{
+					public void run()
+					{
+						tileMap.setVector(0, 1);		
+					}
+					
+				}, 3000);
 			}
 		}
 		if(k == GameStateManager.reset)
@@ -79,6 +96,6 @@ public class PlayState extends GameState
 
 	public void keyReleased(int k) 
 	{
-		//player.keyReleased(k);
+		player.keyReleased(k);
 	}
 }
