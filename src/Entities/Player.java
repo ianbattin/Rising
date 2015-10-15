@@ -34,6 +34,7 @@ public class Player extends MapObject
 	public boolean jumped;
 	private boolean doubleJumped;
 	
+	public boolean idle;
 	public boolean jumping;
 	public boolean falling;
 	public boolean left;
@@ -112,6 +113,7 @@ public class Player extends MapObject
 	{	
 		getMovement();
 		myCheckCollision();
+		if(idle) dy = dy + 1;
 		getAnimation();
 
 		x += dx;
@@ -246,7 +248,7 @@ public class Player extends MapObject
 			jumping = false;
 			if(dy > 0.0 && gliding)
 			{
-				dy += acceleration/10;
+				dy = 1;
 			}
 			else dy += acceleration;
 		}
@@ -334,18 +336,21 @@ public class Player extends MapObject
 			if(!jumped)
 			{
 				jumping = true;
+				idle = false;
 			}
 			if(jumped && !doubleJump)
 			{
 				falling = false;
 				jumping = false;
 				doubleJump = true;
+				idle = false;
 			}
 		}
 		if(k == KeyEvent.VK_S)
 		{
 			falling = true;
 			drop = true;
+			idle = false;
 		}
 		if(k == KeyEvent.VK_A)
 		{
@@ -358,8 +363,8 @@ public class Player extends MapObject
 		if(k == KeyEvent.VK_SPACE)
 		{
 			gliding = true;
-		}
-			
+			idle = false;
+		}	
 	}
 	
 	public void keyReleased(int k)
@@ -368,16 +373,20 @@ public class Player extends MapObject
 		{
 			falling = true;
 			jumping = false;
+			idle = true;
+			
 			if(doubleJump)
 			{
 				doubleJump = false;
 				jumping = false;
+				idle = true;
 			}
 		}
 		if(k == KeyEvent.VK_S)
 		{
 			falling = true;
 			drop = false;
+			idle = true;
 		}
 		if(k == KeyEvent.VK_A)
 		{
@@ -390,6 +399,7 @@ public class Player extends MapObject
 		if(k == KeyEvent.VK_SPACE)
 		{
 			gliding = false;
+			idle = true;
 		}
 	}
 	
