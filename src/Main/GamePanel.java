@@ -115,7 +115,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 			}
 			
 			totalTime += System.nanoTime() - startTime;
-			elapsedTime += System.nanoTime() - startTime;
+			elapsedTime += System.nanoTime() - startTime - elapsedTime;
 			frameCount++;
 			if(frameCount == maxFrameCount)
 			{
@@ -172,6 +172,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	{
 		return elapsedTime;
 	}
+
 	
 	//processes key presses
 	public void keyPressed(KeyEvent key) 

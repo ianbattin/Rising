@@ -8,11 +8,13 @@ import TileMap.Background;
 public class SplashState extends GameState 
 {
 	private Background bg;
-	long elapsedTime = 0;
+	long elapsedTime;
 	
 	public SplashState(GameStateManager gsm)
 	{
 		this.gsm = gsm;
+		
+		elapsedTime = 0;
 		try
 		{
 			bg = new Background("/Backgrounds/splashscreen.jpg", 1);
@@ -31,8 +33,8 @@ public class SplashState extends GameState
 
 	public void update() 
 	{
-		
-		if(GamePanel.getElapsedTime() < 800000000.0) 
+		elapsedTime += GamePanel.getElapsedTime();
+		if(elapsedTime < 800000000.0) 
 		{
 			bg.update(); 
 		}

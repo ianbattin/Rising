@@ -1,6 +1,7 @@
 package GameState;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -60,6 +61,7 @@ public class PlayState extends GameState
 		tileMap.draw(g);
 		player.draw(g);
 		g.setColor(Color.WHITE);
+		g.setFont(new Font("RusselSquare", Font.PLAIN, 24));
 		if(!start) 
 		{
 			String[] notStarted = {"PRESS ENTER TO START", "PRESS BACKSPACE TO RETURN TO MENU" };

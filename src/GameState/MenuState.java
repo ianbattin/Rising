@@ -15,15 +15,21 @@ public class MenuState extends GameState
 	private String[] options = {"Play", "Controls", "Credits", "Quit" };
 	private int currentChoice = 0;
 	
-	private Color titleColor;
 	private Font titleFont;
 	private Font optionsFont;
+	private boolean isFadingOut;
+	private int alphaLevel;
+	private int titleAlphaLevel;
+	private float timeKeeper;
 	
 	public MenuState(GameStateManager gsm)
 	{
 		this.gsm = gsm;
 		
-		titleColor = new Color(255, 60 ,0);
+		isFadingOut = false;
+		alphaLevel = 0;
+		timeKeeper = 0;
+		titleAlphaLevel = 255;
 		titleFont = new Font("RussellSquare", Font.BOLD, 60);
 		optionsFont = new Font("RusselSquare", Font.PLAIN, 24);
 		
@@ -49,17 +55,33 @@ public class MenuState extends GameState
 	public void update()
 	{
 		bg.update();
+		
+		timeKeeper += GamePanel.getElapsedTime();
+		
+		if (isFadingOut)
+		{
+			if (alphaLevel < 255){
+				alphaLevel += 5;
+				timeKeeper = 0;
+			} 
+			if (titleAlphaLevel > 0)
+			{
+				titleAlphaLevel -= 1;
+			}
+			else if(timeKeeper > 1000000000.0)
+			{
+				isFadingOut = false;
+				gsm.resetState(GameStateManager.MENUSTATE);
+				gsm.setState(GameStateManager.INTROSTATE);
+			}
+		}
 	}
 
 
 	public void draw(Graphics2D g)
 	{
 		bg.draw(g);
-		
-		g.setColor(titleColor);
-		g.setFont(titleFont);
-		g.drawString("RISING", GamePanel.centerStringX("RISING", 0, 600), GamePanel.HEIGHT/4); //This probably shouldn't be coded, but instead part of the background or an actual image
-
+			
 		//Draws out our options menu
 		for(int i = 0; i < options.length; i++)
 		{
@@ -73,15 +95,23 @@ public class MenuState extends GameState
 			}
 			g.setFont(optionsFont);
 			g.drawString(options[i], GamePanel.centerStringX(options[i], 0, 600), GamePanel.HEIGHT/2 + 40 + i * 25); //uses the i variable from the for loop to correctly position options on top of eachother
+		
+			g.setColor(new Color(0, 0, 0, alphaLevel));
+			g.fillRect(0, 0, 600, 800);
+			
+			g.setColor(new Color(255, 60, 0, titleAlphaLevel));
+			g.setFont(titleFont);
+			g.drawString("RISING", GamePanel.centerStringX("RISING", 0, 600), GamePanel.HEIGHT/4); //This probably shouldn't be coded, but instead part of the background or an actual image
+
 		}
 	}
 
 	//Selects the current game state
 	private void select()
 	{
-		if(currentChoice == 0)
+	    if(currentChoice == 0)
 		{
-			gsm.setCurrentState(GameStateManager.INTROSTATE);
+			isFadingOut = true;
 		}
 		if(currentChoice == 1)
 		{
@@ -99,9 +129,19 @@ public class MenuState extends GameState
 	
 	public void keyPressed(int k) 
 	{
-		if(k == GameStateManager.select)
+		if(k == GameStateManager.select && !isFadingOut)
 		{
 			select();
+		} 
+		else if (k == GameStateManager.select && isFadingOut)
+		{
+			gsm.resetState(GameStateManager.MENUSTATE);
+			gsm.setCurrentState(GameStateManager.PLAYSTATE);
+		}
+		
+		if (k == GameStateManager.reset && isFadingOut)
+		{
+			gsm.resetState(GameStateManager.MENUSTATE);
 		}
 		
 		//If you press the up key, the selected option go up
