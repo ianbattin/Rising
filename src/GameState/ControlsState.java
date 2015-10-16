@@ -59,7 +59,7 @@ public class ControlsState extends GameState {
 		//set the style of the title of the page
 		g.setColor(titleColor);
 		g.setFont(titleFont);
-		g.drawString("CONTROLS", GamePanel.centerStringX("CONTROLS", 0, 600), GamePanel.HEIGHT/4);
+		g.drawString("CONTROLS", centerStringX("CONTROLS", 0, 600, g), GamePanel.HEIGHT/4);
 		
 		g.setColor(Color.WHITE);
 		g.setFont(optionsFont);
@@ -87,7 +87,7 @@ public class ControlsState extends GameState {
 		}
 		
 		g.setFont(subTextFont);
-		g.drawString("Return to Menu", GamePanel.centerStringX("Return to Menu", 0, 600), GamePanel.HEIGHT-100);
+		g.drawString("Return to Menu", centerStringX("Return to Menu", 0, 600, g), GamePanel.HEIGHT-100);
 	}
 	
 	//when you select something, it changes to press so that you can set the controls

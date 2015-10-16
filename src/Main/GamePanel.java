@@ -152,17 +152,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 		return averageFPS;
 	}
 	
-	//centers string between the xPos and endPos x coordinates
-	//probably shouldn't be in the GamePanel class but i wanted all classes to have access
-	//TODO Maybe we create a class for methods we want everything to have that the GameState class extends?
-	public static int centerStringX(String s, int xPos, int endPos)
-	{
-        int stringLen = (int)g.getFontMetrics().getStringBounds(s, g).getWidth();
-        int width = endPos - xPos;
-        int start = width/2 - stringLen/2;
-        return start + xPos;
-	}
-	
 	public static long getTotalTime()
 	{
 		return totalTime;

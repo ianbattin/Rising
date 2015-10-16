@@ -15,4 +15,12 @@ public abstract class GameState
 	public abstract void keyPressed(int k);
 	public abstract void keyReleased(int k);
 	
+	//Centers string between the xPos and endPos x coordinates
+	public static int centerStringX(String s, int xPos, int endPos, Graphics2D g)
+	{
+        int stringLen = (int)g.getFontMetrics().getStringBounds(s, g).getWidth();
+        int width = endPos - xPos;
+        int start = width/2 - stringLen/2;
+        return start + xPos;
+	}
 }

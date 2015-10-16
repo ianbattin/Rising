@@ -46,19 +46,19 @@ public class CreditState extends GameState
 
 		g.setColor(titleColor);
 		g.setFont(titleFont);
-		g.drawString("CREDITS", GamePanel.centerStringX("CREDITS", 0, 600), GamePanel.HEIGHT/4); //This probably shouldn't be coded, but instead part of the background or an actual image
+		g.drawString("CREDITS", centerStringX("CREDITS", 0, 600, g), GamePanel.HEIGHT/4); //This probably shouldn't be coded, but instead part of the background or an actual image
 
 		g.setColor(Color.WHITE);
 		g.setFont(optionsFont);
 		for (int i = 0; i < creditsNames.length; i++)
 		{
-			g.drawString(creditsNames[i], GamePanel.centerStringX(creditsNames[i], 0, 600), GamePanel.HEIGHT/2+(i*30)-75);
+			g.drawString(creditsNames[i], centerStringX(creditsNames[i], 0, 600, g), GamePanel.HEIGHT/2+(i*30)-75);
 		}
 		
 		//trying to keep it looking & functioning the same as in the control state. Harmony = better esthetics.
 		g.setFont(subTextFont);
 		g.setColor(new Color(255,150,0));
-		g.drawString("Return to Menu", GamePanel.centerStringX("Return to Menu", 0, 600), GamePanel.HEIGHT-100);
+		g.drawString("Return to Menu", centerStringX("Return to Menu", 0, 600, g), GamePanel.HEIGHT-100);
 		/*
 		g.drawString("Press " + KeyEvent.getKeyText(GameStateManager.reset) + " to return to Main Menu", 
 				GamePanel.centerStringX("Press " + KeyEvent.getKeyText(GameStateManager.reset) + " to return to Main Menu", 0, 600), GamePanel.HEIGHT-100);

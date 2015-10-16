@@ -66,7 +66,7 @@ public class PlayState extends GameState
 		{
 			String[] notStarted = {"PRESS ENTER TO START", "PRESS BACKSPACE TO RETURN TO MENU" };
 			for(int i = 0; i < notStarted.length; i++)
-				g.drawString(notStarted[i], GamePanel.centerStringX(notStarted[i], 0, 600), 400  + (40 * i));
+				g.drawString(notStarted[i], centerStringX(notStarted[i], 0, 600, g), 400  + (40 * i));
 		}
 	}
 	

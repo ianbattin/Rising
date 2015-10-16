@@ -94,14 +94,14 @@ public class MenuState extends GameState
 				g.setColor(Color.WHITE);
 			}
 			g.setFont(optionsFont);
-			g.drawString(options[i], GamePanel.centerStringX(options[i], 0, 600), GamePanel.HEIGHT/2 + 40 + i * 25); //uses the i variable from the for loop to correctly position options on top of eachother
+			g.drawString(options[i], centerStringX(options[i], 0, 600, g), GamePanel.HEIGHT/2 + 40 + i * 25); //uses the i variable from the for loop to correctly position options on top of eachother
 		
 			g.setColor(new Color(0, 0, 0, alphaLevel));
 			g.fillRect(0, 0, 600, 800);
 			
 			g.setColor(new Color(255, 60, 0, titleAlphaLevel));
 			g.setFont(titleFont);
-			g.drawString("RISING", GamePanel.centerStringX("RISING", 0, 600), GamePanel.HEIGHT/4); //This probably shouldn't be coded, but instead part of the background or an actual image
+			g.drawString("RISING", centerStringX("RISING", 0, 600, g), GamePanel.HEIGHT/4); //This probably shouldn't be coded, but instead part of the background or an actual image
 
 		}
 	}

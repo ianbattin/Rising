@@ -67,7 +67,8 @@ public class GameStateManager
 		currentState = state;
 	}
 	
-	//Resets a state by deleting and re adding a new version of a state
+	//Resets a state by deleting and re adding a new version of a state (Decided it actually makes sense
+	//to have this method in the GSM as the GSM is managing the states, which reseting is a part of
 	public void resetState(int state)
 	{
 		setState(MENUSTATE);
