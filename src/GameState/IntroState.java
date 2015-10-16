@@ -11,8 +11,8 @@ public class IntroState extends GameState {
 	private Background bg;
 	private GameStateManager gsm;
 	
-	private float timeKeeper, initTime;
-	private int currFrame, totalFrames, alphaLevel, alphaUpdateSpeed;
+	private float timeKeeper;
+	private int currFrame, totalFrames, alphaLevel;
 	private boolean isFadingIn, isFadingOut;
 
 	
@@ -20,7 +20,7 @@ public class IntroState extends GameState {
 	{
 		this.gsm = gsm;
 		
-		initTime = timeKeeper = 0;
+		timeKeeper = 0;
 		currFrame = 1; //set the starting frame number.
 		totalFrames = 4; //set last frame number
 		
@@ -50,28 +50,11 @@ public class IntroState extends GameState {
 					
 		if(isFadingIn)
 		{
-			if(timeKeeper > 500000000.0)
-			{
-				alphaLevel -= 5;
-				if (alphaLevel == 0){
-					isFadingIn = false;
-					timeKeeper = 0; 
-				}	
-			}
+			fadeIn(500000000.0);
 		}
 		else if (isFadingOut)
 		{
-			if (alphaLevel < 255){
-				alphaLevel += 5;
-				timeKeeper = 0;
-			} 
-			else if(timeKeeper > 1000000000.0)
-			{
-				isFadingOut = false;
-				gsm.resetState(GameStateManager.INTROSTATE);
-				gsm.setState(GameStateManager.PLAYSTATE);
-
-			}
+			fadeOut(1000000000.0);
 		}
 		else if(timeKeeper > 2000000000.0)
 		{
@@ -79,7 +62,6 @@ public class IntroState extends GameState {
 			if (currFrame < totalFrames)
 			{
 				currFrame++;
-				initTime = GamePanel.getElapsedTime();
 				try
 				{
 					bg.setNewImage("/Intro/frame" + currFrame + ".gif");
@@ -100,9 +82,7 @@ public class IntroState extends GameState {
 	public void draw(Graphics2D g) 
 	{
 		bg.draw(g);
-		
-		g.setColor(new Color(0, 0, 0, alphaLevel));
-		g.fillRect(0, 0, 600, 800);
+		drawFade(g);
 	}
 	
 	public void keyPressed(int k) 
@@ -123,4 +103,36 @@ public class IntroState extends GameState {
 	{
 	}
 
+	//Fading methods
+	private void fadeIn(double timeToWait)
+	{
+		if(timeKeeper > timeToWait)
+		{
+			alphaLevel -= 5;
+			if (alphaLevel == 0){
+				isFadingIn = false;
+				timeKeeper = 0; 
+			}	
+		}
+	}
+	
+	private void fadeOut(double timeToWait)
+	{
+		if (alphaLevel < 255){
+			alphaLevel += 5;
+			timeKeeper = 0;
+		} 
+		else if(timeKeeper > timeToWait)
+		{
+			isFadingOut = false;
+			gsm.resetState(GameStateManager.INTROSTATE);
+			gsm.setState(GameStateManager.PLAYSTATE);
+		}
+	}
+	
+	private void drawFade(Graphics2D g)
+	{
+		g.setColor(new Color(0, 0, 0, alphaLevel));
+		g.fillRect(0, 0, 600, 800);
+	}
 }

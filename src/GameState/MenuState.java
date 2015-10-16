@@ -60,19 +60,10 @@ public class MenuState extends GameState
 		
 		if (isFadingOut)
 		{
-			if (alphaLevel < 255){
-				alphaLevel += 5;
-				timeKeeper = 0;
-			} 
+			fadeOut(4000000000.0);
 			if (titleAlphaLevel > 0)
 			{
 				titleAlphaLevel -= 1;
-			}
-			else if(timeKeeper > 1000000000.0)
-			{
-				isFadingOut = false;
-				gsm.resetState(GameStateManager.MENUSTATE);
-				gsm.setState(GameStateManager.INTROSTATE);
 			}
 		}
 	}
@@ -96,8 +87,7 @@ public class MenuState extends GameState
 			g.setFont(optionsFont);
 			g.drawString(options[i], centerStringX(options[i], 0, 600, g), GamePanel.HEIGHT/2 + 40 + i * 25); //uses the i variable from the for loop to correctly position options on top of eachother
 		
-			g.setColor(new Color(0, 0, 0, alphaLevel));
-			g.fillRect(0, 0, 600, 800);
+			drawFade(g);
 			
 			g.setColor(new Color(255, 60, 0, titleAlphaLevel));
 			g.setFont(titleFont);
@@ -172,4 +162,26 @@ public class MenuState extends GameState
 	{
 
 	}
+	
+	//Fading methods
+	private void fadeOut(double timeToWait)
+	{
+		if (alphaLevel < 255){
+			alphaLevel += 5;
+			timeKeeper = 0;
+		} 
+		else if(timeKeeper > timeToWait)
+		{
+			isFadingOut = false;
+			gsm.resetState(GameStateManager.MENUSTATE);
+			gsm.setState(GameStateManager.INTROSTATE);
+		}
+	}
+	
+	private void drawFade(Graphics2D g)
+	{
+		g.setColor(new Color(0, 0, 0, alphaLevel));
+		g.fillRect(0, 0, 600, 800);
+	}
+
 }
