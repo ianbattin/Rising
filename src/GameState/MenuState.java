@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
 
 import Main.GamePanel;
 import TileMap.Background;
@@ -11,6 +14,7 @@ import TileMap.Background;
 public class MenuState extends GameState 
 {
 	private Background bg;
+	private BufferedImage title;
 	
 	private String[] options = {"Play", "Controls", "Credits", "Quit" };
 	private int currentChoice = 0;
@@ -37,6 +41,7 @@ public class MenuState extends GameState
 		try
 		{
 			bg = new Background("/Backgrounds/menubackground.gif", 1);
+			title = ImageIO.read(getClass().getResourceAsStream("/Text/TitlePlaceholder2.png"));
 			bg.setVector(0, -5.0); //moves the background
 		}
 		catch(Exception e)
@@ -89,10 +94,10 @@ public class MenuState extends GameState
 		
 			drawFade(g);
 			
-			g.setColor(new Color(255, 60, 0, titleAlphaLevel));
-			g.setFont(titleFont);
-			g.drawString("RISING", centerStringX("RISING", 0, 600, g), GamePanel.HEIGHT/4); //This probably shouldn't be coded, but instead part of the background or an actual image
-
+			//g.setColor(new Color(255, 60, 0, titleAlphaLevel));
+			//g.setFont(titleFont);
+			//g.drawString("RISING", centerStringX("RISING", 0, 600, g), GamePanel.HEIGHT/4); //This probably shouldn't be coded, but instead part of the background or an actual image
+			g.drawImage(title, GamePanel.WIDTH/2 - 175/2, GamePanel.HEIGHT/4, 175, 100, null);
 		}
 	}
 

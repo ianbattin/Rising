@@ -1,5 +1,7 @@
 TODO:
 
+-CLEANUP rest of the code from Ian's code (Animation, Player, MapObject)
+-Create a separate program that allows us to create a level by selecting our tile and clicking to place (Rather than manually editing numbers)
+	-Ian has code copied from a YouTube tutorial to do this, but maybe we want to make our own for the fun of it :D
 -Apply the center string method to the Controls arrays in a way that looks good
 -Allow the user to edit the SCALEWIDTH and SCALEHEIGHT
--CLEANUP rest of the code from Ian's code (Animation, Player, MapObject)
