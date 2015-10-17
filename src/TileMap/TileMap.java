@@ -64,7 +64,7 @@ public class TileMap
 			for(int col = 0; col < width; col++)
 			{
 				int tile = map[row][col];
-				if(tile == 0) 
+				if(tile != 0) 
 				{
 					tiles.add(new Tile(col * tileSize, row * tileSize - height * tileSize + GamePanel.HEIGHT, tile, tileSize));
 				}
@@ -85,7 +85,7 @@ public class TileMap
 		//instead of drawing the tiles in this class, each tile draws itself
 		for(Tile t: tiles)
 		{
-			t.draw(g);
+			t.draw(g, t.getType());
 		}
 	}
 	

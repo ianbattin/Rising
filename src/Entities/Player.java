@@ -72,10 +72,7 @@ public class Player extends MapObject
 		
 		try
 		{
-			BufferedImage spritesheet = ImageIO.read(
-					getClass().getResourceAsStream("/Sprites/Player/RisingBasicSpriteSheet.png"));
-			
-			
+			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/RisingBasicSpriteSheet.png"));
 			sprites = new ArrayList<BufferedImage[]>();
 			for(int i = 0; i < 6; i++)
 			{

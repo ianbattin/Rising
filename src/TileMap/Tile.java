@@ -2,6 +2,10 @@ package TileMap;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import GameState.PlayState;
 import Main.GamePanel;
@@ -21,8 +25,16 @@ public class Tile
 	private int size;
 	
 	private int type;
-	public static final int NORMAL = 1; //able to pass through
-	public static final int BLOCKED = 0; //collision enabled
+	public static final int AIR = 0; //able to pass through
+	public static final int BASICBLOCKED = 1; //collision enabled
+	public static final int WINGBROKE = 2;
+	public static final int WINGMIDDLE = 3;
+	public static final int WINGTURBINE = 4;
+	public static final int WINGEND = 5;
+	//public static final int ANIMATED = 2;
+	
+	private BufferedImage spritesheet;
+	private BufferedImage image;
 	
 	public Tile(int x, int y, int type, int size)
 	{
@@ -37,6 +49,8 @@ public class Tile
 		
 		this.type = type;
 		this.size = size;
+		
+		image = this.getImage(type);
 	}
 	
 	public void update(int dx, int dy)
@@ -51,11 +65,10 @@ public class Tile
 		bottom = y + size;
 	}
 	
-	public void draw(Graphics2D g)
+	public void draw(Graphics2D g, int type)
 	{
-		if(type == 0)
+		if(type == 1)
 		{
-			//TODO Set an image, not just a color, from an image sprite sheet
 			g.setColor(Color.BLACK);
 			g.fillRect(x, y, size, size);
 			g.setColor(Color.RED);
@@ -64,6 +77,39 @@ public class Tile
 			g.drawLine(right, bottom, left, bottom);
 			g.drawLine(left, bottom, left, top);
 		}
+		else
+			g.drawImage(image, x, y, size, size, null);
+	}
+	
+	public BufferedImage getImage(int type)
+	{
+		try
+		{ 
+			spritesheet = ImageIO.read(getClass().getResourceAsStream("/Tiles/AirplaneWingTileSet/WingTileSet1.png"));	
+			switch(type)
+			{
+				case WINGBROKE:
+					image = spritesheet.getSubimage(3 * size, 0, size, size);
+					break;
+				case WINGMIDDLE:
+					image = spritesheet.getSubimage(2 * size, 0, size, size);
+					break;
+				case WINGTURBINE:
+					image = spritesheet.getSubimage(1 * size, 0, size, size);
+					break;
+				case WINGEND:
+					image = spritesheet.getSubimage(0 * size, 0, size, size);
+					break;
+				default:
+					image = ImageIO.read(getClass().getResourceAsStream("/Tiles/Error.png"));
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return image;
 	}
 	
 	//moves the tilemap in a direction
