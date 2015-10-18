@@ -89,13 +89,13 @@ public class Tile
 			switch(type)
 			{
 				case WINGBROKE:
-					image = spritesheet.getSubimage(3 * size, 0, size, size);
+					image = spritesheet.getSubimage(3 * size + 3, 0, size, size);
 					break;
 				case WINGMIDDLE:
-					image = spritesheet.getSubimage(2 * size, 0, size, size);
+					image = spritesheet.getSubimage(2 * size + 2, 0, size, size);
 					break;
 				case WINGTURBINE:
-					image = spritesheet.getSubimage(1 * size, 0, size, size);
+					image = spritesheet.getSubimage(1 * size + 1, 0, size, size);
 					break;
 				case WINGEND:
 					image = spritesheet.getSubimage(0 * size, 0, size, size);
