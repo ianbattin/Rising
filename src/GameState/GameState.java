@@ -40,12 +40,11 @@ public abstract class GameState
 
         try
         {
-            InputStream test = new FileInputStream("Resources/Sound/Cybernator_-_Fully_Set_Up_For_Penetration.wav");
-            BGM = new AudioStream(test);
+            InputStream music = new FileInputStream("Resources/Sound/Cybernator_-_Fully_Set_Up_For_Penetration.wav");
+            BGM = new AudioStream(music);
             AudioPlayer.player.start(BGM);
             MD = BGM.getData();
             loop = new ContinuousAudioDataStream(MD);
-
         }
         catch(FileNotFoundException e){
             System.out.print(e.toString());
