@@ -65,9 +65,7 @@ public abstract class GameState
 			{
 				try 
 				{
-					System.out.println("SOUND");
 					AudioClip clip = Applet.newAudioClip(new URL("file:Resources/Sound/" + fileName));
-					System.out.println("SOUND");
 					clip.play();
 				} 
 				catch (MalformedURLException murle)
