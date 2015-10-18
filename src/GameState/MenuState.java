@@ -1,10 +1,14 @@
 package GameState;
 
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 
@@ -29,7 +33,7 @@ public class MenuState extends GameState
 	public MenuState(GameStateManager gsm)
 	{
 		this.gsm = gsm;
-		
+
 		isFadingOut = false;
 		alphaLevel = 0;
 		timeKeeper = 0;
@@ -104,6 +108,7 @@ public class MenuState extends GameState
 	//Selects the current game state
 	private void select()
 	{
+		playSound("select.wav");
 	    if(currentChoice == 0)
 		{
 			isFadingOut = true;
@@ -142,6 +147,7 @@ public class MenuState extends GameState
 		//If you press the up key, the selected option go up
 		if(k == GameStateManager.up)
 		{
+			playSound("changeselection.wav");
 			currentChoice--;
 			//Unless you reach the top in which case it loops back to the bottom
 			if(currentChoice == -1)
@@ -153,6 +159,7 @@ public class MenuState extends GameState
 		//If you press the down key, the selected option goes down
 		if(k == GameStateManager.down)
 		{
+			playSound("changeselection.wav");
 			currentChoice++;
 			//Unless you reach the bottom in which case it loops back to the top
 			if(currentChoice == options.length)

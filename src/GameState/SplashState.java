@@ -12,6 +12,7 @@ public class SplashState extends GameState
 	
 	public SplashState(GameStateManager gsm)
 	{
+		init();
 		this.gsm = gsm;
 		
 		elapsedTime = 0;
@@ -27,7 +28,7 @@ public class SplashState extends GameState
 	
 	public void init() 
 	{
-		
+		music();
 	}
 
 
