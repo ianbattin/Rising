@@ -10,7 +10,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import Entities.Player;
-//import Entities.Player;
+import Entities.Pickups;
 import Main.GamePanel;
 import TileMap.Background;
 import TileMap.TileMap;
@@ -21,6 +21,7 @@ public class PlayState extends GameState
 	private Background bg;
 	private TileMap tileMap;
 	Player player;
+	Pickups pickups;
 	private boolean start;
 	
 	public PlayState(GameStateManager gsm)
@@ -43,6 +44,7 @@ public class PlayState extends GameState
 	{
 		tileMap = new TileMap("level1.txt");
 		player = new Player(tileMap);
+		pickups = new Pickups(player);
 	}
 
 	public void update()
@@ -51,6 +53,7 @@ public class PlayState extends GameState
 		{
 			bg.update();
 			tileMap.update();
+			pickups.update();
 			player.update();
 		}
 	}
@@ -59,6 +62,7 @@ public class PlayState extends GameState
 	{
 		bg.draw(g);
 		tileMap.draw(g);
+		pickups.draw(g);
 		player.draw(g);
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("RusselSquare", Font.PLAIN, 24));

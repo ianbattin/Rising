@@ -11,22 +11,20 @@ public class IntroState extends GameState {
 	private Background bg;
 	private GameStateManager gsm;
 	
-	private float timeKeeper;
-	private int currFrame, totalFrames, alphaLevel;
-	private boolean isFadingIn, isFadingOut;
-
+	private float timer;
+	private int currFrame, totalFrames;//, alphaLevel;
 	
 	public IntroState(GameStateManager gsm)
 	{
 		this.gsm = gsm;
 		
-		timeKeeper = 0;
+		timer = 0;
 		currFrame = 1; //set the starting frame number.
 		totalFrames = 4; //set last frame number
 		
-		isFadingOut = false;
-		isFadingIn = true;
-		alphaLevel = 255;
+		super.isFadingOut = false;
+		super.isFadingIn = true;
+		super.alphaLevel = 255;
 		
 		try
 		{
@@ -46,43 +44,38 @@ public class IntroState extends GameState {
 	//update bgrnd
 	public void update() 
 	{
-		timeKeeper += GamePanel.getElapsedTime();
-					
-		if(isFadingIn)
+		if(super.isFadingIn)
 		{
-			fadeIn(500000000.0);
+			super.fadeIn(500000000.0);
 		}
-		else if (isFadingOut)
+		else if (super.isFadingOut)
 		{
-			fadeOut(1000000000.0);
+			super.fadeOut(1000000000.0, gsm, GameStateManager.INTROSTATE, GameStateManager.PLAYSTATE);
 		}
-		else if(timeKeeper > 2000000000.0)
+		else
 		{
-			timeKeeper = 0;
-			if (currFrame < totalFrames)
+			if(timer > 2000000000.0)
 			{
-				currFrame++;
-				try
+				timer = 0;
+				if (currFrame < totalFrames)
 				{
+					currFrame++;
 					bg.setNewImage("/Intro/frame" + currFrame + ".gif");
 				}
-				catch(Exception e)
+				else
 				{
-					e.printStackTrace();
+					super.isFadingOut = true;
 				}
 			}
-			else
-			{
-				isFadingOut = true;
-			}
+			timer += GamePanel.getElapsedTime();
+			bg.update();
 		}
-		bg.update();
 	}
 
 	public void draw(Graphics2D g) 
 	{
 		bg.draw(g);
-		drawFade(g);
+		super.drawFade(g);
 	}
 	
 	public void keyPressed(int k) 
@@ -101,38 +94,5 @@ public class IntroState extends GameState {
 
 	public void keyReleased(int k) 
 	{
-	}
-
-	//Fading methods
-	private void fadeIn(double timeToWait)
-	{
-		if(timeKeeper > timeToWait)
-		{
-			alphaLevel -= 5;
-			if (alphaLevel == 0){
-				isFadingIn = false;
-				timeKeeper = 0; 
-			}	
-		}
-	}
-	
-	private void fadeOut(double timeToWait)
-	{
-		if (alphaLevel < 255){
-			alphaLevel += 5;
-			timeKeeper = 0;
-		} 
-		else if(timeKeeper > timeToWait)
-		{
-			isFadingOut = false;
-			gsm.resetState(GameStateManager.INTROSTATE);
-			gsm.setState(GameStateManager.PLAYSTATE);
-		}
-	}
-	
-	private void drawFade(Graphics2D g)
-	{
-		g.setColor(new Color(0, 0, 0, alphaLevel));
-		g.fillRect(0, 0, 600, 800);
 	}
 }

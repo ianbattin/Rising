@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.awt.Color;
 
 import Main.GamePanel;
 import sun.audio.*;
@@ -15,6 +16,10 @@ import sun.audio.*;
 public abstract class GameState
 {
 	protected GameStateManager gsm;
+	protected boolean isFadingOut, isFadingIn;
+	protected int alphaLevel;
+	private float timeKeeper = 0;
+	
 	public abstract void init();
 	public abstract void update();
 	public abstract void draw(Graphics2D g);
@@ -29,6 +34,50 @@ public abstract class GameState
         int start = width/2 - stringLen/2;
         return start + xPos;
 	}
+	
+	//Fading methods
+	//input: time before the animation starts
+	protected void fadeIn(double timeToWait)
+	{
+		timeKeeper += GamePanel.getElapsedTime();
+		
+		if(timeKeeper > timeToWait)
+		{
+			alphaLevel -= 5;
+			if (alphaLevel == 0){
+				isFadingIn = false;
+				timeKeeper = 0; 
+			}	
+		}
+	}
+	
+	//input: time to wait after animation ends, current gamestatemanager, state that needs reset, and state to initiate
+	protected void fadeOut(double timeToWait, GameStateManager currGsm, int stateToReset, int stateToSet)
+	{	
+		if (alphaLevel < 255){
+			alphaLevel += 5;
+		} 
+		else
+		{
+			timeKeeper += GamePanel.getElapsedTime();
+		}
+		
+		if(timeKeeper > timeToWait)
+		{
+			isFadingOut = false;
+			currGsm.resetState(stateToReset);
+			currGsm.setState(stateToSet);
+		}
+	 }
+	
+	//draws the rectangle on top of the game to make the fading appearance
+	protected void drawFade(Graphics2D g)
+	{
+		g.setColor(new Color(0, 0, 0, alphaLevel));
+		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+	}
+	
+		
 	
 	public void music() 
     {       

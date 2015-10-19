@@ -25,19 +25,15 @@ public class MenuState extends GameState
 	
 	private Font titleFont;
 	private Font optionsFont;
-	private boolean isFadingOut;
-	private int alphaLevel;
 	private int titleAlphaLevel;
-	private float timeKeeper;
 	
 	public MenuState(GameStateManager gsm)
 	{
 		this.gsm = gsm;
 
-		isFadingOut = false;
-		alphaLevel = 0;
-		timeKeeper = 0;
-		titleAlphaLevel = 255;
+		super.isFadingOut = false;
+		super.alphaLevel = 0;
+		titleAlphaLevel = 0;
 		titleFont = new Font("RussellSquare", Font.BOLD, 60);
 		optionsFont = new Font("RusselSquare", Font.PLAIN, 24);
 		
@@ -65,14 +61,13 @@ public class MenuState extends GameState
 	{
 		bg.update();
 		
-		timeKeeper += GamePanel.getElapsedTime();
-		
-		if (isFadingOut)
+		if (super.isFadingOut)
 		{
-			fadeOut(4000000000.0);
-			if (titleAlphaLevel > 0)
+			super.fadeOut(4000000000.0, gsm, GameStateManager.MENUSTATE, GameStateManager.INTROSTATE);
+			//title fading
+			if (titleAlphaLevel < 255)
 			{
-				titleAlphaLevel -= 1;
+				titleAlphaLevel += 1;
 			}
 		}
 	}
@@ -81,7 +76,7 @@ public class MenuState extends GameState
 	public void draw(Graphics2D g)
 	{
 		bg.draw(g);
-			
+		
 		//Draws out our options menu
 		for(int i = 0; i < options.length; i++)
 		{
@@ -96,12 +91,12 @@ public class MenuState extends GameState
 			g.setFont(optionsFont);
 			g.drawString(options[i], centerStringX(options[i], 0, 600, g), GamePanel.HEIGHT/2 + 40 + i * 25); //uses the i variable from the for loop to correctly position options on top of eachother
 		
-			drawFade(g);
+			super.drawFade(g);
 			
-			//g.setColor(new Color(255, 60, 0, titleAlphaLevel));
-			//g.setFont(titleFont);
-			//g.drawString("RISING", centerStringX("RISING", 0, 600, g), GamePanel.HEIGHT/4); //This probably shouldn't be coded, but instead part of the background or an actual image
 			g.drawImage(title, GamePanel.WIDTH/2 - 175/2, GamePanel.HEIGHT/4, 175, 100, null);
+			//title fading
+			g.setColor(new Color(0,0,0,titleAlphaLevel));
+			g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 		}
 	}
 
@@ -111,7 +106,7 @@ public class MenuState extends GameState
 		playSound("select.wav");
 	    if(currentChoice == 0)
 		{
-			isFadingOut = true;
+			super.isFadingOut = true;
 		}
 		if(currentChoice == 1)
 		{
@@ -129,17 +124,17 @@ public class MenuState extends GameState
 	
 	public void keyPressed(int k) 
 	{
-		if(k == GameStateManager.select && !isFadingOut)
+		if(k == GameStateManager.select && !super.isFadingOut)
 		{
 			select();
 		} 
-		else if (k == GameStateManager.select && isFadingOut)
+		else if (k == GameStateManager.select && super.isFadingOut)
 		{
 			gsm.resetState(GameStateManager.MENUSTATE);
 			gsm.setCurrentState(GameStateManager.PLAYSTATE);
 		}
 		
-		if (k == GameStateManager.reset && isFadingOut)
+		if (k == GameStateManager.reset && super.isFadingOut)
 		{
 			gsm.resetState(GameStateManager.MENUSTATE);
 		}
@@ -174,26 +169,4 @@ public class MenuState extends GameState
 	{
 
 	}
-	
-	//Fading methods
-	private void fadeOut(double timeToWait)
-	{
-		if (alphaLevel < 255){
-			alphaLevel += 5;
-			timeKeeper = 0;
-		} 
-		else if(timeKeeper > timeToWait)
-		{
-			isFadingOut = false;
-			gsm.resetState(GameStateManager.MENUSTATE);
-			gsm.setState(GameStateManager.INTROSTATE);
-		}
-	}
-	
-	private void drawFade(Graphics2D g)
-	{
-		g.setColor(new Color(0, 0, 0, alphaLevel));
-		g.fillRect(0, 0, 600, 800);
-	}
-
 }
