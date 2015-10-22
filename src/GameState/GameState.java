@@ -105,7 +105,7 @@ public abstract class GameState
         MGP.start(loop);
     }
 	
-	public void playSound(String fileName)
+	public void playSound(final String fileName)
 	{
 		Thread thread = new Thread(new Runnable()
 		{

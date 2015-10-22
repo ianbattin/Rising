@@ -42,6 +42,10 @@ public class Player extends MapObject
 	public boolean gliding;
 	public boolean drop;
 	
+	//effect variables - @Ian you can edit this how you want when you get to cleaning this class up
+	private boolean isUnderEffect;
+	private double jumpHeightFactor;
+	
 	TileMap tm;
 	
 	//animation
@@ -104,6 +108,10 @@ public class Player extends MapObject
 		
 		jumped = false;
 		falling = true;
+		
+		//effects
+		isUnderEffect = false;
+		jumpHeightFactor = 1;
 	}
 	
 	public void update()
@@ -208,7 +216,7 @@ public class Player extends MapObject
 		{
 			if(!jumped)
 			{
-				jumpHeight = this.y - 100.0;
+				jumpHeight = this.y - (100.0*jumpHeightFactor); //edited to be "effectable"
 				jumped = true;
 			}
 			if(jumped)
@@ -226,12 +234,12 @@ public class Player extends MapObject
 		{
 			if(!doubleJumped)
 			{
-				jumpHeight = this.y - 50.0;
+				jumpHeight = this.y - (50.0*jumpHeightFactor); //edited to be "effectable"
 				doubleJumped = true;
 			}
 			if(jumped)
 			{
-				if(y > jumpHeight) dy = -maxSpeed*2;
+				if(y > jumpHeight) dy = -maxSpeed*2*jumpHeightFactor; //edited to be "effectable"
 				if(y <= jumpHeight) 
 				{
 					jumpHeight = 9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
@@ -409,4 +417,28 @@ public class Player extends MapObject
 	{
 		return this.y;
 	}
+	
+	//starts effects, added to enable the pickups
+	public void effectStart(int effect)
+	{
+		switch (effect)
+		{
+			case 0: 
+			{
+				jumpHeightFactor = 2;
+				break;
+			}
+		}
+		isUnderEffect = true;
+		System.out.println("Effect started");
+	}
+	
+	//resets the effects
+	public void resetEffects()
+	{
+		isUnderEffect = false;
+		jumpHeightFactor = 1;
+		System.out.println("Effect ended");
+	}
+	
 }

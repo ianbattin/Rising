@@ -9,7 +9,7 @@ public class Pickups {
 	private Player player;
 	
 	private long coolDownTime;
-	private boolean willDrawPickup;
+	private boolean willDrawPickup, isUnderEffect;
 	private float xLoc, yLoc, offSet;
 	
 	public Pickups(Player player)
@@ -17,11 +17,19 @@ public class Pickups {
 		this.player = player;
 		
 		coolDownTime = 10000000000L;
+		
+		init();
+	}
+	
+	public void init()
+	{
 		willDrawPickup = false;
+		isUnderEffect = false;
+		
+		//sets starting points for the spawning of the pickups
 		xLoc = GamePanel.WIDTH/2;
 		yLoc = -50;
 		offSet = (float)(Math.random()*GamePanel.HEIGHT);
-		System.out.println(offSet);
 	}
 
 	//updates by checking to see if it should spawn a pickup.
@@ -44,6 +52,12 @@ public class Pickups {
 		{
 			coolDownTime -= GamePanel.getElapsedTime();
 		} 
+		else if (isUnderEffect)
+		{
+			player.resetEffects();
+			coolDownTime = 100000000000L;
+			init();
+		}
 		else 
 		{
 			if ((int)(Math.random()*0) == 0)//edit probability of spawning here
@@ -69,7 +83,7 @@ public class Pickups {
 			if (yLoc < GamePanel.HEIGHT)
 				yLoc += 0.5;
 			else 
-				willDrawPickup = false;
+				init();
 			xLoc = (float)(Math.sin((yLoc-offSet)/(GamePanel.HEIGHT/4))*(GamePanel.WIDTH/2-50))+GamePanel.WIDTH/2;
 		}
 	}
@@ -77,7 +91,19 @@ public class Pickups {
 	//checks if the player collided with the pickup
 	public void checkCollision()
 	{
-		if ((player.getX()-(player.getWidth()/2)) < xLoc+10 && xLoc-10 < (player.getX()+(player.getWidth()/2)) && (player.getY()-player.getHeight()/2) < yLoc+10 && yLoc-10 < (player.getY()+player.getHeight()/2))
+		if ((player.getX()-(player.getWidth()/2)) < xLoc+35 && xLoc-10 < (player.getX()+(player.getWidth()/2)) && (player.getY()-player.getHeight()/2) < yLoc && yLoc < (player.getY()+player.getHeight()/2))
+		{
+			effectStart();
 			willDrawPickup = false;
+			isUnderEffect = true;
+			coolDownTime = 10000000000L;
+		}
 	}
+	
+	public void effectStart()
+	{
+		int rand = (int)(Math.random()*0);//increase 0 to increase possibilities
+		player.effectStart(rand);
+	}
+	
 }
