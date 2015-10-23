@@ -20,7 +20,7 @@ public class IntroState extends GameState {
 		
 		timer = 0;
 		currFrame = 1; //set the starting frame number.
-		totalFrames = 4; //set last frame number
+		totalFrames = 5; //set last frame number
 		
 		super.isFadingOut = false;
 		super.isFadingIn = true;
@@ -54,7 +54,7 @@ public class IntroState extends GameState {
 		}
 		else
 		{
-			if(timer > 2000000000.0)
+			if(timer > 8000000000.0)
 			{
 				timer = 0;
 				if (currFrame < totalFrames)
