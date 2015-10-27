@@ -1,4 +1,4 @@
-package TileMapEditor;
+package TileMapEditor.TileMapEditor;
 
 import javax.swing.JFrame;
 

@@ -22,7 +22,6 @@ public class Player extends MapObject
 	
 	public int x;
 	public int y;
-	public int r;
 	public double dx;
 	public double dy;
 	
@@ -97,7 +96,6 @@ public class Player extends MapObject
 
 		x = GamePanel.WIDTH/2;
 		y = GamePanel.HEIGHT/2;
-		r = 10;
 		
 		dx = 0.0;
 		dy = 0.0;
@@ -124,9 +122,9 @@ public class Player extends MapObject
 		x += dx;
 		y += dy;
 
-		if(x - r < 0) x = r;
-		if(y - r < 0) y = r;
-		if(x + r > GamePanel.WIDTH) x = GamePanel.WIDTH -r;
+		if(x - width/2 < 0) x = width/2;
+		if(y - height/2 < 0) y = height/2;
+		if(x + width/2 > GamePanel.WIDTH) x = GamePanel.WIDTH - width/2;
 		if(y  + cheight/2 > GamePanel.HEIGHT)
 		{
 			jumped = false;

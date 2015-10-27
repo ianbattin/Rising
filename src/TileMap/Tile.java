@@ -26,12 +26,6 @@ public class Tile
 	
 	private int type;
 	public static final int AIR = 0; //able to pass through
-	public static final int BASICBLOCKED = 1; //collision enabled
-	public static final int WINGBROKE = 2;
-	public static final int WINGMIDDLE = 3;
-	public static final int WINGTURBINE = 4;
-	public static final int WINGEND = 5;
-	//public static final int ANIMATED = 2;
 	
 	private BufferedImage spritesheet;
 	private BufferedImage image;
@@ -67,17 +61,6 @@ public class Tile
 	
 	public void draw(Graphics2D g, int type)
 	{
-		if(type == 1)
-		{
-			g.setColor(Color.BLACK);
-			g.fillRect(x, y, size, size);
-			g.setColor(Color.RED);
-			g.drawLine(left, top, right, top);
-			g.drawLine(right, top, right, bottom);
-			g.drawLine(right, bottom, left, bottom);
-			g.drawLine(left, bottom, left, top);
-		}
-		else
 			g.drawImage(image, x, y, size, size, null);
 	}
 	
@@ -85,24 +68,8 @@ public class Tile
 	{
 		try
 		{ 
-			spritesheet = ImageIO.read(getClass().getResourceAsStream("/Tiles/AirplaneWingTileSet/WingTileSet1.png"));	
-			switch(type)
-			{
-				case WINGBROKE:
-					image = spritesheet.getSubimage(3 * size + 3, 0, size, size);
-					break;
-				case WINGMIDDLE:
-					image = spritesheet.getSubimage(2 * size + 2, 0, size, size);
-					break;
-				case WINGTURBINE:
-					image = spritesheet.getSubimage(1 * size + 1, 0, size, size);
-					break;
-				case WINGEND:
-					image = spritesheet.getSubimage(0 * size, 0, size, size);
-					break;
-				default:
-					image = ImageIO.read(getClass().getResourceAsStream("/Tiles/Error.png"));
-			}
+			spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Tiles/tileset.png"));	
+			image = spritesheet.getSubimage(type * size, 0, size, size);
 		}
 		catch(Exception e)
 		{

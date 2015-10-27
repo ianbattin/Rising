@@ -1,4 +1,4 @@
-package TileMapEditor;
+package TileMapEditor.TileMapEditor;
 
 import java.awt.*;
 import java.awt.image.*;

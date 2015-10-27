@@ -1,4 +1,4 @@
-package TileMapEditor;
+package TileMapEditor.TileMapEditor;
 
 import java.io.*;
 import javax.swing.*;
@@ -10,13 +10,13 @@ import java.awt.event.*;
 
 public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 	
-	public static final int WIDTH = 600;
-	public static final int HEIGHT = 850;
+	public static final int WIDTH = 601;
+	public static final int HEIGHT = 752;
 	public static final int SCALE = 1;
 	public static int TILESIZE = 25;
 	public static final int numRows = 2;
 	
-	private String path = "tileset.png";
+	private String path = "Resources/Sprites/Tiles/tileset.png";
 	private BufferedImage tileset;
 	private BufferedImage[][] tiles;
 	private int numTiles;
@@ -216,8 +216,8 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 		g.drawRect(xmap, ymap, mapWidth * TILESIZE, mapHeight * TILESIZE);
 		
 		// draw map border
-		g.setColor(Color.GREEN);
-		g.drawRect(xmap + 10 * TILESIZE, ymap + 7 * TILESIZE, (mapWidth - 20) * TILESIZE, (mapHeight - 14) * TILESIZE);
+		//g.setColor(Color.GREEN);
+		//g.drawRect(xmap + 10 * TILESIZE, ymap + 7 * TILESIZE, (mapWidth - 20) * TILESIZE, (mapHeight - 14) * TILESIZE);
 		
 		// draw clickable blocks
 		int bo = HEIGHT - numRows * TILESIZE;
@@ -328,7 +328,8 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 				try {
 					String str = JOptionPane.showInputDialog(null, "Save file name", "Save Map", 1);
 					if(str == null) return;
-					BufferedWriter bw = new BufferedWriter(new FileWriter(str));
+					BufferedWriter bw = new BufferedWriter(new FileWriter("Resources/Maps/" + str + ".txt"));
+					bw.write(TILESIZE + "\n");
 					bw.write(mapWidth + "\n");
 					bw.write(mapHeight + "\n");
 					for(int row = 0; row < mapHeight; row++) {
@@ -350,7 +351,8 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 				try {
 					str = JOptionPane.showInputDialog(null, "Open file name", "Open Map", 1);
 					if(str == null) return;
-					BufferedReader br = new BufferedReader(new FileReader(str));
+					BufferedReader br = new BufferedReader(new FileReader("Resources/Maps/" + str + ".txt"));
+					TILESIZE = Integer.parseInt(br.readLine());
 					mapWidth = Integer.parseInt(br.readLine());
 					mapHeight = Integer.parseInt(br.readLine());;
 					map = new int[mapHeight][mapWidth];
@@ -529,7 +531,10 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 				int[][] temp = new int[mapHeight][mapWidth];
 				for(int row = 0; row < mapHeight; row++) {
 					for(int col = 0; col < mapWidth; col++) {
-						temp[row][col] = map[row][col];
+						try {
+							temp[row-1][col] = map[row][col];
+						} catch(Exception e) {
+							 }
 					}
 				}
 				map = temp;
@@ -552,7 +557,7 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 				int[][] temp = new int[mapHeight][mapWidth];
 				for(int row = 0; row < mapHeight - 1; row++) {
 					for(int col = 0; col < mapWidth; col++) {
-						temp[row][col] = map[row][col];
+						temp[row+1][col] = map[row][col];
 					}
 				}
 				map = temp;
