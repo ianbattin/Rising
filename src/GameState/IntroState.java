@@ -54,7 +54,7 @@ public class IntroState extends GameState {
 		}
 		else
 		{
-			if(timer > 8000000000.0)
+			if(timer > 7000000000.0)
 			{
 				timer = 0;
 				if (currFrame < totalFrames)

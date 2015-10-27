@@ -19,33 +19,17 @@ import TileMap.TileMap;
 
 public class Player extends MapObject
 {
-	
-	public int x;
-	public int y;
-	public double dx;
-	public double dy;
-	
-	public double maxSpeed = 3.0;
-	public double acceleration = 0.5;
-	
-	public double jumpHeight;
-	public boolean doubleJump;
-	public boolean jumped;
-	private boolean doubleJumped;
-	
-	public boolean idle;
-	public boolean jumping;
-	public boolean falling;
-	public boolean left;
-	public boolean right;
-	public boolean gliding;
-	public boolean drop;
+	//position
+	private int x;
+	private int y;
+	private double dx;
+	private double dy;
 	
 	//effect variables - @Ian you can edit this how you want when you get to cleaning this class up
 	private boolean isUnderEffect;
 	private double jumpHeightFactor;
 	
-	TileMap tm;
+	private TileMap tm;
 	
 	//animation
 	private ArrayList<BufferedImage[]> sprites;
@@ -65,6 +49,13 @@ public class Player extends MapObject
 	{	
 		super(tm);
 		this.tm = tm;
+		
+		moveSpeed = 0.3;
+		maxSpeed = 5.0;
+		stopSpeed = 0.4;
+		fallSpeed = 0.25;
+		maxFallSpeed = 7.0;
+		jumpStart = -3.0;
 		
 		width = 20;
 		height = 40;
@@ -104,7 +95,6 @@ public class Player extends MapObject
 		animation.setFrames(sprites.get(IDLE));
 		animation.setDelay(400);
 		
-		jumped = false;
 		falling = true;
 		
 		//effects
@@ -114,8 +104,8 @@ public class Player extends MapObject
 	
 	public void update()
 	{	
-		getMovement();
 		myCheckCollision();
+		getMovement();
 		if(idle) dy = dy + 1;
 		getAnimation();
 
@@ -123,13 +113,10 @@ public class Player extends MapObject
 		y += dy;
 
 		if(x - width/2 < 0) x = width/2;
-		if(y - height/2 < 0) y = height/2;
 		if(x + width/2 > GamePanel.WIDTH) x = GamePanel.WIDTH - width/2;
 		if(y  + cheight/2 > GamePanel.HEIGHT)
 		{
-			jumped = false;
 			y = GamePanel.HEIGHT - cheight/2;
-			dy = 0.0;
 		}
 	}
 	
@@ -156,8 +143,8 @@ public class Player extends MapObject
 			int collisionRight = t.right;
 			int collisionTop = t.top;
 			int collisionBottom = t.bottom;
-			
-			if(!(jumping && doubleJumped) && (collisionLeft < x && x < collisionRight) && (collisionTop < y + height/2 && y + height/2 < collisionBottom && !drop))
+
+			if(!jumping && !doubleJumped && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 && y + height/2 < collisionBottom) && !drop)
 			{
 				y = t.top - cheight/2;
 				dy = 0.0;
@@ -166,7 +153,11 @@ public class Player extends MapObject
 				falling = false;
 				gliding = false;
 			}
-			if(!collided && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 + 1 && y + height/2 + 1 < collisionBottom && !drop)) collided = true;
+			if(!collided && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 + 1 && y + height/2 + 1 < collisionBottom && !drop)) 
+			{
+				collided = true;
+				falling = false;
+			}
 		}
 		if(!collided && !jumping && !jumped && !doubleJumped)
 		{
@@ -185,13 +176,13 @@ public class Player extends MapObject
 		//MOVING LEFT AND RIGHT
 		if(left)
 		{
-			dx -= acceleration;
+			dx -= moveSpeed;
 			if(dx < -maxSpeed) dx = -maxSpeed;
 		}
 
 		if(right)
 		{
-			dx += acceleration;
+			dx += moveSpeed;
 			if(dx > maxSpeed) dx = maxSpeed;
 		}
 
@@ -199,12 +190,12 @@ public class Player extends MapObject
 		{
 			if(dx < 0.0) 
 			{
-				dx += acceleration;
+				dx += stopSpeed;
 				if(dx > 0.0) dx = 0.0;
 			}
 			if(dx > 0.0) 
 			{
-				dx -= acceleration;
+				dx -= stopSpeed;
 				if(dx < 0.0) dx = 0.0;
 			}
 		}
@@ -219,7 +210,7 @@ public class Player extends MapObject
 			}
 			if(jumped)
 			{
-				if(y > jumpHeight) dy = -maxSpeed*3;
+				if(y > jumpHeight) dy = jumpStart*3;
 				if(y <= jumpHeight) 
 				{
 					jumpHeight = 9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
@@ -237,7 +228,7 @@ public class Player extends MapObject
 			}
 			if(jumped)
 			{
-				if(y > jumpHeight) dy = -maxSpeed*2*jumpHeightFactor; //edited to be "effectable"
+				if(y > jumpHeight) dy = jumpStart*2*jumpHeightFactor; //edited to be "effectable"
 				if(y <= jumpHeight) 
 				{
 					jumpHeight = 9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
@@ -253,7 +244,8 @@ public class Player extends MapObject
 			{
 				dy = 1;
 			}
-			else dy += acceleration;
+			else if(dy < maxFallSpeed) dy += fallSpeed;
+			else dy = maxFallSpeed;
 		}
 	}
 	
@@ -341,13 +333,13 @@ public class Player extends MapObject
 				jumping = true;
 				idle = false;
 			}
-			if(jumped && !doubleJump)
+			/*if(jumped && !doubleJump)
 			{
 				falling = false;
 				jumping = false;
 				doubleJump = true;
 				idle = false;
-			}
+			}*/
 		}
 		if(k == KeyEvent.VK_S)
 		{

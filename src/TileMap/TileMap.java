@@ -28,6 +28,8 @@ public class TileMap
 	
 	public TileMap(String s)
 	{
+		x = 0;
+		y = 0;
 		try
 		{
 			BufferedReader br = new BufferedReader(new FileReader(s));
@@ -66,7 +68,7 @@ public class TileMap
 				int tile = map[row][col];
 				if(tile != 0) 
 				{
-					tiles.add(new Tile(col * tileSize, row * tileSize - height * tileSize + GamePanel.HEIGHT, tile, tileSize));
+					tiles.add(new Tile(col * tileSize + x, row * tileSize - height * tileSize + GamePanel.HEIGHT + y, tile, tileSize));
 				}
 			}
 		}
@@ -93,10 +95,6 @@ public class TileMap
 	{
 		this.dx = dx;
 		this.dy = dy;
-		for(Tile t: tiles)
-		{
-			t.setVector(dx, dy);
-		}
 	}
 	
 	public int getTileSize()

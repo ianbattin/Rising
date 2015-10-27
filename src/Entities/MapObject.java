@@ -50,13 +50,16 @@ public abstract class MapObject
 	protected boolean facingRight;
 	
 	//movement
+	protected boolean idle;
 	protected boolean left;
 	protected boolean right;
-	protected boolean up;
-	protected boolean down;
 	protected boolean jumping;
-	protected boolean falling;
 	protected boolean jumped;
+	protected boolean doubleJump;
+	protected boolean doubleJumped;
+	protected boolean falling;
+	protected boolean gliding;
+	protected boolean drop;
 	
 	//movement attributes
 	protected double moveSpeed;
@@ -66,6 +69,7 @@ public abstract class MapObject
 	protected double maxFallSpeed;
 	protected double jumpHeight;
 	protected double stopJump;
+	protected double jumpStart;
 	
 	public MapObject(TileMap tm)
 	{
@@ -197,8 +201,8 @@ public abstract class MapObject
 	
 	public void setLeft(boolean b) { 	left = b;	}
 	public void setRight(boolean b) { 	right = b;	}
-	public void setUp(boolean b) { 	up = b;	}
-	public void setDown(boolean b) { 	down = b;	}
+	public void setUp(boolean b) { 	jumping = b;	}
+	public void setDown(boolean b) { 	drop = b;	}
 	public void setJumping(boolean b) { 	jumping = b;	}
 	
 	public boolean notOnScreen()

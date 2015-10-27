@@ -11,7 +11,7 @@ import java.awt.event.*;
 public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 	
 	public static final int WIDTH = 601;
-	public static final int HEIGHT = 752;
+	public static final int HEIGHT = 751;
 	public static final int SCALE = 1;
 	public static int TILESIZE = 25;
 	public static final int numRows = 2;

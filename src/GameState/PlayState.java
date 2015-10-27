@@ -27,7 +27,7 @@ public class PlayState extends GameState
 	public PlayState(GameStateManager gsm)
 	{
 		init();
-		player.setPosition(300, 700);
+		player.setPosition(250, -100);
 		this.gsm = gsm;
 		start = false;
 		try
