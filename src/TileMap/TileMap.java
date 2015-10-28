@@ -144,4 +144,13 @@ public class TileMap
 	public int getX() {	return x;	}
 	public int getY() {	return y;	}
 	public double getDY() { return dy; }
+
+	public void setXVector(double dx) 
+	{
+		this.dx = dx;
+	}
+	public void setYVector(double dy) 
+	{
+		this.dy = dy;
+	}
 }

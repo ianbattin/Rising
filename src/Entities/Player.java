@@ -112,20 +112,28 @@ public class Player extends MapObject
 		//Camera left and right movement (Player always stays centered)
 		if(x < GamePanel.WIDTH/2)
 		{
-			tm.setVector(-dx, 2.0);
-			//x = GamePanel.WIDTH/2;
+			tm.setXVector(-dx);
 		}
 		if(x > GamePanel.WIDTH/2)
 		{
-			tm.setVector(-dx, 2.0);
-			//x = GamePanel.WIDTH/2;
+			tm.setXVector(-dx);
 		}
 		else
 		{
-			tm.setVector(0, 2.0);
+			tm.setXVector(0);
 			x += dx;
-			
 		}
+		
+//		if(y < 200) 
+//		{
+//			tm.setYVector(-dy);
+//			y++;
+//		}
+//		else 
+//		{
+//			tm.setYVector(2.0);
+//			y += dy;
+//		}
 		
 		y += dy;
 		
