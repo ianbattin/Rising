@@ -46,11 +46,14 @@ public class Tile
 		
 		this.type = type;
 		this.size = size;
-		
-		image = this.getImage(type);
 	}
 	
-	public void update(int dx, int dy)
+	public void init()
+	{
+		image = TileMap.getSprite(type);
+	}
+	
+	public void update(double dx, double dy)
 	{
 		//for when we have to move the tiles as the player ascends
 		x += dx;
@@ -65,21 +68,6 @@ public class Tile
 	public void draw(Graphics2D g, int type)
 	{
 		g.drawImage(image, x, y, size, size, null);
-	}
-	
-	public BufferedImage getImage(int type)
-	{
-		try
-		{ 
-			spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Tiles/tileset.png"));	
-			image = spritesheet.getSubimage(type * size, 0, size, size);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		
-		return image;
 	}
 	
 	//moves the tilemap in a direction

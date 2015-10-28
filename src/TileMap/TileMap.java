@@ -2,9 +2,12 @@ package TileMap;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 //import Entities.MapObject;
 import GameState.GameStateManager;
@@ -15,8 +18,8 @@ public class TileMap
 {
 	private int x;
 	private int y;
-	private int dx;
-	private int dy;
+	private double dx;
+	private double dy;
 	
 	private int width; //total width in tiles
 	private int height; //total height in tiles
@@ -25,13 +28,18 @@ public class TileMap
 	private int tileSize; //width and height of individual tiles
 	
 	public ArrayList<Tile> tiles;
+	public static BufferedImage[] sprites;
+	public BufferedImage spritesheet;
 	
 	public TileMap(String s)
 	{
 		x = 0;
 		y = 0;
+		
 		try
 		{
+			spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Tiles/tileset.png"));
+			
 			BufferedReader br = new BufferedReader(new FileReader(s));
 			tileSize = Integer.parseInt(br.readLine());
 			width = Integer.parseInt(br.readLine()); //reads line 1 of the file for the width
@@ -61,6 +69,7 @@ public class TileMap
 		tiles = new ArrayList<Tile>();//basically map[][] but in ArrayList form cause they're easier
 
 		//takes all of the values in map[][] and adds a new tile with their location to tiles
+		int minType = 0;
 		for(int row = 0; row < height; row++)
 		{
 			for(int col = 0; col < width; col++)
@@ -69,8 +78,28 @@ public class TileMap
 				if(tile != 0) 
 				{
 					tiles.add(new Tile(col * tileSize + x, row * tileSize - height * tileSize + GamePanel.HEIGHT + y, tile, tileSize));
+					
+					tiles.add(new Tile(col * tileSize + x + GamePanel.WIDTH, row * tileSize - height * tileSize + GamePanel.HEIGHT + y, tile, tileSize));
+					
+					tiles.add(new Tile(col * tileSize + x - GamePanel.WIDTH, row * tileSize - height * tileSize + GamePanel.HEIGHT + y, tile, tileSize));
+				}
+				if(tile > minType)
+				{
+					minType = tile;
 				}
 			}
+		}
+		
+		//load sprites into sprites array
+		sprites = new BufferedImage[minType+1];
+		for(int i = 0; i < sprites.length; i++)
+		{
+			sprites[i] = spritesheet.getSubimage(i * tileSize, 0, tileSize, tileSize);
+		}
+		
+		for(Tile t: tiles)
+		{
+			t.init();
 		}
 	}
 	
@@ -91,7 +120,7 @@ public class TileMap
 		}
 	}
 	
-	public void setVector(int dx, int dy)
+	public void setVector(double dx, double dy)
 	{
 		this.dx = dx;
 		this.dy = dy;
@@ -107,7 +136,12 @@ public class TileMap
 		return map[row][col];
 	}
 	
+	public static BufferedImage getSprite(int type)
+	{
+		return sprites[type];
+	}
+	
 	public int getX() {	return x;	}
 	public int getY() {	return y;	}
-	public int getDY() { return dy; }
+	public double getDY() { return dy; }
 }

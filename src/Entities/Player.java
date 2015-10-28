@@ -109,14 +109,31 @@ public class Player extends MapObject
 		if(idle) dy = dy + 1;
 		getAnimation();
 
-		x += dx;
+		//Camera left and right movement (Player always stays centered)
+		if(x < GamePanel.WIDTH/2)
+		{
+			tm.setVector(-dx, 2.0);
+			//x = GamePanel.WIDTH/2;
+		}
+		if(x > GamePanel.WIDTH/2)
+		{
+			tm.setVector(-dx, 2.0);
+			//x = GamePanel.WIDTH/2;
+		}
+		else
+		{
+			tm.setVector(0, 2.0);
+			x += dx;
+			
+		}
+		
 		y += dy;
-
+		
 		if(x - width/2 < 0) x = width/2;
 		if(x + width/2 > GamePanel.WIDTH) x = GamePanel.WIDTH - width/2;
 		if(y  + cheight/2 > GamePanel.HEIGHT)
 		{
-			y = GamePanel.HEIGHT - cheight/2;
+			//y = GamePanel.HEIGHT - cheight/2;
 		}
 	}
 	
