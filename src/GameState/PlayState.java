@@ -20,14 +20,15 @@ public class PlayState extends GameState
 {
 	private Background bg;
 	private TileMap tileMap;
-	Player player;
-	Pickups pickups;
+	private Player player;
+	private Pickups pickups;
 	private boolean start;
+	public static boolean tileStart;
 	
 	public PlayState(GameStateManager gsm)
 	{
 		init();
-		player.setPosition(300, 250);
+		player.setPosition(300, -100);
 		this.gsm = gsm;
 		start = false;
 		try
@@ -45,6 +46,7 @@ public class PlayState extends GameState
 		tileMap = new TileMap("Resources/Maps/level2.txt");
 		player = new Player(tileMap);
 		pickups = new Pickups(player);
+		tileStart = false;
 	}
 
 	public void update()
@@ -88,6 +90,7 @@ public class PlayState extends GameState
 				{
 					public void run()
 					{
+						tileStart = true;
 						tileMap.setVector(0, 2.0);		
 					}
 					

@@ -121,23 +121,27 @@ public class Player extends MapObject
 			tm.setXVector(0);
 			x += dx;
 		}
-		
+
 		if(y < 200) 
 		{
-			tm.setYVector(-dy);
-			if(dy >= 0) tm.setYVector(2.0);
-			y++;
+			if(PlayState.tileStart) tm.setYVector(-dy);
+			if(dy >= 0 && PlayState.tileStart) tm.setYVector(2.0);
+			if(PlayState.tileStart)
+			{
+				y++;
+			}
+			else
+			{
+				y += dy;
+			}
+			
 		}
 		else 
 		{
-			//tm.setYVector(2.0);
+			if(PlayState.tileStart) tm.setYVector(2.0);
 			y += dy;
-			yJump += dy;
 		}
-		
-		
-		
-		//y += dy;
+		yJump += dy;
 		
 		if(x - width/2 < 0) x = width/2;
 		if(x + width/2 > GamePanel.WIDTH) x = GamePanel.WIDTH - width/2;
@@ -264,8 +268,6 @@ public class Player extends MapObject
 			falling = true;
 		}
 		
-		System.out.println(yJump + "   " + jumpHeight + "   " + (jumpHeight - yJump));
-		
 		if(falling)
 		{
 			jumping = false;
@@ -362,13 +364,13 @@ public class Player extends MapObject
 				jumping = true;
 				idle = false;
 			}
-			if(jumped && !doubleJump)
+			/*if(jumped && !doubleJump)
 			{
 				falling = false;
 				jumping = false;
 				doubleJump = true;
 				idle = false;
-			}
+			}*/
 		}
 		if(k == KeyEvent.VK_S)
 		{
