@@ -77,7 +77,7 @@ public class TileMap
 				int tile = map[row][col];
 				if(tile != 0) 
 				{
-					tiles.add(new Tile(col * tileSize + x, row * tileSize - height * tileSize + GamePanel.HEIGHT + y, tile, tileSize));
+					tiles.add(new Tile(col * tileSize + x, row * tileSize - height * tileSize + GamePanel.HEIGHT, tile, tileSize));
 					
 					tiles.add(new Tile(col * tileSize + x + GamePanel.WIDTH, row * tileSize - height * tileSize + GamePanel.HEIGHT + y, tile, tileSize));
 					

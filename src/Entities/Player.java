@@ -18,12 +18,8 @@ import TileMap.TileMap;
 
 
 public class Player extends MapObject
-{
-	//position
-	private int x;
-	private int y;
-	private double dx;
-	private double dy;
+{	
+	public double yJump;
 	
 	//effect variables - @Ian you can edit this how you want when you get to cleaning this class up
 	private boolean isUnderEffect;
@@ -88,6 +84,8 @@ public class Player extends MapObject
 		x = GamePanel.WIDTH/2;
 		y = GamePanel.HEIGHT/2;
 		
+		yJump = y;
+		
 		dx = 0.0;
 		dy = 0.0;
 		
@@ -124,18 +122,22 @@ public class Player extends MapObject
 			x += dx;
 		}
 		
-//		if(y < 200) 
-//		{
-//			tm.setYVector(-dy);
-//			y++;
-//		}
-//		else 
-//		{
-//			tm.setYVector(2.0);
-//			y += dy;
-//		}
+		if(y < 200) 
+		{
+			tm.setYVector(-dy);
+			if(dy >= 0) tm.setYVector(2.0);
+			y++;
+		}
+		else 
+		{
+			//tm.setYVector(2.0);
+			y += dy;
+			yJump += dy;
+		}
 		
-		y += dy;
+		
+		
+		//y += dy;
 		
 		if(x - width/2 < 0) x = width/2;
 		if(x + width/2 > GamePanel.WIDTH) x = GamePanel.WIDTH - width/2;
@@ -169,7 +171,7 @@ public class Player extends MapObject
 			int collisionTop = t.top;
 			int collisionBottom = t.bottom;
 
-			if(!jumping && !doubleJumped && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 && y + height/2 < collisionBottom) && !drop)
+			if(!jumping && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 && y + height/2 < collisionBottom) && !drop)
 			{
 				y = t.top - cheight/2;
 				dy = 0.0;
@@ -230,13 +232,13 @@ public class Player extends MapObject
 		{
 			if(!jumped)
 			{
-				jumpHeight = this.y - (100.0*jumpHeightFactor); //edited to be "effectable"
+				jumpHeight = this.yJump - (100.0*jumpHeightFactor); //edited to be "effectable"
 				jumped = true;
 			}
 			if(jumped)
 			{
-				if(y > jumpHeight) dy = jumpStart*3;
-				if(y <= jumpHeight) 
+				if(yJump > jumpHeight) dy = jumpStart*3;
+				if(yJump <= jumpHeight) 
 				{
 					jumpHeight = 9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
 					falling = true;
@@ -248,19 +250,21 @@ public class Player extends MapObject
 		{
 			if(!doubleJumped)
 			{
-				jumpHeight = this.y - (50.0*jumpHeightFactor); //edited to be "effectable"
+				jumpHeight = this.yJump - (50.0*jumpHeightFactor); //edited to be "effectable"
 				doubleJumped = true;
 			}
 			if(jumped)
 			{
-				if(y > jumpHeight) dy = jumpStart*2*jumpHeightFactor; //edited to be "effectable"
-				if(y <= jumpHeight) 
+				if(yJump > jumpHeight) dy = jumpStart*2*jumpHeightFactor; //edited to be "effectable"
+				if(yJump <= jumpHeight) 
 				{
 					jumpHeight = 9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
 				}
 			}
 			falling = true;
 		}
+		
+		System.out.println(yJump + "   " + jumpHeight + "   " + (jumpHeight - yJump));
 		
 		if(falling)
 		{
@@ -358,13 +362,13 @@ public class Player extends MapObject
 				jumping = true;
 				idle = false;
 			}
-			/*if(jumped && !doubleJump)
+			if(jumped && !doubleJump)
 			{
 				falling = false;
 				jumping = false;
 				doubleJump = true;
 				idle = false;
-			}*/
+			}
 		}
 		if(k == KeyEvent.VK_S)
 		{
