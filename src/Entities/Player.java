@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import GameState.GameStateManager;
 import GameState.PlayState;
 import Main.GamePanel;
 import TileMap.Tile;
@@ -19,13 +20,15 @@ import TileMap.TileMap;
 
 public class Player extends MapObject
 {	
-	public double yJump;
+	private TileMap tm;
 	
 	//effect variables - @Ian you can edit this how you want when you get to cleaning this class up
 	private boolean isUnderEffect;
 	private double jumpHeightFactor;
 	
-	private TileMap tm;
+	//character position relative to bottom of tileMap
+	private double character_y;
+		
 	
 	//animation
 	private ArrayList<BufferedImage[]> sprites;
@@ -83,8 +86,8 @@ public class Player extends MapObject
 
 		x = GamePanel.WIDTH/2;
 		y = GamePanel.HEIGHT/2;
-		
-		yJump = y;
+				
+		character_y =  GamePanel.heightScaled - y;
 		
 		dx = 0.0;
 		dy = 0.0;
@@ -102,9 +105,9 @@ public class Player extends MapObject
 	
 	public void update()
 	{	
-		myCheckCollision();
-		getMovement();
 		if(idle) dy = dy + 1;
+		getMovement();
+		myCheckCollision();
 		getAnimation();
 
 		//Camera left and right movement (Player always stays centered)
@@ -122,13 +125,13 @@ public class Player extends MapObject
 			x += dx;
 		}
 
-		if(y < 200) 
+		if(y < 300) 
 		{
-			if(PlayState.tileStart) tm.setYVector(-dy);
+			if(PlayState.tileStart) tm.setYVector(-dy + 2);
 			if(dy >= 0 && PlayState.tileStart) tm.setYVector(2.0);
 			if(PlayState.tileStart)
 			{
-				y++;
+				if(dy > 0) y += (dy);
 			}
 			else
 			{
@@ -141,7 +144,9 @@ public class Player extends MapObject
 			if(PlayState.tileStart) tm.setYVector(2.0);
 			y += dy;
 		}
-		yJump += dy;
+		
+		character_y += (-dy + tm.getDY());
+
 		
 		if(x - width/2 < 0) x = width/2;
 		if(x + width/2 > GamePanel.WIDTH) x = GamePanel.WIDTH - width/2;
@@ -175,10 +180,10 @@ public class Player extends MapObject
 			int collisionTop = t.top;
 			int collisionBottom = t.bottom;
 
-			if(!jumping && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 && y + height/2 < collisionBottom) && !drop)
+			if(dy > 0 && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 && y + height/2 < collisionBottom) && !drop)
 			{
 				y = t.top - cheight/2;
-				dy = 0.0;
+				dy = tm.getDY();
 				jumped  = false;
 				doubleJumped = false;
 				falling = false;
@@ -187,8 +192,8 @@ public class Player extends MapObject
 			if(!collided && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 + 1 && y + height/2 + 1 < collisionBottom && !drop)) 
 			{
 				collided = true;
-				falling = false;
 			}
+			
 		}
 		if(!collided && !jumping && !jumped && !doubleJumped)
 		{
@@ -200,6 +205,7 @@ public class Player extends MapObject
 	{
 		this.x = x;
 		this.y = y;
+		character_y = GamePanel.heightScaled - y;
 	}
 	
 	public void getMovement()
@@ -236,20 +242,21 @@ public class Player extends MapObject
 		{
 			if(!jumped)
 			{
-				jumpHeight = this.yJump - (100.0*jumpHeightFactor); //edited to be "effectable"
+				jumpHeight = character_y + (100*jumpHeightFactor); //edited to be "effectable"
 				jumped = true;
 			}
 			if(jumped)
 			{
-				if(yJump > jumpHeight) dy = jumpStart*3;
-				if(yJump <= jumpHeight) 
+				if(character_y < jumpHeight) dy = jumpStart*3*jumpHeightFactor;
+				if(character_y >= jumpHeight) 
 				{
-					jumpHeight = 9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
+					jumpHeight = -9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
 					falling = true;
 				}
 			}
 		}
 
+		/*
 		if(doubleJump)
 		{
 			if(!doubleJumped)
@@ -267,7 +274,7 @@ public class Player extends MapObject
 			}
 			falling = true;
 		}
-		
+		*/
 		if(falling)
 		{
 			jumping = false;
@@ -357,7 +364,7 @@ public class Player extends MapObject
 	
 	public void keyPressed(int k)
 	{
-		if(k == KeyEvent.VK_W)
+		if(k == GameStateManager.up)
 		{
 			if(!jumped)
 			{
@@ -372,21 +379,21 @@ public class Player extends MapObject
 				idle = false;
 			}*/
 		}
-		if(k == KeyEvent.VK_S)
+		if(k == GameStateManager.down)
 		{
 			falling = true;
 			drop = true;
 			idle = false;
 		}
-		if(k == KeyEvent.VK_A)
+		if(k == GameStateManager.left)
 		{
 			left = true;
 		}
-		if(k == KeyEvent.VK_D)
+		if(k == GameStateManager.right)
 		{
 			right = true;
 		}
-		if(k == KeyEvent.VK_SPACE)
+		if(k == GameStateManager.glide)
 		{
 			gliding = true;
 			idle = false;
@@ -395,7 +402,7 @@ public class Player extends MapObject
 	
 	public void keyReleased(int k)
 	{
-		if(k == KeyEvent.VK_W)
+		if(k == GameStateManager.up)
 		{
 			falling = true;
 			jumping = false;
@@ -408,21 +415,21 @@ public class Player extends MapObject
 				idle = true;
 			}
 		}
-		if(k == KeyEvent.VK_S)
+		if(k == GameStateManager.down)
 		{
 			falling = true;
 			drop = false;
 			idle = true;
 		}
-		if(k == KeyEvent.VK_A)
+		if(k == GameStateManager.left)
 		{
 			left = false;
 		}
-		if(k == KeyEvent.VK_D)
+		if(k == GameStateManager.right)
 		{
 			right = false;
 		}
-		if(k == KeyEvent.VK_SPACE)
+		if(k == GameStateManager.glide)
 		{
 			gliding = false;
 			idle = true;
