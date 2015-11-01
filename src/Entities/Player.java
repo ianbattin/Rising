@@ -27,7 +27,7 @@ public class Player extends MapObject
 	private double jumpHeightFactor;
 	
 	//character position relative to bottom of tileMap
-	private double character_y;
+	private double yFromBottom;
 		
 	
 	//animation
@@ -87,7 +87,7 @@ public class Player extends MapObject
 		x = GamePanel.WIDTH/2;
 		y = GamePanel.HEIGHT/2;
 				
-		character_y =  GamePanel.heightScaled - y;
+		yFromBottom =  GamePanel.HEIGHTSCALED - y;
 		
 		dx = 0.0;
 		dy = 0.0;
@@ -145,7 +145,7 @@ public class Player extends MapObject
 			y += dy;
 		}
 		
-		character_y += (-dy + tm.getDY());
+		yFromBottom += (-dy + tm.getDY());
 
 		
 		if(x - width/2 < 0) x = width/2;
@@ -205,7 +205,7 @@ public class Player extends MapObject
 	{
 		this.x = x;
 		this.y = y;
-		character_y = GamePanel.heightScaled - y;
+		yFromBottom = GamePanel.HEIGHTSCALED - y;
 	}
 	
 	public void getMovement()
@@ -242,13 +242,13 @@ public class Player extends MapObject
 		{
 			if(!jumped)
 			{
-				jumpHeight = character_y + (100*jumpHeightFactor); //edited to be "effectable"
+				jumpHeight = yFromBottom + (100*jumpHeightFactor); //edited to be "effectable"
 				jumped = true;
 			}
 			if(jumped)
 			{
-				if(character_y < jumpHeight) dy = jumpStart*3*jumpHeightFactor;
-				if(character_y >= jumpHeight) 
+				if(yFromBottom < jumpHeight) dy = jumpStart*3*jumpHeightFactor;
+				if(yFromBottom >= jumpHeight) 
 				{
 					jumpHeight = -9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
 					falling = true;
