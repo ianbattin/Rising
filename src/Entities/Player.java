@@ -438,7 +438,7 @@ public class Player extends MapObject
 	
 	public double getCharacterY()
 	{
-		return this.character_y;
+		return this.yFromBottom;
 	}
 	
 	//starts effects, added to enable the pickups

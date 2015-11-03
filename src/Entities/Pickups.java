@@ -73,7 +73,7 @@ public class Pickups {
 				willDrawPickup = true;
 				
 				//sets starting points for the spawning of the pickups
-				startingPositionOffset = -(Math.random()*GamePanel.heightScaled/2);
+				startingPositionOffset = -(Math.random()*GamePanel.HEIGHTSCALED/2);
 			}
 			else
 			{
