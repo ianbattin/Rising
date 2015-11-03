@@ -1,35 +1,42 @@
-package Entities;
+package Entities; 
 
 import Main.GamePanel;
+import TileMap.TileMap;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class Pickups {	
 	
 	private Player player;
+	private TileMap tileMap;
+	
+	private final float tileMapWidth;
 	
 	private long coolDownTime;
 	private boolean willDrawPickup, isUnderEffect;
-	private float xLoc, yLoc, offSet;
+	private double xLoc, yLoc, startingPositionOffset, tmDyPositionOffset, xShift;
 	
-	public Pickups(Player player)
+	public Pickups(Player player, TileMap tileMap)
 	{
 		this.player = player;
+		this.tileMap = tileMap;
 		
 		coolDownTime = 10000000000L;
+		
+		tileMapWidth = tileMap.getTileMapWidth()/2;
 		
 		init();
 	}
 	
 	public void init()
 	{
+		//reset values
 		willDrawPickup = false;
-		isUnderEffect = false;
-		
-		//sets starting points for the spawning of the pickups
-		xLoc = GamePanel.WIDTH/2;
-		yLoc = -50;
-		offSet = (float)(Math.random()*GamePanel.HEIGHT);
+		isUnderEffect = false;	
+		yLoc = -100;
+		xLoc = 0;
+		tmDyPositionOffset = 0;
+		xShift = 0;
 	}
 
 	//updates by checking to see if it should spawn a pickup.
@@ -64,6 +71,9 @@ public class Pickups {
 			{
 				coolDownTime = 100000000000L;
 				willDrawPickup = true;
+				
+				//sets starting points for the spawning of the pickups
+				startingPositionOffset = -(Math.random()*GamePanel.heightScaled/2);
 			}
 			else
 			{
@@ -76,22 +86,30 @@ public class Pickups {
 	public void draw(Graphics2D g)
 	{
 		if(willDrawPickup)
-		{
-			g.setColor(new Color(0, 0, 0));
-			g.fillRect((int)xLoc, (int)yLoc, 25, 25);
-			
-			if (yLoc < GamePanel.HEIGHT)
-				yLoc += 0.5;
+		{									
+			if (yLoc < GamePanel.HEIGHT + 50)
+			{
+				yLoc += 0.5 + ((tileMap.getDY() - 2)*0.25);
+				if (tileMap.getDY() > 2){
+					tmDyPositionOffset += ((tileMap.getDY() - 2)*0.25);
+				}
+			}
 			else 
+			{
 				init();
-			xLoc = (float)(Math.sin((yLoc-offSet)/(GamePanel.HEIGHT/4))*(GamePanel.WIDTH/2-50))+GamePanel.WIDTH/2;
+			}
+			xLoc = tileMapWidth + (Math.sin((yLoc-startingPositionOffset-tmDyPositionOffset)/100))*200;
+			xShift += tileMap.getDX();
+						
+			g.setColor(new Color(0, 0, 0));
+			g.fillRect((int)(xLoc+xShift), (int)(yLoc), 25, 25);
 		}
 	}
 	
 	//checks if the player collided with the pickup
 	public void checkCollision()
 	{
-		if ((player.getX()-(player.getWidth()/2)) < xLoc+35 && xLoc-10 < (player.getX()+(player.getWidth()/2)) && (player.getY()-player.getHeight()/2) < yLoc && yLoc < (player.getY()+player.getHeight()/2))
+		if ((player.getX()-(player.getWidth()/2)) < (xLoc+xShift)+35 && (xLoc+xShift)-10 < (player.getX()+(player.getWidth()/2)) && (player.getY()-player.getHeight()/2) < yLoc && yLoc < (player.getY()+player.getHeight()/2))
 		{
 			effectStart();
 			willDrawPickup = false;

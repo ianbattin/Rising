@@ -45,7 +45,7 @@ public class PlayState extends GameState
 	{
 		tileMap = new TileMap("Resources/Maps/level2.txt");
 		player = new Player(tileMap);
-		pickups = new Pickups(player);
+		pickups = new Pickups(player, tileMap);
 		tileStart = false;
 	}
 

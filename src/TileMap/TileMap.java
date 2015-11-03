@@ -120,9 +120,24 @@ public class TileMap
 		}
 	}
 	
+	//Getters & Setters
 	public void setVector(double dx, double dy)
 	{
 		this.dx = dx;
+		this.dy = dy;
+	}
+		
+	public static BufferedImage getSprite(int type)
+	{
+		return sprites[type];
+	}
+
+	public void setXVector(double dx) 
+	{
+		this.dx = dx;
+	}
+	public void setYVector(double dy) 
+	{
 		this.dy = dy;
 	}
 	
@@ -136,21 +151,12 @@ public class TileMap
 		return map[row][col];
 	}
 	
-	public static BufferedImage getSprite(int type)
-	{
-		return sprites[type];
+	public int getTileMapWidth(){
+		return width*tileSize;
 	}
 	
 	public int getX() {	return x;	}
 	public int getY() {	return y;	}
+	public double getDX() { return dx; }
 	public double getDY() { return dy; }
-
-	public void setXVector(double dx) 
-	{
-		this.dx = dx;
-	}
-	public void setYVector(double dy) 
-	{
-		this.dy = dy;
-	}
 }

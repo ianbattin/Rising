@@ -176,6 +176,8 @@ public abstract class MapObject
 
 	public double getX() {	return x;	}
 	public double getY() {	return y;	}
+	public double getDX() {	return dx; }
+	public double getDY() {	return dy;	}
 	public int getWidth() {	return width;	}
 	public int getHeight() {	return height;	}
 	public int getCWidth() {	return cwidth;	}

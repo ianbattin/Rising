@@ -436,14 +436,9 @@ public class Player extends MapObject
 		}
 	}
 	
-	public double getX()
+	public double getCharacterY()
 	{
-		return this.x;
-	}
-	
-	public double getY()
-	{
-		return this.y;
+		return this.character_y;
 	}
 	
 	//starts effects, added to enable the pickups
