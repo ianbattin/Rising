@@ -16,12 +16,12 @@ import GameState.GameStateManager;
 public class GamePanel extends JPanel implements Runnable, KeyListener
 {
 	//window size TODO: Allow the user to edit the SCALEWIDTH and SCALEHEIGHT
-	public static final double SCALEWIDTH = Math.min(((Toolkit.getDefaultToolkit().getScreenSize().height-50.0)/GamePanel.HEIGHT), 1);
-	public static final double SCALEHEIGHT = Math.min(((Toolkit.getDefaultToolkit().getScreenSize().height-50.0)/GamePanel.HEIGHT), 1);
+	public static double scaleWidth = Math.min(((Toolkit.getDefaultToolkit().getScreenSize().height-50.0)/GamePanel.HEIGHT), 1);
+	public static double scaleHeight = Math.min(((Toolkit.getDefaultToolkit().getScreenSize().height-50.0)/GamePanel.HEIGHT), 1);
 	public static final int WIDTH = 600;
 	public static final int HEIGHT = 800;
-	public static final int widthScaled = (int)(WIDTH * SCALEWIDTH);
-	public static final int heightScaled = (int)(HEIGHT * SCALEHEIGHT);
+	public static final int WIDTHSCALED = (int)(WIDTH * scaleWidth);
+	public static final int HEIGHTSCALED = (int)(HEIGHT * scaleHeight);
 	
 	//run
 	private Thread thread;
@@ -44,7 +44,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	public GamePanel()
 	{
 		super(); //used since it extends/implements JPanel, Runnable, and KeyListener so it will be able to access their methods
-		setPreferredSize(new Dimension(widthScaled, heightScaled)); //sets the size of the GamePanel
+		setPreferredSize(new Dimension(WIDTHSCALED, HEIGHTSCALED)); //sets the size of the GamePanel
 		setFocusable(true); //like when you click the window, allows for key inputs
 		requestFocus(); //does the above
 	}
@@ -64,9 +64,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	//initialize the game
 	public void init()
 	{
-		image = new BufferedImage(widthScaled, heightScaled, BufferedImage.TYPE_INT_RGB);
+		image = new BufferedImage(WIDTHSCALED, HEIGHTSCALED, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D) image.getGraphics(); //do graphics stuff
-		g.scale(SCALEWIDTH, SCALEHEIGHT);
+		g.scale(scaleWidth, scaleHeight);
 		gsm = new GameStateManager(); //create new GameStateManager
 		running = true; //game initialized, so running is true
 	}
@@ -142,7 +142,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	public void gameDrawToScreen()
 	{
 		Graphics g2 = this.getGraphics();
-		g2.drawImage(image, 0 , 0, widthScaled, heightScaled, null);
+		g2.drawImage(image, 0 , 0, WIDTHSCALED, HEIGHTSCALED, null);
 		if(displayFPS) g2.drawString("" + (int)averageFPS, 2, 10);
 		g2.dispose();
 	}

@@ -67,7 +67,7 @@ public class Tile
 	
 	public void draw(Graphics2D g, int type)
 	{
-		if(-25 < x && x < GamePanel.WIDTH + 25 && -25 < y && y < GamePanel.HEIGHT + 25) g.drawImage(image, x, y, size, size, null);
+		if(-size <= x && x <= GamePanel.WIDTH+size && -size <= y && y <= GamePanel.HEIGHT+size) g.drawImage(image, x, y, size, size, null);
 	}
 	
 	//moves the tilemap in a direction
