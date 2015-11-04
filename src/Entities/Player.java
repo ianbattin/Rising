@@ -26,6 +26,14 @@ public class Player extends MapObject
 	private boolean isUnderEffect;
 	private double jumpHeightFactor;
 	
+
+	//character position relative to bottom of tileMap
+	private double yFromBottom;
+	
+	//player health
+	private ArrayList<BufferedImage> heartImages;
+	private int health;
+	
 	//animation
 	private ArrayList<BufferedImage[]> sprites;
 	private final int[] numFrames = { 2, 4, 2, 1, 2, 4 };
@@ -70,6 +78,13 @@ public class Player extends MapObject
 				}
 				sprites.add(bi);
 			}
+			heartImages = new ArrayList<BufferedImage>();
+			
+			BufferedImage h1 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/fullHeart.png"));
+			BufferedImage h2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/emptyHeart.png"));
+			
+			heartImages.add(h1);
+			heartImages.add(h2);
 		}
 		catch(Exception e)
 		{
@@ -91,6 +106,9 @@ public class Player extends MapObject
 		animation.setDelay(400);
 		
 		falling = true;
+		
+		//health
+		health = 3;
 		
 		//effects
 		isUnderEffect = false;
@@ -139,6 +157,18 @@ public class Player extends MapObject
 	
 	public void draw(Graphics2D g) 
 	{
+		for (int i = 0; i < 5; i++)
+		{
+			if (i < health)
+			{
+				g.drawImage(heartImages.get(0), GamePanel.WIDTHSCALED - 10 - (i*40), 10 , null);
+			}
+			else
+			{
+				g.drawImage(heartImages.get(1), GamePanel.WIDTHSCALED - 10 - (i*40), 10 , null);
+			}
+		}
+		
 		setMapPosition();
 
 		if(facingRight)
@@ -317,6 +347,11 @@ public class Player extends MapObject
 		return this.yFromBottom;
 	}
 	
+	public int getPlayerHealth()
+	{
+		return health;
+	}
+		
 	//starts effects, added to enable the pickups
 	public void effectStart(int effect)
 	{
