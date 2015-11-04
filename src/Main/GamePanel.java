@@ -30,7 +30,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	private static long elapsedTime;
 	
 	private final int FPS = 60; //game will update 60 times per second
-	private double averageFPS;
+	private static double averageFPS;
 	private boolean displayFPS = false;
 	
 	//image
@@ -143,11 +143,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	{
 		Graphics g2 = this.getGraphics();
 		g2.drawImage(image, 0 , 0, WIDTHSCALED, HEIGHTSCALED, null);
-		if(displayFPS) g2.drawString("" + (int)averageFPS, 2, 10);
+		if(displayFPS) g2.drawString("" + (int)getAverageFPS(), 2, 10);
 		g2.dispose();
 	}
 
-	public double getAverageFPS()
+	public static double getAverageFPS()
 	{
 		return averageFPS;
 	}
@@ -171,8 +171,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 			if(displayFPS) displayFPS = false;
 			else displayFPS = true;
 		}
-		else
-			displayFPS = false;
 		gsm.keyPressed(key.getKeyCode());
 	}
 

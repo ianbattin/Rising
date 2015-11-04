@@ -28,7 +28,6 @@ public class PlayState extends GameState
 	public PlayState(GameStateManager gsm)
 	{
 		init();
-		player.setPosition(300, -100);
 		this.gsm = gsm;
 		start = false;
 		try
@@ -91,7 +90,7 @@ public class PlayState extends GameState
 					public void run()
 					{
 						tileStart = true;
-						tileMap.setVector(0, 2.0);		
+						tileMap.setYVector(2.0);		
 					}
 					
 				}, 3000);

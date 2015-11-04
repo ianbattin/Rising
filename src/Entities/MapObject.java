@@ -53,10 +53,11 @@ public abstract class MapObject
 	protected boolean idle;
 	protected boolean left;
 	protected boolean right;
-	protected boolean jumping;
+	protected boolean jump;
 	protected boolean jumped;
 	protected boolean doubleJump;
 	protected boolean doubleJumped;
+	protected boolean doubleJumpable; //Prevents you from double-jumping in the same key press you initially jumped with (Player must tap jump twice basically)
 	protected boolean falling;
 	protected boolean gliding;
 	protected boolean drop;
@@ -203,9 +204,9 @@ public abstract class MapObject
 	
 	public void setLeft(boolean b) { 	left = b;	}
 	public void setRight(boolean b) { 	right = b;	}
-	public void setUp(boolean b) { 	jumping = b;	}
+	public void setUp(boolean b) { 	jump = b;	}
 	public void setDown(boolean b) { 	drop = b;	}
-	public void setJumping(boolean b) { 	jumping = b;	}
+	public void setJumping(boolean b) { 	jump = b;	}
 	
 	public boolean notOnScreen()
 	{

@@ -12,15 +12,15 @@ import Main.GamePanel;
 
 public class Tile 
 {
-	private int x;
-	private int y;
-	private int dx;
-	private int dy;
+	private double x;
+	private double y;
+	private double dx;
+	private double dy;
 	
-	public int left;
-	public int right;
-	public int top;
-	public int bottom;
+	public double left;
+	public double right;
+	public double top;
+	public double bottom;
 	
 	private int size;
 	
@@ -30,7 +30,7 @@ public class Tile
 	private BufferedImage spritesheet;
 	private BufferedImage image;
 	
-	public Tile(int x, int y, int type, int size)
+	public Tile(double x, double y, int type, int size)
 	{
 		this.x = x;
 		this.y = y;
@@ -56,8 +56,8 @@ public class Tile
 	public void update(double dx, double dy)
 	{
 		//for when we have to move the tiles as the player ascends
-		x += dx;
-		y += dy;
+		this.x += dx;
+		this.y += dy;
 		
 		left = x;
 		right = x + size;
@@ -67,19 +67,18 @@ public class Tile
 	
 	public void draw(Graphics2D g, int type)
 	{
-		if(-size <= x && x <= GamePanel.WIDTH+size && -size <= y && y <= GamePanel.HEIGHT+size) g.drawImage(image, x, y, size, size, null);
-	}
-	
-	//moves the tilemap in a direction
-	public void setVector(int dx, int dy)
-	{
-		this.dx = dx;
-		this.dy = dy;
+		if(-size <= x && x <= GamePanel.WIDTH+size && -size <= y && y <= GamePanel.HEIGHT+size) g.drawImage(image, (int)x, (int)y, size, size, null);
+		
+		/*g.setColor(Color.RED);
+		g.drawLine((int)left, (int)top, (int)right, (int)top);
+		g.drawLine((int)right, (int)top, (int)right, (int)bottom);
+		g.drawLine((int)right, (int)bottom, (int)left, (int)bottom);
+		g.drawLine((int)left, (int)bottom, (int)left, (int)top);*/
 	}
 	
 	public int getType() {	return type;	}
-	public int getX(){	return x;	}
-	public int getY(){	return y;	}
-	public void setX(int x) { this.x = x; }
-	public void setY(int y) {this.y = y; }
+	public double getX(){	return x;	}
+	public double getY(){	return y;	}
+	public void setX(double x) { this.x = x; }
+	public void setY(double y) {this.y = y; }
 }

@@ -4,6 +4,8 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import Main.GamePanel;
+
 public class GameStateManager 
 {
 	private static ArrayList<GameState> gameStates;

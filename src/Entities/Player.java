@@ -84,8 +84,8 @@ public class Player extends MapObject
 		
 		animation = new Animation();
 
-		x = GamePanel.WIDTH/2;
-		y = GamePanel.HEIGHT/2;
+		x = GamePanel.WIDTH/2 - 20;
+		y = -100;
 				
 		yFromBottom =  GamePanel.HEIGHTSCALED - y;
 		
@@ -111,19 +111,7 @@ public class Player extends MapObject
 		getAnimation();
 
 		//Camera left and right movement (Player always stays centered)
-		if(x < GamePanel.WIDTH/2)
-		{
-			tm.setXVector(-dx);
-		}
-		if(x > GamePanel.WIDTH/2)
-		{
-			tm.setXVector(-dx);
-		}
-		else
-		{
-			tm.setXVector(0);
-			x += dx;
-		}
+		tm.setXVector(-dx);
 
 		if(y < 300) 
 		{
@@ -175,10 +163,10 @@ public class Player extends MapObject
 		boolean collided = false;
 		for(Tile t: tiles)
 		{
-			int collisionLeft = t.left;
-			int collisionRight = t.right;
-			int collisionTop = t.top;
-			int collisionBottom = t.bottom;
+			double collisionLeft = t.left;
+			double collisionRight = t.right;
+			double collisionTop = t.top;
+			double collisionBottom = t.bottom;
 
 			if(dy > 0 && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 && y + height/2 < collisionBottom) && !drop)
 			{
@@ -195,7 +183,7 @@ public class Player extends MapObject
 			}
 			
 		}
-		if(!collided && !jumping && !jumped && !doubleJumped)
+		if(!collided && !jump && !jumped && !doubleJumped)
 		{
 			falling = true;
 		}
@@ -238,7 +226,7 @@ public class Player extends MapObject
 		}
 
 		//JUMPING AND FALLING
-		if(jumping)
+		if(jump)
 		{
 			if(!jumped)
 			{
@@ -255,29 +243,27 @@ public class Player extends MapObject
 				}
 			}
 		}
-
-		/*
 		if(doubleJump)
 		{
 			if(!doubleJumped)
 			{
-				jumpHeight = this.yJump - (50.0*jumpHeightFactor); //edited to be "effectable"
+				jumpHeight = yFromBottom + (50.0*jumpHeightFactor); //edited to be "effectable"
 				doubleJumped = true;
 			}
 			if(jumped)
 			{
-				if(yJump > jumpHeight) dy = jumpStart*2*jumpHeightFactor; //edited to be "effectable"
-				if(yJump <= jumpHeight) 
+				if(yFromBottom < jumpHeight) dy = jumpStart*2*jumpHeightFactor; //edited to be "effectable"
+				if(yFromBottom >= jumpHeight) 
 				{
-					jumpHeight = 9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
+					jumpHeight = -9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
 				}
 			}
 			falling = true;
 		}
-		*/
+		
 		if(falling)
 		{
-			jumping = false;
+			jump = false;
 			if(dy > 0.0 && gliding)
 			{
 				dy = 1;
@@ -302,7 +288,7 @@ public class Player extends MapObject
 				height = 40;
 			}
 		}
-		if(jumping)
+		if(jump)
 		{
 			if(currentAction != JUMPING)
 			{
@@ -362,80 +348,6 @@ public class Player extends MapObject
 			
 	}
 	
-	public void keyPressed(int k)
-	{
-		if(k == GameStateManager.up)
-		{
-			if(!jumped)
-			{
-				jumping = true;
-				idle = false;
-			}
-			/*if(jumped && !doubleJump)
-			{
-				falling = false;
-				jumping = false;
-				doubleJump = true;
-				idle = false;
-			}*/
-		}
-		if(k == GameStateManager.down)
-		{
-			falling = true;
-			drop = true;
-			idle = false;
-		}
-		if(k == GameStateManager.left)
-		{
-			left = true;
-		}
-		if(k == GameStateManager.right)
-		{
-			right = true;
-		}
-		if(k == GameStateManager.glide)
-		{
-			gliding = true;
-			idle = false;
-		}	
-	}
-	
-	public void keyReleased(int k)
-	{
-		if(k == GameStateManager.up)
-		{
-			falling = true;
-			jumping = false;
-			idle = true;
-			
-			if(doubleJump)
-			{
-				doubleJump = false;
-				jumping = false;
-				idle = true;
-			}
-		}
-		if(k == GameStateManager.down)
-		{
-			falling = true;
-			drop = false;
-			idle = true;
-		}
-		if(k == GameStateManager.left)
-		{
-			left = false;
-		}
-		if(k == GameStateManager.right)
-		{
-			right = false;
-		}
-		if(k == GameStateManager.glide)
-		{
-			gliding = false;
-			idle = true;
-		}
-	}
-	
 	public double getCharacterY()
 	{
 		return this.yFromBottom;
@@ -464,4 +376,79 @@ public class Player extends MapObject
 		System.out.println("Effect ended");
 	}
 	
+	public void keyPressed(int k)
+	{
+		if(k == GameStateManager.up)
+		{
+			if(!jumped)
+			{
+				jump = true;
+				doubleJumpable = false;
+				idle = false;
+			}
+			if(jumped && !doubleJump && doubleJumpable)
+			{
+				falling = false;
+				jump = false;
+				doubleJump = true;
+				idle = false;
+			}
+		}
+		if(k == GameStateManager.down)
+		{
+			falling = true;
+			drop = true;
+			idle = false;
+		}
+		if(k == GameStateManager.left)
+		{
+			left = true;
+		}
+		if(k == GameStateManager.right)
+		{
+			right = true;
+		}
+		if(k == GameStateManager.glide)
+		{
+			gliding = true;
+			idle = false;
+		}	
+	}
+	
+	public void keyReleased(int k)
+	{
+		if(k == GameStateManager.up)
+		{
+			falling = true;
+			jump = false;
+			idle = true;
+			doubleJumpable = true;
+			
+			if(doubleJump)
+			{
+				doubleJump = false;
+				jump = false;
+				idle = true;
+			}
+		}
+		if(k == GameStateManager.down)
+		{
+			falling = true;
+			drop = false;
+			idle = true;
+		}
+		if(k == GameStateManager.left)
+		{
+			left = false;
+		}
+		if(k == GameStateManager.right)
+		{
+			right = false;
+		}
+		if(k == GameStateManager.glide)
+		{
+			gliding = false;
+			idle = true;
+		}
+	}
 }
