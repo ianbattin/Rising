@@ -36,15 +36,16 @@ public class Player extends MapObject
 	
 	//animation
 	private ArrayList<BufferedImage[]> sprites;
-	private final int[] numFrames = { 2, 4, 2, 1, 2, 4 };
+	private final int[] numFrames = { 1, 3, 3, 3, 4 };
 	
 	//animation actions
 	private static final int IDLE = 0;
 	private static final int WALKING = 1;
 	private static final int JUMPING = 2;
 	private static final int FALLING = 3;
-	private static final int HOVERING = 4;
-	private static final int DOUBLEJUMP = 5;
+	private static final int LANDING = 4;
+	private static final int HOVERING = 5;
+	private static final int DOUBLEJUMP = 6;
 	
 	public Player(TileMap tm)
 	{	
@@ -58,16 +59,16 @@ public class Player extends MapObject
 		maxFallSpeed = 7.0;
 		jumpStart = -3.0;
 		
-		width = 20;
-		height = 40;
-		cwidth = 20;
-		cheight = 40;
+		width = 50;
+		height = 70;
+		cwidth = 50;
+		cheight = 70;
 
 		facingRight = true;
 		
 		try
 		{
-			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/RisingBasicSpriteSheet.png"));
+			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/MainCharacterSpriteSheet.png"));
 			sprites = new ArrayList<BufferedImage[]>();
 			for(int i = 0; i < numFrames.length; i++)
 			{
@@ -78,8 +79,8 @@ public class Player extends MapObject
 				}
 				sprites.add(bi);
 			}
-			heartImages = new ArrayList<BufferedImage>();
 			
+			heartImages = new ArrayList<BufferedImage>();
 			BufferedImage h1 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/fullHeart.png"));
 			BufferedImage h2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/emptyHeart.png"));
 			
@@ -278,8 +279,8 @@ public class Player extends MapObject
 				currentAction = WALKING;
 				animation.setFrames(sprites.get(WALKING));
 				animation.setDelay(200);
-				width = 20;
-				height = 40;
+				width = 50;
+				height = 70;
 			}
 		}
 		if(jump)
@@ -289,8 +290,8 @@ public class Player extends MapObject
 				currentAction = JUMPING;
 				animation.setFrames(sprites.get(JUMPING));
 				animation.setDelay(200);
-				width = 20;
-				height = 40;
+				width = 50;
+				height = 70;
 			}
 		}
 		else if(!left && !right)
@@ -300,8 +301,8 @@ public class Player extends MapObject
 				currentAction = IDLE;
 				animation.setFrames(sprites.get(IDLE));
 				animation.setDelay(200);
-				width = 20;
-				height = 40;
+				width = 50;
+				height = 70;
 			}
 		}
 		if(falling)
@@ -311,8 +312,19 @@ public class Player extends MapObject
 				currentAction = FALLING;
 				animation.setFrames(sprites.get(FALLING));
 				animation.setDelay(200);
-				width = 20;
-				height = 40;
+				width = 50;
+				height = 70;
+			}
+		}
+		if(landing)
+		{
+			if(currentAction != LANDING)
+			{
+				currentAction = LANDING;
+				animation.setFrames(sprites.get(LANDING));
+				animation.setDelay(200);
+				width = 50;
+				height = 70;
 			}
 		}
 		if(gliding)
@@ -322,8 +334,8 @@ public class Player extends MapObject
 				currentAction = HOVERING;
 				animation.setFrames(sprites.get(HOVERING));
 				animation.setDelay(200);
-				width = 20;
-				height = 40;
+				width = 50;
+				height = 70;
 			}
 		}
 		if(doubleJump)
@@ -333,8 +345,8 @@ public class Player extends MapObject
 				currentAction = DOUBLEJUMP;
 				animation.setFrames(sprites.get(DOUBLEJUMP));
 				animation.setDelay(50);
-				width = 20;
-				height = 40;
+				width = 50;
+				height = 70;
 			}
 		}
 		
@@ -385,13 +397,13 @@ public class Player extends MapObject
 				doubleJumpable = false;
 				idle = false;
 			}
-			if(jumped && !doubleJump && doubleJumpable)
+			/*if(jumped && !doubleJump && doubleJumpable)
 			{
 				falling = false;
 				jump = false;
 				doubleJump = true;
 				idle = false;
-			}
+			}*/
 		}
 		if(k == GameStateManager.down)
 		{
