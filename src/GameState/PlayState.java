@@ -93,7 +93,7 @@ public class PlayState extends GameState
 						tileMap.setYVector(2.0);		
 					}
 					
-				}, 3000);
+				}, 6000);
 			}
 		}
 		if(k == GameStateManager.reset)
