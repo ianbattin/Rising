@@ -62,6 +62,7 @@ public abstract class MapObject
 	protected boolean doubleJumped;
 	protected boolean doubleJumpable; //Prevents you from double-jumping in the same key press you initially jumped with (Player must tap jump twice basically)
 	protected boolean falling;
+	protected boolean fallingAnim;
 	protected boolean landing;
 	protected boolean gliding;
 	protected boolean drop;
@@ -133,6 +134,8 @@ public abstract class MapObject
 				falling = false;
 				//landing = true;
 				gliding = false;
+				idle = true;
+				fallingAnim = false;
 			}
 			if(!collided && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 + 1 && y + height/2 + 1 < collisionBottom && !drop)) 
 			{

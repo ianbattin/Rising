@@ -11,6 +11,7 @@ public class Animation
 	private long delay;
 	
 	private boolean playedOnce;
+	private boolean done;
 	
 	public Animation()
 	{
@@ -44,7 +45,8 @@ public class Animation
 		
 		if(currentFrame == frames.length)
 		{
-			currentFrame = 0;
+			if(!done) currentFrame = 0;
+			else currentFrame--;
 			playedOnce = true;
 		}
 	}
@@ -52,4 +54,5 @@ public class Animation
 	public int getFrame() {	 return currentFrame;	}
 	public BufferedImage getImage() {	return frames[currentFrame];	}
 	public boolean hasPlayedOnce() {	return playedOnce;	}
+	public void setDone(boolean b) { done = b; }
 }

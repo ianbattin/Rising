@@ -102,9 +102,9 @@ public class Player extends MapObject
 		dx = 0.0;
 		dy = 0.0;
 		
-		currentAction = IDLE;
-		animation.setFrames(sprites.get(IDLE));
-		animation.setDelay(400);
+		currentAction = FALLING;
+		animation.setFrames(sprites.get(FALLING));
+		animation.setDelay(200);
 		
 		falling = true;
 		
@@ -265,17 +265,32 @@ public class Player extends MapObject
 			}
 			else if(dy < maxFallSpeed) dy += fallSpeed;
 			else dy = maxFallSpeed;
+			
+			if(!fallingAnim && dy > 0) fallingAnim = true;
 		}
+		else
+			fallingAnim = false;
 	}
 	
 	public void getAnimation()
 	{
+		if(idle)
+		{
+			if(currentAction != IDLE && currentAction != WALKING)
+			{
+				currentAction = IDLE;
+				animation.setFrames(sprites.get(IDLE));
+				animation.setDelay(200);
+				width = 50;
+				height = 70;
+			}
+		}
 		if(left || right)
 		{
-			if(currentAction != WALKING)
+			if(right){ facingRight = true;	}
+			else{ facingRight = false;	}
+			if(currentAction != WALKING && currentAction != FALLING && currentAction != JUMPING)
 			{
-				if(right){ facingRight = true;	}
-				else{ facingRight = false;	}
 				currentAction = WALKING;
 				animation.setFrames(sprites.get(WALKING));
 				animation.setDelay(200);
@@ -285,27 +300,17 @@ public class Player extends MapObject
 		}
 		if(jump)
 		{
-			if(currentAction != JUMPING)
+			if(currentAction != JUMPING && !fallingAnim)
 			{
 				currentAction = JUMPING;
 				animation.setFrames(sprites.get(JUMPING));
 				animation.setDelay(200);
+				animation.setDone(true);
 				width = 50;
 				height = 70;
 			}
 		}
-		else if(!left && !right)
-		{
-			if(currentAction != IDLE)
-			{
-				currentAction = IDLE;
-				animation.setFrames(sprites.get(IDLE));
-				animation.setDelay(200);
-				width = 50;
-				height = 70;
-			}
-		}
-		if(falling)
+		if(fallingAnim)
 		{
 			if(currentAction != FALLING)
 			{
@@ -316,7 +321,7 @@ public class Player extends MapObject
 				height = 70;
 			}
 		}
-		if(landing)
+		/*else if(landing)
 		{
 			if(currentAction != LANDING)
 			{
@@ -327,7 +332,7 @@ public class Player extends MapObject
 				height = 70;
 			}
 		}
-		if(gliding)
+		else if(gliding)
 		{
 			if(currentAction != HOVERING)
 			{
@@ -338,7 +343,7 @@ public class Player extends MapObject
 				height = 70;
 			}
 		}
-		if(doubleJump)
+		else if(doubleJump)
 		{
 			if(currentAction != DOUBLEJUMP)
 			{
@@ -348,7 +353,7 @@ public class Player extends MapObject
 				width = 50;
 				height = 70;
 			}
-		}
+		}*/
 		
 		animation.update();
 			
