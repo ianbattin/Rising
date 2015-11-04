@@ -28,7 +28,7 @@ public class SplashState extends GameState
 	
 	public void init() 
 	{
-		music();
+		music("Resources/Sound/Cybernator_-_Fully_Set_Up_For_Penetration.wav");
 	}
 
 

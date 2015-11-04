@@ -26,15 +26,9 @@ public class Player extends MapObject
 	private boolean isUnderEffect;
 	private double jumpHeightFactor;
 	
-	//character position relative to bottom of tileMap
-	private double yFromBottom;
-		
-	
 	//animation
 	private ArrayList<BufferedImage[]> sprites;
-	private final int[] numFrames = {
-			2, 4, 2, 1, 2, 4
-	};
+	private final int[] numFrames = { 2, 4, 2, 1, 2, 4 };
 	
 	//animation actions
 	private static final int IDLE = 0;
@@ -67,7 +61,7 @@ public class Player extends MapObject
 		{
 			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/RisingBasicSpriteSheet.png"));
 			sprites = new ArrayList<BufferedImage[]>();
-			for(int i = 0; i < 6; i++)
+			for(int i = 0; i < numFrames.length; i++)
 			{
 				BufferedImage[] bi = new BufferedImage[numFrames[i]];
 				for(int j = 0; j < numFrames[i]; j++)
@@ -107,7 +101,7 @@ public class Player extends MapObject
 	{	
 		if(idle) dy = dy + 1;
 		getMovement();
-		myCheckCollision();
+		myCheckCollision(tm);
 		getAnimation();
 
 		//Camera left and right movement (Player always stays centered)
@@ -134,7 +128,6 @@ public class Player extends MapObject
 		}
 		
 		yFromBottom += (-dy + tm.getDY());
-
 		
 		if(x - width/2 < 0) x = width/2;
 		if(x + width/2 > GamePanel.WIDTH) x = GamePanel.WIDTH - width/2;
@@ -158,36 +151,7 @@ public class Player extends MapObject
 		}
 	}
 	
-	public void myCheckCollision()
-	{
-		boolean collided = false;
-		for(Tile t: tiles)
-		{
-			double collisionLeft = t.left;
-			double collisionRight = t.right;
-			double collisionTop = t.top;
-			double collisionBottom = t.bottom;
-
-			if(dy > 0 && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 && y + height/2 < collisionBottom) && !drop)
-			{
-				y = t.top - cheight/2;
-				dy = tm.getDY();
-				jumped  = false;
-				doubleJumped = false;
-				falling = false;
-				gliding = false;
-			}
-			if(!collided && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 + 1 && y + height/2 + 1 < collisionBottom && !drop)) 
-			{
-				collided = true;
-			}
-			
-		}
-		if(!collided && !jump && !jumped && !doubleJumped)
-		{
-			falling = true;
-		}
-	}
+	
 	
 	public void setPosition(int x, int y)
 	{

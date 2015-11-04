@@ -23,6 +23,9 @@ public abstract class MapObject
 	protected double dx;
 	protected double dy;
 	
+	//character position relative to bottom of tileMap
+	protected double yFromBottom;
+	
 	//dimensions
 	protected int width;
 	protected int height;
@@ -108,6 +111,37 @@ public abstract class MapObject
 		bottomLeft = bl == Tile.AIR;
 		bottomRight = br == Tile.AIR;
 		
+	}
+	
+	public void myCheckCollision(TileMap tm)
+	{
+		boolean collided = false;
+		for(Tile t: tiles)
+		{
+			double collisionLeft = t.left;
+			double collisionRight = t.right;
+			double collisionTop = t.top;
+			double collisionBottom = t.bottom;
+
+			if(dy > 0 && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 && y + height/2 < collisionBottom) && !drop)
+			{
+				y = t.top - cheight/2;
+				dy = tm.getDY();
+				jumped  = false;
+				doubleJumped = false;
+				falling = false;
+				gliding = false;
+			}
+			if(!collided && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 + 1 && y + height/2 + 1 < collisionBottom && !drop)) 
+			{
+				collided = true;
+			}
+			
+		}
+		if(!collided && !jump && !jumped && !doubleJumped)
+		{
+			falling = true;
+		}
 	}
 	
 	public void checkTileMapCollision()

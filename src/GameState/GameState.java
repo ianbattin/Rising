@@ -79,7 +79,7 @@ public abstract class GameState
 	
 		
 	
-	public void music() 
+	public void music(String fileName) 
     {       
         AudioPlayer MGP = AudioPlayer.player;
         AudioStream BGM;
@@ -89,7 +89,7 @@ public abstract class GameState
 
         try
         {
-            InputStream music = new FileInputStream("Resources/Sound/Cybernator_-_Fully_Set_Up_For_Penetration.wav");
+            InputStream music = new FileInputStream(fileName);
             BGM = new AudioStream(music);
             AudioPlayer.player.start(BGM);
             MD = BGM.getData();
@@ -105,7 +105,7 @@ public abstract class GameState
         MGP.start(loop);
     }
 	
-	public void playSound(final String fileName)
+	public void playSound(String fileName)
 	{
 		Thread thread = new Thread(new Runnable()
 		{

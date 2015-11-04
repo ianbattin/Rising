@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import Entities.Animation;
 import GameState.PlayState;
 import Main.GamePanel;
 
@@ -24,11 +25,15 @@ public class Tile
 	
 	private int size;
 	
+	private Animation animation;
+	private int frames;
+	private boolean animated = false;
+	
 	private int type;
+	private boolean blocked = true;
 	public static final int AIR = 0; //able to pass through
 	
-	private BufferedImage spritesheet;
-	private BufferedImage image;
+	private BufferedImage[] images;
 	
 	public Tile(double x, double y, int type, int size)
 	{
@@ -46,11 +51,28 @@ public class Tile
 		
 		this.type = type;
 		this.size = size;
+		animation = new Animation();
+
+		if(type < 17) frames = 1;
+		else if(type == 17) 
+		{
+			frames = 3;
+			blocked = false;
+		}
+		else frames = 1;
+		if(frames > 1) animated = true;
+		
+		images = new BufferedImage[frames];
 	}
 	
 	public void init()
 	{
-		image = TileMap.getSprite(type);
+		for(int i = 0; i < frames; i++)
+		{
+			images[i] = TileMap.getSprite(type + i);
+		}
+		animation.setFrames(images);
+		animation.setDelay(100);
 	}
 	
 	public void update(double dx, double dy)
@@ -63,11 +85,16 @@ public class Tile
 		right = x + size;
 		top = y;
 		bottom = y + size;
+		
+		animation.update();
 	}
 	
 	public void draw(Graphics2D g, int type)
 	{
-		if(-size <= x && x <= GamePanel.WIDTH+size && -size <= y && y <= GamePanel.HEIGHT+size) g.drawImage(image, (int)x, (int)y, size, size, null);
+		if(-size <= x && x <= GamePanel.WIDTH+size && -size <= y && y <= GamePanel.HEIGHT+size)
+		{
+			g.drawImage(animation.getImage(), (int)x, (int)y, size, size, null);
+		}
 		
 		/*g.setColor(Color.RED);
 		g.drawLine((int)left, (int)top, (int)right, (int)top);
@@ -79,6 +106,8 @@ public class Tile
 	public int getType() {	return type;	}
 	public double getX(){	return x;	}
 	public double getY(){	return y;	}
+	public boolean getAnimated() { return animated; }
+	public boolean getBlocked() { return blocked; }
 	public void setX(double x) { this.x = x; }
 	public void setY(double y) {this.y = y; }
 }

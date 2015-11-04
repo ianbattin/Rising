@@ -38,7 +38,7 @@ public class TileMap
 		
 		try
 		{
-			spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Tiles/tileset.png"));
+			spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Tiles/tileset2.png"));
 			
 			BufferedReader br = new BufferedReader(new FileReader(s));
 			tileSize = Integer.parseInt(br.readLine());
@@ -89,7 +89,7 @@ public class TileMap
 		}
 		
 		//load sprites into sprites array
-		sprites = new BufferedImage[minType+1];
+		sprites = new BufferedImage[minType+3];
 		for(int i = 0; i < sprites.length; i++)
 		{
 			sprites[i] = spritesheet.getSubimage(i * tileSize, 0, tileSize, tileSize);
