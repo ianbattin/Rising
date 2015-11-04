@@ -30,9 +30,7 @@ public class Player extends MapObject
 	//character position relative to bottom of tileMap
 	private double yFromBottom;
 	
-	//player health
 	private ArrayList<BufferedImage> heartImages;
-	private int health;
 	
 	//animation
 	private ArrayList<BufferedImage[]> sprites;
@@ -162,11 +160,11 @@ public class Player extends MapObject
 		{
 			if (i < health)
 			{
-				g.drawImage(heartImages.get(0), GamePanel.WIDTHSCALED - 10 - (i*40), 10 , null);
+				g.drawImage(heartImages.get(0), 10 + (i*40), 10 , null);
 			}
 			else
 			{
-				g.drawImage(heartImages.get(1), GamePanel.WIDTHSCALED - 10 - (i*40), 10 , null);
+				g.drawImage(heartImages.get(1), 10 + (i*40), 10 , null);
 			}
 		}
 		
@@ -182,7 +180,26 @@ public class Player extends MapObject
 		}
 	}
 	
-	
+	public void collided(int type)
+	{
+		if(recovering)
+		{
+			long elapsed = (System.nanoTime() - recoverLength) / 1000000;
+			if(3000 <= elapsed)
+			{
+				recovering = false;
+			}
+		}
+		else if(type == 17) 
+		{
+			health--;
+			dy = -8.0;
+			if(dx >= 0) dx = -8.0;
+			else dx = 8.0;
+			recovering = true;
+			recoverLength = System.nanoTime();
+		}
+	}
 	
 	public void setPosition(int x, int y)
 	{

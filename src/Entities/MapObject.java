@@ -1,6 +1,7 @@
 package Entities;
 
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import Main.GamePanel;
@@ -46,6 +47,11 @@ public abstract class MapObject
 	protected boolean bottomLeft;
 	protected boolean bottomRight;
 	
+	//health
+	protected int health;
+	protected boolean recovering;
+	protected long recoverLength;
+	
 	//animation
 	protected Animation animation;
 	protected int currentAction;
@@ -83,6 +89,8 @@ public abstract class MapObject
 		tiles = tm.tiles;
 		tileSize = tm.getTileSize();
 	}
+	
+	public abstract void collided(int type);
 	
 	public boolean intersects(MapObject other)
 	{
@@ -127,15 +135,23 @@ public abstract class MapObject
 
 			if(dy > 0 && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 && y + height/2 < collisionBottom) && !drop)
 			{
-				y = t.top - cheight/2;
-				dy = tm.getDY();
-				jumped  = false;
-				doubleJumped = false;
-				falling = false;
-				//landing = true;
-				gliding = false;
-				idle = true;
-				fallingAnim = false;
+				if(t.getType() < 17) 
+				{
+					y = t.top - cheight/2 -1;
+					dy = tm.getDY();
+					jumped  = false;
+					doubleJumped = false;
+					falling = false;
+					//landing = true;
+					gliding = false;
+					idle = true;
+					fallingAnim = false;
+				}
+				else
+				{
+					collided(t.getType());
+				}
+					
 			}
 			if(!collided && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 + 1 && y + height/2 + 1 < collisionBottom && !drop)) 
 			{

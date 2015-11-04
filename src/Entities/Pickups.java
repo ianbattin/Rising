@@ -163,6 +163,11 @@ public class Pickups extends MapObject {
 		}
 	}
 	
+	public void collided(int type)
+	{
+		if(type == 17) willDrawPickup = false;
+	}
+	
 	//checks if the player collided with the pickup
 	public void checkCollision()
 	{
