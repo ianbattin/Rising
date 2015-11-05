@@ -53,14 +53,23 @@ public class Tile
 		this.size = size;
 		animation = new Animation();
 
-		if(type < 17) frames = 1;
+		if(type < 17)
+		{
+			frames = 1;
+		}
 		else if(type == 17) 
 		{
 			frames = 3;
 			blocked = false;
+			animated = true;
+		}
+		else if(type == 20)
+		{
+			frames = 4;
+			blocked = true;
+			animated = false;
 		}
 		else frames = 1;
-		if(frames > 1) animated = true;
 		
 		images = new BufferedImage[frames];
 	}
@@ -86,7 +95,10 @@ public class Tile
 		top = y;
 		bottom = y + size;
 		
-		animation.update();
+		if(animated) 
+		{ 
+			animation.update(); 
+		}
 	}
 	
 	public void draw(Graphics2D g, int type)
@@ -106,6 +118,7 @@ public class Tile
 	public int getType() {	return type;	}
 	public double getX(){	return x;	}
 	public double getY(){	return y;	}
+	public void setAnimated(boolean b) { animated = b; }
 	public boolean getAnimated() { return animated; }
 	public boolean getBlocked() { return blocked; }
 	public void setX(double x) { this.x = x; }

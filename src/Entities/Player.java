@@ -180,7 +180,7 @@ public class Player extends MapObject
 		}
 	}
 	
-	public void collided(int type)
+	public void collided(int type, Tile t)
 	{
 		if(recovering)
 		{
@@ -198,6 +198,12 @@ public class Player extends MapObject
 			else dx = 8.0;
 			recovering = true;
 			recoverLength = System.nanoTime();
+		}
+		else if(type == 20)
+		{
+			falling = true;
+			dy = -20.0;
+			t.setAnimated(true);
 		}
 	}
 	
@@ -306,7 +312,7 @@ public class Player extends MapObject
 		{
 			if(right){ facingRight = true;	}
 			else{ facingRight = false;	}
-			if(currentAction != WALKING && currentAction != FALLING && currentAction != JUMPING)
+			if(currentAction != WALKING && currentAction != FALLING && currentAction != JUMPING && !idle)
 			{
 				currentAction = WALKING;
 				animation.setFrames(sprites.get(WALKING));
@@ -436,10 +442,12 @@ public class Player extends MapObject
 		if(k == GameStateManager.left)
 		{
 			left = true;
+			idle = false;
 		}
 		if(k == GameStateManager.right)
 		{
 			right = true;
+			idle = false;
 		}
 		if(k == GameStateManager.glide)
 		{

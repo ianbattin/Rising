@@ -1,6 +1,7 @@
 package Entities; 
 
 import Main.GamePanel;
+import TileMap.Tile;
 import TileMap.TileMap;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -163,7 +164,7 @@ public class Pickups extends MapObject {
 		}
 	}
 	
-	public void collided(int type)
+	public void collided(int type, Tile t)
 	{
 		if(type == 17) willDrawPickup = false;
 	}

@@ -95,7 +95,8 @@ public abstract class GameState
             MD = BGM.getData();
             loop = new ContinuousAudioDataStream(MD);
         }
-        catch(FileNotFoundException e){
+        catch(FileNotFoundException e)
+        {
             System.out.print(e.toString());
         }
         catch(IOException error)

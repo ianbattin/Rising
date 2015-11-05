@@ -90,7 +90,7 @@ public abstract class MapObject
 		tileSize = tm.getTileSize();
 	}
 	
-	public abstract void collided(int type);
+	public abstract void collided(int type, Tile t);
 	
 	public boolean intersects(MapObject other)
 	{
@@ -149,7 +149,7 @@ public abstract class MapObject
 				}
 				else
 				{
-					collided(t.getType());
+					collided(t.getType(), t);
 				}
 					
 			}
