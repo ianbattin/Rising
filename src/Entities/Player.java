@@ -30,9 +30,7 @@ public class Player extends MapObject
 	//character position relative to bottom of tileMap
 	private double yFromBottom;
 	
-	//player health
 	private ArrayList<BufferedImage> heartImages;
-	private int health;
 	
 	//animation
 	private ArrayList<BufferedImage[]> sprites;
@@ -81,8 +79,11 @@ public class Player extends MapObject
 			}
 			
 			heartImages = new ArrayList<BufferedImage>();
-			heartImages.add(ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/fullHeart.png")));
-			heartImages.add(ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/emptyHeart.png")));
+			BufferedImage h1 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/fullHeart.png"));
+			BufferedImage h2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/emptyHeart.png"));
+			
+			heartImages.add(h1);
+			heartImages.add(h2);
 		}
 		catch(Exception e)
 		{
@@ -155,6 +156,18 @@ public class Player extends MapObject
 	
 	public void draw(Graphics2D g) 
 	{
+		for (int i = 0; i < 5; i++)
+		{
+			if (i < health)
+			{
+				g.drawImage(heartImages.get(0), 10 + (i*40), 10 , null);
+			}
+			else
+			{
+				g.drawImage(heartImages.get(1), 10 + (i*40), 10 , null);
+			}
+		}
+		
 		setMapPosition();
 
 		if(facingRight)
@@ -165,23 +178,27 @@ public class Player extends MapObject
 		{
 			g.drawImage(animation.getImage(), (int)(x + xmap - width / 2 + width), (int)(y + ymap - height / 2), -width, height, null);
 		}
-		
-		for (int i = 0; i < 5; i++)
-		{
-			if (i < health)
-			{
-				g.drawImage(heartImages.get(0), GamePanel.WIDTH - 42 - (i*40), 10, null);
-			}
-			else
-			{
-				g.drawImage(heartImages.get(1), GamePanel.WIDTH - 42 - (i*40), 10, null);
-			}
-		}
 	}
 	
 	public void collided(int type)
 	{
-		
+		if(recovering)
+		{
+			long elapsed = (System.nanoTime() - recoverLength) / 1000000;
+			if(3000 <= elapsed)
+			{
+				recovering = false;
+			}
+		}
+		else if(type == 17) 
+		{
+			health--;
+			dy = -8.0;
+			if(dx >= 0) dx = -8.0;
+			else dx = 8.0;
+			recovering = true;
+			recoverLength = System.nanoTime();
+		}
 	}
 	
 	public void setPosition(int x, int y)
@@ -357,11 +374,6 @@ public class Player extends MapObject
 		
 		animation.update();
 			
-	}
-	
-	public void characterHurt()
-	{
-		
 	}
 	
 	public double getCharacterY()

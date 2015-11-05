@@ -105,8 +105,7 @@ public abstract class GameState
         MGP.start(loop);
     }
 	
-	//Added a final marker to variable as eclipse has been identifying it as an error if left without
-	public void playSound(final String fileName)
+	public void playSound(String fileName)
 	{
 		Thread thread = new Thread(new Runnable()
 		{
