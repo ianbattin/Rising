@@ -155,6 +155,17 @@ public class Player extends MapObject
 	
 	public void draw(Graphics2D g) 
 	{
+		setMapPosition();
+
+		if(facingRight)
+		{
+			g.drawImage(animation.getImage(), (int)(x + xmap - width / 2), (int)(y + ymap - height / 2), width, height, null);
+		}
+		else
+		{
+			g.drawImage(animation.getImage(), (int)(x + xmap - width / 2 + width), (int)(y + ymap - height / 2), -width, height, null);
+		}
+		
 		for (int i = 0; i < 5; i++)
 		{
 			if (i < health)
@@ -166,20 +177,12 @@ public class Player extends MapObject
 				g.drawImage(heartImages.get(1), GamePanel.WIDTH - 42 - (i*40), 10, null);
 			}
 		}
-		
-		setMapPosition();
-
-		if(facingRight)
-		{
-			g.drawImage(animation.getImage(), (int)(x + xmap - width / 2), (int)(y + ymap - height / 2), width, height, null);
-		}
-		else
-		{
-			g.drawImage(animation.getImage(), (int)(x + xmap - width / 2 + width), (int)(y + ymap - height / 2), -width, height, null);
-		}
 	}
 	
-	
+	public void collided(int type)
+	{
+		
+	}
 	
 	public void setPosition(int x, int y)
 	{
