@@ -26,6 +26,8 @@ public class Player extends MapObject
 	private boolean isUnderEffect;
 	private double jumpHeightFactor;
 	
+	private int points;
+	int heightScore;
 
 	//character position relative to bottom of tileMap
 	private double yFromBottom;
@@ -63,6 +65,8 @@ public class Player extends MapObject
 		cheight = 70;
 
 		facingRight = true;
+		
+		points = 0;
 		
 		try
 		{
@@ -112,6 +116,7 @@ public class Player extends MapObject
 		//effects
 		isUnderEffect = false;
 		jumpHeightFactor = 1;
+		heightScore = 0;
 	}
 	
 	public void update()
@@ -158,6 +163,12 @@ public class Player extends MapObject
 		if(y  + cheight/2 > GamePanel.HEIGHT)
 		{
 			//y = GamePanel.HEIGHT - cheight/2;
+		}
+		
+		if(dy < 0 && heightScore <= yFromBottom)
+		{
+			heightScore = (int)yFromBottom;
+			points += -dy;
 		}
 	}
 	
@@ -420,6 +431,11 @@ public class Player extends MapObject
 		isUnderEffect = false;
 		jumpHeightFactor = 1;
 		System.out.println("Effect ended");
+	}
+	
+	public int getPoints()
+	{
+		return points;
 	}
 	
 	public void keyPressed(int k)

@@ -83,6 +83,8 @@ public class PlayState extends GameState
 			for(int i = 0; i < notStarted.length; i++)
 				g.drawString(notStarted[i], centerStringX(notStarted[i], 0, 600, g), 400  + (40 * i));
 		}
+		else
+			g.drawString("Score: " + player.getPoints(), centerStringX("Score: " + player.getPoints(), 0, GamePanel.WIDTH, g), 30);
 		
 		super.drawFade(g);
 		
