@@ -81,11 +81,8 @@ public class Player extends MapObject
 			}
 			
 			heartImages = new ArrayList<BufferedImage>();
-			BufferedImage h1 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/fullHeart.png"));
-			BufferedImage h2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/emptyHeart.png"));
-			
-			heartImages.add(h1);
-			heartImages.add(h2);
+			heartImages.add(ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/fullHeart.png")));
+			heartImages.add(ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/emptyHeart.png")));
 		}
 		catch(Exception e)
 		{
@@ -162,11 +159,11 @@ public class Player extends MapObject
 		{
 			if (i < health)
 			{
-				g.drawImage(heartImages.get(0), GamePanel.WIDTHSCALED - 10 - (i*40), 10 , null);
+				g.drawImage(heartImages.get(0), GamePanel.WIDTH - 42 - (i*40), 10, null);
 			}
 			else
 			{
-				g.drawImage(heartImages.get(1), GamePanel.WIDTHSCALED - 10 - (i*40), 10 , null);
+				g.drawImage(heartImages.get(1), GamePanel.WIDTH - 42 - (i*40), 10, null);
 			}
 		}
 		
@@ -357,6 +354,11 @@ public class Player extends MapObject
 		
 		animation.update();
 			
+	}
+	
+	public void characterHurt()
+	{
+		
 	}
 	
 	public double getCharacterY()

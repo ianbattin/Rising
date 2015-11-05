@@ -131,7 +131,7 @@ public class Pickups extends MapObject {
 		{									
 			if (yLoc < GamePanel.HEIGHT + 50)
 			{
-				yLoc += 0.5 + ((tm.getDY() - 2)*0.25);
+				yLoc += (tm.getDY()*0.25);
 				if (tm.getDY() > 2){
 					tmDyPositionOffset += ((tm.getDY() - 2)*0.25);
 				}
