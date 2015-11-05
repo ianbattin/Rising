@@ -22,7 +22,8 @@ public class PlayState extends GameState
 	private TileMap tileMap;
 	private Player player;
 	private Pickups pickups;
-	private boolean start;
+	private boolean start, isStillAlive;
+	private float timer;
 	public static boolean tileStart;
 	
 	public PlayState(GameStateManager gsm)
@@ -38,6 +39,7 @@ public class PlayState extends GameState
 		{
 			e.printStackTrace();
 		}
+		timer = 0;
 	}
 
 	public void init() 
@@ -57,6 +59,14 @@ public class PlayState extends GameState
 			pickups.update();
 			player.update();
 		}
+		if(player.getPlayerHealth() < 1 && timer > 1000000000.0)
+		{
+			super.fadeOut(500000000, gsm, GameStateManager.PLAYSTATE, GameStateManager.OUTROSTATE);
+		}
+		else if (player.getPlayerHealth() < 1)
+		{
+			timer += GamePanel.getElapsedTime();
+		}
 	}
 
 	public void draw(Graphics2D g)
@@ -73,6 +83,9 @@ public class PlayState extends GameState
 			for(int i = 0; i < notStarted.length; i++)
 				g.drawString(notStarted[i], centerStringX(notStarted[i], 0, 600, g), 400  + (40 * i));
 		}
+		
+		super.drawFade(g);
+		
 	}
 	
 	public void keyPressed(int k) 

@@ -17,6 +17,7 @@ public class GameStateManager
 	public static final int CREDITSTATE = 3; //Show credits
 	public static final int INTROSTATE = 4; //Planes crash/background story
 	public static final int PLAYSTATE = 5; //Actually playing
+	public static final int OUTROSTATE = 6; //Outro state
 	
 	
 	//these are the controls. Need to be set up here so that they are accessible gamewide.
@@ -41,6 +42,7 @@ public class GameStateManager
 		gameStates.add(new CreditState(this));
 		gameStates.add(new IntroState(this));
 		gameStates.add(new PlayState(this));
+		gameStates.add(new OutroState(this));
 	}
 	
 	public void setState(int state)
@@ -82,6 +84,7 @@ public class GameStateManager
 		else if(stateAtPos instanceof CreditState) gameStates.add(state, new CreditState(this));
 		else if(stateAtPos instanceof IntroState) gameStates.add(state, new IntroState(this));
 		else if(stateAtPos instanceof PlayState) gameStates.add(state, new PlayState(this));
+		else if(stateAtPos instanceof OutroState) gameStates.add(state, new OutroState(this));
 	}
 	
 	public void keyPressed(int k)

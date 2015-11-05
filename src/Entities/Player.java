@@ -107,7 +107,7 @@ public class Player extends MapObject
 		falling = true;
 		
 		//health
-		health = 3;
+		health = 1;
 		
 		//effects
 		isUnderEffect = false;
@@ -118,7 +118,14 @@ public class Player extends MapObject
 	{	
 		if(idle) dy = dy + 1;
 		getMovement();
-		myCheckCollision(tm);
+		if (health > 0)
+		{
+			myCheckCollision(tm);
+		}
+		else
+		{
+			falling = true;
+		}
 		getAnimation();
 
 		//Camera left and right movement (Player always stays centered)
