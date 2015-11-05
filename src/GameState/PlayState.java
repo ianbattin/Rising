@@ -62,9 +62,9 @@ public class PlayState extends GameState
 	public void draw(Graphics2D g)
 	{
 		bg.draw(g);
+		player.draw(g);
 		tileMap.draw(g);
 		pickups.draw(g);
-		player.draw(g);
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("RusselSquare", Font.PLAIN, 24));
 		if(!start) 
