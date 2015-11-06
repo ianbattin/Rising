@@ -10,6 +10,7 @@ public class GameStateManager
 {
 	private static ArrayList<GameState> gameStates;
 	private static int currentState;
+	private String[] data;
 	
 	public static final int SPLASHSTATE = 0; //Splash screen
 	public static final int MENUSTATE = 1; //Menu
@@ -43,6 +44,7 @@ public class GameStateManager
 		gameStates.add(new IntroState(this));
 		gameStates.add(new PlayState(this));
 		gameStates.add(new OutroState(this));
+		data = new String[gameStates.size()];
 	}
 	
 	public void setState(int state)
@@ -71,6 +73,11 @@ public class GameStateManager
 		currentState = state;
 	}
 	
+	public String getDataForState(int state)
+	{
+		return data[state];
+	}
+	
 	//Resets a state by deleting and re adding a new version of a state (Decided it actually makes sense
 	//to have this method in the GSM as the GSM is managing the states, which reseting is a part of
 	public void resetState(int state)
@@ -85,6 +92,7 @@ public class GameStateManager
 		else if(stateAtPos instanceof IntroState) gameStates.add(state, new IntroState(this));
 		else if(stateAtPos instanceof PlayState) gameStates.add(state, new PlayState(this));
 		else if(stateAtPos instanceof OutroState) gameStates.add(state, new OutroState(this));
+		data[state] = stateAtPos.data;
 	}
 	
 	public void keyPressed(int k)

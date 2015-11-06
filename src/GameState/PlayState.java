@@ -61,12 +61,16 @@ public class PlayState extends GameState
 		}
 		if(player.getPlayerHealth() < 1 && timer > 1000000000.0)
 		{
+			super.isFadingOut = true;
 			super.fadeOut(500000000, gsm, GameStateManager.PLAYSTATE, GameStateManager.OUTROSTATE);
 		}
 		else if (player.getPlayerHealth() < 1)
 		{
 			timer += GamePanel.getElapsedTime();
 		}
+		
+		//save data (in this case the points)
+		super.data = Integer.toString(player.getPoints());
 	}
 
 	public void draw(Graphics2D g)

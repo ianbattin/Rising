@@ -16,9 +16,12 @@ import sun.audio.*;
 public abstract class GameState
 {
 	protected GameStateManager gsm;
+	//store data from each state
+	protected String data;
 	protected boolean isFadingOut, isFadingIn;
 	protected int alphaLevel;
 	private float timeKeeper = 0;
+	
 	
 	public abstract void init();
 	public abstract void update();
@@ -26,6 +29,12 @@ public abstract class GameState
 	public abstract void keyPressed(int k);
 	public abstract void keyReleased(int k);
 	
+	//return the saved data
+	public String saveState()
+	{
+		return data;
+	}
+		
 	//Centers string between the xPos and endPos x coordinates
 	public static int centerStringX(String s, int xPos, int endPos, Graphics2D g)
 	{
@@ -73,10 +82,12 @@ public abstract class GameState
 	//draws the rectangle on top of the game to make the fading appearance
 	protected void drawFade(Graphics2D g)
 	{
-		g.setColor(new Color(0, 0, 0, alphaLevel));
-		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+		if(isFadingIn || isFadingOut)
+		{
+			g.setColor(new Color(0, 0, 0, alphaLevel));
+			g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+		}
 	}
-	
 		
 	
 	public void music(String fileName) 
@@ -106,7 +117,8 @@ public abstract class GameState
         MGP.start(loop);
     }
 	
-	public void playSound(String fileName)
+	//getting an error on eclipse here (but not other machines... its weird). setting final to the parameter should solve the error. (runs the same)
+	public void playSound(final String fileName)
 	{
 		Thread thread = new Thread(new Runnable()
 		{

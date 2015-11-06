@@ -1,5 +1,7 @@
 package GameState;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 
 import Main.GamePanel;
@@ -10,6 +12,7 @@ public class OutroState extends GameState{
 	private Background bg;
 	private GameStateManager gsm;
 	
+	private String points;
 	private float timer;
 	
 	public OutroState(GameStateManager gsm)
@@ -19,16 +22,15 @@ public class OutroState extends GameState{
 		bg = new Background("/Outro/gameOver.gif", 1);
 	}
 	
-	@Override
 	public void init() 
 	{
 		super.isFadingIn = true;
 		super.alphaLevel = 255;
 		
 		timer = 0;
+		points = gsm.getDataForState(GameStateManager.PLAYSTATE);
 	}
 
-	@Override
 	public void update() 
 	{
 		if(super.isFadingIn)
@@ -37,6 +39,7 @@ public class OutroState extends GameState{
 		}
 		else if (timer > 1000000000)
 		{
+			super.isFadingOut = true;
 			super.fadeOut(1000000000.0, gsm, GameStateManager.OUTROSTATE, GameStateManager.MENUSTATE);
 		}
 		else
@@ -45,21 +48,21 @@ public class OutroState extends GameState{
 		}
 	}
 
-	@Override
 	public void draw(Graphics2D g) 
 	{
 		bg.draw(g);
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("RusselSquare", Font.PLAIN, 24));
+		g.drawString("Score: " + points, centerStringX("Score: " + points, 0, GamePanel.WIDTH, g), 440);
 		super.drawFade(g);
 	}
 
-	@Override
 	public void keyPressed(int k) 
 	{
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void keyReleased(int k) 
 	{
 		// TODO Auto-generated method stub
