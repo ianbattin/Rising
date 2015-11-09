@@ -32,6 +32,9 @@ public class Player extends MapObject
 	//character position relative to bottom of tileMap
 	private double yFromBottom;
 	
+	private byte numOfFramesToAnimHealth;
+	private byte timesToLoop;
+	
 	private ArrayList<BufferedImage> heartImages;
 	
 	//animation
@@ -83,11 +86,39 @@ public class Player extends MapObject
 			}
 			
 			heartImages = new ArrayList<BufferedImage>();
-			BufferedImage h1 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/fullHeart.png"));
-			BufferedImage h2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/emptyHeart.png"));
+			BufferedImage h1 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/fullHeart2.png"));
+			BufferedImage h2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/emptyHeart2.png"));
+
+			BufferedImage h3 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/fullHeart2.png"));
+			BufferedImage h4 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/emptyHeart2.png"));
+
 			
 			heartImages.add(h1);
 			heartImages.add(h2);
+			heartImages.add(h3);
+			heartImages.add(h4);
+			for (int l = 2; l < heartImages.size(); l++)
+			{
+				for (int x = 0; x < heartImages.get(l).getWidth(); x++)
+				{
+					for (int y = 0; y < heartImages.get(l).getHeight(); y++)
+					{
+						int rgb = heartImages.get(l).getRGB(x, y);
+						int a = (rgb >> 24) & 0xFF;
+						int r = (rgb >> 16) & 0xFF;
+						int g = (rgb >> 8) & 0xFF;
+						int b = rgb & 0xFF;
+						if (r+150 > 255) r = 255;
+						else r += 150;
+						if (g-25 < 0) r = 0;
+						else g -= 25;
+						if (b-25 < 0) r = 0;
+						else b -= 25;
+						heartImages.get(l).setRGB(x, y, (a*16777216)+(r*65536)+(g*256)+b);
+					}
+				}
+			}
+			
 		}
 		catch(Exception e)
 		{
@@ -111,7 +142,10 @@ public class Player extends MapObject
 		falling = true;
 		
 		//health
-		health = 1;
+		health = 4;
+		
+		numOfFramesToAnimHealth = 0;
+		timesToLoop = 0;
 		
 		//effects
 		isUnderEffect = false;
@@ -170,19 +204,57 @@ public class Player extends MapObject
 			heightScore = (int)yFromBottom;
 			points += -dy;
 		}
+		
+		if (y > GamePanel.HEIGHT + 50 + height)
+		{
+			playerHurt(1);
+		}
 	}
 	
 	public void draw(Graphics2D g) 
 	{
-		for (int i = 0; i < 5; i++)
+		if (numOfFramesToAnimHealth  > 0 && timesToLoop%2 == 0)
 		{
-			if (i < health)
+			for (int i = 0; i < 5; i++)
 			{
-				g.drawImage(heartImages.get(0), 10 + (i*40), 10 , null);
+				if (i < health)
+				{
+					g.drawImage(heartImages.get(2), 10 + (i*40), 10 , null);
+				}
+				else
+				{
+					g.drawImage(heartImages.get(3), 10 + (i*40), 10 , null);
+				}
 			}
-			else
+			numOfFramesToAnimHealth--;
+			if(numOfFramesToAnimHealth == 0 && timesToLoop > 0) 
 			{
-				g.drawImage(heartImages.get(1), 10 + (i*40), 10 , null);
+				timesToLoop--;
+				numOfFramesToAnimHealth = 10;
+			}
+		}
+		else
+		{
+			if (numOfFramesToAnimHealth > 0 && timesToLoop%2 == 1)
+			{
+				numOfFramesToAnimHealth--;
+				if(numOfFramesToAnimHealth == 0 && timesToLoop > 0)
+				{
+					timesToLoop--;
+					numOfFramesToAnimHealth = 10;
+				}
+			}
+			for (int i = 0; i < 5; i++)
+			{
+				if (i < health)
+				{
+					g.drawImage(heartImages.get(0), 10 + (i*40), 10 , null);
+				}
+				else
+				{
+					g.drawImage(heartImages.get(1), 10 + (i*40), 10 , null);
+				}
+
 			}
 		}
 		
@@ -210,7 +282,7 @@ public class Player extends MapObject
 		}
 		else if(type == 17) 
 		{
-			health--;
+			playerHurt(1);
 			dy = -8.0;
 			if(dx >= 0) dx = -8.0;
 			else dx = 8.0;
@@ -409,6 +481,19 @@ public class Player extends MapObject
 	{
 		return health;
 	}
+	
+	public void playerHeal(int amount)
+	{
+		health += amount;
+		numOfFramesToAnimHealth = 10;
+		timesToLoop = 2;
+	}
+	public void playerHurt(int amount)
+	{
+		health -= amount;
+		numOfFramesToAnimHealth = 10;
+		timesToLoop = 4;
+	}
 		
 	//starts effects, added to enable the pickups
 	public void effectStart(int effect)
@@ -418,6 +503,11 @@ public class Player extends MapObject
 			case 0: 
 			{
 				jumpHeightFactor = 2;
+				break;
+			}
+			case 1:
+			{
+				playerHeal(1);
 				break;
 			}
 		}
