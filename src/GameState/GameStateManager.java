@@ -30,6 +30,10 @@ public class GameStateManager
 	public static int glide = KeyEvent.VK_SPACE;
 	public static int select = KeyEvent.VK_ENTER;
 	public static int reset = KeyEvent.VK_BACK_SPACE;
+	public static int shootUp = KeyEvent.VK_UP;
+	public static int shootDown = KeyEvent.VK_DOWN;
+	public static int shootLeft = KeyEvent.VK_LEFT;
+	public static int shootRight = KeyEvent.VK_RIGHT;
 	
 
 	//Constructor, adds all the gamestates to this gamestate arraylist

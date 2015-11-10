@@ -1,5 +1,6 @@
 package Entities;
 
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -91,6 +92,9 @@ public abstract class MapObject
 	}
 	
 	public abstract void collided(int type, Tile t);
+	public abstract void collided(int type, Tile t, MapObject m);
+	public abstract void update();
+	public abstract void draw(Graphics2D g);
 	
 	public boolean intersects(MapObject other)
 	{
@@ -255,6 +259,16 @@ public abstract class MapObject
 	{
 		xmap = tileMap.getX();
 		ymap = tileMap.getY();
+	}
+	
+	public int getHealth()
+	{
+		return health;
+	}
+	
+	public void setHealth(int health)
+	{
+		this.health = health;
 	}
 	
 	public void setLeft(boolean b) { 	left = b;	}

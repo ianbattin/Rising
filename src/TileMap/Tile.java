@@ -99,6 +99,12 @@ public class Tile
 		{ 
 			animation.update(); 
 		}
+		
+		if(type == 0)
+		{
+			setX(-100);
+			setY(1000);
+		}
 	}
 	
 	public void draw(Graphics2D g, int type)
@@ -116,6 +122,7 @@ public class Tile
 	}
 	
 	public int getType() {	return type;	}
+	public void setType(int i) { type = i; };
 	public double getX(){	return x;	}
 	public double getY(){	return y;	}
 	public void setAnimated(boolean b) { animated = b; }

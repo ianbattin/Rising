@@ -1,5 +1,7 @@
 package Entities;
 
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -7,6 +9,8 @@ import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -20,21 +24,34 @@ import TileMap.TileMap;
 
 public class Player extends MapObject
 {	
+	//TileMap
 	private TileMap tm;
+	
+	//Attacks
+	private ArrayList<Projectile> bullets;
+	private long fireTimer;
+	public static int fireDelay;
+	public static boolean firing;
+	private double angle;
+	private boolean shootUp;
+	private boolean shootDown;
+	private boolean shootLeft;
+	private boolean shootRight;
 	
 	//effect variables - @Ian you can edit this how you want when you get to cleaning this class up
 	private boolean isUnderEffect;
 	private double jumpHeightFactor;
 	
+	//score system
 	private int points;
 	int heightScore;
 
 	//character position relative to bottom of tileMap
 	private double yFromBottom;
 	
+	//health
 	private byte numOfFramesToAnimHealth;
 	private byte timesToLoop;
-	
 	private ArrayList<BufferedImage> heartImages;
 	
 	//animation
@@ -54,6 +71,12 @@ public class Player extends MapObject
 	{	
 		super(tm);
 		this.tm = tm;
+		
+		bullets = new ArrayList<Projectile>();
+		angle = 0.0;
+		firing = false;
+		fireDelay = 250;
+		fireTimer = System.nanoTime();
 		
 		moveSpeed = 0.3;
 		maxSpeed = 5.0;
@@ -166,6 +189,12 @@ public class Player extends MapObject
 			falling = true;
 		}
 		getAnimation();
+		getAttack();
+		
+		for(Projectile p: bullets)
+		{
+			p.update();
+		}
 
 		//Camera left and right movement (Player always stays centered)
 		tm.setXVector(-dx);
@@ -268,6 +297,11 @@ public class Player extends MapObject
 		{
 			g.drawImage(animation.getImage(), (int)(x + xmap - width / 2 + width), (int)(y + ymap - height / 2), -width, height, null);
 		}
+		
+		for(Projectile p: bullets)
+		{
+			p.draw(g);
+		}
 	}
 	
 	public void collided(int type, Tile t)
@@ -294,6 +328,30 @@ public class Player extends MapObject
 			falling = true;
 			dy = -20.0;
 			t.setAnimated(true);
+		}
+	}
+	
+	public void getAttack()
+	{
+		if(shootUp) angle = Math.toRadians(270);
+		if(shootDown) angle = Math.toRadians(90);
+		if(shootLeft) angle = Math.toRadians(180);
+		if(shootRight) angle = Math.toRadians(0);
+		if(shootUp && shootRight) angle = Math.toRadians(315);
+		if(shootUp && shootLeft) angle = Math.toRadians(225);
+		if(shootDown && shootLeft) angle = Math.toRadians(135);
+		if(shootDown && shootRight) angle = Math.toRadians(45);
+		
+		if(!shootUp && !shootDown && !shootLeft && !shootRight) firing = false;
+		
+		if(firing)
+		{
+			long elapsed= (System.nanoTime() - fireTimer) / 1000000;
+			if(fireDelay <= elapsed)
+			{
+				bullets.add(new Projectile(x, y, angle, 1, tm));
+				fireTimer = System.nanoTime();
+			}
 		}
 	}
 	
@@ -567,6 +625,26 @@ public class Player extends MapObject
 			gliding = true;
 			idle = false;
 		}	
+		if(k == GameStateManager.shootUp)
+		{
+			shootUp = true;
+			firing = true;
+		}
+		if(k == GameStateManager.shootDown)
+		{
+			shootDown = true;
+			firing = true;
+		}
+		if(k == GameStateManager.shootLeft)
+		{
+			shootLeft = true;
+			firing = true;
+		}
+		if(k == GameStateManager.shootRight)
+		{
+			shootRight = true;
+			firing = true;
+		}
 	}
 	
 	public void keyReleased(int k)
@@ -604,5 +682,27 @@ public class Player extends MapObject
 			gliding = false;
 			idle = true;
 		}
+		if(k == GameStateManager.shootUp)
+		{
+			shootUp = false;
+		}
+		if(k == GameStateManager.shootDown)
+		{
+			shootDown = false;
+		}
+		if(k == GameStateManager.shootLeft)
+		{
+			shootLeft = false;
+		}
+		if(k == GameStateManager.shootRight)
+		{
+			shootRight = false;
+		}
+	}
+
+	@Override
+	public void collided(int type, Tile t, MapObject m) {
+		// TODO Auto-generated method stub
+		
 	}
 }

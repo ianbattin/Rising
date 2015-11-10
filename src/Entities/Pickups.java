@@ -193,4 +193,10 @@ public class Pickups extends MapObject {
 		player.effectStart(effectType);
 	}
 
+	@Override
+	public void collided(int type, Tile t, MapObject m) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
