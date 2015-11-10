@@ -44,7 +44,7 @@ public class PlayState extends GameState
 
 	public void init() 
 	{
-		tileMap = new TileMap("Resources/Maps/level4.txt");
+		tileMap = new TileMap("Resources/Maps/level5.txt");
 		player = new Player(tileMap);
 		pickups = new Pickups(player, tileMap);
 		tileStart = false;
@@ -85,7 +85,7 @@ public class PlayState extends GameState
 		{
 			String[] notStarted = {"PRESS ENTER TO START", "PRESS BACKSPACE TO RETURN TO MENU" };
 			for(int i = 0; i < notStarted.length; i++)
-				g.drawString(notStarted[i], centerStringX(notStarted[i], 0, 600, g), 400  + (40 * i));
+				g.drawString(notStarted[i], centerStringX(notStarted[i], 0, GamePanel.WIDTH, g), 400  + (40 * i));
 		}
 		else
 			g.drawString("Score: " + player.getPoints(), centerStringX("Score: " + player.getPoints(), 0, GamePanel.WIDTH, g), 30);
