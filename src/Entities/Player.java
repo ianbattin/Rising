@@ -52,11 +52,7 @@ public class Player extends MapObject
 	//health
 	private byte numOfFramesToAnimHealth;
 	private byte timesToLoop;
-<<<<<<< HEAD
-=======
 	private boolean isFlashing;
-	
->>>>>>> origin/master
 	private ArrayList<BufferedImage> heartImages;
 	
 	//animation
