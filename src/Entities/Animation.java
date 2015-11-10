@@ -26,6 +26,12 @@ public class Animation
 		playedOnce = false;
 	}
 	
+	//changes the frames without interrupting animation sequence
+	public void changeFrames (BufferedImage[] frames)
+	{
+		this.frames = frames;
+	}
+	
 	public void setDelay(long d) {	delay = d;	}
 	public void setFrame(int i) {	currentFrame = i;	}
 	

@@ -34,11 +34,13 @@ public class Player extends MapObject
 	
 	private byte numOfFramesToAnimHealth;
 	private byte timesToLoop;
+	private boolean isFlashing;
 	
 	private ArrayList<BufferedImage> heartImages;
 	
 	//animation
-	private ArrayList<BufferedImage[]> sprites;
+	private ArrayList<BufferedImage[]> playerSprites;
+	private ArrayList<BufferedImage[]> playerHurtSprites;
 	private final int[] numFrames = { 1, 4, 3, 3, 4 };
 	
 	//animation actions
@@ -74,7 +76,7 @@ public class Player extends MapObject
 		try
 		{
 			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/MainCharacterSpriteSheet.png"));
-			sprites = new ArrayList<BufferedImage[]>();
+			playerSprites = new ArrayList<BufferedImage[]>();
 			for(int i = 0; i < numFrames.length; i++)
 			{
 				BufferedImage[] bi = new BufferedImage[numFrames[i]];
@@ -82,9 +84,38 @@ public class Player extends MapObject
 				{
 					bi[j] = spritesheet.getSubimage(j * width, i * height, width, height);
 				}
-				sprites.add(bi);
+				playerSprites.add(bi);
 			}
 			
+			//make the spritesheet for when the player is blinking red
+			BufferedImage playerHurtSpritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/MainCharacterSpriteSheet.png"));
+			for (int x = 0; x < playerHurtSpritesheet.getWidth(); x++)
+			{
+				for (int y = 0; y < playerHurtSpritesheet.getHeight(); y++)
+				{
+					int rgb = playerHurtSpritesheet.getRGB(x, y);
+					int a = (rgb >> 24) & 0xFF;
+					int r = (rgb >> 16) & 0xFF;
+					int g = (rgb >> 8) & 0xFF;
+					int b = rgb & 0xFF;
+					if (r+150 > 255) r = 255;
+					else r += 150;
+					playerHurtSpritesheet.setRGB(x, y, (a*16777216)+(r*65536)+(g*256)+b);
+				}
+			}
+			playerHurtSprites = new ArrayList<BufferedImage[]>();
+			for(int i = 0; i < numFrames.length; i++)
+			{
+				BufferedImage[] bi = new BufferedImage[numFrames[i]];
+				for(int j = 0; j < numFrames[i]; j++)
+				{
+					bi[j] = playerHurtSpritesheet.getSubimage(j * width, i * height, width, height);
+				}
+				//sprites.add(bi);
+				playerHurtSprites.add(bi);
+			}
+			
+			//get sprites for heart. This will be improved if we make the two hearts be on the same spritesheet image
 			heartImages = new ArrayList<BufferedImage>();
 			BufferedImage h1 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/fullHeart2.png"));
 			BufferedImage h2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/emptyHeart2.png"));
@@ -136,16 +167,17 @@ public class Player extends MapObject
 		dy = 0.0;
 		
 		currentAction = FALLING;
-		animation.setFrames(sprites.get(FALLING));
+		animation.setFrames(playerSprites.get(FALLING));
 		animation.setDelay(200);
 		
 		falling = true;
 		
 		//health
-		health = 4;
+		health = 5;
 		
 		numOfFramesToAnimHealth = 0;
 		timesToLoop = 0;
+		isFlashing = false;
 		
 		//effects
 		isUnderEffect = false;
@@ -182,7 +214,6 @@ public class Player extends MapObject
 			{
 				y += dy;
 			}
-			
 		}
 		else 
 		{
@@ -209,11 +240,32 @@ public class Player extends MapObject
 		{
 			playerHurt(1);
 		}
+		
+		if (numOfFramesToAnimHealth  > 0 && timesToLoop%2 == 1)
+		{
+			isFlashing = true;
+			numOfFramesToAnimHealth--;
+			if(numOfFramesToAnimHealth == 0 && timesToLoop > 0) 
+			{
+				timesToLoop--;
+				numOfFramesToAnimHealth = 10;
+			}
+		}
+		else if (numOfFramesToAnimHealth > 0 && timesToLoop%2 == 0)
+		{
+			isFlashing = false;
+			numOfFramesToAnimHealth--;
+			if(numOfFramesToAnimHealth == 0 && timesToLoop > 0)
+			{
+				timesToLoop--;
+				numOfFramesToAnimHealth = 10;
+			}
+		}
 	}
 	
 	public void draw(Graphics2D g) 
 	{
-		if (numOfFramesToAnimHealth  > 0 && timesToLoop%2 == 0)
+		if (isFlashing)
 		{
 			for (int i = 0; i < 5; i++)
 			{
@@ -226,24 +278,9 @@ public class Player extends MapObject
 					g.drawImage(heartImages.get(3), 10 + (i*40), 10 , null);
 				}
 			}
-			numOfFramesToAnimHealth--;
-			if(numOfFramesToAnimHealth == 0 && timesToLoop > 0) 
-			{
-				timesToLoop--;
-				numOfFramesToAnimHealth = 10;
-			}
 		}
 		else
 		{
-			if (numOfFramesToAnimHealth > 0 && timesToLoop%2 == 1)
-			{
-				numOfFramesToAnimHealth--;
-				if(numOfFramesToAnimHealth == 0 && timesToLoop > 0)
-				{
-					timesToLoop--;
-					numOfFramesToAnimHealth = 10;
-				}
-			}
 			for (int i = 0; i < 5; i++)
 			{
 				if (i < health)
@@ -254,7 +291,6 @@ public class Player extends MapObject
 				{
 					g.drawImage(heartImages.get(1), 10 + (i*40), 10 , null);
 				}
-
 			}
 		}
 		
@@ -392,7 +428,7 @@ public class Player extends MapObject
 			if(currentAction != IDLE && currentAction != WALKING)
 			{
 				currentAction = IDLE;
-				animation.setFrames(sprites.get(IDLE));
+				animation.setFrames(playerSprites.get(IDLE));
 				animation.setDelay(200);
 				width = 50;
 				height = 70;
@@ -405,7 +441,7 @@ public class Player extends MapObject
 			if(currentAction != WALKING && currentAction != FALLING && currentAction != JUMPING && !idle)
 			{
 				currentAction = WALKING;
-				animation.setFrames(sprites.get(WALKING));
+				animation.setFrames(playerSprites.get(WALKING));
 				animation.setDelay(200);
 				width = 50;
 				height = 70;
@@ -416,7 +452,7 @@ public class Player extends MapObject
 			if(currentAction != JUMPING && !fallingAnim)
 			{
 				currentAction = JUMPING;
-				animation.setFrames(sprites.get(JUMPING));
+				animation.setFrames(playerSprites.get(JUMPING));
 				animation.setDelay(200);
 				animation.setDone(true);
 				width = 50;
@@ -428,7 +464,7 @@ public class Player extends MapObject
 			if(currentAction != FALLING)
 			{
 				currentAction = FALLING;
-				animation.setFrames(sprites.get(FALLING));
+				animation.setFrames(playerSprites.get(FALLING));
 				animation.setDelay(200);
 				width = 50;
 				height = 70;
@@ -468,6 +504,9 @@ public class Player extends MapObject
 			}
 		}*/
 		
+		if (isFlashing) animation.changeFrames(playerHurtSprites.get(currentAction));
+		else animation.changeFrames(playerSprites.get(currentAction));
+		
 		animation.update();
 			
 	}
@@ -485,14 +524,12 @@ public class Player extends MapObject
 	public void playerHeal(int amount)
 	{
 		health += amount;
-		numOfFramesToAnimHealth = 10;
-		timesToLoop = 2;
 	}
 	public void playerHurt(int amount)
 	{
 		health -= amount;
 		numOfFramesToAnimHealth = 10;
-		timesToLoop = 4;
+		timesToLoop = 5;
 	}
 		
 	//starts effects, added to enable the pickups
