@@ -10,7 +10,7 @@ import java.awt.event.*;
 
 public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 	
-	public static final int WIDTH = 601;
+	public static final int WIDTH = 801;
 	public static final int HEIGHT = 751;
 	public static final int SCALE = 1;
 	public static int TILESIZE = 25;
@@ -105,7 +105,7 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D) image.getGraphics();
 		
-		mapWidth = 24;
+		mapWidth = 32;
 		mapHeight = 28;
 		map = new int[mapHeight][mapWidth];
 		

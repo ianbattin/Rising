@@ -22,6 +22,7 @@ public class PlayState extends GameState
 	private TileMap tileMap;
 	private Player player;
 	private Pickups pickups;
+	private int[][] debrisInfo;
 	private boolean start, isStillAlive;
 	private float timer;
 	public static boolean tileStart;
@@ -40,11 +41,22 @@ public class PlayState extends GameState
 			e.printStackTrace();
 		}
 		timer = 0;
+		debrisInfo = new int[50][4];
+		for(int i = 0; i < debrisInfo.length; i++)
+		{
+			for(int j = 0; j < debrisInfo[i].length; j++)
+			{
+				debrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
+				debrisInfo[i][1] = (int)(Math.random()*GamePanel.HEIGHT);
+				debrisInfo[i][2] = (int)(Math.random()*5)+2;
+				debrisInfo[i][3] = (int)(Math.random()*170)+25;
+			}
+		}
 	}
 
 	public void init() 
 	{
-		tileMap = new TileMap("Resources/Maps/level4.txt");
+		tileMap = new TileMap("Resources/Maps/level5.txt");
 		player = new Player(tileMap);
 		pickups = new Pickups(player, tileMap);
 		tileStart = false;
@@ -79,19 +91,41 @@ public class PlayState extends GameState
 		player.draw(g);
 		tileMap.draw(g);
 		pickups.draw(g);
+		debris(g);
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("RusselSquare", Font.PLAIN, 24));
 		if(!start) 
 		{
 			String[] notStarted = {"PRESS ENTER TO START", "PRESS BACKSPACE TO RETURN TO MENU" };
 			for(int i = 0; i < notStarted.length; i++)
-				g.drawString(notStarted[i], centerStringX(notStarted[i], 0, 600, g), 400  + (40 * i));
+				g.drawString(notStarted[i], centerStringX(notStarted[i], 0, GamePanel.WIDTH, g), 400  + (40 * i));
 		}
 		else
 			g.drawString("Score: " + player.getPoints(), centerStringX("Score: " + player.getPoints(), 0, GamePanel.WIDTH, g), 30);
 		
 		super.drawFade(g);
 		
+	}
+	
+	public void debris(Graphics2D g)
+	{
+		for(int i = 0; i < debrisInfo.length; i++)
+		{
+			for(int j = 0; j < debrisInfo[i].length; j++)
+			{
+				g.setColor(new Color(debrisInfo[i][3], debrisInfo[i][3], debrisInfo[i][3]));
+				g.fillOval(debrisInfo[i][0], debrisInfo[i][1], debrisInfo[i][2], debrisInfo[i][2]);
+				debrisInfo[i][1] += debrisInfo[i][2]*.75;
+				
+				if (debrisInfo[i][1] > GamePanel.HEIGHT)
+				{
+					debrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
+					debrisInfo[i][1] = -20;
+					debrisInfo[i][2] = (int)(Math.random()*5)+2;
+					debrisInfo[i][3] = (int)(Math.random()*170)+25;
+				}
+			}
+		}
 	}
 	
 	public void keyPressed(int k) 

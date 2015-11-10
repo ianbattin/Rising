@@ -53,7 +53,7 @@ public class OutroState extends GameState{
 		bg.draw(g);
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("RusselSquare", Font.PLAIN, 24));
-		g.drawString("Score: " + points, centerStringX("Score: " + points, 0, GamePanel.WIDTH, g), 440);
+		g.drawString("Score: " + points, centerStringX("Score: " + points, 0, GamePanel.WIDTH, g), 480);
 		super.drawFade(g);
 	}
 

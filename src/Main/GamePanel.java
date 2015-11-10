@@ -18,7 +18,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	//window size TODO: Allow the user to edit the SCALEWIDTH and SCALEHEIGHT
 	public static double scaleWidth = Math.min(((Toolkit.getDefaultToolkit().getScreenSize().height-50.0)/GamePanel.HEIGHT), 1);
 	public static double scaleHeight = Math.min(((Toolkit.getDefaultToolkit().getScreenSize().height-50.0)/GamePanel.HEIGHT), 1);
-	public static final int WIDTH = 600;
+	public static final int WIDTH = 800;
 	public static final int HEIGHT = 800;
 	public static final int WIDTHSCALED = (int)(WIDTH * scaleWidth);
 	public static final int HEIGHTSCALED = (int)(HEIGHT * scaleHeight);
