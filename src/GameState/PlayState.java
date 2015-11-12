@@ -1,9 +1,12 @@
 package GameState;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.lang.Object.*;
 import java.util.Timer;
@@ -18,6 +21,14 @@ import TileMap.TileMap;
 
 public class PlayState extends GameState
 {
+	//Mouse
+	private int mouseX;
+	private int mouseY;
+	private int relX;
+	private int relY;
+	private boolean mouseUpdate;
+	private MouseEvent mouse;
+	
 	private Background bg;
 	private TileMap tileMap;
 	private Player player;
@@ -92,6 +103,9 @@ public class PlayState extends GameState
 		tileMap.draw(g);
 		pickups.draw(g);
 		debris(g);
+		
+		drawCrossHair(g);
+		
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("RusselSquare", Font.PLAIN, 24));
 		if(!start) 
@@ -104,9 +118,16 @@ public class PlayState extends GameState
 			g.drawString("Score: " + player.getPoints(), centerStringX("Score: " + player.getPoints(), 0, GamePanel.WIDTH, g), 30);
 		
 		super.drawFade(g);
-		
 	}
 	
+	private void drawCrossHair(Graphics2D g) 
+	{
+		g.setColor(Color.BLACK);
+		g.setStroke(new BasicStroke(2));
+		g.drawLine(mouseX - 5, mouseY, mouseX + 5, mouseY);
+		g.drawLine(mouseX, mouseY - 5, mouseX, mouseY + 5);
+	}
+
 	public void debris(Graphics2D g)
 	{
 		for(int i = 0; i < debrisInfo.length; i++)
@@ -158,5 +179,66 @@ public class PlayState extends GameState
 	public void keyReleased(int k) 
 	{
 		player.keyReleased(k);
+	}
+
+	@Override
+
+	public void mouseClicked(MouseEvent e)
+	{
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) 
+	{
+		mouseUpdate = true;
+		mouse = e;
+	}
+
+	
+
+	@Override
+	public void mouseExited(MouseEvent e) 
+	{
+		mouseUpdate = false;
+		mouse = e;
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) 
+	{
+		if(e.getButton() == MouseEvent.BUTTON1)
+		{
+			player.setFiring(true);
+		}
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) 
+	{
+		if(e.getButton() == MouseEvent.BUTTON1)
+		{
+			player.setFiring(false);
+		}
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) 
+	{
+		mouseX = e.getX();
+		mouseY = e.getY();
+		relX = mouseX - (int)player.getX();
+		relY = mouseY - (int)player.getY();
+		player.setAngle(Math.atan2(relY, relX));
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) 
+	{
+		mouseX = e.getX();
+		mouseY = e.getY();
+		relX = mouseX - (int)player.getX();
+		relY = mouseY - (int)player.getY();
+		player.setAngle(Math.atan2(relY, relX));
 	}
 }

@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -77,7 +78,7 @@ public class Player extends MapObject
 		bullets = new ArrayList<Projectile>();
 		angle = 0.0;
 		firing = false;
-		fireDelay = 250;
+		fireDelay = 200;
 		fireTimer = System.nanoTime();
 		
 		moveSpeed = 0.3;
@@ -223,9 +224,10 @@ public class Player extends MapObject
 		getAnimation();
 		getAttack();
 		
-		for(Projectile p: bullets)
+		for(int i = 0; i < bullets.size(); i++)
 		{
-			p.update();
+			bullets.get(i).update();
+			if(bullets.get(i).notOnScreen()) bullets.remove(i);
 		}
 
 		//Camera left and right movement (Player always stays centered)
@@ -369,19 +371,20 @@ public class Player extends MapObject
 	
 	public void getAttack()
 	{
-		if(shootUp) angle = Math.toRadians(270);
+		/*if(shootUp) angle = Math.toRadians(270);
 		if(shootDown) angle = Math.toRadians(90);
 		if(shootLeft) angle = Math.toRadians(180);
 		if(shootRight) angle = Math.toRadians(0);
 		if(shootUp && shootRight) angle = Math.toRadians(315);
 		if(shootUp && shootLeft) angle = Math.toRadians(225);
 		if(shootDown && shootLeft) angle = Math.toRadians(135);
-		if(shootDown && shootRight) angle = Math.toRadians(45);
+		if(shootDown && shootRight) angle = Math.toRadians(45);*/
 		
-		if(!shootUp && !shootDown && !shootLeft && !shootRight) firing = false;
-		
+		//if(!shootUp && !shootDown && !shootLeft && !shootRight) firing = false;
+	
 		if(firing)
 		{
+			
 			long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 			if(fireDelay <= elapsed)
 			{
@@ -662,7 +665,7 @@ public class Player extends MapObject
 			gliding = true;
 			idle = false;
 		}	
-		if(k == GameStateManager.shootUp)
+		/*if(k == GameStateManager.shootUp)
 		{
 			shootUp = true;
 			firing = true;
@@ -681,7 +684,7 @@ public class Player extends MapObject
 		{
 			shootRight = true;
 			firing = true;
-		}
+		}*/
 	}
 	
 	public void keyReleased(int k)
@@ -719,7 +722,7 @@ public class Player extends MapObject
 			gliding = false;
 			idle = true;
 		}
-		if(k == GameStateManager.shootUp)
+		/*if(k == GameStateManager.shootUp)
 		{
 			shootUp = false;
 		}
@@ -734,12 +737,27 @@ public class Player extends MapObject
 		if(k == GameStateManager.shootRight)
 		{
 			shootRight = false;
-		}
+		}*/
 	}
 
 	@Override
 	public void collided(int type, Tile t, MapObject m) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void setFiring(boolean b) 
+	{
+		firing = b;
+	}
+
+	public void setAngle(double atan) 
+	{
+		angle = atan;
+	}
+
+	public double getAngle() 
+	{
+		return angle;
 	}
 }

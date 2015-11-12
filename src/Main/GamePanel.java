@@ -5,6 +5,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.awt.Toolkit;
 
@@ -13,7 +16,7 @@ import javax.swing.JPanel;
 import GameState.GameStateManager;
 
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel implements Runnable, KeyListener
+public class GamePanel extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener
 {
 	//window size TODO: Allow the user to edit the SCALEWIDTH and SCALEHEIGHT
 	public static double scaleWidth = Math.min(((Toolkit.getDefaultToolkit().getScreenSize().height-50.0)/GamePanel.HEIGHT), 1);
@@ -57,6 +60,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 		{
 			thread = new Thread(this);
 			addKeyListener(this);
+			addMouseListener(this);
+			addMouseMotionListener(this);
 			thread.start();
 		}
 	}
@@ -182,5 +187,47 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 	public void keyTyped(KeyEvent key) 
 	{
 		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) 
+	{
+		gsm.mouseClicked(e);
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) 
+	{
+		gsm.mouseEntered(e);
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) 
+	{
+		gsm.mouseExited(e);
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) 
+	{
+		gsm.mousePressed(e);
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) 
+	{
+		gsm.mouseReleased(e);
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) 
+	{
+		gsm.mouseDragged(e);
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) 
+	{
+		gsm.mouseMoved(e);
 	}
 }

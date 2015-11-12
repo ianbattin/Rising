@@ -2,6 +2,7 @@ package GameState;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import Main.GamePanel;
@@ -107,5 +108,40 @@ public class GameStateManager
 	public void keyReleased(int k)
 	{
 		gameStates.get(currentState).keyReleased(k);
+	}
+
+	public void mouseClicked(MouseEvent e) 
+	{
+		gameStates.get(currentState).mouseClicked(e);
+	}
+
+	public void mouseEntered(MouseEvent e) 
+	{
+		gameStates.get(currentState).mouseEntered(e);
+	}
+
+	public void mouseExited(MouseEvent e) 
+	{
+		gameStates.get(currentState).mouseExited(e);
+	}
+
+	public void mousePressed(MouseEvent e) 
+	{
+		gameStates.get(currentState).mousePressed(e);
+	}
+
+	public void mouseReleased(MouseEvent e) 
+	{
+		gameStates.get(currentState).mouseReleased(e);
+	}
+
+	public void mouseDragged(MouseEvent e) 
+	{
+		gameStates.get(currentState).mouseDragged(e);
+	}
+
+	public void mouseMoved(MouseEvent e) 
+	{
+		gameStates.get(currentState).mouseMoved(e);
 	}
 }

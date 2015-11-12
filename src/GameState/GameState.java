@@ -3,6 +3,7 @@ package GameState;
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,6 +29,13 @@ public abstract class GameState
 	public abstract void draw(Graphics2D g);
 	public abstract void keyPressed(int k);
 	public abstract void keyReleased(int k);
+	public abstract void mouseClicked(MouseEvent e);
+	public abstract void mouseEntered(MouseEvent e);
+	public abstract void mouseExited(MouseEvent e);
+	public abstract void mousePressed(MouseEvent e);
+	public abstract void mouseReleased(MouseEvent e);
+	public abstract void mouseDragged(MouseEvent e);
+	public abstract void mouseMoved(MouseEvent e);
 	
 	//return the saved data
 	public String saveState()
@@ -137,6 +145,4 @@ public abstract class GameState
 		});
 		thread.start();
 	}
-	
-	
 }

@@ -28,8 +28,8 @@ public class Projectile extends MapObject
 			case 1: 
 			{
 				moveSpeed = 15.0;
-				width = 5;
-				height = 5;
+				width = 7;
+				height = 7;
 				damage = 1;
 			}
 		}
@@ -46,6 +46,7 @@ public class Projectile extends MapObject
 			x += dx;
 			y += dy;
 		}
+		
 	}
 
 	public void draw(Graphics2D g) 
