@@ -64,7 +64,7 @@ public class MenuState extends GameState
 		
 		if (super.isFadingOut)
 		{
-			super.fadeOut(4000000000.0, gsm, GameStateManager.MENUSTATE, GameStateManager.INTROSTATE);
+			super.fadeOut(5000000000.0, gsm, GameStateManager.MENUSTATE, GameStateManager.INTROSTATE);
 			//title fading
 			if (titleAlphaLevel < 255)
 			{
@@ -125,42 +125,47 @@ public class MenuState extends GameState
 	
 	public void keyPressed(int k) 
 	{
+		
 		if(k == GameStateManager.select && !super.isFadingOut)
 		{
 			select();
 		} 
-		else if (k == GameStateManager.select && super.isFadingOut)
+		else if (k == GameStateManager.select)
 		{
 			gsm.resetState(GameStateManager.MENUSTATE);
-			gsm.setCurrentState(GameStateManager.INTROSTATE);
+			gsm.setCurrentState(GameStateManager.PLAYSTATE);
 		}
 		
-		if (k == GameStateManager.reset && super.isFadingOut)
+		if (k == GameStateManager.reset)
 		{
 			gsm.resetState(GameStateManager.MENUSTATE);
 		}
 		
-		//If you press the up key, the selected option go up
-		if(k == GameStateManager.up)
+		//prevents other changes/movements once play has been selected
+		if(!super.isFadingOut)
 		{
-			playSound("changeselection.wav");
-			currentChoice--;
-			//Unless you reach the top in which case it loops back to the bottom
-			if(currentChoice == -1)
+			//If you press the up key, the selected option go up
+			if(k == GameStateManager.up)
 			{
-				currentChoice = options.length - 1;
+				playSound("changeselection.wav");
+				currentChoice--;
+				//Unless you reach the top in which case it loops back to the bottom
+				if(currentChoice == -1)
+				{
+					currentChoice = options.length - 1;
+				}
 			}
-		}
-		
-		//If you press the down key, the selected option goes down
-		if(k == GameStateManager.down)
-		{
-			playSound("changeselection.wav");
-			currentChoice++;
-			//Unless you reach the bottom in which case it loops back to the top
-			if(currentChoice == options.length)
+			
+			//If you press the down key, the selected option goes down
+			if(k == GameStateManager.down)
 			{
-				currentChoice = 0;
+				playSound("changeselection.wav");
+				currentChoice++;
+				//Unless you reach the bottom in which case it loops back to the top
+				if(currentChoice == options.length)
+				{
+					currentChoice = 0;
+				}
 			}
 		}
 	}

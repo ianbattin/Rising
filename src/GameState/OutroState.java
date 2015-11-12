@@ -38,7 +38,7 @@ public class OutroState extends GameState{
 		{
 			super.fadeIn(500000000.0);
 		}
-		else if (timer > 1000000000)
+		else if (timer > 2000000000)
 		{
 			super.isFadingOut = true;
 			super.fadeOut(1000000000.0, gsm, GameStateManager.OUTROSTATE, GameStateManager.MENUSTATE);

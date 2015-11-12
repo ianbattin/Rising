@@ -11,6 +11,7 @@ import java.io.File;
 import java.lang.Object.*;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.ArrayList;
 
 import Entities.Player;
 import Entities.Pickups;
@@ -34,6 +35,7 @@ public class PlayState extends GameState
 	private Player player;
 	private Pickups pickups;
 	private int[][] debrisInfo;
+	private ArrayList<Color> colors;
 	private boolean start, isStillAlive;
 	private float timer;
 	public static boolean tileStart;
@@ -52,6 +54,13 @@ public class PlayState extends GameState
 			e.printStackTrace();
 		}
 		timer = 0;
+		//create & stores all the necessary colors (avoid creating too many color objects)
+		colors = new ArrayList<Color>();
+		for(int i = 25; i < 195; i++)
+		{
+			colors.add(new Color(i, i, i));
+		}
+		//create the initial debris
 		debrisInfo = new int[50][4];
 		for(int i = 0; i < debrisInfo.length; i++)
 		{
@@ -60,7 +69,7 @@ public class PlayState extends GameState
 				debrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
 				debrisInfo[i][1] = (int)(Math.random()*GamePanel.HEIGHT);
 				debrisInfo[i][2] = (int)(Math.random()*5)+2;
-				debrisInfo[i][3] = (int)(Math.random()*170)+25;
+				debrisInfo[i][3] = (int)(Math.random()*170);
 			}
 		}
 	}
@@ -128,13 +137,14 @@ public class PlayState extends GameState
 		g.drawLine(mouseX, mouseY - 5, mouseX, mouseY + 5);
 	}
 
+	//update and draw the debris
 	public void debris(Graphics2D g)
 	{
 		for(int i = 0; i < debrisInfo.length; i++)
 		{
 			for(int j = 0; j < debrisInfo[i].length; j++)
 			{
-				g.setColor(new Color(debrisInfo[i][3], debrisInfo[i][3], debrisInfo[i][3]));
+				g.setColor(colors.get(debrisInfo[i][3]));
 				g.fillOval(debrisInfo[i][0], debrisInfo[i][1], debrisInfo[i][2], debrisInfo[i][2]);
 				debrisInfo[i][1] += debrisInfo[i][2]*.75;
 				
@@ -143,7 +153,7 @@ public class PlayState extends GameState
 					debrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
 					debrisInfo[i][1] = -20;
 					debrisInfo[i][2] = (int)(Math.random()*5)+2;
-					debrisInfo[i][3] = (int)(Math.random()*170)+25;
+					debrisInfo[i][3] = (int)(Math.random()*170);
 				}
 			}
 		}
