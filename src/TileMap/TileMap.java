@@ -77,9 +77,9 @@ public class TileMap
 				int tile = map[row][col];
 				if(tile != 0) 
 				{
-					tiles.add(new Tile(col * tileSize + x, row * tileSize - height * tileSize + GamePanel.HEIGHT, tile, tileSize));
-					tiles.add(new Tile(col * tileSize + x + GamePanel.WIDTH, row * tileSize - height * tileSize + GamePanel.HEIGHT + y, tile, tileSize));
-					tiles.add(new Tile(col * tileSize + x - GamePanel.WIDTH, row * tileSize - height * tileSize + GamePanel.HEIGHT + y, tile, tileSize));
+					tiles.add(new Tile(col * tileSize + x, row * tileSize - height * tileSize + GamePanel.HEIGHT, tile, tileSize, this));
+					tiles.add(new Tile(col * tileSize + x + GamePanel.WIDTH, row * tileSize - height * tileSize + GamePanel.HEIGHT + y, tile, tileSize, this));
+					tiles.add(new Tile(col * tileSize + x - GamePanel.WIDTH, row * tileSize - height * tileSize + GamePanel.HEIGHT + y, tile, tileSize, this));
 				}
 				if(tile > minType)
 				{
@@ -104,9 +104,12 @@ public class TileMap
 	
 	public void update()
 	{	
-		for(Tile t: tiles)
+		for(int i = 0; i < tiles.size(); i++)
 		{
-			t.update(dx, dy);
+			if(tiles.get(i).pastBottom())
+				tiles.remove(i);
+			else
+				tiles.get(i).update(dx, dy);
 		}
 	}
 	

@@ -45,7 +45,7 @@ public class PlayState extends GameState
 		start = false;
 		try
 		{
-			bg = new Background("/Backgrounds/menubackground.gif", 1);
+			bg = new Background("/Backgrounds/gamebackground.gif", 1);
 		}
 		catch(Exception e)
 		{

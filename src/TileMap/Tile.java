@@ -25,6 +25,8 @@ public class Tile
 	
 	private int size;
 	
+	private TileMap tm;
+	
 	private Animation animation;
 	private int frames;
 	private boolean animated = false;
@@ -35,7 +37,7 @@ public class Tile
 	
 	private BufferedImage[] images;
 	
-	public Tile(double x, double y, int type, int size)
+	public Tile(double x, double y, int type, int size, TileMap tm)
 	{
 		this.x = x;
 		this.y = y;
@@ -48,6 +50,8 @@ public class Tile
 		right = x + size;
 		top = y;
 		bottom = y + size;
+		
+		this.tm = tm;
 		
 		this.type = type;
 		this.size = size;
@@ -103,13 +107,13 @@ public class Tile
 		if(type == 0)
 		{
 			setX(-100);
-			setY(1000);
+			setY(100000);
 		}
 	}
 	
 	public void draw(Graphics2D g, int type)
 	{
-		if(-size <= x && x <= GamePanel.WIDTH+size && -size <= y && y <= GamePanel.HEIGHT+size)
+		if(onScreen())
 		{
 			g.drawImage(animation.getImage(), (int)x, (int)y, size, size, null);
 		}
@@ -119,6 +123,16 @@ public class Tile
 		g.drawLine((int)right, (int)top, (int)right, (int)bottom);
 		g.drawLine((int)right, (int)bottom, (int)left, (int)bottom);
 		g.drawLine((int)left, (int)bottom, (int)left, (int)top);*/
+	}
+	
+	public boolean onScreen()
+	{
+		return (-size <= x && x <= GamePanel.WIDTH+size && -size <= y && y <= GamePanel.HEIGHT+size);
+	}
+	
+	public boolean pastBottom()
+	{
+		return (y > GamePanel.HEIGHT + 200);
 	}
 	
 	public int getType() {	return type;	}

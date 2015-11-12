@@ -41,7 +41,7 @@ public class MenuState extends GameState
 		//This is going to try to set the background from a certain file path
 		try
 		{
-			bg = new Background("/Backgrounds/menubackground.gif", 1);
+			bg = new Background("/Backgrounds/gamebackground.gif", 1);
 			title = ImageIO.read(getClass().getResourceAsStream("/Text/TitlePlaceholder2.png"));
 			bg.setVector(0, -5.0); //moves the background
 		}
@@ -132,7 +132,7 @@ public class MenuState extends GameState
 		else if (k == GameStateManager.select && super.isFadingOut)
 		{
 			gsm.resetState(GameStateManager.MENUSTATE);
-			gsm.setCurrentState(GameStateManager.PLAYSTATE);
+			gsm.setCurrentState(GameStateManager.INTROSTATE);
 		}
 		
 		if (k == GameStateManager.reset && super.isFadingOut)
