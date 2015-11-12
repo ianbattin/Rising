@@ -141,7 +141,7 @@ public abstract class MapObject
 			{
 				if(t.getType() < 17) 
 				{
-					y = t.top - cheight/2 -1;
+					y = t.top - cheight/2 - 0.1;
 					dy = tm.getDY();
 					jumped  = false;
 					doubleJumped = false;
