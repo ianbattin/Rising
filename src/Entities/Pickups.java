@@ -26,6 +26,11 @@ public class Pickups extends MapObject {
 	//animation types
 	private static final int JUMPBOOST = 0;
 	private static final int PLAYERHEAL = 1;
+	private static final int LAUNCHERBOOST = 2;
+	private static final int BIRDBOOST = 3;
+	private static final int ARMORBOOST = 4;
+	private static final int TIMEBOOST = 5;
+	
 	
 	private int effectType;
 	private long coolDownTime;
@@ -114,7 +119,7 @@ public class Pickups extends MapObject {
 				coolDownTime = 100000000000L;
 				willDrawPickup = true;
 				//set the pickup type.
-				effectType = (int)(Math.random()*2);
+				effectType = (int)(Math.random()*6);
 				
 				//sets starting points for the spawning of the pickups
 				startingPositionOffset = -(Math.random()*GamePanel.HEIGHTSCALED/2);
@@ -165,6 +170,30 @@ public class Pickups extends MapObject {
 			case 1:
 			{
 				animation.setFrames(sprites.get(JUMPBOOST)); // switch to playerheal when ready
+				animation.setDelay(200);
+				break;
+			}
+			case 2:
+			{
+				animation.setFrames(sprites.get(JUMPBOOST)); //switch to launcherboost
+				animation.setDelay(200);
+				break;
+			}
+			case 3: 
+			{
+				animation.setFrames(sprites.get(JUMPBOOST)); //switch to birdboost
+				animation.setDelay(200);
+				break;
+			}
+			case 4:
+			{
+				animation.setFrames(sprites.get(JUMPBOOST)); //switch to armorboost
+				animation.setDelay(200);
+				break;
+			}
+			case 5:
+			{			
+				animation.setFrames(sprites.get(JUMPBOOST)); //switch to timeboost
 				animation.setDelay(200);
 				break;
 			}

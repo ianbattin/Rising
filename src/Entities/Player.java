@@ -41,7 +41,8 @@ public class Player extends MapObject
 	
 	//effect variables - @Ian you can edit this how you want when you get to cleaning this class up
 	private boolean isUnderEffect;
-	private double jumpHeightFactor;
+	private double jumpHeightFactor, birdPos;
+	private boolean hasJetpack, hasBird, hasArmor, stopTime;
 	
 	//score system
 	private int points;
@@ -204,8 +205,9 @@ public class Player extends MapObject
 		isFlashing = false;
 		
 		//effects
-		isUnderEffect = false;
+		stopTime = isUnderEffect = hasJetpack  = hasBird = false;
 		jumpHeightFactor = 1;
+		birdPos = 0;
 		heightScore = 0;
 	}
 	
@@ -247,8 +249,9 @@ public class Player extends MapObject
 			}
 		}
 		else 
-		{
-			if(PlayState.tileStart) tm.setYVector(2.0);
+		{	
+			if(stopTime) tm.setYVector(0);
+			else if(PlayState.tileStart) tm.setYVector(2.0);
 			y += dy;
 		}
 		
@@ -269,7 +272,7 @@ public class Player extends MapObject
 		
 		if (y > GamePanel.HEIGHT + 50 + height)
 		{
-			playerHurt(1);
+			playerHurt(10);
 		}
 		
 		if (numOfFramesToAnimHealth  > 0 && timesToLoop%2 == 1)
@@ -292,6 +295,8 @@ public class Player extends MapObject
 				numOfFramesToAnimHealth = 10;
 			}
 		}
+		
+		if(hasBird && ++birdPos > 720) birdPos = 0;
 	}
 	
 	public void draw(Graphics2D g) 
@@ -334,6 +339,12 @@ public class Player extends MapObject
 		else
 		{
 			g.drawImage(animation.getImage(), (int)(x + xmap - width / 2 + width), (int)(y + ymap - height / 2), -width, height, null);
+		}
+		
+		if(hasBird)
+		{
+			//replace with image when bird is drawn. Use current X & Y calculations for the position however
+			g.fillRect((int)(x+(50*Math.cos(Math.toRadians(birdPos)))), (int)(y-50-(5*Math.sin(Math.toRadians(birdPos)))), 5, 5);
 		}
 		
 		for(Projectile p: bullets)
@@ -433,22 +444,30 @@ public class Player extends MapObject
 		//JUMPING AND FALLING
 		if(jump)
 		{
-			if(!jumped)
+			if(hasJetpack)
 			{
-				jumpHeight = yFromBottom + (100*jumpHeightFactor); //edited to be "effectable"
-				jumped = true;
+				dy = jumpStart*4;
 			}
-			if(jumped)
+			else
 			{
-				if(yFromBottom < jumpHeight) dy = jumpStart*3*jumpHeightFactor;
-				if(yFromBottom >= jumpHeight) 
+				if(!jumped)
 				{
-					jumpHeight = -9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
-					falling = true;
+					jumpHeight = yFromBottom + (100*jumpHeightFactor); //edited to be "effectable"
+					jumped = true;
+				}
+				if(jumped)
+				{
+					if(yFromBottom < jumpHeight) dy = jumpStart*3*jumpHeightFactor;
+					if(yFromBottom >= jumpHeight) 
+					{
+						jumpHeight = -9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
+						falling = true;
+					}
 				}
 			}
 		}
-		if(doubleJump)
+	
+		/*if(doubleJump)
 		{
 			if(!doubleJumped)
 			{
@@ -464,7 +483,7 @@ public class Player extends MapObject
 				}
 			}
 			falling = true;
-		}
+		}*/
 		
 		if(falling)
 		{
@@ -571,24 +590,29 @@ public class Player extends MapObject
 		animation.update();
 			
 	}
-	
 	public double getCharacterY()
 	{
 		return this.yFromBottom;
 	}
-	
 	public int getPlayerHealth()
 	{
 		return health;
 	}
-	
 	public void playerHeal(int amount)
 	{
 		health += amount;
 	}
 	public void playerHurt(int amount)
 	{
-		health -= amount;
+		if (hasArmor) 
+		{
+			health -= amount/2; //as int, any damage of 1 will be truncated to 0 after the division
+			hasArmor = false;
+		}
+		else
+		{
+			health -= amount;
+		}
 		numOfFramesToAnimHealth = 10;
 		timesToLoop = 5;
 	}
@@ -608,15 +632,42 @@ public class Player extends MapObject
 				playerHeal(1);
 				break;
 			}
+			case 2:
+			{
+				jumpHeightFactor = 3;
+				hasJetpack = true;
+				jump = true;
+				break;
+			}
+			case 3:
+			{
+				//bird
+				hasBird = true;
+				break;
+			}
+			case 4:
+			{
+				//armor
+				hasArmor = true;
+				break;
+			}
+			case 5:
+			{
+				stopTime = true;
+				jumpHeightFactor = 1.5;
+				break;
+			}
 		}
 		isUnderEffect = true;
-		System.out.println("Effect started");
+		System.out.println("Effect started: " + effect);
 	}
 	
 	//resets the effects
 	public void resetEffects()
 	{
 		isUnderEffect = false;
+		hasJetpack = false;
+		stopTime = false;
 		jumpHeightFactor = 1;
 		System.out.println("Effect ended");
 	}
@@ -665,6 +716,11 @@ public class Player extends MapObject
 			gliding = true;
 			idle = false;
 		}	
+		if(k == GameStateManager.action && hasBird)
+		{
+			hasBird = false;
+			System.out.println("NEUTRALIZE ENEMY");
+		}
 		/*if(k == GameStateManager.shootUp)
 		{
 			shootUp = true;
@@ -691,8 +747,8 @@ public class Player extends MapObject
 	{
 		if(k == GameStateManager.up)
 		{
-			falling = true;
 			jump = false;
+			falling = true;
 			idle = true;
 			doubleJumpable = true;
 			

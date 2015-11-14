@@ -20,9 +20,9 @@ public class ControlsState extends GameState {
 	private int selection;
 	private boolean isListeningToKey; //true if next key press will set controls
 
-	private String[] movementTypes = {"Jump:", "Drop:", "Right:", "Left:", "Glide:", "Select:", "Reset:"};
+	private String[] movementTypes = {"Jump:", "Drop:", "Right:", "Left:", "Glide:", "Select:", "Reset:", "Action:"};
 	private String[] movementKeys = {KeyEvent.getKeyText(GameStateManager.up), KeyEvent.getKeyText(GameStateManager.down), KeyEvent.getKeyText(GameStateManager.right), 
-			KeyEvent.getKeyText(GameStateManager.left), KeyEvent.getKeyText(GameStateManager.glide), KeyEvent.getKeyText(GameStateManager.select), KeyEvent.getKeyText(GameStateManager.reset)};
+			KeyEvent.getKeyText(GameStateManager.left), KeyEvent.getKeyText(GameStateManager.glide), KeyEvent.getKeyText(GameStateManager.select), KeyEvent.getKeyText(GameStateManager.reset), KeyEvent.getKeyText(GameStateManager.action)};
 
 	
 	public ControlsState(GameStateManager gsm)
@@ -73,9 +73,9 @@ public class ControlsState extends GameState {
 				g.setColor(Color.WHITE);
 			
 			//TODO Figure out how to apply the centerStringX() method to this?
-			g.drawString(movementKeys[i],  GamePanel.WIDTH/2+20, 50+GamePanel.HEIGHT/4+(i*40));
+			g.drawString(movementKeys[i],  GamePanel.WIDTH/2+30, 50+GamePanel.HEIGHT/4+(i*40));
 			g.setColor(Color.WHITE);
-			g.drawString(movementTypes[i], GamePanel.WIDTH/2-60, 50+GamePanel.HEIGHT/4+(i*40));
+			g.drawString(movementTypes[i], GamePanel.WIDTH/2-70, 50+GamePanel.HEIGHT/4+(i*40));
 		}
 		
 		if (selection == movementTypes.length)

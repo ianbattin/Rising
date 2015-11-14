@@ -61,7 +61,7 @@ public class PlayState extends GameState
 			colors.add(new Color(i, i, i));
 		}
 		//create the initial debris
-		debrisInfo = new int[50][4];
+		debrisInfo = new int[30][4];
 		for(int i = 0; i < debrisInfo.length; i++)
 		{
 			for(int j = 0; j < debrisInfo[i].length; j++)
@@ -145,7 +145,7 @@ public class PlayState extends GameState
 			for(int j = 0; j < debrisInfo[i].length; j++)
 			{
 				g.setColor(colors.get(debrisInfo[i][3]));
-				g.fillOval(debrisInfo[i][0], debrisInfo[i][1], debrisInfo[i][2], debrisInfo[i][2]);
+				g.fillRect(debrisInfo[i][0], debrisInfo[i][1], debrisInfo[i][2], debrisInfo[i][2]);
 				debrisInfo[i][1] += debrisInfo[i][2]*.75;
 				
 				if (debrisInfo[i][1] > GamePanel.HEIGHT)
