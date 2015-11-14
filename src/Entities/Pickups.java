@@ -194,7 +194,7 @@ public class Pickups extends MapObject {
 	}
 
 	@Override
-	public void collided(int type, Tile t, MapObject m) {
+	public void collided(MapObject m) {
 		// TODO Auto-generated method stub
 		
 	}

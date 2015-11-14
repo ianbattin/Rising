@@ -81,6 +81,8 @@ public class Player extends MapObject
 		fireDelay = 200;
 		fireTimer = System.nanoTime();
 		
+		recoverLength = 3000;
+		
 		moveSpeed = 0.3;
 		maxSpeed = 5.0;
 		stopSpeed = 0.4;
@@ -267,9 +269,9 @@ public class Player extends MapObject
 			points += -dy;
 		}
 		
-		if (y > GamePanel.HEIGHT + 50 + height)
+		if (y > GamePanel.HEIGHT + 500 + height)
 		{
-			playerHurt(1);
+			health = 0;
 		}
 		
 		if (numOfFramesToAnimHealth  > 0 && timesToLoop%2 == 1)
@@ -346,7 +348,7 @@ public class Player extends MapObject
 	{
 		if(recovering)
 		{
-			long elapsed = (System.nanoTime() - recoverLength) / 1000000;
+			long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
 			if(3000 <= elapsed)
 			{
 				recovering = false;
@@ -355,13 +357,8 @@ public class Player extends MapObject
 		else if(type == 17) 
 		{
 			playerHurt(1);
-			dy = -8.0;
-			if(dx >= 0) dx = -8.0;
-			else dx = 8.0;
-			recovering = true;
-			recoverLength = System.nanoTime();
 		}
-		else if(type == 20)
+		if(type == 20)
 		{
 			falling = true;
 			dy = -20.0;
@@ -577,6 +574,11 @@ public class Player extends MapObject
 		return this.yFromBottom;
 	}
 	
+	public int getScore()
+	{
+		return heightScore;
+	}
+	
 	public int getPlayerHealth()
 	{
 		return health;
@@ -588,9 +590,25 @@ public class Player extends MapObject
 	}
 	public void playerHurt(int amount)
 	{
-		health -= amount;
-		numOfFramesToAnimHealth = 10;
-		timesToLoop = 5;
+		if(recovering)
+		{
+			long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
+			if(recoverLength <= elapsed)
+			{
+				recovering = false;
+			}
+		}
+		else
+		{
+			health -= amount;
+			numOfFramesToAnimHealth = 10;
+			timesToLoop = 5;
+			dy = -8.0;
+			if(dx >= 0) dx = -8.0;
+			else dx = 8.0;
+			recovering = true;
+			recoverTimer = System.nanoTime();
+		}
 	}
 		
 	//starts effects, added to enable the pickups
@@ -741,9 +759,14 @@ public class Player extends MapObject
 	}
 
 	@Override
-	public void collided(int type, Tile t, MapObject m) {
-		// TODO Auto-generated method stub
-		
+	public void collided(MapObject m) 
+	{
+
+	}
+	
+	public boolean getRecovering()
+	{
+		return recovering;
 	}
 
 	public void setFiring(boolean b) 
@@ -759,5 +782,15 @@ public class Player extends MapObject
 	public double getAngle() 
 	{
 		return angle;
+	}
+	
+	public ArrayList<Projectile> getBullets()
+	{
+		return bullets;
+	}
+
+	public double getTotalHeight() 
+	{
+		return yFromBottom;
 	}
 }
