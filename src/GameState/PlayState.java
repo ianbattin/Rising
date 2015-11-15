@@ -100,7 +100,7 @@ public class PlayState extends GameState
 		{
 			enemies.add(new Enemy(-100, 300, tileMap, player));
 		}
-		if(player.getPlayerHealth() < 1 && timer > 1000000000.0)
+		if(player.getPlayerHealth() < 1 && timer > 1500000000.0)
 		{
 			super.isFadingOut = true;
 			super.fadeOut(500000000, gsm, GameStateManager.PLAYSTATE, GameStateManager.OUTROSTATE);
@@ -179,21 +179,28 @@ public class PlayState extends GameState
 			{
 				start = true;
 				bg.setVector(0, -5.0);
-				Timer timer = new Timer();
-				timer.schedule(new TimerTask()
+				if(!tileStart)
 				{
-					public void run()
+					Timer timer = new Timer();
+					timer.schedule(new TimerTask()
 					{
-						tileStart = true;
-						tileMap.setYVector(2.0);		
-					}
-					
-				}, 4000);
+						public void run()
+						{
+							tileStart = true;
+							tileMap.setYVector(2.0);		
+						}
+						
+					}, 4000);
+				}
 			}
 		}
 		if(k == GameStateManager.reset)
 		{
 			gsm.resetState(GameStateManager.PLAYSTATE);
+		}
+		if(k == GameStateManager.pause)
+		{
+			start = false;
 		}
 	}
 

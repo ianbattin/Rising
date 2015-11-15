@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import GameState.PlayState;
+
 public class Pickups extends MapObject {	
 	
 	private Player player;
@@ -93,8 +95,22 @@ public class Pickups extends MapObject {
 		{
 			checkPickups();
 		}
-		else
-		{
+		else if(willDrawPickup)
+		{									
+			if (yLoc < GamePanel.HEIGHT + 50)
+			{
+				yLoc += 0.5 + ((tm.getDY() - 2)*0.25);
+				if (tm.getDY() > 2){
+					tmDyPositionOffset += ((tm.getDY() - 2)*0.25);
+				}
+			}
+			else 
+			{
+				init();
+			}
+			xLoc = tileMapWidth + (Math.sin((yLoc-startingPositionOffset-tmDyPositionOffset)/100))*200;
+			xShift += tm.getDX();
+			
 			checkCollision();
 		}
 	}
@@ -133,25 +149,10 @@ public class Pickups extends MapObject {
 	
 	//draws the pickup
 	public void draw(Graphics2D g)
-	{
-		if(willDrawPickup)
-		{									
-			if (yLoc < GamePanel.HEIGHT + 50)
-			{
-				yLoc += 0.5 + ((tm.getDY() - 2)*0.25);
-				if (tm.getDY() > 2){
-					tmDyPositionOffset += ((tm.getDY() - 2)*0.25);
-				}
-			}
-			else 
-			{
-				init();
-			}
-			xLoc = tileMapWidth + (Math.sin((yLoc-startingPositionOffset-tmDyPositionOffset)/100))*200;
-			xShift += tm.getDX();
-						
+	{			
+		if (willDrawPickup)
+		{
 			getAnimation();
-			
 			g.drawImage(animation.getImage(), (int)(xLoc+xShift), (int)yLoc, width, height, null);
 		}
 	}
