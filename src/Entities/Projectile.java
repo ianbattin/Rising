@@ -2,12 +2,14 @@ package Entities;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 import TileMap.Tile;
 import TileMap.TileMap;
 
 public class Projectile extends MapObject
 {
+	private TileMap tm;
 	private double direction;
 	private double damage;
 	
@@ -16,6 +18,7 @@ public class Projectile extends MapObject
 	public Projectile(double x, double y, double direction, int type, TileMap tm) 
 	{
 		super(tm);
+		this.tm = tm;
 		
 		this.x = x;
 		this.y = y;
@@ -31,48 +34,67 @@ public class Projectile extends MapObject
 				width = 7;
 				height = 7;
 				damage = 1;
+				break;
+			}
+			case 2:
+			{
+				moveSpeed = 7.0;
+				width = 14;
+				height = 14;
+				damage = 2;
+				break;
 			}
 		}
 	}
 
 	public void update() 
 	{
-		if(!remove)
-		{
-			this.myCheckCollision(tileMap);
-			dx = Math.cos(direction) * moveSpeed;
-			dy = Math.sin(direction) * moveSpeed + tileMap.getDY();
+		this.myCheckCollision(tileMap);
+		dx = Math.cos(direction) * moveSpeed;
+		dy = Math.sin(direction) * moveSpeed + tileMap.getDY();
+		dx += tm.getDX();
+		dy += tm.getDY();
 			
-			x += dx;
-			y += dy;
-		}
-		
+		x += dx;
+		y += dy;
 	}
 
 	public void draw(Graphics2D g) 
 	{
-		g.setColor(Color.BLACK);
-		g.fillOval((int)x, (int)y, width, height);
-	}
-
-	public void collided(int type, Tile t, MapObject m) 
-	{
-		if(m instanceof Player)
+		if(!remove)
 		{
-			m.setHealth(m.getHealth()-1);
-			remove = true;
+			g.setColor(Color.BLACK);
+			g.fillOval((int)x, (int)y, width, height);
 		}
-		
 	}
-
+	
 	@Override
 	public void collided(int type, Tile t) 
 	{
-		System.out.println("Kinda Working");
 		if(t.getType() == 17)
 		{
-			System.out.println("Working");
 			t.setType(0);
+			remove = true;
+		}
+		else
+		{
+			remove = true;
+		}
+	}
+
+	@Override
+	public void collided(MapObject m) 
+	{
+		if(m instanceof Player)
+		{
+			((Player) m).playerHurt(1);
+			remove = true;
+		}
+		
+		if(m instanceof Enemy)
+		{
+			((Enemy) m).playerHurt(1);
+			remove = true;
 		}
 	}
 }

@@ -158,6 +158,11 @@ public class TileMap
 		return width*tileSize;
 	}
 	
+	public ArrayList<Tile> getTiles()
+	{
+		return tiles;
+	}
+	
 	public int getX() {	return x;	}
 	public int getY() {	return y;	}
 	public double getDX() { return dx; }

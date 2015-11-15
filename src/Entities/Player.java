@@ -54,7 +54,7 @@ public class Player extends MapObject
 	//health
 	private byte numOfFramesToAnimHealth;
 	private byte timesToLoop;
-	private boolean isFlashing;
+	private boolean hasFlashed, isBlinking, isFlashing;
 	private ArrayList<BufferedImage> heartImages;
 	
 	//animation
@@ -81,6 +81,8 @@ public class Player extends MapObject
 		firing = false;
 		fireDelay = 200;
 		fireTimer = System.nanoTime();
+		
+		recoverLength = 3000;
 		
 		moveSpeed = 0.3;
 		maxSpeed = 5.0;
@@ -202,7 +204,7 @@ public class Player extends MapObject
 		
 		numOfFramesToAnimHealth = 0;
 		timesToLoop = 0;
-		isFlashing = false;
+		isFlashing = isBlinking = hasFlashed = false;
 		
 		//effects
 		stopTime = isUnderEffect = hasJetpack  = hasBird = false;
@@ -222,6 +224,7 @@ public class Player extends MapObject
 		else
 		{
 			falling = true;
+			gliding = false;
 		}
 		getAnimation();
 		getAttack();
@@ -270,32 +273,50 @@ public class Player extends MapObject
 			points += -dy;
 		}
 		
-		if (y > GamePanel.HEIGHT + 50 + height)
+		if (y > GamePanel.HEIGHT + 500 + height)
 		{
 			playerHurt(10);
 		}
 		
-		if (numOfFramesToAnimHealth  > 0 && timesToLoop%2 == 1)
+		if (recovering)
 		{
-			isFlashing = true;
-			numOfFramesToAnimHealth--;
-			if(numOfFramesToAnimHealth == 0 && timesToLoop > 0) 
+			long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
+			if(recoverLength <= elapsed)
 			{
-				timesToLoop--;
-				numOfFramesToAnimHealth = 10;
+				recovering = false;
+			}
+			if (!hasFlashed && numOfFramesToAnimHealth < 30)
+			{
+				isFlashing = true;
+				numOfFramesToAnimHealth++;
+			}
+			else if (!hasFlashed && !(numOfFramesToAnimHealth < 30))
+			{
+				isFlashing = false;
+				hasFlashed = true;
+				numOfFramesToAnimHealth = 0;
+			}
+			
+			if(hasFlashed && numOfFramesToAnimHealth < 20)
+			{
+				if(numOfFramesToAnimHealth < 5)
+					isBlinking = true;
+				else
+					isBlinking = false;
+				numOfFramesToAnimHealth++;
+			}
+			else if(hasFlashed && !(numOfFramesToAnimHealth < 20))
+			{
+				numOfFramesToAnimHealth = 0;
 			}
 		}
-		else if (numOfFramesToAnimHealth > 0 && timesToLoop%2 == 0)
+		else
 		{
+			isBlinking = false;
 			isFlashing = false;
-			numOfFramesToAnimHealth--;
-			if(numOfFramesToAnimHealth == 0 && timesToLoop > 0)
-			{
-				timesToLoop--;
-				numOfFramesToAnimHealth = 10;
-			}
+			hasFlashed = false;
 		}
-		
+
 		if(hasBird && ++birdPos > 720) birdPos = 0;
 	}
 	
@@ -331,16 +352,18 @@ public class Player extends MapObject
 		}
 		
 		setMapPosition();
-
-		if(facingRight)
+		if (!isBlinking)
 		{
-			g.drawImage(animation.getImage(), (int)(x + xmap - width / 2), (int)(y + ymap - height / 2), width, height, null);
+			if(facingRight)
+			{
+				g.drawImage(animation.getImage(), (int)(x + xmap - width / 2), (int)(y + ymap - height / 2), width, height, null);
+			}
+			else
+			{
+				g.drawImage(animation.getImage(), (int)(x + xmap - width / 2 + width), (int)(y + ymap - height / 2), -width, height, null);
+			}
 		}
-		else
-		{
-			g.drawImage(animation.getImage(), (int)(x + xmap - width / 2 + width), (int)(y + ymap - height / 2), -width, height, null);
-		}
-		
+	
 		if(hasBird)
 		{
 			//replace with image when bird is drawn. Use current X & Y calculations for the position however
@@ -357,7 +380,7 @@ public class Player extends MapObject
 	{
 		if(recovering)
 		{
-			long elapsed = (System.nanoTime() - recoverLength) / 1000000;
+			long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
 			if(3000 <= elapsed)
 			{
 				recovering = false;
@@ -366,13 +389,8 @@ public class Player extends MapObject
 		else if(type == 17) 
 		{
 			playerHurt(1);
-			dy = -8.0;
-			if(dx >= 0) dx = -8.0;
-			else dx = 8.0;
-			recovering = true;
-			recoverLength = System.nanoTime();
 		}
-		else if(type == 20)
+		if(type == 20)
 		{
 			falling = true;
 			dy = -20.0;
@@ -584,7 +602,7 @@ public class Player extends MapObject
 			}
 		}*/
 		
-		if (isFlashing) animation.changeFrames(playerHurtSprites.get(currentAction));
+		if (isFlashing)	animation.changeFrames(playerHurtSprites.get(currentAction));
 		else animation.changeFrames(playerSprites.get(currentAction));
 		
 		animation.update();
@@ -594,6 +612,12 @@ public class Player extends MapObject
 	{
 		return this.yFromBottom;
 	}
+
+	public int getScore()
+	{
+		return heightScore;
+	}
+	
 	public int getPlayerHealth()
 	{
 		return health;
@@ -607,14 +631,29 @@ public class Player extends MapObject
 		if (hasArmor) 
 		{
 			health -= amount/2; //as int, any damage of 1 will be truncated to 0 after the division
-			hasArmor = false;
 		}
 		else
 		{
-			health -= amount;
+			if(recovering)
+			{
+				long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
+				if(recoverLength <= elapsed)
+				{
+					recovering = false;
+				}
+			}
+			else
+			{
+				health -= amount;
+				dy = -8.0;
+				if(dx >= 0) dx = -8.0;
+				else dx = 8.0;
+				numOfFramesToAnimHealth = 0;
+				//timesToLoop = 1;
+				recovering = true;
+				recoverTimer = System.nanoTime();
+			}
 		}
-		numOfFramesToAnimHealth = 10;
-		timesToLoop = 5;
 	}
 		
 	//starts effects, added to enable the pickups
@@ -667,6 +706,7 @@ public class Player extends MapObject
 	{
 		isUnderEffect = false;
 		hasJetpack = false;
+		hasArmor = false;
 		stopTime = false;
 		jumpHeightFactor = 1;
 		System.out.println("Effect ended");
@@ -679,68 +719,71 @@ public class Player extends MapObject
 	
 	public void keyPressed(int k)
 	{
-		if(k == GameStateManager.up)
+		if(health > 0)
 		{
-			if(!jumped)
+			if(k == GameStateManager.up)
 			{
-				jump = true;
-				doubleJumpable = false;
+				if(!jumped)
+				{
+					jump = true;
+					doubleJumpable = false;
+					idle = false;
+				}
+				/*if(jumped && !doubleJump && doubleJumpable)
+				{
+					falling = false;
+					jump = false;
+					doubleJump = true;
+					idle = false;
+				}*/
+			}
+			if(k == GameStateManager.down)
+			{
+				falling = true;
+				drop = true;
 				idle = false;
 			}
-			/*if(jumped && !doubleJump && doubleJumpable)
+			if(k == GameStateManager.left)
 			{
-				falling = false;
-				jump = false;
-				doubleJump = true;
+				left = true;
 				idle = false;
+			}
+			if(k == GameStateManager.right)
+			{
+				right = true;
+				idle = false;
+			}
+			if(k == GameStateManager.glide)
+			{
+				gliding = true;
+				idle = false;
+			}	
+			if(k == GameStateManager.action && hasBird)
+			{
+				hasBird = false;
+				System.out.println("NEUTRALIZE ENEMY");
+			}
+			/*if(k == GameStateManager.shootUp)
+			{
+				shootUp = true;
+				firing = true;
+			}
+			if(k == GameStateManager.shootDown)
+			{
+				shootDown = true;
+				firing = true;
+			}
+			if(k == GameStateManager.shootLeft)
+			{
+				shootLeft = true;
+				firing = true;
+			}
+			if(k == GameStateManager.shootRight)
+			{
+				shootRight = true;
+				firing = true;
 			}*/
 		}
-		if(k == GameStateManager.down)
-		{
-			falling = true;
-			drop = true;
-			idle = false;
-		}
-		if(k == GameStateManager.left)
-		{
-			left = true;
-			idle = false;
-		}
-		if(k == GameStateManager.right)
-		{
-			right = true;
-			idle = false;
-		}
-		if(k == GameStateManager.glide)
-		{
-			gliding = true;
-			idle = false;
-		}	
-		if(k == GameStateManager.action && hasBird)
-		{
-			hasBird = false;
-			System.out.println("NEUTRALIZE ENEMY");
-		}
-		/*if(k == GameStateManager.shootUp)
-		{
-			shootUp = true;
-			firing = true;
-		}
-		if(k == GameStateManager.shootDown)
-		{
-			shootDown = true;
-			firing = true;
-		}
-		if(k == GameStateManager.shootLeft)
-		{
-			shootLeft = true;
-			firing = true;
-		}
-		if(k == GameStateManager.shootRight)
-		{
-			shootRight = true;
-			firing = true;
-		}*/
 	}
 	
 	public void keyReleased(int k)
@@ -797,9 +840,14 @@ public class Player extends MapObject
 	}
 
 	@Override
-	public void collided(int type, Tile t, MapObject m) {
-		// TODO Auto-generated method stub
-		
+	public void collided(MapObject m) 
+	{
+
+	}
+	
+	public boolean getRecovering()
+	{
+		return recovering;
 	}
 
 	public void setFiring(boolean b) 
@@ -815,5 +863,15 @@ public class Player extends MapObject
 	public double getAngle() 
 	{
 		return angle;
+	}
+	
+	public ArrayList<Projectile> getBullets()
+	{
+		return bullets;
+	}
+
+	public double getTotalHeight() 
+	{
+		return yFromBottom;
 	}
 }

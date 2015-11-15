@@ -14,6 +14,7 @@ import java.util.TimerTask;
 import java.util.ArrayList;
 
 import Entities.Player;
+import Entities.Enemy;
 import Entities.Pickups;
 import Main.GamePanel;
 import TileMap.Background;
@@ -34,6 +35,7 @@ public class PlayState extends GameState
 	private TileMap tileMap;
 	private Player player;
 	private Pickups pickups;
+	private ArrayList<Enemy> enemies;
 	private int[][] debrisInfo;
 	private ArrayList<Color> colors;
 	private boolean start, isStillAlive;
@@ -78,6 +80,7 @@ public class PlayState extends GameState
 	{
 		tileMap = new TileMap("Resources/Maps/level5.txt");
 		player = new Player(tileMap);
+		enemies = new ArrayList<Enemy>();
 		pickups = new Pickups(player, tileMap);
 		tileStart = false;
 	}
@@ -90,6 +93,12 @@ public class PlayState extends GameState
 			tileMap.update();
 			pickups.update();
 			player.update();
+			for(Enemy e: enemies)
+				e.update();
+		}
+		if(player.getPoints() > 1000 && enemies.size() == 0)
+		{
+			enemies.add(new Enemy(-100, 300, tileMap, player));
 		}
 		if(player.getPlayerHealth() < 1 && timer > 1000000000.0)
 		{
@@ -111,6 +120,8 @@ public class PlayState extends GameState
 		player.draw(g);
 		tileMap.draw(g);
 		pickups.draw(g);
+		for(Enemy e: enemies)
+			e.draw(g);
 		debris(g);
 		
 		drawCrossHair(g);
@@ -235,18 +246,19 @@ public class PlayState extends GameState
 	@Override
 	public void mouseDragged(MouseEvent e) 
 	{
-		mouseX = e.getX();
-		mouseY = e.getY();
+		mouseX = (int)(e.getX()/GamePanel.scaleWidth);
+		mouseY = (int)(e.getY()/GamePanel.scaleHeight);
 		relX = mouseX - (int)player.getX();
 		relY = mouseY - (int)player.getY();
 		player.setAngle(Math.atan2(relY, relX));
+
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) 
 	{
-		mouseX = e.getX();
-		mouseY = e.getY();
+		mouseX = (int)(e.getX()/GamePanel.scaleWidth);
+		mouseY = (int)(e.getY()/GamePanel.scaleHeight);
 		relX = mouseX - (int)player.getX();
 		relY = mouseY - (int)player.getY();
 		player.setAngle(Math.atan2(relY, relX));

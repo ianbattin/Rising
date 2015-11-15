@@ -2,6 +2,7 @@ package TileMap;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -144,4 +145,9 @@ public class Tile
 	public boolean getBlocked() { return blocked; }
 	public void setX(double x) { this.x = x; }
 	public void setY(double y) {this.y = y; }
+
+	public Rectangle getRectangle() 
+	{
+		return new Rectangle((int)x - size, (int)y - size, size, size);
+	}
 }

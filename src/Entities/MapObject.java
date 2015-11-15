@@ -51,7 +51,8 @@ public abstract class MapObject
 	//health
 	protected int health;
 	protected boolean recovering;
-	protected long recoverLength;
+	protected long recoverTimer;
+	protected int recoverLength;
 	
 	//animation
 	protected Animation animation;
@@ -92,7 +93,7 @@ public abstract class MapObject
 	}
 	
 	public abstract void collided(int type, Tile t);
-	public abstract void collided(int type, Tile t, MapObject m);
+	public abstract void collided(MapObject m);
 	public abstract void update();
 	public abstract void draw(Graphics2D g);
 	
@@ -103,9 +104,16 @@ public abstract class MapObject
 		return r1.intersects(r2);
 	}
 	
+	public boolean intersects(Tile other)
+	{
+		Rectangle r1 = getRectangle();
+		Rectangle r2 = other.getRectangle();
+		return r1.intersects(r2);
+	}
+	
 	public Rectangle getRectangle()
 	{
-		return new Rectangle((int)x - cwidth, (int)y - cheight, cwidth, cheight);
+		return new Rectangle((int)x - width, (int)y - height, width, height);
 	}
 	
 	public void calculateCorners(double x, double y)
@@ -137,19 +145,23 @@ public abstract class MapObject
 			double collisionTop = t.top;
 			double collisionBottom = t.bottom;
 
-			if(dy > 0 && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 && y + height/2 < collisionBottom) && !drop)
+			if((collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 && y + height/2 < collisionBottom) && !drop)
 			{
 				if(t.getType() < 17) 
 				{
-					y = t.top - cheight/2 - 0.1;
-					dy = tm.getDY();
-					jumped  = false;
-					doubleJumped = false;
-					falling = false;
-					//landing = true;
-					gliding = false;
-					idle = true;
-					fallingAnim = false;
+					if(dy >= 0)
+					{
+						y = t.top - cheight/2 - 0.5;
+						dy = tm.getDY();
+						jumped  = false;
+						doubleJumped = false;
+						falling = false;
+						//landing = true;
+						gliding = false;
+						idle = true;
+						fallingAnim = false;
+					}
+					collided(t.getType(), t);
 				}
 				else
 				{
@@ -269,6 +281,15 @@ public abstract class MapObject
 	public void setHealth(int health)
 	{
 		this.health = health;
+	}
+	
+	public void setXVector(double dx) 
+	{
+		this.dx = dx;
+	}
+	public void setYVector(double dy) 
+	{
+		this.dy = dy;
 	}
 	
 	public void setLeft(boolean b) { 	left = b;	}
