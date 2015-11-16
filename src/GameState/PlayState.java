@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import Entities.Player;
 import Entities.Enemy;
+import Entities.Jetpacker;
 import Entities.Pickups;
 import Main.GamePanel;
 import TileMap.Background;
@@ -98,7 +99,7 @@ public class PlayState extends GameState
 		}
 		if(player.getPoints() > 1000 && enemies.size() == 0)
 		{
-			enemies.add(new Enemy(-100, 300, tileMap, player));
+			enemies.add(new Jetpacker(-100, 300, tileMap, player));
 		}
 		if(player.getPlayerHealth() < 1 && timer > 1500000000.0)
 		{
