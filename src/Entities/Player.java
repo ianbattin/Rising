@@ -31,8 +31,9 @@ public class Player extends MapObject
 	//Attacks
 	private ArrayList<Projectile> bullets;
 	private long fireTimer;
-	public static int fireDelay;
-	public static boolean firing;
+	public int fireDelay;
+	public boolean firing;
+	private boolean mouseHeld;
 	private double angle;
 	private boolean shootUp;
 	private boolean shootDown;
@@ -396,20 +397,26 @@ public class Player extends MapObject
 			dy = -20.0;
 			t.setAnimated(true);
 		}
+		if(type == 24)
+		{
+			t.setType(0);
+			falling = true;
+			dy = -50.0;
+		}
 	}
 	
 	public void getAttack()
 	{
-		/*if(shootUp) angle = Math.toRadians(270);
+		if(shootUp) angle = Math.toRadians(270);
 		if(shootDown) angle = Math.toRadians(90);
 		if(shootLeft) angle = Math.toRadians(180);
 		if(shootRight) angle = Math.toRadians(0);
 		if(shootUp && shootRight) angle = Math.toRadians(315);
 		if(shootUp && shootLeft) angle = Math.toRadians(225);
 		if(shootDown && shootLeft) angle = Math.toRadians(135);
-		if(shootDown && shootRight) angle = Math.toRadians(45);*/
+		if(shootDown && shootRight) angle = Math.toRadians(45);
 		
-		//if(!shootUp && !shootDown && !shootLeft && !shootRight) firing = false;
+		if(!shootUp && !shootDown && !shootLeft && !shootRight && !mouseHeld) firing = false;
 	
 		if(firing)
 		{
@@ -421,6 +428,11 @@ public class Player extends MapObject
 				fireTimer = System.nanoTime();
 			}
 		}
+	}
+	
+	public void setMouseHeld(boolean b)
+	{
+		mouseHeld = b;
 	}
 	
 	public void setPosition(int x, int y)
@@ -763,7 +775,7 @@ public class Player extends MapObject
 				hasBird = false;
 				System.out.println("NEUTRALIZE ENEMY");
 			}
-			/*if(k == GameStateManager.shootUp)
+			if(k == GameStateManager.shootUp)
 			{
 				shootUp = true;
 				firing = true;
@@ -782,7 +794,16 @@ public class Player extends MapObject
 			{
 				shootRight = true;
 				firing = true;
-			}*/
+			}
+			if(k == KeyEvent.VK_T)
+			{
+				if(tm.getShowCollisonBox())
+				{
+					tm.setShowCollisonBox(false);
+				}
+				else
+					tm.setShowCollisonBox(true);
+			}
 		}
 	}
 	
@@ -821,7 +842,7 @@ public class Player extends MapObject
 			gliding = false;
 			idle = true;
 		}
-		/*if(k == GameStateManager.shootUp)
+		if(k == GameStateManager.shootUp)
 		{
 			shootUp = false;
 		}
@@ -836,7 +857,7 @@ public class Player extends MapObject
 		if(k == GameStateManager.shootRight)
 		{
 			shootRight = false;
-		}*/
+		}
 	}
 
 	@Override

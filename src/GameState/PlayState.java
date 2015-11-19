@@ -239,6 +239,7 @@ public class PlayState extends GameState
 		if(e.getButton() == MouseEvent.BUTTON1)
 		{
 			player.setFiring(true);
+			player.setMouseHeld(true);
 		}
 	}
 
@@ -248,6 +249,7 @@ public class PlayState extends GameState
 		if(e.getButton() == MouseEvent.BUTTON1)
 		{
 			player.setFiring(false);
+			player.setMouseHeld(false);
 		}
 	}
 

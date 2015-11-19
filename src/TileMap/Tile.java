@@ -119,11 +119,14 @@ public class Tile
 			g.drawImage(animation.getImage(), (int)x, (int)y, size, size, null);
 		}
 		
-		/*g.setColor(Color.RED);
-		g.drawLine((int)left, (int)top, (int)right, (int)top);
-		g.drawLine((int)right, (int)top, (int)right, (int)bottom);
-		g.drawLine((int)right, (int)bottom, (int)left, (int)bottom);
-		g.drawLine((int)left, (int)bottom, (int)left, (int)top);*/
+		if(tm.getShowCollisonBox())
+		{
+			g.setColor(Color.RED);
+			g.drawLine((int)left, (int)top, (int)right, (int)top);
+			g.drawLine((int)right, (int)top, (int)right, (int)bottom);
+			g.drawLine((int)right, (int)bottom, (int)left, (int)bottom);
+			g.drawLine((int)left, (int)bottom, (int)left, (int)top);
+		}
 	}
 	
 	public boolean onScreen()
