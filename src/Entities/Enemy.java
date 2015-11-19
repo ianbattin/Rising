@@ -46,6 +46,9 @@ public abstract class Enemy extends MapObject
 	protected ArrayList<BufferedImage[]> playerHurtSprites;
 	protected int[] numFrames;
 	
+	//slowdown (when player picks up powerup)
+	protected float slowDown;
+	
 	public Enemy(int x, int y, TileMap tm, Player player)
 	{
 		super(tm);
@@ -56,15 +59,17 @@ public abstract class Enemy extends MapObject
 		
 		angle = 0.0;
 		fireTimer = System.nanoTime();
-				
+		
 		yFromBottom =  GamePanel.HEIGHTSCALED - y;
 		
 		dx = 0.0;
 		dy = 0.0;
-
+		
 		numOfFramesToAnimHealth = 0;
 		timesToLoop = 0;
 		isFlashing = false;
+		
+		slowDown = 1; // 1 is the normal speed
 	}
 
 	public abstract void update();
@@ -80,6 +85,12 @@ public abstract class Enemy extends MapObject
 		for(int i = 0; i < bullets.size(); i++)
 		{
 			bullets.get(i).update();
+			if(bullets.get(i).getRemove())
+			{
+				bullets.remove(i);
+				i--;
+				break;
+			}
 			if(bullets.get(i).intersects(player))
 			{
 				bullets.get(i).collided(player);
@@ -155,5 +166,14 @@ public abstract class Enemy extends MapObject
 	public double getAngle() 
 	{
 		return angle;
+	}
+	
+	public void setSlowDownRate(float slowDown)
+	{
+		this.slowDown = slowDown;
+		for(int i = 0; i < bullets.size(); i++)
+		{
+			bullets.get(i).setSlowTime(this.slowDown);
+		}
 	}
 }

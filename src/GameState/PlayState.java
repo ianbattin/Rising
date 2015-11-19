@@ -43,6 +43,9 @@ public class PlayState extends GameState
 	private float timer;
 	public static boolean tileStart;
 	
+	private double bgVectorX, bgVectorY;
+	private double debrisVector;
+	
 	public PlayState(GameStateManager gsm)
 	{
 		init();
@@ -75,6 +78,9 @@ public class PlayState extends GameState
 				debrisInfo[i][3] = (int)(Math.random()*170);
 			}
 		}
+		bgVectorX = 0;
+		bgVectorY = 0;
+		debrisVector = 0;
 	}
 
 	public void init() 
@@ -82,7 +88,7 @@ public class PlayState extends GameState
 		tileMap = new TileMap("Resources/Maps/level5.txt");
 		player = new Player(tileMap);
 		enemies = new ArrayList<Enemy>();
-		pickups = new Pickups(player, tileMap);
+		pickups = new Pickups(player, tileMap, this);
 		tileStart = false;
 	}
 
@@ -158,7 +164,7 @@ public class PlayState extends GameState
 			{
 				g.setColor(colors.get(debrisInfo[i][3]));
 				g.fillRect(debrisInfo[i][0], debrisInfo[i][1], debrisInfo[i][2], debrisInfo[i][2]);
-				debrisInfo[i][1] += debrisInfo[i][2]*.75;
+				debrisInfo[i][1] += debrisInfo[i][2]*debrisVector;
 				
 				if (debrisInfo[i][1] > GamePanel.HEIGHT)
 				{
@@ -171,6 +177,24 @@ public class PlayState extends GameState
 		}
 	}
 	
+	public void setBackgroundVector(double vectorX, double vectorY)
+	{
+		bgVectorX = vectorX;
+		bgVectorY = vectorY;
+		bg.setVector(bgVectorX, bgVectorY);
+	}
+	
+	public void setDebrisVectors(double vector)
+	{
+		debrisVector = vector;
+	}
+	
+	public void setEntitiySpeed(float speed)
+	{
+		for(Enemy e: enemies)
+			e.setSlowDownRate(speed);
+	}
+	
 	public void keyPressed(int k) 
 	{
 		player.keyPressed(k);
@@ -179,7 +203,8 @@ public class PlayState extends GameState
 			if(!start)
 			{
 				start = true;
-				bg.setVector(0, -5.0);
+				setBackgroundVector(0, -5.0);
+				setDebrisVectors(1);
 				if(!tileStart)
 				{
 					Timer timer = new Timer();

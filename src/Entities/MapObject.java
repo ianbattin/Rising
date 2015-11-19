@@ -78,6 +78,8 @@ public abstract class MapObject
 	//movement attributes
 	protected double moveSpeed;
 	protected double maxSpeed;
+	protected double maxSpeedY;
+	protected double maxSpeedX;
 	protected double stopSpeed;
 	protected double fallSpeed;
 	protected double maxFallSpeed;

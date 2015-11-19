@@ -14,6 +14,7 @@ import GameState.PlayState;
 
 public class Pickups extends MapObject {	
 	
+	private PlayState playState;
 	private Player player;
 	private TileMap tm;
 	
@@ -39,10 +40,11 @@ public class Pickups extends MapObject {
 	private boolean willDrawPickup, isUnderEffect;
 	private double xLoc, yLoc, startingPositionOffset, tmDyPositionOffset, xShift;
 	
-	public Pickups(Player player, TileMap tileMap)
+	public Pickups(Player player, TileMap tileMap, PlayState playState)
 	{
 		super (tileMap);
 		
+		this.playState = playState;
 		this.player = player;
 		this.tm = tileMap;
 		
@@ -51,8 +53,8 @@ public class Pickups extends MapObject {
 		tileMapWidth = tileMap.getTileMapWidth()/2;
 		
 		//set the dimensions of the pickup images
-		width = 30;
-		height = 40;
+		width = 60;
+		height = 80;
 		try
 		{
 			//will have to be fixed to get an image from a large sprites image rather than a single image for each pickup
@@ -124,7 +126,7 @@ public class Pickups extends MapObject {
 		} 
 		else if (isUnderEffect)
 		{
-			player.resetEffects();
+			resetEffects();
 			coolDownTime = 100000000000L;
 			init();
 		}
@@ -135,7 +137,7 @@ public class Pickups extends MapObject {
 				coolDownTime = 100000000000L;
 				willDrawPickup = true;
 				//set the pickup type.
-				effectType = (int)(Math.random()*6);
+				effectType = 5;//(int)(Math.random()*6);
 				
 				//sets starting points for the spawning of the pickups
 				startingPositionOffset = -(Math.random()*GamePanel.HEIGHTSCALED/2);
@@ -194,7 +196,7 @@ public class Pickups extends MapObject {
 			}
 			case 5:
 			{			
-				animation.setFrames(sprites.get(JUMPBOOST)); //switch to timeboost
+				animation.setFrames(sprites.get(0)); //switch to timeboost
 				animation.setDelay(200);
 				break;
 			}
@@ -206,10 +208,15 @@ public class Pickups extends MapObject {
 		if(type == 17) willDrawPickup = false;
 	}
 	
+	public void collided(MapObject m) 
+	{
+		
+	}
+	
 	//checks if the player collided with the pickup
 	public void checkCollision()
 	{
-		if ((player.getX()-(player.getWidth()/2)) < (xLoc+xShift)+35 && (xLoc+xShift)-10 < (player.getX()+(player.getWidth()/2)) && (player.getY()-player.getHeight()/2) < yLoc && yLoc < (player.getY()+player.getHeight()/2))
+		if ((player.getX()-(player.getWidth()/2)) < (xLoc+xShift+width) && (xLoc+xShift) < (player.getX()+(player.getWidth()/2)) && (player.getY()-player.getHeight()/2) < (yLoc+height) && (yLoc) < (player.getY()+player.getHeight()/2))
 		{
 			effectStart();
 			willDrawPickup = false;
@@ -220,13 +227,23 @@ public class Pickups extends MapObject {
 	
 	public void effectStart()
 	{
+		if(effectType == 5) 
+		{
+			playState.setBackgroundVector(0, -1);
+			playState.setDebrisVectors(0.5);
+			playState.setEntitiySpeed(0.2f);
+		}
 		player.effectStart(effectType);
 	}
-
-	@Override
-	public void collided(MapObject m) {
-		// TODO Auto-generated method stub
-		
+	
+	public void resetEffects()
+	{
+		if(effectType == 5)
+		{
+			playState.setBackgroundVector(0, -5);
+			playState.setDebrisVectors(1);
+			playState.setEntitiySpeed(1);
+		}
+		player.resetEffects();
 	}
-
 }

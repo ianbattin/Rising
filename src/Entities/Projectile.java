@@ -15,6 +15,9 @@ public class Projectile extends MapObject
 	
 	private boolean remove;
 	
+	//timeslow variable
+	private static double slowTime;
+	
 	public Projectile(double x, double y, double direction, int type, TileMap tm) 
 	{
 		super(tm);
@@ -23,6 +26,8 @@ public class Projectile extends MapObject
 		this.x = x;
 		this.y = y;
 		this.direction = direction;
+		
+		slowTime = 1;
 		
 		remove = false;
 
@@ -50,13 +55,16 @@ public class Projectile extends MapObject
 	public void update() 
 	{
 		this.myCheckCollision(tileMap);
-		dx = Math.cos(direction) * moveSpeed;
-		dy = Math.sin(direction) * moveSpeed + tileMap.getDY();
+		dx = Math.cos(direction) * (moveSpeed*slowTime);
+		dy = Math.sin(direction) * (moveSpeed*slowTime);
 		dx += tm.getDX();
 		dy += tm.getDY();
 			
 		x += dx;
 		y += dy;
+		
+		//y += tm.getDY();
+		//x += tm.getDX();
 	}
 
 	public void draw(Graphics2D g) 
@@ -96,5 +104,15 @@ public class Projectile extends MapObject
 			((Enemy) m).playerHurt(1);
 			remove = true;
 		}
+	}
+	
+	public boolean getRemove()
+	{
+		return remove;
+	}
+	
+	public void setSlowTime(double slowTime)
+	{
+		this.slowTime = slowTime;
 	}
 }

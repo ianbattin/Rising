@@ -34,7 +34,8 @@ public class Jetpacker extends Enemy
 		recoverLength = 100;
 		
 		moveSpeed = 0.1;
-		maxSpeed = 3.0;
+		maxSpeedY = 6.0;
+		maxSpeedX = 3.0;
 		stopSpeed = 0.4;
 		fallSpeed = 0.25;
 		maxFallSpeed = 7.0;
@@ -119,6 +120,10 @@ public class Jetpacker extends Enemy
 			dy = 10.0;
 			y += dy;
 		}
+		
+		x += tm.getDX();
+		y += tm.getDY();
+		
 		getAnimation();
 		getBulletCollision();
 
@@ -183,7 +188,7 @@ public class Jetpacker extends Enemy
 		{
 			
 			long elapsed= (System.nanoTime() - fireTimer) / 1000000;
-			if(fireDelay <= elapsed)
+			if(fireDelay <= elapsed*(0.5*super.slowDown))
 			{
 				bullets.add(new Projectile(x, y, angle, 2, tm));
 				fireTimer = System.nanoTime();
@@ -196,22 +201,22 @@ public class Jetpacker extends Enemy
 		if(relX > 200)
 		{
 			dx -= moveSpeed;
-			if(dx < -maxSpeed) dx = -maxSpeed;
+			if(dx < -(maxSpeedX*super.slowDown)) dx = -(maxSpeedX*super.slowDown);
 		}
 		else if(relX < -200)
 		{
 			dx += moveSpeed;
-			if(dx > maxSpeed) dx = maxSpeed;
+			if(dx > (maxSpeedX*super.slowDown)) dx = (maxSpeedX*super.slowDown);
 		}
 		if(relY > 200)
 		{
 			dy -= moveSpeed;
-			if(dy < -maxSpeed) dy = -maxSpeed;
+			if(dy < -(maxSpeedY*super.slowDown)) dy = -(maxSpeedY*super.slowDown);
 		}
 		else if(relY < -200)
 		{
 			dy += moveSpeed;
-			if(dy > maxSpeed) dy = maxSpeed;
+			if(dy > (maxSpeedY*super.slowDown)) dy = (maxSpeedY*super.slowDown);
 		}
 		//MOVING LEFT AND RIGHT
 		/*if(left)

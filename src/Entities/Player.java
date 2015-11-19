@@ -9,6 +9,8 @@ import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.RescaleOp;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -34,15 +36,12 @@ public class Player extends MapObject
 	public static int fireDelay;
 	public static boolean firing;
 	private double angle;
-	private boolean shootUp;
-	private boolean shootDown;
-	private boolean shootLeft;
-	private boolean shootRight;
 	
-	//effect variables - @Ian you can edit this how you want when you get to cleaning this class up
+	//effect variables
 	private boolean isUnderEffect;
 	private double jumpHeightFactor, birdPos;
 	private boolean hasJetpack, hasBird, hasArmor, stopTime;
+	private ArrayList<Integer> charBlurPos;
 	
 	//score system
 	private int points;
@@ -53,7 +52,6 @@ public class Player extends MapObject
 	
 	//health
 	private byte numOfFramesToAnimHealth;
-	private byte timesToLoop;
 	private boolean hasFlashed, isBlinking, isFlashing;
 	private ArrayList<BufferedImage> heartImages;
 	
@@ -200,10 +198,9 @@ public class Player extends MapObject
 		falling = true;
 		
 		//health
-		health = 5;
+		health = 50;
 		
 		numOfFramesToAnimHealth = 0;
-		timesToLoop = 0;
 		isFlashing = isBlinking = hasFlashed = false;
 		
 		//effects
@@ -211,6 +208,7 @@ public class Player extends MapObject
 		jumpHeightFactor = 1;
 		birdPos = 0;
 		heightScore = 0;
+		charBlurPos = new ArrayList<Integer>();
 	}
 	
 	public void update()
@@ -230,7 +228,13 @@ public class Player extends MapObject
 		getAttack();
 		
 		for(int i = 0; i < bullets.size(); i++)
-		{
+		{	
+			if(bullets.get(i).getRemove())
+			{
+				bullets.remove(i);
+				i--;
+				break;
+			}
 			bullets.get(i).update();
 			if(bullets.get(i).notOnScreen()) bullets.remove(i);
 		}
@@ -253,7 +257,7 @@ public class Player extends MapObject
 		}
 		else 
 		{	
-			if(stopTime) tm.setYVector(0);
+			if(stopTime) tm.setYVector(0.5);
 			else if(PlayState.tileStart) tm.setYVector(2.0);
 			y += dy;
 		}
@@ -354,6 +358,38 @@ public class Player extends MapObject
 		setMapPosition();
 		if (!isBlinking)
 		{
+			//creates the "blur" effect  - to occur only when time is slowed
+			if(stopTime)
+			{
+				
+				float[] scales = { 1f, 1f, 1f, 1f };
+			    float[] offsets = new float[4];
+			    
+			    scales[3] = 0.15f;
+
+				RescaleOp rop = new RescaleOp(scales, offsets, null);
+				BufferedImage fadIm = rop.filter(animation.getImage(), null);
+				
+				
+				for(int i = 0; i < charBlurPos.size(); i+=2)
+				{
+					if(facingRight)
+						g.drawImage(fadIm, (int)(charBlurPos.get(i)), (int)(charBlurPos.get(i+1)), width, height, null);
+					else
+						g.drawImage(fadIm, (int)(charBlurPos.get(i) + width), (int)(charBlurPos.get(i+1)), -width, height, null);
+					
+					charBlurPos.set(i, charBlurPos.get(i)-(int)dx);
+					charBlurPos.set(i+1, charBlurPos.get(i+1)-(int)dy/2);
+				}
+				if(charBlurPos.size()>10)
+				{
+					charBlurPos.remove(0);
+					charBlurPos.remove(0);
+				}
+	
+				charBlurPos.add((int)(x + xmap - width / 2));
+				charBlurPos.add((int)(y + ymap - height / 2));
+			}
 			if(facingRight)
 			{
 				g.drawImage(animation.getImage(), (int)(x + xmap - width / 2), (int)(y + ymap - height / 2), width, height, null);
@@ -462,25 +498,18 @@ public class Player extends MapObject
 		//JUMPING AND FALLING
 		if(jump)
 		{
-			if(hasJetpack)
+			if(!jumped)
 			{
-				dy = jumpStart*4;
+				jumpHeight = yFromBottom + (100*jumpHeightFactor); //edited to be "effectable"
+				jumped = true;
 			}
-			else
+			if(jumped)
 			{
-				if(!jumped)
+				if(yFromBottom < jumpHeight) dy = jumpStart*3*jumpHeightFactor;
+				if(yFromBottom >= jumpHeight) 
 				{
-					jumpHeight = yFromBottom + (100*jumpHeightFactor); //edited to be "effectable"
-					jumped = true;
-				}
-				if(jumped)
-				{
-					if(yFromBottom < jumpHeight) dy = jumpStart*3*jumpHeightFactor;
-					if(yFromBottom >= jumpHeight) 
-					{
-						jumpHeight = -9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
-						falling = true;
-					}
+					jumpHeight = -9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
+					falling = true;
 				}
 			}
 		}
@@ -628,7 +657,7 @@ public class Player extends MapObject
 	}
 	public void playerHurt(int amount)
 	{
-		if (hasArmor) 
+		if (hasArmor || hasJetpack) 
 		{
 			health -= amount/2; //as int, any damage of 1 will be truncated to 0 after the division
 		}
@@ -673,7 +702,7 @@ public class Player extends MapObject
 			}
 			case 2:
 			{
-				jumpHeightFactor = 3;
+				dy = -60;
 				hasJetpack = true;
 				jump = true;
 				break;
@@ -693,7 +722,7 @@ public class Player extends MapObject
 			case 5:
 			{
 				stopTime = true;
-				jumpHeightFactor = 1.5;
+				jumpHeightFactor = 1.2;
 				break;
 			}
 		}
@@ -708,6 +737,7 @@ public class Player extends MapObject
 		hasJetpack = false;
 		hasArmor = false;
 		stopTime = false;
+		charBlurPos = new ArrayList<Integer>();
 		jumpHeightFactor = 1;
 		System.out.println("Effect ended");
 	}
