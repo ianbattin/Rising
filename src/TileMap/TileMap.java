@@ -21,6 +21,8 @@ public class TileMap
 	private double dx;
 	private double dy;
 	
+	private boolean showCollisonBox = false;
+	
 	private int width; //total width in tiles
 	private int height; //total height in tiles
 	private int[][] map; //our 2d array of tiles
@@ -161,6 +163,16 @@ public class TileMap
 	public ArrayList<Tile> getTiles()
 	{
 		return tiles;
+	}
+	
+	public void setShowCollisonBox(boolean b)
+	{
+		showCollisonBox = b;
+	}
+	
+	public boolean getShowCollisonBox()
+	{
+		return showCollisonBox;
 	}
 	
 	public int getX() {	return x;	}

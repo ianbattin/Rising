@@ -39,11 +39,10 @@ public abstract class Enemy extends MapObject
 	protected byte numOfFramesToAnimHealth;
 	protected byte timesToLoop;
 	protected boolean isFlashing;
-	protected ArrayList<BufferedImage> heartImages;
 	
 	//animation
-	protected ArrayList<BufferedImage[]> playerSprites;
-	protected ArrayList<BufferedImage[]> playerHurtSprites;
+	protected ArrayList<BufferedImage[]> entitySprites;
+	protected ArrayList<BufferedImage[]> entityHurtSprites;
 	protected int[] numFrames;
 	
 	//slowdown (when player picks up powerup)
