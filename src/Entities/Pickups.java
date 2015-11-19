@@ -137,7 +137,7 @@ public class Pickups extends MapObject {
 				coolDownTime = 100000000000L;
 				willDrawPickup = true;
 				//set the pickup type.
-				effectType = 5;//(int)(Math.random()*6);
+				effectType = 3;//(int)(Math.random()*6);
 				
 				//sets starting points for the spawning of the pickups
 				startingPositionOffset = -(Math.random()*GamePanel.HEIGHTSCALED/2);
@@ -155,7 +155,7 @@ public class Pickups extends MapObject {
 		if (willDrawPickup)
 		{
 			getAnimation();
-			g.drawImage(animation.getImage(), (int)(xLoc+xShift), (int)yLoc, width, height, null);
+			g.drawImage(animation.getImage(), (int)(xLoc+xShift), (int)yLoc, (int)(width), (int)(height), null);
 		}
 	}
 	
@@ -196,7 +196,7 @@ public class Pickups extends MapObject {
 			}
 			case 5:
 			{			
-				animation.setFrames(sprites.get(0)); //switch to timeboost
+				animation.setFrames(sprites.get(JUMPBOOST)); //switch to timeboost
 				animation.setDelay(200);
 				break;
 			}
@@ -227,7 +227,11 @@ public class Pickups extends MapObject {
 	
 	public void effectStart()
 	{
-		if(effectType == 5) 
+		if(effectType == 3)
+		{
+			
+		}
+		else if(effectType == 5) 
 		{
 			playState.setBackgroundVector(0, -1);
 			playState.setDebrisVectors(0.5);

@@ -28,6 +28,7 @@ import TileMap.TileMap;
 public class Player extends MapObject
 {	
 	//TileMap
+	private PlayState playState;
 	private TileMap tm;
 	
 	//Attacks
@@ -40,7 +41,7 @@ public class Player extends MapObject
 	
 	//effect variables
 	private boolean isUnderEffect;
-	private double jumpHeightFactor, birdPos;
+	private double jumpHeightFactor, birdPos, healthPos;
 	private boolean hasJetpack, hasBird, hasArmor, stopTime;
 	private ArrayList<Integer> charBlurPos;
 	
@@ -52,8 +53,8 @@ public class Player extends MapObject
 	private double yFromBottom;
 	
 	//health
-	private byte numOfFramesToAnimHealth;
-	private boolean hasFlashed, isBlinking, isFlashing;
+	private short numOfFramesToAnimHealth, healthAphaVal;
+	private boolean hasFlashed, isBlinking, isFlashing, healing;
 	private ArrayList<BufferedImage> heartImages;
 	
 	//animation
@@ -70,10 +71,11 @@ public class Player extends MapObject
 	private static final int HOVERING = 5;
 	private static final int DOUBLEJUMP = 6;
 	
-	public Player(TileMap tm)
+	public Player(TileMap tm, PlayState ps)
 	{	
 		super(tm);
 		this.tm = tm;
+		this.playState = ps;
 		
 		bullets = new ArrayList<Projectile>();
 		angle = 0.0;
@@ -199,14 +201,15 @@ public class Player extends MapObject
 		falling = true;
 		
 		//health
-		health = 50;
-		
+		health = 5;
+		healthAphaVal = 255;
 		numOfFramesToAnimHealth = 0;
-		isFlashing = isBlinking = hasFlashed = false;
+		healing = isFlashing = isBlinking = hasFlashed = false;
 		
 		//effects
 		stopTime = isUnderEffect = hasJetpack  = hasBird = false;
 		jumpHeightFactor = 1;
+		healthPos = 0;
 		birdPos = 0;
 		heightScore = 0;
 		charBlurPos = new ArrayList<Integer>();
@@ -323,6 +326,7 @@ public class Player extends MapObject
 		}
 
 		if(hasBird && ++birdPos > 720) birdPos = 0;
+		if(healing) healthPos += 5;
 	}
 	
 	public void draw(Graphics2D g) 
@@ -362,15 +366,13 @@ public class Player extends MapObject
 			//creates the "blur" effect  - to occur only when time is slowed
 			if(stopTime)
 			{
-				
 				float[] scales = { 1f, 1f, 1f, 1f };
 			    float[] offsets = new float[4];
-			    
+			
 			    scales[3] = 0.15f;
 
 				RescaleOp rop = new RescaleOp(scales, offsets, null);
 				BufferedImage fadIm = rop.filter(animation.getImage(), null);
-				
 				
 				for(int i = 0; i < charBlurPos.size(); i+=2)
 				{
@@ -387,7 +389,7 @@ public class Player extends MapObject
 					charBlurPos.remove(0);
 					charBlurPos.remove(0);
 				}
-	
+				
 				charBlurPos.add((int)(x + xmap - width / 2));
 				charBlurPos.add((int)(y + ymap - height / 2));
 			}
@@ -405,6 +407,26 @@ public class Player extends MapObject
 		{
 			//replace with image when bird is drawn. Use current X & Y calculations for the position however
 			g.fillRect((int)(x+(50*Math.cos(Math.toRadians(birdPos)))), (int)(y-50-(5*Math.sin(Math.toRadians(birdPos)))), 5, 5);
+		}
+		
+		if(healing)
+		{
+			float[] scales = { 1f, 1f, 1f, 1f };
+		    float[] offsets = new float[4];
+		
+		    scales[3] = healthAphaVal/255f;
+
+			RescaleOp rop = new RescaleOp(scales, offsets, null);
+			BufferedImage fadIm = rop.filter(heartImages.get(2), null);
+			
+			g.drawImage(fadIm, (int)(x+(50*Math.cos(Math.toRadians(healthPos)))), (int)(y-40-(healthPos/4)), 15, 15, null);
+			
+			healthAphaVal-=2;
+			if (healthAphaVal <= 0)
+			{
+				healthAphaVal = 255;
+				healing = false;
+			}
 		}
 		
 		for(Projectile p: bullets)
@@ -668,6 +690,7 @@ public class Player extends MapObject
 	public void playerHeal(int amount)
 	{
 		health += amount;
+		healing = true;
 	}
 	public void playerHurt(int amount)
 	{
@@ -805,6 +828,12 @@ public class Player extends MapObject
 			if(k == GameStateManager.action && hasBird)
 			{
 				hasBird = false;
+				ArrayList<Enemy> enemies = playState.getEnemies();
+				if(enemies != null)
+				{
+					Enemy chosenE = enemies.get((int)(Math.random()*enemies.size()));
+					chosenE.playerHurt(50);
+				}
 				System.out.println("NEUTRALIZE ENEMY");
 			}
 			/*

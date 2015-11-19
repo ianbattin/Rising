@@ -86,7 +86,7 @@ public class PlayState extends GameState
 	public void init() 
 	{
 		tileMap = new TileMap("Resources/Maps/level5.txt");
-		player = new Player(tileMap);
+		player = new Player(tileMap, this);
 		enemies = new ArrayList<Enemy>();
 		pickups = new Pickups(player, tileMap, this);
 		tileStart = false;
@@ -228,6 +228,14 @@ public class PlayState extends GameState
 		{
 			start = false;
 		}
+	}
+	
+	public ArrayList<Enemy> getEnemies()
+	{
+		if(enemies.size() > 0)
+			return enemies;
+		else
+			return null;
 	}
 
 	public void keyReleased(int k) 
