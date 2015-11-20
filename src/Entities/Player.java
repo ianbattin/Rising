@@ -42,7 +42,10 @@ public class Player extends MapObject
 	//effect variables
 	private boolean isUnderEffect;
 	private double jumpHeightFactor, birdPos, healthPos;
-	private boolean hasJetpack, hasBird, hasArmor, stopTime;
+	private boolean hasJetpack, hasBird, birdActive, hasArmor, stopTime;
+	private int birdMaxDy, birdMaxDx;
+	private double birdX, birdY;
+	private Enemy chosenEnemy;
 	private ArrayList<Integer> charBlurPos;
 	
 	//score system
@@ -207,10 +210,14 @@ public class Player extends MapObject
 		healing = isFlashing = isBlinking = hasFlashed = false;
 		
 		//effects
-		stopTime = isUnderEffect = hasJetpack  = hasBird = false;
+		stopTime = isUnderEffect = hasJetpack = birdActive = hasBird = false;
+		birdMaxDy = 4;
+		birdMaxDx = 4;
+		birdX = 0;
+		birdY = 0;
+		birdPos = 0;
 		jumpHeightFactor = 1;
 		healthPos = 0;
-		birdPos = 0;
 		heightScore = 0;
 		charBlurPos = new ArrayList<Integer>();
 	}
@@ -281,9 +288,9 @@ public class Player extends MapObject
 			points += -dy;
 		}
 		
-		if (y > GamePanel.HEIGHT + 500 + height)
+		if (y > GamePanel.HEIGHT + 150 + height)
 		{
-			playerHurt(10);
+			playerHurt(50);
 		}
 		
 		if (recovering)
@@ -403,10 +410,44 @@ public class Player extends MapObject
 			}
 		}
 	
-		if(hasBird)
+		if(hasBird && !birdActive)
 		{
 			//replace with image when bird is drawn. Use current X & Y calculations for the position however
-			g.fillRect((int)(x+(50*Math.cos(Math.toRadians(birdPos)))), (int)(y-50-(5*Math.sin(Math.toRadians(birdPos)))), 5, 5);
+			birdX = (x+(50*Math.cos(Math.toRadians(birdPos))));
+			birdY = (y-50-(5*Math.sin(Math.toRadians(birdPos))));
+			g.fillRect((int)birdX, (int)birdY, 10, 10);
+
+		}
+		else if(hasBird && birdActive)
+		{
+		    double slope = (chosenEnemy.getY()-birdY)/(chosenEnemy.getX()-birdX);
+		    double angle = Math.atan((double)slope);
+		    
+			if(chosenEnemy.getX() < birdX && chosenEnemy.getX() > 0)
+			{
+				birdX = birdX -(5*Math.cos(angle));
+			}
+			else if(chosenEnemy.getX() > birdX && chosenEnemy.getX() > 0)
+			{
+				birdX = birdX + (5*Math.cos(angle));
+			}
+			
+			if(chosenEnemy.getY() < birdY && chosenEnemy.getY() > 0)
+			{
+				birdY = birdY - Math.abs((5*Math.sin(angle)));
+			}
+			else if(chosenEnemy.getY() > birdY && chosenEnemy.getY() > 0)
+			{
+				birdY = birdY + Math.abs((5*Math.sin(angle)));
+			}
+
+			if(birdY+10 >= chosenEnemy.getY() && birdY-10 <= chosenEnemy.getY() && birdX+10 >= chosenEnemy.getX() && birdX-10 <= chosenEnemy.getX()) 
+			{
+				chosenEnemy.playerHurt(50);
+				hasBird = false;
+				birdActive = false;
+			}
+			g.fillRect((int)birdX, (int)birdY, 10, 10);
 		}
 		
 		if(healing)
@@ -419,7 +460,9 @@ public class Player extends MapObject
 			RescaleOp rop = new RescaleOp(scales, offsets, null);
 			BufferedImage fadIm = rop.filter(heartImages.get(2), null);
 			
-			g.drawImage(fadIm, (int)(x+(50*Math.cos(Math.toRadians(healthPos)))), (int)(y-40-(healthPos/4)), 15, 15, null);
+			g.drawImage(fadIm, (int)(x+(50*Math.cos(Math.toRadians(healthPos)))), (int)(y-40-(healthPos/4)), 20, 20, null);
+			//g.drawImage(fadIm, (int)(x+(-50*Math.cos(Math.toRadians(healthPos)))), (int)(y-20-(healthPos/4)), 20, 20, null);
+
 			
 			healthAphaVal-=2;
 			if (healthAphaVal <= 0)
@@ -827,14 +870,13 @@ public class Player extends MapObject
 			}	
 			if(k == GameStateManager.action && hasBird)
 			{
-				hasBird = false;
 				ArrayList<Enemy> enemies = playState.getEnemies();
-				if(enemies != null)
+				if(enemies != null && enemies.size() > 0)
 				{
-					Enemy chosenE = enemies.get((int)(Math.random()*enemies.size()));
-					chosenE.playerHurt(50);
+					this.chosenEnemy = enemies.get((int)(Math.random()*enemies.size()));
+					birdActive = true;
+					System.out.println("NEUTRALIZE ENEMY");
 				}
-				System.out.println("NEUTRALIZE ENEMY");
 			}
 			/*
 			if(k == GameStateManager.shootUp)
