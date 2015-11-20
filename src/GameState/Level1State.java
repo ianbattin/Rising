@@ -83,7 +83,7 @@ public class Level1State extends PlayState
 	public void init() 
 	{
 		tileMap = new TileMap("Resources/Maps/level5.txt");
-		player = new Player(tileMap);
+		player = new Player(tileMap, this);
 		player.setPosition(400, -100);
 		enemies = new ArrayList<Enemy>();
 		pickups = new Pickups(player, tileMap, this);

@@ -22,6 +22,7 @@ import javax.imageio.ImageIO;
 
 import GameState.GameStateManager;
 import GameState.Level1State;
+import GameState.PlayState;
 import Main.GamePanel;
 import TileMap.Tile;
 import TileMap.TileMap;
@@ -205,28 +206,21 @@ public class Player extends MapObject
 		
 		//health
 		health = 5;
-<<<<<<< HEAD
-		
-=======
 		healthAphaVal = 255;
->>>>>>> origin/master
 		numOfFramesToAnimHealth = 0;
 		healing = isFlashing = isBlinking = hasFlashed = false;
 		
 		//effects
-<<<<<<< HEAD
 		hasJetpack = false; 
 		hasBird = false; 
 		hasArmor = false;
 		stopTime = isUnderEffect = hasJetpack  = hasBird = false;
 		jumpHeightFactor = 1;
-=======
 		stopTime = isUnderEffect = hasJetpack = birdActive = hasBird = false;
 		birdMaxDy = 4;
 		birdMaxDx = 4;
 		birdX = 0;
 		birdY = 0;
->>>>>>> origin/master
 		birdPos = 0;
 		jumpHeightFactor = 1;
 		healthPos = 0;

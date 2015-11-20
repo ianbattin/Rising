@@ -39,4 +39,9 @@ public abstract class PlayState extends GameState
 	{
 		return player;
 	}
+
+	public ArrayList<Enemy> getEnemies() 
+	{
+		return enemies;
+	}
 }

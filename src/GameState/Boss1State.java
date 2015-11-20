@@ -85,7 +85,7 @@ public class Boss1State extends PlayState
 	{
 		tileMap = new TileMap("Resources/Maps/boss1.txt");
 		tileMap.setVector(0, 0);
-		player = new Player(tileMap);
+		player = new Player(tileMap, this);
 		pickups = new Pickups(player, tileMap, this);
 		enemies = new ArrayList<Enemy>();
 		tileStart = false;
