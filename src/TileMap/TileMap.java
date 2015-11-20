@@ -18,8 +18,13 @@ public class TileMap
 {
 	private int x;
 	private int y;
+	private int xMove;
+	private int yMove;
 	private double dx;
 	private double dy;
+	private boolean moving;
+	
+	private String path;
 	
 	private boolean showCollisonBox = false;
 	
@@ -37,10 +42,14 @@ public class TileMap
 	{
 		x = 0;
 		y = 0;
+		xMove = 0;
+		yMove = 0;
+		moving = false;
 		
 		try
 		{
-			spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Tiles/tileset4.png"));
+			path = "/Sprites/Tiles/FullTileSet.png";
+			spritesheet = ImageIO.read(getClass().getResourceAsStream(path));
 			
 			BufferedReader br = new BufferedReader(new FileReader(s));
 			tileSize = Integer.parseInt(br.readLine());
@@ -91,11 +100,20 @@ public class TileMap
 		}
 		
 		//load sprites into sprites array
-		sprites = new BufferedImage[minType+7];
-		for(int i = 0; i < sprites.length; i++)
+		sprites = new BufferedImage[spritesheet.getHeight()/25 * spritesheet.getWidth()/25];
+//		for(int i = 0; i < sprites.length; i++)
+//		{
+//			if(i < 20) sprites[i] = spritesheet.getSubimage(i * tileSize, 0, tileSize, tileSize);
+//			else sprites[i] = spritesheet.getSubimage((i-20) * tileSize, tileSize, tileSize, tileSize);
+//		}
+		int count = 0;
+		for(int row = 0; row < spritesheet.getHeight() / tileSize; row++)
 		{
-			if(i < 20) sprites[i] = spritesheet.getSubimage(i * tileSize, 0, tileSize, tileSize);
-			else sprites[i] = spritesheet.getSubimage((i-20) * tileSize, tileSize, tileSize, tileSize);
+			for(int col = 0; col < spritesheet.getWidth() / tileSize; col++)
+			{
+				sprites[count] = spritesheet.getSubimage(col * tileSize, row * tileSize, tileSize, tileSize);
+				count++;
+			}
 		}
 		
 		for(Tile t: tiles)
@@ -106,6 +124,9 @@ public class TileMap
 	
 	public void update()
 	{	
+		xMove += dx;
+		yMove += dy;
+		
 		for(int i = 0; i < tiles.size(); i++)
 		{
 			if(tiles.get(i).pastBottom())
@@ -135,6 +156,11 @@ public class TileMap
 	{
 		return sprites[type];
 	}
+	
+	public String getSpriteSheet()
+	{
+		return path;
+	}
 
 	public void setXVector(double dx) 
 	{
@@ -143,6 +169,14 @@ public class TileMap
 	public void setYVector(double dy) 
 	{
 		this.dy = dy;
+		if(dy != 0) moving = true;
+		else
+			moving = false;
+	}
+	
+	public boolean getMoving()
+	{
+		return moving;
 	}
 	
 	public int getTileSize()
@@ -153,6 +187,11 @@ public class TileMap
 	public int getType(int row, int col)
 	{
 		return map[row][col];
+	}
+	
+	public int getTileMapHeight()
+	{
+		return height*tileSize;
 	}
 	
 	public int getTileMapWidth()
@@ -175,8 +214,12 @@ public class TileMap
 		return showCollisonBox;
 	}
 	
+	public void setX(int x) {	this.x = x;	}
+	public void setY( int y) {	this.y = y;	}
 	public int getX() {	return x;	}
 	public int getY() {	return y;	}
+	public int getXMove() {	return xMove;	}
+	public int getYMove() {	return yMove;	}
 	public double getDX() { return dx; }
 	public double getDY() { return dy; }
 }

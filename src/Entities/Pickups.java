@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import GameState.GameState;
+import GameState.Level1State;
 import GameState.PlayState;
 
 public class Pickups extends MapObject {	

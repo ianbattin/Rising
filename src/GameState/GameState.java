@@ -7,9 +7,15 @@ import java.awt.event.MouseEvent;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+
+import Entities.Enemy;
+import Entities.Player;
+
 import java.awt.Color;
 
 import Main.GamePanel;
+import TileMap.Background;
 import sun.audio.*;
 
 //Every game state will have each of these things. 
@@ -21,8 +27,7 @@ public abstract class GameState
 	protected String data;
 	protected boolean isFadingOut, isFadingIn;
 	protected int alphaLevel;
-	private float timeKeeper = 0;
-	
+	protected float timeKeeper = 0;
 	
 	public abstract void init();
 	public abstract void update();

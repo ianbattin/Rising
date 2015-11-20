@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import GameState.PlayState;
+import GameState.Level1State;
 import Main.GamePanel;
 import TileMap.Tile;
 import TileMap.TileMap;
@@ -94,7 +94,7 @@ public abstract class Enemy extends MapObject
 			{
 				bullets.get(i).collided(player);
 			}
-			if(bullets.get(i).notOnScreen()) bullets.remove(i);
+			if(bullets.get(i).notOnScreen() && bullets.get(i).getLifeTime() > 300) bullets.remove(i);
 		}
 		
 		for(int i = 0; i < player.getBullets().size(); i++)

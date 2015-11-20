@@ -133,7 +133,7 @@ public class MenuState extends GameState
 		else if (k == GameStateManager.select)
 		{
 			gsm.resetState(GameStateManager.MENUSTATE);
-			gsm.setCurrentState(GameStateManager.PLAYSTATE);
+			gsm.setCurrentState(GameStateManager.LEVEL1STATE);
 		}
 		
 		if (k == GameStateManager.reset)

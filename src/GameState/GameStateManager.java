@@ -18,8 +18,14 @@ public class GameStateManager
 	public static final int CONTROLSTATE = 2; //Lists controls
 	public static final int CREDITSTATE = 3; //Show credits
 	public static final int INTROSTATE = 4; //Planes crash/background story
-	public static final int PLAYSTATE = 5; //Actually playing
-	public static final int OUTROSTATE = 6; //Outro state
+	public static final int LEVEL1STATE = 5; //Actually playing
+	public static final int TRANSITION1STATE = 6;
+	public static final int BOSS1STATE = 7;
+	//public static final int LEVEL2STATE = 7;
+	//public static final int BOSS2STATE = 8;
+	//public static final int LEVEL3STATE = 9;
+	//public static final int BOSS3STATE = 10;
+	public static final int OUTROSTATE = 8; //Outro state
 	
 	
 	//these are the controls. Need to be set up here so that they are accessible gamewide.
@@ -48,8 +54,10 @@ public class GameStateManager
 		gameStates.add(new MenuState(this));
 		gameStates.add(new ControlsState(this));
 		gameStates.add(new CreditState(this));
-		gameStates.add(new IntroState(this));
-		gameStates.add(new PlayState(this));
+		gameStates.add(new TransitionState(this, "Intro"));
+		gameStates.add(new Level1State(this));
+		gameStates.add(new TransitionState(this, "Intro"));
+		gameStates.add(new Boss1State(this, ((PlayState) (gameStates.get(LEVEL1STATE))).getPlayer()));
 		gameStates.add(new OutroState(this));
 		data = new String[gameStates.size()];
 	}
@@ -96,8 +104,8 @@ public class GameStateManager
 		else if(stateAtPos instanceof MenuState) gameStates.add(state, new MenuState(this));
 		else if(stateAtPos instanceof ControlsState) gameStates.add(state, new ControlsState(this));
 		else if(stateAtPos instanceof CreditState) gameStates.add(state, new CreditState(this));
-		else if(stateAtPos instanceof IntroState) gameStates.add(state, new IntroState(this));
-		else if(stateAtPos instanceof PlayState) gameStates.add(state, new PlayState(this));
+		else if(stateAtPos instanceof TransitionState) gameStates.add(state, new TransitionState(this, "Intro"));
+		else if(stateAtPos instanceof Level1State) gameStates.add(state, new Level1State(this));
 		else if(stateAtPos instanceof OutroState) gameStates.add(state, new OutroState(this));
 		data[state] = stateAtPos.data;
 	}

@@ -15,11 +15,13 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
 import GameState.GameStateManager;
-import GameState.PlayState;
+import GameState.Level1State;
 import Main.GamePanel;
 import TileMap.Tile;
 import TileMap.TileMap;
@@ -31,6 +33,10 @@ public class Player extends MapObject
 	private TileMap tm;
 	
 	//Attacks
+	private boolean shootUp;
+	private boolean shootDown;
+	private boolean shootLeft;
+	private boolean shootRight;
 	private ArrayList<Projectile> bullets;
 	private long fireTimer;
 	public int fireDelay;
@@ -88,7 +94,7 @@ public class Player extends MapObject
 		stopSpeed = 0.4;
 		fallSpeed = 0.25;
 		maxFallSpeed = 7.0;
-		jumpStart = -3.0;
+		jumpStart = -9.0;
 		
 		width = 50;
 		height = 70;
@@ -183,14 +189,8 @@ public class Player extends MapObject
 		}
 		
 		animation = new Animation();
-
-		x = GamePanel.WIDTH/2 - 20;
-		y = -100;
 				
 		yFromBottom =  GamePanel.HEIGHTSCALED - y;
-		
-		dx = 0.0;
-		dy = 0.0;
 		
 		currentAction = FALLING;
 		animation.setFrames(playerSprites.get(FALLING));
@@ -199,12 +199,15 @@ public class Player extends MapObject
 		falling = true;
 		
 		//health
-		health = 50;
+		health = 5;
 		
 		numOfFramesToAnimHealth = 0;
 		isFlashing = isBlinking = hasFlashed = false;
 		
 		//effects
+		hasJetpack = false; 
+		hasBird = false; 
+		hasArmor = false;
 		stopTime = isUnderEffect = hasJetpack  = hasBird = false;
 		jumpHeightFactor = 1;
 		birdPos = 0;
@@ -214,8 +217,6 @@ public class Player extends MapObject
 	
 	public void update()
 	{	
-		if(idle) dy = dy + 1;
-		getMovement();
 		if (health > 0)
 		{
 			myCheckCollision(tm);
@@ -225,6 +226,7 @@ public class Player extends MapObject
 			falling = true;
 			gliding = false;
 		}
+		getMovement();
 		getAnimation();
 		getAttack();
 		
@@ -240,15 +242,13 @@ public class Player extends MapObject
 			if(bullets.get(i).notOnScreen()) bullets.remove(i);
 		}
 
-		//Camera left and right movement (Player always stays centered)
-		tm.setXVector(-dx);
-
+		x += (dx + tm.getDX());
 		if(y < 300) 
 		{
-			if(PlayState.tileStart) tm.setYVector(-dy + 2);
-			if(dy >= 0 && PlayState.tileStart) tm.setYVector(2.0);
-			if(PlayState.tileStart)
+			if(Level1State.tileStart && tm.getMoving())
 			{
+				if(dy >= 0) tm.setYVector(2.0);
+				tm.setYVector(-dy + 2);
 				if(dy > 0) y += (dy);
 			}
 			else
@@ -259,7 +259,7 @@ public class Player extends MapObject
 		else 
 		{	
 			if(stopTime) tm.setYVector(0.5);
-			else if(PlayState.tileStart) tm.setYVector(2.0);
+			else if(Level1State.tileStart) tm.setYVector(2.0);
 			y += dy;
 		}
 		
@@ -437,13 +437,13 @@ public class Player extends MapObject
 		{
 			t.setType(0);
 			falling = true;
-			dy = -50.0;
+			dy = -60.0;
 		}
 	}
 	
 	public void getAttack()
 	{
-		/*
+		
 		if(shootUp) angle = Math.toRadians(270);
 		if(shootDown) angle = Math.toRadians(90);
 		if(shootLeft) angle = Math.toRadians(180);
@@ -454,7 +454,7 @@ public class Player extends MapObject
 		if(shootDown && shootRight) angle = Math.toRadians(45);
 		
 		if(!shootUp && !shootDown && !shootLeft && !shootRight && !mouseHeld) firing = false;
-		*/
+		
 	
 		if(firing)
 		{
@@ -507,6 +507,7 @@ public class Player extends MapObject
 				dx -= stopSpeed;
 				if(dx < 0.0) dx = 0.0;
 			}
+			if(!jump && !falling) idle = true;
 		}
 
 		//JUMPING AND FALLING
@@ -514,12 +515,20 @@ public class Player extends MapObject
 		{
 			if(!jumped)
 			{
-				jumpHeight = yFromBottom + (100*jumpHeightFactor); //edited to be "effectable"
-				jumped = true;
+				Timer timer = new Timer();
+				timer.schedule(new TimerTask()
+				{
+					public void run()
+					{	
+						jumpHeight = yFromBottom + (100*jumpHeightFactor); //edited to be "effectable"
+						jumped = true;
+					}
+					
+				}, 200);
 			}
 			if(jumped)
 			{
-				if(yFromBottom < jumpHeight) dy = jumpStart*3*jumpHeightFactor;
+				if(yFromBottom < jumpHeight) dy = jumpStart*jumpHeightFactor;
 				if(yFromBottom >= jumpHeight) 
 				{
 					jumpHeight = -9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
@@ -566,7 +575,7 @@ public class Player extends MapObject
 	{
 		if(idle)
 		{
-			if(currentAction != IDLE && currentAction != WALKING)
+			if(currentAction != IDLE && (!left || !right))
 			{
 				currentAction = IDLE;
 				animation.setFrames(playerSprites.get(IDLE));
@@ -579,7 +588,7 @@ public class Player extends MapObject
 		{
 			if(right){ facingRight = true;	}
 			else{ facingRight = false;	}
-			if(currentAction != WALKING && currentAction != FALLING && currentAction != JUMPING && !idle)
+			if(currentAction != WALKING && currentAction != FALLING && currentAction != JUMPING)
 			{
 				currentAction = WALKING;
 				animation.setFrames(playerSprites.get(WALKING));
@@ -688,9 +697,9 @@ public class Player extends MapObject
 			else
 			{
 				health -= amount;
-				dy = -8.0;
-				if(dx >= 0) dx = -8.0;
-				else dx = 8.0;
+				dy = -2.0;
+				if(dx >= 0) dx = -2.0;
+				else dx = 2.0;
 				numOfFramesToAnimHealth = 0;
 				//timesToLoop = 1;
 				recovering = true;
@@ -769,9 +778,9 @@ public class Player extends MapObject
 			{
 				if(!jumped)
 				{
+					idle = false;
 					jump = true;
 					doubleJumpable = false;
-					idle = false;
 				}
 				/*if(jumped && !doubleJump && doubleJumpable)
 				{
@@ -802,12 +811,15 @@ public class Player extends MapObject
 				gliding = true;
 				idle = false;
 			}	
+			if(k == KeyEvent.VK_C)
+			{
+				points = 10000;
+			}
 			if(k == GameStateManager.action && hasBird)
 			{
 				hasBird = false;
 				System.out.println("NEUTRALIZE ENEMY");
 			}
-			/*
 			if(k == GameStateManager.shootUp)
 			{
 				shootUp = true;
@@ -828,7 +840,6 @@ public class Player extends MapObject
 				shootRight = true;
 				firing = true;
 			}
-			*/
 			if(k == KeyEvent.VK_T)
 			{
 				if(tm.getShowCollisonBox())
@@ -845,23 +856,24 @@ public class Player extends MapObject
 	{
 		if(k == GameStateManager.up)
 		{
-			jump = false;
-			falling = true;
-			idle = true;
-			doubleJumpable = true;
+			if(jumped)
+			{
+				jump = false;
+				falling = true;
+				doubleJumpable = true;
+			}
 			
 			if(doubleJump)
 			{
 				doubleJump = false;
 				jump = false;
-				idle = true;
+				falling = true;
 			}
 		}
 		if(k == GameStateManager.down)
 		{
 			falling = true;
 			drop = false;
-			idle = true;
 		}
 		if(k == GameStateManager.left)
 		{
@@ -874,9 +886,7 @@ public class Player extends MapObject
 		if(k == GameStateManager.glide)
 		{
 			gliding = false;
-			idle = true;
 		}
-		/*
 		if(k == GameStateManager.shootUp)
 		{
 			shootUp = false;
@@ -893,7 +903,6 @@ public class Player extends MapObject
 		{
 			shootRight = false;
 		}
-		*/
 	}
 
 	@Override

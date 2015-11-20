@@ -149,7 +149,7 @@ public abstract class MapObject
 
 			if((collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 && y + height/2 < collisionBottom) && !drop)
 			{
-				if(t.getType() < 17) 
+				if(t.getType() < 17 || (32 <= t.getType() && t.getType() <= 57))
 				{
 					if(dy >= 0)
 					{
@@ -262,7 +262,7 @@ public abstract class MapObject
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	public void setVector(double dx, double dy)
 	{
 		this.dx = dx;

@@ -11,9 +11,13 @@ public class Projectile extends MapObject
 {
 	private TileMap tm;
 	private double direction;
-	private double damage;
+	private int damage;
+	private int type;
 	
 	private boolean remove;
+	private boolean playerCollide;
+	
+	private long lifeTime;
 	
 	//timeslow variable
 	private static double slowTime;
@@ -26,12 +30,15 @@ public class Projectile extends MapObject
 		this.x = x;
 		this.y = y;
 		this.direction = direction;
+		this.type = type;
 		
 		slowTime = 1;
 		
+		lifeTime = 0;
+		
 		remove = false;
 
-		switch (type)
+		switch (this.type)
 		{
 			case 1: 
 			{
@@ -39,6 +46,7 @@ public class Projectile extends MapObject
 				width = 7;
 				height = 7;
 				damage = 1;
+				playerCollide = true;
 				break;
 			}
 			case 2:
@@ -47,6 +55,16 @@ public class Projectile extends MapObject
 				width = 14;
 				height = 14;
 				damage = 2;
+				playerCollide = true;
+				break;
+			}
+			case 3:
+			{
+				moveSpeed = 25.0;
+				width = 10;
+				height = 10;
+				damage = 0;
+				playerCollide = false;
 				break;
 			}
 		}
@@ -62,6 +80,8 @@ public class Projectile extends MapObject
 			
 		x += dx;
 		y += dy;
+		
+		lifeTime++;
 		
 		//y += tm.getDY();
 		//x += tm.getDX();
@@ -84,25 +104,31 @@ public class Projectile extends MapObject
 			t.setType(0);
 			remove = true;
 		}
-		else
+		else if(this.type == 3)
 		{
+			t.setType(0);
 			remove = true;
 		}
+		else
+			remove = true;
 	}
 
 	@Override
 	public void collided(MapObject m) 
 	{
-		if(m instanceof Player)
+		if(playerCollide)
 		{
-			((Player) m).playerHurt(1);
-			remove = true;
-		}
-		
-		if(m instanceof Enemy)
-		{
-			((Enemy) m).playerHurt(1);
-			remove = true;
+			if(m instanceof Player)
+			{
+				((Player) m).playerHurt(damage);
+				remove = true;
+			}
+
+			if(m instanceof Enemy)
+			{
+				((Enemy) m).playerHurt(damage);
+				remove = true;
+			}
 		}
 	}
 	
@@ -114,5 +140,10 @@ public class Projectile extends MapObject
 	public void setSlowTime(double slowTime)
 	{
 		this.slowTime = slowTime;
+	}
+
+	public long getLifeTime() 
+	{
+		return lifeTime;
 	}
 }

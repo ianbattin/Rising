@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import Entities.Animation;
-import GameState.PlayState;
+import GameState.Level1State;
 import Main.GamePanel;
 
 public class Tile 

@@ -29,7 +29,7 @@ public class OutroState extends GameState{
 		super.alphaLevel = 255;
 		
 		timer = 0;
-		points = gsm.getDataForState(GameStateManager.PLAYSTATE);
+		points = gsm.getDataForState(GameStateManager.LEVEL1STATE);
 	}
 
 	public void update() 
