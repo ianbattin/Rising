@@ -425,20 +425,20 @@ public class Player extends MapObject
 		    
 			if(chosenEnemy.getX() < birdX && chosenEnemy.getX() > 0)
 			{
-				birdX = birdX -(5*Math.cos(angle));
+				birdX = birdX -(8*Math.cos(angle));
 			}
 			else if(chosenEnemy.getX() > birdX && chosenEnemy.getX() > 0)
 			{
-				birdX = birdX + (5*Math.cos(angle));
+				birdX = birdX + (8*Math.cos(angle));
 			}
 			
 			if(chosenEnemy.getY() < birdY && chosenEnemy.getY() > 0)
 			{
-				birdY = birdY - Math.abs((5*Math.sin(angle)));
+				birdY = birdY - Math.abs((8*Math.sin(angle)));
 			}
 			else if(chosenEnemy.getY() > birdY && chosenEnemy.getY() > 0)
 			{
-				birdY = birdY + Math.abs((5*Math.sin(angle)));
+				birdY = birdY + Math.abs((8*Math.sin(angle)));
 			}
 
 			if(birdY+10 >= chosenEnemy.getY() && birdY-10 <= chosenEnemy.getY() && birdX+10 >= chosenEnemy.getX() && birdX-10 <= chosenEnemy.getX()) 
@@ -461,9 +461,7 @@ public class Player extends MapObject
 			BufferedImage fadIm = rop.filter(heartImages.get(2), null);
 			
 			g.drawImage(fadIm, (int)(x+(50*Math.cos(Math.toRadians(healthPos)))), (int)(y-40-(healthPos/4)), 20, 20, null);
-			//g.drawImage(fadIm, (int)(x+(-50*Math.cos(Math.toRadians(healthPos)))), (int)(y-20-(healthPos/4)), 20, 20, null);
 
-			
 			healthAphaVal-=2;
 			if (healthAphaVal <= 0)
 			{
