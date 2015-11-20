@@ -49,7 +49,7 @@ public class Player extends MapObject
 	//effect variables
 	private boolean isUnderEffect;
 	private double jumpHeightFactor, birdPos, healthPos;
-	private boolean hasJetpack, hasBird, birdActive, hasArmor, stopTime;
+	private boolean hasJetpack, hasBird, birdActive, hasArmor, slowTime;
 	private int birdMaxDy, birdMaxDx;
 	private double birdX, birdY;
 	private Enemy chosenEnemy;
@@ -214,9 +214,9 @@ public class Player extends MapObject
 		hasJetpack = false; 
 		hasBird = false; 
 		hasArmor = false;
-		stopTime = isUnderEffect = hasJetpack  = hasBird = false;
+		slowTime = isUnderEffect = hasJetpack  = hasBird = false;
 		jumpHeightFactor = 1;
-		stopTime = isUnderEffect = hasJetpack = birdActive = hasBird = false;
+		slowTime = isUnderEffect = hasJetpack = birdActive = hasBird = false;
 		birdMaxDy = 4;
 		birdMaxDx = 4;
 		birdX = 0;
@@ -260,8 +260,9 @@ public class Player extends MapObject
 		{
 			if(Level1State.tileStart && tm.getMoving())
 			{
-				if(dy >= 0) tm.setYVector(2.0);
-				tm.setYVector(-dy + 2);
+				
+				if (dy >= 0) tm.setYVector(2.0);
+				else tm.setYVector(-dy + 2);
 				if(dy > 0) y += (dy);
 			}
 			else
@@ -271,7 +272,7 @@ public class Player extends MapObject
 		}
 		else 
 		{	
-			if(stopTime) tm.setYVector(0.5);
+			if(slowTime) tm.setYVector(0.5);
 			else if(Level1State.tileStart) tm.setYVector(2.0);
 			y += dy;
 		}
@@ -374,7 +375,7 @@ public class Player extends MapObject
 		if (!isBlinking)
 		{
 			//creates the "blur" effect  - to occur only when time is slowed
-			if(stopTime)
+			if(slowTime)
 			{
 				float[] scales = { 1f, 1f, 1f, 1f };
 			    float[] offsets = new float[4];
@@ -811,7 +812,7 @@ public class Player extends MapObject
 			}
 			case 5:
 			{
-				stopTime = true;
+				slowTime = true;
 				jumpHeightFactor = 1.2;
 				break;
 			}
@@ -826,7 +827,7 @@ public class Player extends MapObject
 		isUnderEffect = false;
 		hasJetpack = false;
 		hasArmor = false;
-		stopTime = false;
+		slowTime = false;
 		charBlurPos = new ArrayList<Integer>();
 		jumpHeightFactor = 1;
 		System.out.println("Effect ended");

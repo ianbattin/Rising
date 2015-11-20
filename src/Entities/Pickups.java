@@ -139,7 +139,7 @@ public class Pickups extends MapObject {
 				coolDownTime = 100000000000L;
 				willDrawPickup = true;
 				//set the pickup type.
-				effectType = 3;//(int)(Math.random()*6);
+				effectType = 5;//(int)(Math.random()*6);
 				
 				//sets starting points for the spawning of the pickups
 				startingPositionOffset = -(Math.random()*GamePanel.HEIGHTSCALED/2);
@@ -229,11 +229,7 @@ public class Pickups extends MapObject {
 	
 	public void effectStart()
 	{
-		if(effectType == 3)
-		{
-			
-		}
-		else if(effectType == 5) 
+		if(effectType == 5)
 		{
 			playState.setBackgroundVector(0, -1);
 			playState.setDebrisVectors(0.5);
