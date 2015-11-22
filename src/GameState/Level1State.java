@@ -131,6 +131,14 @@ public class Level1State extends PlayState
 			else
 			{
 				transitionDY = 0;
+				//removes all non-boss entities
+				for(int i = 0; i < enemies.size(); i++)
+				{
+					if(!(enemies.get(i) instanceof PlaneBoss))
+					{
+						enemies.get(i).playerHurt(50);
+					}
+				}
 				if(enemies.size() <= 1)
 				{
 					enemies.add(new PlaneBoss(2000, -200, tileMap, player));

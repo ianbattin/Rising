@@ -234,6 +234,7 @@ public class Player extends MapObject
 		if (health > 0)
 		{
 			myCheckCollision(tm);
+			getAttack();
 		}
 		else
 		{
@@ -242,7 +243,7 @@ public class Player extends MapObject
 		}
 		getMovement();
 		getAnimation();
-		getAttack();
+		
 		
 		for(int i = 0; i < bullets.size(); i++)
 		{	
@@ -351,107 +352,7 @@ public class Player extends MapObject
 		}
 		
 		setMapPosition();
-		if (!isBlinking)
-		{
-			//creates the "blur" effect  - to occur only when time is slowed
-			if(slowTime)
-			{
-				float[] scales = { 1f, 1f, 1f, 1f };
-			    float[] offsets = new float[4];
-			
-			    scales[3] = 0.15f;
-
-				RescaleOp rop = new RescaleOp(scales, offsets, null);
-				BufferedImage fadIm = rop.filter(animation.getImage(), null);
-				
-				for(int i = 0; i < charBlurPos.size(); i+=2)
-				{
-					if(facingRight)
-						g.drawImage(fadIm, (int)(charBlurPos.get(i)), (int)(charBlurPos.get(i+1)), width, height, null);
-					else
-						g.drawImage(fadIm, (int)(charBlurPos.get(i) + width), (int)(charBlurPos.get(i+1)), -width, height, null);
-					
-					charBlurPos.set(i, charBlurPos.get(i)-(int)dx);
-					charBlurPos.set(i+1, charBlurPos.get(i+1)-(int)dy/2);
-				}
-				if(charBlurPos.size()>10)
-				{
-					charBlurPos.remove(0);
-					charBlurPos.remove(0);
-				}
-				
-				charBlurPos.add((int)(x + xmap - width / 2));
-				charBlurPos.add((int)(y + ymap - height / 2));
-			}
-			if(facingRight)
-			{
-				g.drawImage(animation.getImage(), (int)(x + xmap - width / 2), (int)(y + ymap - height / 2), width, height, null);
-			}
-			else
-			{
-				g.drawImage(animation.getImage(), (int)(x + xmap - width / 2 + width), (int)(y + ymap - height / 2), -width, height, null);
-			}
-		}
-	
-		if(hasBird && !birdActive)
-		{
-			//replace with image when bird is drawn. Use current X & Y calculations for the position however
-			birdX = (x+(50*Math.cos(Math.toRadians(birdPos))));
-			birdY = (y-50-(5*Math.sin(Math.toRadians(birdPos))));
-			g.fillRect((int)birdX, (int)birdY, 10, 10);
-
-		}
-		else if(hasBird && birdActive)
-		{
-		    double slope = (chosenEnemy.getY()-birdY)/(chosenEnemy.getX()-birdX);
-		    double angle = Math.atan((double)slope);
-		    
-			if(chosenEnemy.getX() < birdX && chosenEnemy.getX() > 0)
-			{
-				birdX = birdX -(8*Math.cos(angle));
-			}
-			else if(chosenEnemy.getX() > birdX && chosenEnemy.getX() > 0)
-			{
-				birdX = birdX + (8*Math.cos(angle));
-			}
-			
-			if(chosenEnemy.getY() < birdY && chosenEnemy.getY() > 0)
-			{
-				birdY = birdY - Math.abs((8*Math.sin(angle)));
-			}
-			else if(chosenEnemy.getY() > birdY && chosenEnemy.getY() > 0)
-			{
-				birdY = birdY + Math.abs((8*Math.sin(angle)));
-			}
-
-			if(birdY+10 >= chosenEnemy.getY() && birdY-10 <= chosenEnemy.getY() && birdX+10 >= chosenEnemy.getX() && birdX-10 <= chosenEnemy.getX()) 
-			{
-				chosenEnemy.playerHurt(50);
-				hasBird = false;
-				birdActive = false;
-			}
-			g.fillRect((int)birdX, (int)birdY, 10, 10);
-		}
-		
-		if(healing)
-		{
-			float[] scales = { 1f, 1f, 1f, 1f };
-		    float[] offsets = new float[4];
-		
-		    scales[3] = healthAphaVal/255f;
-
-			RescaleOp rop = new RescaleOp(scales, offsets, null);
-			BufferedImage fadIm = rop.filter(heartImages.get(2), null);
-			
-			g.drawImage(fadIm, (int)(x+(50*Math.cos(Math.toRadians(healthPos)))), (int)(y-40-(healthPos/4)), 20, 20, null);
-
-			healthAphaVal-=2;
-			if (healthAphaVal <= 0)
-			{
-				healthAphaVal = 255;
-				healing = false;
-			}
-		}
+		drawEffects(g);
 		
 		for(Projectile p: bullets)
 		{
@@ -779,10 +680,15 @@ public class Player extends MapObject
 				dy = -2.0;
 				if(dx >= 0) dx = -2.0;
 				else dx = 2.0;
-				numOfFramesToAnimHealth = 0;
-				//timesToLoop = 1;
 				recovering = true;
-				recoverTimer = System.nanoTime();
+				numOfFramesToAnimHealth = 0;
+				if(health > 0)
+					recoverTimer = System.nanoTime();
+				else
+				{
+					numOfFramesToAnimHealth = -500;
+					recoverTimer = System.nanoTime();
+				}
 			}
 		}
 	}
@@ -842,6 +748,111 @@ public class Player extends MapObject
 		charBlurPos = new ArrayList<Integer>();
 		jumpHeightFactor = 1;
 		System.out.println("Effect ended");
+	}
+	
+	public void drawEffects(Graphics2D g)
+	{
+		if (!isBlinking)
+		{
+			//creates the "blur" effect  - to occur only when time is slowed
+			if(slowTime)
+			{
+				float[] scales = { 1f, 1f, 1f, 1f };
+			    float[] offsets = new float[4];
+			
+			    scales[3] = 0.15f;
+
+				RescaleOp rop = new RescaleOp(scales, offsets, null);
+				BufferedImage fadIm = rop.filter(animation.getImage(), null);
+				
+				for(int i = 0; i < charBlurPos.size(); i+=2)
+				{
+					if(facingRight)
+						g.drawImage(fadIm, (int)(charBlurPos.get(i)), (int)(charBlurPos.get(i+1)), width, height, null);
+					else
+						g.drawImage(fadIm, (int)(charBlurPos.get(i) + width), (int)(charBlurPos.get(i+1)), -width, height, null);
+					
+					charBlurPos.set(i, charBlurPos.get(i)-(int)dx);
+					charBlurPos.set(i+1, charBlurPos.get(i+1)-(int)dy/2);
+				}
+				if(charBlurPos.size()>10)
+				{
+					charBlurPos.remove(0);
+					charBlurPos.remove(0);
+				}
+				
+				charBlurPos.add((int)(x + xmap - width / 2));
+				charBlurPos.add((int)(y + ymap - height / 2));
+			}
+			if(facingRight)
+			{
+				g.drawImage(animation.getImage(), (int)(x + xmap - width / 2), (int)(y + ymap - height / 2), width, height, null);
+			}
+			else
+			{
+				g.drawImage(animation.getImage(), (int)(x + xmap - width / 2 + width), (int)(y + ymap - height / 2), -width, height, null);
+			}
+		}
+	
+		if(hasBird && !birdActive)
+		{
+			//replace with image when bird is drawn. Use current X & Y calculations for the position however
+			birdX = (x+(50*Math.cos(Math.toRadians(birdPos))));
+			birdY = (y-50-(5*Math.sin(Math.toRadians(birdPos))));
+			g.fillRect((int)birdX, (int)birdY, 10, 10);
+
+		}
+		else if(hasBird && birdActive)
+		{
+		    double slope = (chosenEnemy.getY()-birdY)/(chosenEnemy.getX()-birdX);
+		    double angle = Math.atan((double)slope);
+		    
+			if(chosenEnemy.getX() < birdX && chosenEnemy.getX() > 0)
+			{
+				birdX = birdX -(8*Math.cos(angle));
+			}
+			else if(chosenEnemy.getX() > birdX && chosenEnemy.getX() > 0)
+			{
+				birdX = birdX + (8*Math.cos(angle));
+			}
+			
+			if(chosenEnemy.getY() < birdY && chosenEnemy.getY() > 0)
+			{
+				birdY = birdY - Math.abs((8*Math.sin(angle)));
+			}
+			else if(chosenEnemy.getY() > birdY && chosenEnemy.getY() > 0)
+			{
+				birdY = birdY + Math.abs((8*Math.sin(angle)));
+			}
+
+			if(birdY+10 >= chosenEnemy.getY() && birdY-10 <= chosenEnemy.getY() && birdX+10 >= chosenEnemy.getX() && birdX-10 <= chosenEnemy.getX()) 
+			{
+				chosenEnemy.playerHurt(50);
+				hasBird = false;
+				birdActive = false;
+			}
+			g.fillRect((int)birdX, (int)birdY, 10, 10);
+		}
+		
+		if(healing)
+		{
+			float[] scales = { 1f, 1f, 1f, 1f };
+		    float[] offsets = new float[4];
+		
+		    scales[3] = healthAphaVal/255f;
+
+			RescaleOp rop = new RescaleOp(scales, offsets, null);
+			BufferedImage fadIm = rop.filter(heartImages.get(2), null);
+			
+			g.drawImage(fadIm, (int)(x+(50*Math.cos(Math.toRadians(healthPos)))), (int)(y-40-(healthPos/4)), 20, 20, null);
+
+			healthAphaVal-=2;
+			if (healthAphaVal <= 0)
+			{
+				healthAphaVal = 255;
+				healing = false;
+			}
+		}
 	}
 	
 	public int getPoints()
@@ -989,7 +1000,6 @@ public class Player extends MapObject
 		}
 	}
 
-	@Override
 	public void collided(MapObject m) 
 	{
 
