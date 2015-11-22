@@ -279,7 +279,7 @@ public class Boss1State extends PlayState
 							done = true;
 						}
 						long elapsed = (System.nanoTime() - timer) / 1000000;
-						if(4000 <= elapsed)
+						if(2000 <= elapsed)
 						{
 							((PlaneBoss) enemies.get(0)).setMoveComplete(false);
 							step = 2;

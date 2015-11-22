@@ -27,7 +27,7 @@ public class PlaneBoss extends Enemy {
 		
 		setMovement = false;
 		
-		recoverLength = 100;
+		recoverLength = 5;
 		
 		moveSpeed = 10.0;
 		maxSpeedY = 3.0;
@@ -97,6 +97,7 @@ public class PlaneBoss extends Enemy {
 		setMapPosition();
 
 		g.setColor(Color.BLACK);
+		if(recovering) g.setColor(Color.RED);
 		g.fillRect((int)x, (int)y, width, height);
 //		if(facingRight)
 //		{
@@ -257,6 +258,8 @@ public class PlaneBoss extends Enemy {
 		}
 		else
 		{
+			recovering = true;
+			recoverTimer = System.nanoTime();
 			health -= amount;
 			numOfFramesToAnimHealth = 10;
 			timesToLoop = 5;
