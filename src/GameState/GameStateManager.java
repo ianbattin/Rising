@@ -56,7 +56,7 @@ public class GameStateManager
 		gameStates.add(new CreditState(this));
 		gameStates.add(new TransitionState(this, "Intro"));
 		gameStates.add(new Level1State(this));
-		gameStates.add(new TransitionState(this, "Intro"));
+		gameStates.add(new TransitionState(this, "Outro"));
 		gameStates.add(new Boss1State(this, ((PlayState) (gameStates.get(LEVEL1STATE))).getPlayer()));
 		gameStates.add(new OutroState(this));
 		data = new String[gameStates.size()];
@@ -97,7 +97,6 @@ public class GameStateManager
 	//to have this method in the GSM as the GSM is managing the states, which reseting is a part of
 	public void resetState(int state)
 	{
-		setState(MENUSTATE);
 		GameState stateAtPos = gameStates.get(state);
 		gameStates.remove(state);
 		if(stateAtPos instanceof SplashState) gameStates.add(state, new SplashState(this));

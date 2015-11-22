@@ -140,8 +140,9 @@ public abstract class MapObject
 	public void myCheckCollision(TileMap tm)
 	{
 		boolean collided = false;
-		for(Tile t: tiles)
+		for(int i = 0; i < tiles.size(); i++)
 		{
+			Tile t = tiles.get(i);
 			double collisionLeft = t.left;
 			double collisionRight = t.right;
 			double collisionTop = t.top;
@@ -248,6 +249,8 @@ public abstract class MapObject
 		}
 	}
 
+	public void setX(double x) {	this.x = x;	}
+	public void setY(double y) { this.y = y;	}
 	public double getX() {	return x;	}
 	public double getY() {	return y;	}
 	public double getDX() {	return dx; }
@@ -256,6 +259,16 @@ public abstract class MapObject
 	public int getHeight() {	return height;	}
 	public int getCWidth() {	return cwidth;	}
 	public int getCHeight() {	return cheight;	}
+	
+	public ArrayList<Tile> getTiles()
+	{
+		return tiles;
+	}
+	
+	public void addTile(Tile t)
+	{
+		tiles.add(t);
+	}
 	
 	public void setPosition(double x, double y)
 	{

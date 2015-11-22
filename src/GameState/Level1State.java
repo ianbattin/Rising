@@ -75,6 +75,7 @@ public class Level1State extends PlayState
 				debrisInfo[i][3] = (int)(Math.random()*170);
 			}
 		}
+		tileStart = false;
 		bgVectorX = 0;
 		bgVectorY = 0;
 		debrisVector = 0;
@@ -85,6 +86,7 @@ public class Level1State extends PlayState
 		tileMap = new TileMap("Resources/Maps/level5.txt");
 		player = new Player(tileMap, this);
 		player.setPosition(400, -100);
+		player.setTileMapMoving(true);
 		enemies = new ArrayList<Enemy>();
 		pickups = new Pickups(player, tileMap, this);
 		tileStart = false;
@@ -132,7 +134,6 @@ public class Level1State extends PlayState
 				if(enemies.size() <= 1)
 				{
 					enemies.add(new PlaneBoss(2000, -200, tileMap, player));
-					System.out.println("Yep");
 				}
 			}
 			tileMap.setYVector(transitionDY);
@@ -253,6 +254,11 @@ public class Level1State extends PlayState
 		if(k == KeyEvent.VK_P)
 		{
 			enemies.add(new PlaneBoss(1000, 100, tileMap, player));
+		}
+		if(k == KeyEvent.VK_N)
+		{
+			gsm.setCurrentState(GameStateManager.BOSS1STATE);
+			gsm.resetState(GameStateManager.LEVEL1STATE);
 		}
 	}
 

@@ -12,6 +12,7 @@ public class TransitionState extends GameState {
 
 	private Background bg;
 	private GameStateManager gsm;
+	private String path;
 	
 	private float timer;
 	private int currFrame, totalFrames;//, alphaLevel;
@@ -19,10 +20,20 @@ public class TransitionState extends GameState {
 	public TransitionState(GameStateManager gsm, String path)
 	{
 		this.gsm = gsm;
+		this.path = path;
 		
 		timer = 0;
 		currFrame = 1; //set the starting frame number.
-		totalFrames = 5; //set last frame number
+
+		switch(path)
+		{
+			case "Intro":
+				totalFrames = 5;
+				break;
+			case "Outro":
+				totalFrames = 1;
+				break;
+		}
 		
 		super.isFadingOut = false;
 		super.isFadingIn = true;
@@ -52,7 +63,15 @@ public class TransitionState extends GameState {
 		}
 		else if (super.isFadingOut)
 		{
-			super.fadeOut(1000000000.0, gsm, GameStateManager.INTROSTATE, GameStateManager.LEVEL1STATE);
+			switch(path)
+			{
+				case "Intro":
+					super.fadeOut(1000000000.0, gsm, GameStateManager.INTROSTATE, GameStateManager.LEVEL1STATE);
+					break;
+				case "Outro":
+					super.fadeOut(1000000000.0, gsm, GameStateManager.TRANSITION1STATE, GameStateManager.BOSS1STATE);
+			}
+			
 		}
 		else
 		{
@@ -62,7 +81,7 @@ public class TransitionState extends GameState {
 				if (currFrame < totalFrames)
 				{
 					currFrame++;
-					bg.setNewImage("/Intro/frame" + currFrame + ".gif");
+					bg.setNewImage("/" + path + "/frame" + currFrame + ".gif");
 				}
 				else
 				{

@@ -18,8 +18,8 @@ public class TileMap
 {
 	private int x;
 	private int y;
-	private int xMove;
-	private int yMove;
+	private double xMove;
+	private double yMove;
 	private double dx;
 	private double dy;
 	private boolean moving;
@@ -101,11 +101,6 @@ public class TileMap
 		
 		//load sprites into sprites array
 		sprites = new BufferedImage[spritesheet.getHeight()/25 * spritesheet.getWidth()/25];
-//		for(int i = 0; i < sprites.length; i++)
-//		{
-//			if(i < 20) sprites[i] = spritesheet.getSubimage(i * tileSize, 0, tileSize, tileSize);
-//			else sprites[i] = spritesheet.getSubimage((i-20) * tileSize, tileSize, tileSize, tileSize);
-//		}
 		int count = 0;
 		for(int row = 0; row < spritesheet.getHeight() / tileSize; row++)
 		{
@@ -214,12 +209,26 @@ public class TileMap
 		return showCollisonBox;
 	}
 	
-	public void setX(int x) {	this.x = x;	}
-	public void setY( int y) {	this.y = y;	}
+	public void setX(int x) 
+	{	
+		xMove = x;
+		for(Tile t: tiles)
+		{
+			t.setX(t.getX() + x);
+		}
+	}
+	public void setY( int y) 
+	{	
+		yMove = y;
+		for(Tile t: tiles)
+		{
+			t.setY(t.getY() + y);
+		}
+	}
 	public int getX() {	return x;	}
 	public int getY() {	return y;	}
-	public int getXMove() {	return xMove;	}
-	public int getYMove() {	return yMove;	}
+	public double getXMove() {	return xMove;	}
+	public double getYMove() {	return yMove;	}
 	public double getDX() { return dx; }
 	public double getDY() { return dy; }
 }

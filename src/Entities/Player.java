@@ -71,6 +71,7 @@ public class Player extends MapObject
 	private ArrayList<BufferedImage[]> playerSprites;
 	private ArrayList<BufferedImage[]> playerHurtSprites;
 	private final int[] numFrames = { 1, 4, 3, 3, 4 };
+	private boolean tileMapMoving;
 	
 	//animation actions
 	private static final int IDLE = 0;
@@ -253,28 +254,6 @@ public class Player extends MapObject
 			}
 			bullets.get(i).update();
 			if(bullets.get(i).notOnScreen()) bullets.remove(i);
-		}
-
-		x += (dx + tm.getDX());
-		if(y < 300) 
-		{
-			if(Level1State.tileStart && tm.getMoving())
-			{
-				
-				if (dy >= 0) tm.setYVector(2.0);
-				else tm.setYVector(-dy + 2);
-				if(dy > 0) y += (dy);
-			}
-			else
-			{
-				y += dy;
-			}
-		}
-		else 
-		{	
-			if(slowTime) tm.setYVector(0.5);
-			else if(Level1State.tileStart) tm.setYVector(2.0);
-			y += dy;
 		}
 		
 		yFromBottom += (-dy + tm.getDY());
@@ -636,6 +615,33 @@ public class Player extends MapObject
 		}
 		else
 			fallingAnim = false;
+		
+		x += (dx + tm.getDX());
+		if(tileMapMoving)
+		{
+			if(y < 300) 
+			{
+				if(Level1State.tileStart && tm.getMoving())
+				{
+
+					if (dy >= 0) tm.setYVector(2.0);
+					else tm.setYVector(-dy + 2);
+					if(dy > 0) y += (dy);
+				}
+				else
+				{
+					y += dy;
+				}
+			}
+			else 
+			{	
+				if(slowTime) tm.setYVector(0.5);
+				else if(Level1State.tileStart) tm.setYVector(2.0);
+				y += dy;
+			}
+		}
+		else
+			y += dy;
 	}
 	
 	public void getAnimation()
@@ -730,6 +736,11 @@ public class Player extends MapObject
 	public double getCharacterY()
 	{
 		return this.yFromBottom;
+	}
+	
+	public void setTileMapMoving(boolean b)
+	{
+		tileMapMoving = b;
 	}
 
 	public int getScore()

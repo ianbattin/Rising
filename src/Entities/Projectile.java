@@ -67,6 +67,15 @@ public class Projectile extends MapObject
 				playerCollide = false;
 				break;
 			}
+			case 4:
+			{
+				moveSpeed = 8.0;
+				width = 15;
+				height = 15;
+				damage = 0;
+				playerCollide = false;
+				break;
+			}
 		}
 	}
 
@@ -99,18 +108,27 @@ public class Projectile extends MapObject
 	@Override
 	public void collided(int type, Tile t) 
 	{
-		if(t.getType() == 17)
+		if(t.getBulletCollision())
 		{
-			t.setType(0);
-			remove = true;
+			if(t.getType() == 17)
+			{
+				t.setType(0);
+				remove = true;
+			}
+			else if(this.type == 3)
+			{
+				t.setType(0);
+				remove = true;
+			}
+			else if(this.type == 4)
+			{
+				getTiles().add(new Tile(t.getX(), t.getY() - 25, 17, t.getSize(), tileMap));
+				getTiles().get(getTiles().size()-1).init();
+				remove = true;
+			}
+			else
+				remove = true;
 		}
-		else if(this.type == 3)
-		{
-			t.setType(0);
-			remove = true;
-		}
-		else
-			remove = true;
 	}
 
 	@Override

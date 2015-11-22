@@ -12,6 +12,10 @@ import TileMap.TileMap;
 
 public class PlaneBoss extends Enemy {
 
+	private boolean setMovement;
+	private boolean moveComplete;
+	private int typeAttack;
+
 	public PlaneBoss(int x, int y, TileMap tm, Player player) 
 	{
 		super(x, y, tm, player);
@@ -19,12 +23,16 @@ public class PlaneBoss extends Enemy {
 		bullets = new ArrayList<Projectile>();
 		firing = false;
 		fireDelay = 10;
+		typeAttack = 1;
+		
+		setMovement = false;
 		
 		recoverLength = 100;
 		
-		moveSpeed = 1.0;
+		moveSpeed = 10.0;
 		maxSpeedY = 3.0;
 		maxSpeedX = 7.0;
+		maxSpeed = 10.0;
 		stopSpeed = 0.4;
 		fallSpeed = 0.25;
 		maxFallSpeed = 7.0;
@@ -38,7 +46,7 @@ public class PlaneBoss extends Enemy {
 		facingRight = false;
 		
 		//health
-		health = 10;
+		health = 100;
 	}
 
 	@Override
@@ -57,11 +65,9 @@ public class PlaneBoss extends Enemy {
 
 		x += tm.getDX();
 		y += tm.getDY();
-
+		
 		getAnimation();
 		getBulletCollision();
-
-		yFromBottom += (-dy + tm.getDY());
 
 		if (numOfFramesToAnimHealth  > 0 && timesToLoop%2 == 1)
 		{
@@ -110,7 +116,7 @@ public class PlaneBoss extends Enemy {
 	@Override
 	public void getAttack() 
 	{
-		if(tileMap.getSpriteSheet().equals("/Sprites/Tiles/FullTileSet.png"))
+		if(typeAttack == 1)
 		{
 			for(Tile t: tileMap.getTiles())
 			{
@@ -118,10 +124,10 @@ public class PlaneBoss extends Enemy {
 				{
 					relX = (int) (this.x - (int)t.getX());
 					relY = (int) (this.y - (int)t.getY());
-					this.setAngle(Math.atan2(-relY, -relX));
+					angle = Math.atan2(-relY, -relX);
 					if(angle > 3.5) angle = 3.5;
 					if(angle < 2.5) angle = 2.5;
-					this.setAngle(angle + Math.random()*Math.PI/58 - Math.PI/58);
+					angle +=  Math.random()*Math.PI/58 - Math.PI/58;
 
 					if(relX < 1000)
 					{
@@ -143,12 +149,12 @@ public class PlaneBoss extends Enemy {
 				}
 			}
 		}
-		else
+		else if(typeAttack == 2)
 		{
 			relX = (int) (this.x - (int)player.getX());
 			relY = (int) (this.y - (int)player.getY());
-			this.setAngle(Math.atan2(-relY, -relX));
-			this.setAngle(angle + Math.random()*Math.PI/12 - Math.PI/12);
+			angle = Math.atan2(-relY, -relX);
+			angle += Math.random()*Math.PI/12 - Math.PI/12;
 
 			firing = true;
 
@@ -163,12 +169,32 @@ public class PlaneBoss extends Enemy {
 				}
 			}
 		}
+		else if(typeAttack == 3)
+		{
+			relX = (int) (this.x - (int)player.getX());
+			relY = (int) (this.y - (int)player.getY());
+			angle = 2.5;
+
+			fireDelay = 100;
+			firing = true;
+
+			if(firing)
+			{
+
+				long elapsed= (System.nanoTime() - fireTimer) / 1000000;
+				if(fireDelay <= elapsed*(0.5*super.slowDown))
+				{
+					bullets.add(new Projectile(x, y, angle, 4, tm));
+					fireTimer = System.nanoTime();
+				}
+			}
+		}
 	}
 
 	@Override
 	public void getMovement() 
 	{
-		if(tileMap.getSpriteSheet().equals("/Sprites/Tiles/FullTileSet.png"))
+		if(tileMap.getSpriteSheet().equals("/Sprites/Tiles/FullTileSet.png") && !setMovement)
 		{
 			dx -= moveSpeed;
 			if(dx < -(maxSpeedX*super.slowDown)) dx = -(maxSpeedX*super.slowDown);
@@ -177,7 +203,71 @@ public class PlaneBoss extends Enemy {
 		x += dx;
 		y += dy;
 	}
+	
+	public void setMovement(double startX, double startY, double endX, double endY, double speed, int typeAttack)
+	{
+		this.typeAttack = typeAttack;
+		moveComplete = false;
+		setMovement = true;
+		
+		double differenceX = endX - startX;
+		double differenceY = endY - startY;
+		
+		if(differenceX < 0)
+		{
+			moveSpeed = -maxSpeed;
+		}
+		else
+			moveSpeed = maxSpeed;
+			
+		if((endX - 10 < x && x < endX + 10))
+		{
+			dx = 0;
+		}
+		else
+		{
+			dx = moveSpeed / (1/speed);
+		}
+		
+		if((endY - 10 < y && y < endY + 10))
+		{
+			dy = 0;
+		}
+		else
+		{
+			dy = dx * (differenceY / differenceX);
+		}
+		
+		if((dx == 0 && dy == 0) || (dx == -0 && dy == -0) || (dx == 0 && dy == -0) || (dx == -0 && dy == 0))
+		{
+			moveComplete = true;
+		}
+	}
 
+	@Override
+	public void playerHurt(int amount)
+	{
+		if(recovering || health <= 0)
+		{
+			long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
+			if(recoverLength <= elapsed)
+			{
+				recovering = false;
+			}
+		}
+		else
+		{
+			health -= amount;
+			numOfFramesToAnimHealth = 10;
+			timesToLoop = 5;
+		}
+	}
+	
+	public boolean getMoveComplete()
+	{
+		return moveComplete;
+	}
+	
 	@Override
 	public void getAnimation() {
 		// TODO Auto-generated method stub
@@ -194,6 +284,11 @@ public class PlaneBoss extends Enemy {
 	public void collided(MapObject m) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void setMoveComplete(boolean b) 
+	{
+		moveComplete = b;
 	}
 
 }

@@ -48,7 +48,7 @@ public abstract class Enemy extends MapObject
 	//slowdown (when player picks up powerup)
 	protected float slowDown;
 	
-	public Enemy(int x, int y, TileMap tm, Player player)
+	public Enemy(double x, double y, TileMap tm, Player player)
 	{
 		super(tm);
 		this.x = x;

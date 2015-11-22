@@ -32,6 +32,8 @@ public class Tile
 	private int frames;
 	private boolean animated = false;
 	
+	private boolean bulletCollision;
+	
 	private int type;
 	private boolean blocked = true;
 	public static final int AIR = 0; //able to pass through
@@ -61,20 +63,27 @@ public class Tile
 		if(type < 17)
 		{
 			frames = 1;
+			bulletCollision = true;
 		}
 		else if(type == 17) 
 		{
 			frames = 3;
 			blocked = false;
 			animated = true;
+			bulletCollision = true;
 		}
 		else if(type == 20)
 		{
 			frames = 4;
 			blocked = true;
 			animated = false;
+			bulletCollision = false;
 		}
-		else frames = 1;
+		else
+		{
+			bulletCollision = true;
+			frames = 1;
+		}
 		
 		images = new BufferedImage[frames];
 	}
@@ -143,11 +152,22 @@ public class Tile
 	public void setType(int i) { type = i; };
 	public double getX(){	return x;	}
 	public double getY(){	return y;	}
+	public int getSize() { return size; }
 	public void setAnimated(boolean b) { animated = b; }
 	public boolean getAnimated() { return animated; }
 	public boolean getBlocked() { return blocked; }
 	public void setX(double x) { this.x = x; }
 	public void setY(double y) {this.y = y; }
+	
+	public void setBulletCollision(boolean b)
+	{
+		bulletCollision = b;
+	}
+	
+	public boolean getBulletCollision()
+	{
+		return bulletCollision;
+	}
 
 	public Rectangle getRectangle() 
 	{

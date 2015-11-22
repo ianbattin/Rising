@@ -23,7 +23,7 @@ public class Jetpacker extends Enemy
 	private static final int JUMPING = 2;
 	private static final int FALLING = 3;
 	
-	public Jetpacker(int x, int y, TileMap tm, Player player) 
+	public Jetpacker(double x, double y, TileMap tm, Player player) 
 	{
 		super(x, y, tm, player);
 		
@@ -104,7 +104,7 @@ public class Jetpacker extends Enemy
 		falling = true;
 		
 		//health
-		health = 3;
+		health = 1;
 	}
 	
 	public void update() 

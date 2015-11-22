@@ -14,11 +14,14 @@ import java.util.TimerTask;
 import java.util.ArrayList;
 
 import Entities.Player;
+import Entities.Projectile;
 import Entities.Enemy;
 import Entities.Jetpacker;
 import Entities.Pickups;
+import Entities.PlaneBoss;
 import Main.GamePanel;
 import TileMap.Background;
+import TileMap.Tile;
 import TileMap.TileMap;
 
 
@@ -40,24 +43,35 @@ public class Boss1State extends PlayState
 	private int[][] debrisInfo;
 	private ArrayList<Color> colors;
 	private boolean start, isStillAlive;
-	private float timer;
+	private float deathTimer;
 	public static boolean tileStart;
 	private TileMap tileMap;
 	
+	private long timer;
+	
 	private boolean setUp = false;
+	private boolean done;
+	private int stage;
+	private int step;
+	
+	private double planeX, planeY;
 
 	private double bgVectorX, bgVectorY;
 	private double debrisVector;
+	private boolean drawBossHealth;
 
 	public Boss1State(GameStateManager gsm, Player player)
 	{
 		init();
+		stage = 0;
+		step = 0;
+		done = false;
 		
 		otherPlayer = player;
 		
 		this.gsm = gsm;
 		start = false;
-		timer = 0;
+		deathTimer = 0;
 		//create & stores all the necessary colors (avoid creating too many color objects)
 		colors = new ArrayList<Color>();
 		for(int i = 25; i < 195; i++)
@@ -85,7 +99,9 @@ public class Boss1State extends PlayState
 	{
 		tileMap = new TileMap("Resources/Maps/boss1.txt");
 		tileMap.setVector(0, 0);
+		tileMap.setY(tileMap.getY() + 175);
 		player = new Player(tileMap, this);
+		player.setTileMapMoving(false);
 		pickups = new Pickups(player, tileMap, this);
 		enemies = new ArrayList<Enemy>();
 		tileStart = false;
@@ -98,47 +114,22 @@ public class Boss1State extends PlayState
 			e.printStackTrace();
 		}
 		
-		setBackgroundVector(10.0, 0);
+		setBackgroundVector(0, 5.0);
 		setDebrisVectors(1);
 	}
 
 	public void update()
 	{
-		if(!setUp)
-		{
-			this.player.setPosition(otherPlayer.getX(), otherPlayer.getY());
-			this.player.setXVector(otherPlayer.getDX());
-			this.player.setYVector(otherPlayer.getDY());
-			this.player.setHealth(otherPlayer.getHealth());
-			setUp = true;
-		}
-		
-		bg.update();
-		tileMap.update();
-		pickups.update();
-		player.update();
-		for(Enemy e: enemies)
-			e.update();
-
-		if(player.getPlayerHealth() < 1 && timer > 1500000000.0)
-		{
-			super.isFadingOut = true;
-			super.fadeOut(500000000, gsm, GameStateManager.LEVEL1STATE, GameStateManager.OUTROSTATE);
-		}
-		else if (player.getPlayerHealth() < 1)
-		{
-			timer += GamePanel.getElapsedTime();
-		}
-
-		//save data (in this case the points)
-		super.data = Integer.toString(player.getPoints());
+		basicChecks();
+		script();
 	}
 
 	public void draw(Graphics2D g)
 	{
 		bg.draw(g);
-		player.draw(g);
 		tileMap.draw(g);
+		player.draw(g);
+		
 		pickups.draw(g);
 		for(Enemy e: enemies)
 			e.draw(g);
@@ -148,8 +139,231 @@ public class Boss1State extends PlayState
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("RusselSquare", Font.PLAIN, 24));
 		g.drawString("Score: " + player.getPoints(), centerStringX("Score: " + player.getPoints(), 0, GamePanel.WIDTH, g), 30);
+		
+		if(drawBossHealth) drawBossHealth(g);
 
 		super.drawFade(g);
+	}
+	
+	private void drawBossHealth(Graphics2D g) 
+	{
+		g.setColor(Color.RED);
+		String s = "[";
+		for(int i = 0; i < enemies.get(0).getHealth(); i++)
+		{
+			s += "|";
+		}
+		for(int i = 0; i < 100-enemies.get(0).getHealth(); i++)
+		{
+			s += " ";
+		}
+		s += "]";
+		g.drawString(s, centerStringX(s, 0, GamePanel.WIDTH, g), 100);
+	}
+
+	private void basicChecks() 
+	{
+		if(!setUp)
+		{
+			this.player.setPosition(400, -300);
+			//this.player.setHealth(otherPlayer.getHealth());
+			setUp = true;
+		}
+		
+		bg.update();
+		tileMap.update();
+		pickups.update();
+		player.update();
+		for(int i = 0; i < enemies.size(); i++)
+		{
+			enemies.get(i).update();
+			if(enemies.get(i).getHealth() == 0 && enemies.get(i).getY() > 810)
+			{
+				enemies.remove(i);
+			}
+		}
+
+		if(player.getPlayerHealth() < 1 && deathTimer > 1500000000.0)
+		{
+			super.isFadingOut = true;
+			super.fadeOut(500000000, gsm, GameStateManager.BOSS1STATE, GameStateManager.OUTROSTATE);
+		}
+		else if (player.getPlayerHealth() < 1)
+		{
+			deathTimer += GamePanel.getElapsedTime();
+		}
+
+		//save data (in this case the points)
+		super.data = Integer.toString(player.getPoints());
+	}
+	
+	private void script()
+	{
+		if(enemies.size() == 0)
+		{
+			enemies.add(new PlaneBoss(-2000, 400, tileMap, player));
+		}
+		
+		planeX = ((PlaneBoss) enemies.get(0)).getX();
+		planeY = ((PlaneBoss) enemies.get(0)).getY();
+		
+		//Player falling and being saved by plane
+		if(stage == 0)
+		{
+			switch(step)
+			{
+				case 0:
+				{
+					if(player.getDY() <= 0)
+					{
+						setBackgroundVector(10.0, 0);
+						if(tileMap.getYMove() > 0)
+						{
+							tileMap.setYVector(-1.0);
+						}
+						else
+						{
+							tileMap.setYVector(0);
+							step = 1;
+						}
+					}
+					break;
+				}
+				case 1:
+				{
+					for(Tile t: tileMap.getTiles())
+					{
+						if(t.getY() <= 675)
+						{
+							t.setBulletCollision(false);
+						}
+					}
+					step = 0;
+					stage = 1;
+					break;
+				}
+			}
+		}
+		//Plane gets spawned, doesnt attack yet, but flies past to the right, then comes back from the right and flies past left (shooting but not hurting)
+		else if(stage == 1)
+		{
+			switch(step)
+			{
+				//Plane flies left to right at 1 speed
+				case 0:
+				{
+					if(((PlaneBoss) enemies.get(0)).getMoveComplete() == false)
+					{
+						((PlaneBoss) enemies.get(0)).setMovement(-2000, 400, 1200, 400, 2, 0);
+					}
+					else
+					{
+						((PlaneBoss) enemies.get(0)).setMoveComplete(false);
+						step = 1;
+					}
+					break;
+				}
+					
+				//Plane flies right to middle of screen and waits for 4 seconds at half speed
+				case 1:
+				{
+					if(((PlaneBoss) enemies.get(0)).getMoveComplete() == false)
+					{
+						((PlaneBoss) enemies.get(0)).setMovement(1200, 400, 400, 400, 0.5, 0);
+					}
+					else
+					{
+						if(!done)
+						{
+							timer = System.nanoTime();
+							done = true;
+						}
+						long elapsed = (System.nanoTime() - timer) / 1000000;
+						if(4000 <= elapsed)
+						{
+							((PlaneBoss) enemies.get(0)).setMoveComplete(false);
+							step = 2;
+							timer = System.nanoTime();
+						}
+					}
+					break;
+				}
+					
+				//Plane flies from middle of screen to left at 1 speed
+				case 2:
+				{
+					((PlaneBoss) enemies.get(0)).setHealth(100);
+					drawBossHealth = true;
+					if(((PlaneBoss) enemies.get(0)).getMoveComplete() == false)
+					{
+						((PlaneBoss) enemies.get(0)).setMovement(400, 400, -1500, 400, 1, 0);
+					}
+					else
+					{
+						step = 0;
+						stage = 2;
+						((PlaneBoss) enemies.get(0)).setMoveComplete(false);
+					}
+					break;
+				}
+			}
+		}
+		
+		//Attacking stage at 80-100 health;
+		else if(stage == 2)
+		{
+			if(enemies.get(0).getHealth() > 0)
+			{
+				switch(step)
+				{
+					//Plane flies left to right at 1 speed and drops off 3 paratroopers
+					case 0:
+					{
+						if(((PlaneBoss) enemies.get(0)).getMoveComplete() == false)
+						{
+							((PlaneBoss) enemies.get(0)).setMovement(-1500, 400, 1500, 400, 1, 0);
+						}
+						
+						if(enemies.size() == 1 && (180 < planeX  && planeX < 220))
+						{
+							enemies.add(new Jetpacker(planeX, planeY, tileMap, player));
+						}
+						else if(enemies.size() == 2 && (380 < planeX && planeX < 420))
+						{
+							enemies.add(new Jetpacker(planeX, planeY, tileMap, player));
+						}
+						else if(enemies.size() == 3 && (580 < planeX && planeX < 620))
+						{
+							enemies.add(new Jetpacker(planeX, planeY, tileMap, player));
+						}
+						else if(enemies.size() == 1 && planeX > 800)
+						{
+							step = 1;
+							((PlaneBoss) enemies.get(0)).setMoveComplete(false);
+						}	
+						break;
+					}
+
+					//Plane flies left and shoots fire bullets
+					case 1:
+					{
+						if(((PlaneBoss) enemies.get(0)).getMoveComplete() == false)
+						{
+							((PlaneBoss) enemies.get(0)).setMovement(1500, 400, -1500, 400, 1, 3);
+						}
+						else
+						{
+							step = 0;
+							stage = 2;
+							((PlaneBoss) enemies.get(0)).setMoveComplete(false);
+						}
+						break;
+					}
+				}
+			}
+			else
+				System.out.println("WAHHHHHH");
+		}
 	}
 
 	private void drawCrossHair(Graphics2D g) 
