@@ -115,7 +115,7 @@ public abstract class MapObject
 	
 	public Rectangle getRectangle()
 	{
-		return new Rectangle((int)x - width, (int)y - height, width, height);
+		return new Rectangle((int)x, (int)y, width, height);
 	}
 	
 	public void calculateCorners(double x, double y)

@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
@@ -27,7 +29,7 @@ public class PlaneBoss extends Enemy {
 		
 		setMovement = false;
 		
-		recoverLength = 5;
+		recoverLength = 20;
 		
 		moveSpeed = 10.0;
 		maxSpeedY = 3.0;
@@ -96,8 +98,9 @@ public class PlaneBoss extends Enemy {
 	{
 		setMapPosition();
 
-		g.setColor(Color.BLACK);
 		if(recovering) g.setColor(Color.RED);
+		else g.setColor(Color.BLACK);
+			
 		g.fillRect((int)x, (int)y, width, height);
 //		if(facingRight)
 //		{
@@ -250,19 +253,23 @@ public class PlaneBoss extends Enemy {
 	{
 		if(recovering || health <= 0)
 		{
-			long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
-			if(recoverLength <= elapsed)
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask()
 			{
-				recovering = false;
-			}
+				public void run()
+				{
+					recovering = false;		
+				}
+				
+			}, 10);
 		}
 		else
 		{
-			recovering = true;
-			recoverTimer = System.nanoTime();
 			health -= amount;
 			numOfFramesToAnimHealth = 10;
 			timesToLoop = 5;
+			recovering = true;
+			recoverTimer = System.nanoTime();
 		}
 	}
 	

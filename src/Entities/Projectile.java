@@ -147,6 +147,12 @@ public class Projectile extends MapObject
 				((Enemy) m).playerHurt(damage);
 				remove = true;
 			}
+			
+			if(m instanceof PlaneBoss)
+			{
+				((PlaneBoss) m).playerHurt(damage);
+				remove = true;
+			}
 		}
 	}
 	
