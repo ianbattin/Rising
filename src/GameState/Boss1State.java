@@ -46,6 +46,7 @@ public class Boss1State extends PlayState
 	private float deathTimer;
 	public static boolean tileStart;
 	private TileMap tileMap;
+	private Font healthFont, generalFont;
 	
 	private long timer;
 	
@@ -93,6 +94,9 @@ public class Boss1State extends PlayState
 		bgVectorX = 0;
 		bgVectorY = 0;
 		debrisVector = 0;
+		
+		healthFont = new Font("RusselSquare", Font.PLAIN, (int)(24*(GamePanel.scaleWidth*GamePanel.scaleWidth*GamePanel.scaleWidth)));
+		generalFont = new Font("RusselSquare", Font.PLAIN, 24);
 	}
 
 	public void init() 
@@ -137,7 +141,7 @@ public class Boss1State extends PlayState
 		drawCrossHair(g);
 
 		g.setColor(Color.WHITE);
-		g.setFont(new Font("RusselSquare", Font.PLAIN, 24));
+		g.setFont(generalFont);
 		g.drawString("Score: " + player.getPoints(), centerStringX("Score: " + player.getPoints(), 0, GamePanel.WIDTH, g), 30);
 		
 		if(drawBossHealth) drawBossHealth(g);
@@ -148,6 +152,7 @@ public class Boss1State extends PlayState
 	private void drawBossHealth(Graphics2D g) 
 	{
 		g.setColor(Color.RED);
+		g.setFont(healthFont);
 		String s = "[";
 		for(int i = 0; i < enemies.get(0).getHealth(); i++)
 		{
@@ -235,7 +240,7 @@ public class Boss1State extends PlayState
 					{
 						if(t.getY() <= 675)
 						{
-							t.setBulletCollision(false);
+							//t.setBulletCollision(false);
 						}
 					}
 					step = 0;

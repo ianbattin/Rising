@@ -412,15 +412,7 @@ public class Player extends MapObject
 	
 	public void collided(int type, Tile t)
 	{
-		if(recovering)
-		{
-			long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
-			if(3000 <= elapsed)
-			{
-				recovering = false;
-			}
-		}
-		else if(type == 17) 
+		if(type == 17) 
 		{
 			playerHurt(1);
 		}
@@ -517,7 +509,7 @@ public class Player extends MapObject
 				{
 					public void run()
 					{	
-						jumpHeight = yFromBottom + (100*jumpHeightFactor); //edited to be "effectable"
+						jumpHeight = yFromBottom + (100*jumpHeightFactor);
 						jumped = true;
 					}
 					
@@ -538,12 +530,12 @@ public class Player extends MapObject
 		{
 			if(!doubleJumped)
 			{
-				jumpHeight = yFromBottom + (50.0*jumpHeightFactor); //edited to be "effectable"
+				jumpHeight = yFromBottom + (50.0*jumpHeightFactor);
 				doubleJumped = true;
 			}
 			if(jumped)
 			{
-				if(yFromBottom < jumpHeight) dy = jumpStart*2*jumpHeightFactor; //edited to be "effectable"
+				if(yFromBottom < jumpHeight) dy = jumpStart*2*jumpHeightFactor;
 				if(yFromBottom >= jumpHeight) 
 				{
 					jumpHeight = -9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point

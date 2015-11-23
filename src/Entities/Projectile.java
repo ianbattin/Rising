@@ -91,9 +91,6 @@ public class Projectile extends MapObject
 		y += dy;
 		
 		lifeTime++;
-		
-		//y += tm.getDY();
-		//x += tm.getDX();
 	}
 
 	public void draw(Graphics2D g) 

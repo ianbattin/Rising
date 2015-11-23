@@ -178,7 +178,7 @@ public abstract class MapObject
 			}
 			
 		}
-		if(!collided && !jump && !jumped && !doubleJumped)
+		if(!collided && !jumped && !doubleJumped)
 		{
 			falling = true;
 		}

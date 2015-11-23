@@ -147,12 +147,9 @@ public class Level1State extends PlayState
 			tileMap.setYVector(transitionDY);
 			if(player.getY() > GamePanel.HEIGHT)
 			{
-				super.isFadingOut = true;
 				player.setPosition(400, 900);
-				if(super.isFadingOut)
-				{
-					super.fadeOut(5000000000.0, gsm, GameStateManager.LEVEL1STATE, GameStateManager.TRANSITION1STATE);
-				}
+				super.isFadingOut = true;
+				super.fadeOut(5000000000.0, gsm, GameStateManager.LEVEL1STATE, GameStateManager.TRANSITION1STATE);
 			}
 		}
 		
