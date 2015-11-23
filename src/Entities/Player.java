@@ -166,7 +166,6 @@ public class Player extends MapObject
 			BufferedImage h4 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/emptyHeart2.png"));
 			
 			BufferedImage h5 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/armorHeart.png"));
-
 			
 			heartImages.add(h1);
 			heartImages.add(h2);
