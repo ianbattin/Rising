@@ -139,7 +139,7 @@ public class Pickups extends MapObject {
 				coolDownTime = 100000000000L;
 				willDrawPickup = true;
 				//set the pickup type.
-				effectType = 5;//(int)(Math.random()*6);
+				effectType = 4;//(int)(Math.random()*6);
 				
 				//sets starting points for the spawning of the pickups
 				startingPositionOffset = -(Math.random()*GamePanel.HEIGHTSCALED/2);

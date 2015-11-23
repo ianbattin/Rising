@@ -63,6 +63,9 @@ public class Player extends MapObject
 	private double yFromBottom;
 	
 	//health
+	private int armorBoostHealth;
+	private byte blueInc, redInc, greenInc;
+	private boolean blueChg, redChg, greenChg;
 	private short numOfFramesToAnimHealth, healthAphaVal;
 	private boolean hasFlashed, isBlinking, isFlashing, healing;
 	private ArrayList<BufferedImage> heartImages;
@@ -161,13 +164,16 @@ public class Player extends MapObject
 
 			BufferedImage h3 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/fullHeart2.png"));
 			BufferedImage h4 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/emptyHeart2.png"));
+			
+			BufferedImage h5 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/armorHeart.png"));
 
 			
 			heartImages.add(h1);
 			heartImages.add(h2);
 			heartImages.add(h3);
 			heartImages.add(h4);
-			for (int l = 2; l < heartImages.size(); l++)
+			heartImages.add(h5);
+			for (int l = 2; l < 4; l++)
 			{
 				for (int x = 0; x < heartImages.get(l).getWidth(); x++)
 				{
@@ -180,15 +186,14 @@ public class Player extends MapObject
 						int b = rgb & 0xFF;
 						if (r+150 > 255) r = 255;
 						else r += 150;
-						if (g-25 < 0) r = 0;
+						if (g-25 < 0) g = 0;
 						else g -= 25;
-						if (b-25 < 0) r = 0;
+						if (b-25 < 0) b = 0;
 						else b -= 25;
 						heartImages.get(l).setRGB(x, y, (a*16777216)+(r*65536)+(g*256)+b);
 					}
 				}
 			}
-			
 		}
 		catch(Exception e)
 		{
@@ -223,6 +228,9 @@ public class Player extends MapObject
 		birdX = 0;
 		birdY = 0;
 		birdPos = 0;
+		armorBoostHealth = 0;
+		greenInc = blueInc = redInc = 1;
+		redChg = blueChg = greenChg = false;
 		jumpHeightFactor = 1;
 		healthPos = 0;
 		heightScore = 0;
@@ -334,19 +342,62 @@ public class Player extends MapObject
 				{
 					g.drawImage(heartImages.get(3), 10 + (i*40), 10 , null);
 				}
+				if(hasArmor && i < armorBoostHealth)
+				{
+					g.drawImage(heartImages.get(2), 10 + (i*40), 52 , null);
+				}
 			}
 		}
 		else
 		{
 			for (int i = 0; i < 5; i++)
-			{
+			{				
 				if (i < health)
-				{
+				{			
 					g.drawImage(heartImages.get(0), 10 + (i*40), 10 , null);
 				}
 				else
 				{
 					g.drawImage(heartImages.get(1), 10 + (i*40), 10 , null);
+				}
+				
+				if(hasArmor && i < armorBoostHealth)
+				{
+					for (int x = 0; x < heartImages.get(4).getWidth(); x++)
+					{
+						for (int y = 0; y < heartImages.get(4).getHeight(); y++)
+						{
+							int rgb = heartImages.get(4).getRGB(x, y);
+							int alpha = (rgb >> 24) & 0xFF;
+							int red = (rgb >> 16) & 0xFF;
+							int green = (rgb >> 8) & 0xFF;
+							int blue = rgb & 0xFF;
+							
+							if (!redChg && (red+redInc > 255 || red+redInc < 10)) 
+							{
+								redChg = true;
+							}
+							else if(!(red+redInc > 255 || red+redInc < 10)) red += redInc;
+							if (!greenChg && (green+greenInc > 250 || green+greenInc < 10))
+							{
+								greenChg = true;
+							}
+							else if(!(green+greenInc > 250 || green+greenInc < 10)) green += greenInc;
+							if (!blueChg && (blue+blueInc > 250 || blue+blueInc < 10)) 
+							{
+								blueChg = true;
+							}
+							else if(!(blue+blueInc > 250 || blue+blueInc < 10)) blue += blueInc;					
+							
+							heartImages.get(4).setRGB(x, y, (alpha*16777216)+(red*65536)+(green*256)+blue);
+						}
+					}
+					if(redChg) redInc*=-1;
+					if(greenChg) greenInc *= -1;
+					if(blueChg) blueInc *= -1;
+					redChg = blueChg = greenChg = false;
+					
+					g.drawImage(heartImages.get(4), 10 + (i*40), 52 , null);
 				}
 			}
 		}
@@ -660,19 +711,28 @@ public class Player extends MapObject
 	}
 	public void playerHurt(int amount)
 	{
-		if (hasArmor || hasJetpack) 
+		if(recovering)
 		{
-			health -= amount/2; //as int, any damage of 1 will be truncated to 0 after the division
+			long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
+			if(recoverLength <= elapsed)
+			{
+				recovering = false;
+			}
 		}
 		else
 		{
-			if(recovering)
+			if (hasArmor) 
 			{
-				long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
-				if(recoverLength <= elapsed)
+				armorBoostHealth -= amount;
+				if(armorBoostHealth < 0)
 				{
-					recovering = false;
+					health += armorBoostHealth;
 				}
+				recovering = true;
+				recoverTimer = System.nanoTime();
+				numOfFramesToAnimHealth = 0;
+				if(armorBoostHealth == 0)
+					hasArmor = false;
 			}
 			else
 			{
@@ -725,6 +785,7 @@ public class Player extends MapObject
 			{
 				//armor
 				hasArmor = true;
+				armorBoostHealth = 5;
 				break;
 			}
 			case 5:
@@ -743,7 +804,6 @@ public class Player extends MapObject
 	{
 		isUnderEffect = false;
 		hasJetpack = false;
-		hasArmor = false;
 		slowTime = false;
 		charBlurPos = new ArrayList<Integer>();
 		jumpHeightFactor = 1;
