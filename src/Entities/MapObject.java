@@ -160,7 +160,7 @@ public abstract class MapObject
 						doubleJumped = false;
 						falling = false;
 						//landing = true;
-						gliding = false;
+						//gliding = false;
 						idle = true;
 						fallingAnim = false;
 					}

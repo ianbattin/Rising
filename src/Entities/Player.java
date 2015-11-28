@@ -49,7 +49,7 @@ public class Player extends MapObject
 	//effect variables
 	private boolean isUnderEffect;
 	private double jumpHeightFactor, birdPos, healthPos;
-	private boolean hasJetpack, hasBird, birdActive, hasArmor, slowTime;
+	private boolean hasJetpack, hasBird, birdActive, hasArmor, slowTime, canGlide;
 	private int birdMaxDy, birdMaxDx;
 	private double birdX, birdY;
 	private Enemy chosenEnemy;
@@ -221,7 +221,7 @@ public class Player extends MapObject
 		hasArmor = false;
 		slowTime = isUnderEffect = hasJetpack  = hasBird = false;
 		jumpHeightFactor = 1;
-		slowTime = isUnderEffect = hasJetpack = birdActive = hasBird = false;
+		canGlide = slowTime = isUnderEffect = hasJetpack = birdActive = hasBird = false;
 		birdMaxDy = 4;
 		birdMaxDx = 4;
 		birdX = 0;
@@ -751,7 +751,8 @@ public class Player extends MapObject
 		{
 			case 0: 
 			{
-				jumpHeightFactor = 2;
+				canGlide = true;
+				jumpHeightFactor = 1.5;
 				break;
 			}
 			case 1:
@@ -796,6 +797,7 @@ public class Player extends MapObject
 		isUnderEffect = false;
 		hasJetpack = false;
 		slowTime = false;
+		canGlide = gliding = false;
 		charBlurPos = new ArrayList<Integer>();
 		jumpHeightFactor = 1;
 		System.out.println("Effect ended");
@@ -947,11 +949,11 @@ public class Player extends MapObject
 				right = true;
 				idle = false;
 			}
-			if(k == GameStateManager.glide)
+			if(k == GameStateManager.glide && canGlide)
 			{
 				gliding = true;
 				idle = false;
-			}	
+			}
 			if(k == KeyEvent.VK_C)
 			{
 				points = 10000;

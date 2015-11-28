@@ -30,6 +30,7 @@ public class Level1State extends PlayState
 	private int mouseY;
 	private int relX;
 	private int relY;
+	private int debrisLoop;
 	private boolean mouseUpdate;
 	private MouseEvent mouse;
 	
@@ -64,13 +65,13 @@ public class Level1State extends PlayState
 			colors.add(new Color(i, i, i));
 		}
 		//create the initial debris
-		debrisInfo = new int[30][4];
+		debrisInfo = new int[200][4];
 		for(int i = 0; i < debrisInfo.length; i++)
 		{
 			for(int j = 0; j < debrisInfo[i].length; j++)
 			{
 				debrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
-				debrisInfo[i][1] = (int)(Math.random()*GamePanel.HEIGHT);
+				debrisInfo[i][1] = -2000 + (int)((Math.random()*2000)-1000);
 				debrisInfo[i][2] = (int)(Math.random()*5)+2;
 				debrisInfo[i][3] = (int)(Math.random()*170);
 			}
@@ -79,6 +80,7 @@ public class Level1State extends PlayState
 		bgVectorX = 0;
 		bgVectorY = 0;
 		debrisVector = 0;
+		debrisLoop = 0;
 	}
 
 	public void init() 
@@ -88,7 +90,8 @@ public class Level1State extends PlayState
 		player.setPosition(400, -100);
 		player.setTileMapMoving(true);
 		enemies = new ArrayList<Enemy>();
-		pickups = new Pickups(player, tileMap, this);
+		int[] pickupsToSpawn = {Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST};
+		pickups = new Pickups(player, tileMap, this, pickupsToSpawn);
 		tileStart = false;
 	}
 
@@ -113,7 +116,7 @@ public class Level1State extends PlayState
 		if(player.getPlayerHealth() < 1 && timer > 1500000000.0)
 		{
 			super.isFadingOut = true;
-			super.fadeOut(500000000, gsm, GameStateManager.LEVEL1STATE, GameStateManager.OUTROSTATE);
+			super.fadeOut(500000000, Color.BLACK, 5, gsm, GameStateManager.LEVEL1STATE, GameStateManager.OUTROSTATE);
 		}
 		else if (player.getPlayerHealth() < 1)
 		{
@@ -149,7 +152,7 @@ public class Level1State extends PlayState
 			{
 				player.setPosition(400, 900);
 				super.isFadingOut = true;
-				super.fadeOut(5000000000.0, gsm, GameStateManager.LEVEL1STATE, GameStateManager.TRANSITION1STATE);
+				super.fadeOut(1000000000.0, Color.WHITE, 20, gsm, GameStateManager.LEVEL1STATE, GameStateManager.BOSS1STATE);
 			}
 		}
 		
@@ -199,18 +202,28 @@ public class Level1State extends PlayState
 	//update and draw the debris
 	public void debris(Graphics2D g)
 	{
+		int highestLoc = debrisInfo[0][1];
 		for(int i = 0; i < debrisInfo.length; i++)
 		{
 			for(int j = 0; j < debrisInfo[i].length; j++)
 			{
 				g.setColor(colors.get(debrisInfo[i][3]));
 				g.fillRect(debrisInfo[i][0], debrisInfo[i][1], debrisInfo[i][2], debrisInfo[i][2]);
-				debrisInfo[i][1] += debrisInfo[i][2]*debrisVector;
+				if(debrisInfo[i][1] < 0) debrisInfo[i][1] += 2*debrisVector;
+				else debrisInfo[i][1] += debrisInfo[i][2]*debrisVector;
 				
-				if (debrisInfo[i][1] > GamePanel.HEIGHT)
+				if(debrisInfo[i][1] < highestLoc) highestLoc = debrisInfo[i][1];
+			}
+		}
+		if (highestLoc > GamePanel.HEIGHT)
+		{
+			for(int i = 0; i < debrisInfo.length; i++)
+			{
+				for(int j = 0; j < debrisInfo[i].length; j++)
 				{
+			
 					debrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
-					debrisInfo[i][1] = -20;
+					debrisInfo[i][1] = -2000 + (int)((Math.random()*2000)-1000);
 					debrisInfo[i][2] = (int)(Math.random()*5)+2;
 					debrisInfo[i][3] = (int)(Math.random()*170);
 				}

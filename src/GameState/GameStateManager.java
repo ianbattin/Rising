@@ -66,6 +66,8 @@ public class GameStateManager
 	{
 		currentState = state;
 		gameStates.get(currentState).init();
+		
+		gameStates.get(currentState).update();
 	}
 	
 	public void update()

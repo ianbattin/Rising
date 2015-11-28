@@ -28,6 +28,7 @@ public abstract class GameState
 	protected boolean isFadingOut, isFadingIn;
 	protected int alphaLevel;
 	protected float timeKeeper = 0;
+	private int fadeRed, fadeBlue, fadeGreen;
 	
 	public abstract void init();
 	public abstract void update();
@@ -59,14 +60,19 @@ public abstract class GameState
 	
 	//Fading methods
 	//input: time before the animation starts
-	protected void fadeIn(double timeToWait)
+	protected void fadeIn(double timeToWait, Color myColor, int speed)
 	{
+		fadeRed = myColor.getRed();
+		fadeGreen = myColor.getGreen();
+		fadeBlue = myColor.getBlue();
+		
 		timeKeeper += GamePanel.getElapsedTime();
 		
 		if(timeKeeper > timeToWait)
 		{
-			alphaLevel -= 5;
-			if (alphaLevel == 0){
+			alphaLevel -= speed;
+			if (alphaLevel <= 0){
+				alphaLevel = 0;
 				isFadingIn = false;
 				timeKeeper = 0; 
 			}	
@@ -74,21 +80,25 @@ public abstract class GameState
 	}
 	
 	//input: time to wait after animation ends, current gamestatemanager, state that needs reset, and state to initiate
-	protected void fadeOut(double timeToWait, GameStateManager currGsm, int stateToReset, int stateToSet)
+	protected void fadeOut(double timeToWait, Color myColor, int speed, GameStateManager currGsm, int stateToReset, int stateToSet)
 	{	
-		if (alphaLevel < 255){
-			alphaLevel += 5;
+		fadeRed = myColor.getRed();
+		fadeGreen = myColor.getGreen();
+		fadeBlue = myColor.getBlue();
+		if (alphaLevel+speed < 255){
+			alphaLevel += speed;
 		} 
 		else
 		{
+			alphaLevel = 255;
 			timeKeeper += GamePanel.getElapsedTime();
 		}
 		
 		if(timeKeeper > timeToWait)
 		{
 			isFadingOut = false;
-			currGsm.resetState(stateToReset);
 			currGsm.setState(stateToSet);
+			currGsm.resetState(stateToReset);
 		}
 	 }
 	
@@ -97,7 +107,7 @@ public abstract class GameState
 	{
 		if(isFadingIn || isFadingOut)
 		{
-			g.setColor(new Color(0, 0, 0, alphaLevel));
+			g.setColor(new Color(fadeRed, fadeGreen, fadeBlue, alphaLevel));
 			g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 		}
 	}

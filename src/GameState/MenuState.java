@@ -64,7 +64,7 @@ public class MenuState extends GameState
 		
 		if (super.isFadingOut)
 		{
-			super.fadeOut(5000000000.0, gsm, GameStateManager.MENUSTATE, GameStateManager.INTROSTATE);
+			super.fadeOut(5000000000.0, Color.BLACK, 5, gsm, GameStateManager.MENUSTATE, GameStateManager.INTROSTATE);
 			//title fading
 			if (titleAlphaLevel < 255)
 			{

@@ -97,6 +97,9 @@ public class Boss1State extends PlayState
 		
 		healthFont = new Font("RusselSquare", Font.PLAIN, (int)(24*(GamePanel.scaleWidth*GamePanel.scaleWidth*GamePanel.scaleWidth)));
 		generalFont = new Font("RusselSquare", Font.PLAIN, 24);
+		
+		super.isFadingIn = true;
+		super.alphaLevel = 255;
 	}
 
 	public void init() 
@@ -106,7 +109,8 @@ public class Boss1State extends PlayState
 		tileMap.setY(tileMap.getY() + 175);
 		player = new Player(tileMap, this);
 		player.setTileMapMoving(false);
-		pickups = new Pickups(player, tileMap, this);
+		int[] pickupsToSpawn = {Pickups.ARMORBOOST, Pickups.HEALBOOST, Pickups.SLOWTIMEBOOST, Pickups.BIRDBOOST};
+		pickups = new Pickups(player, tileMap, this, pickupsToSpawn);
 		enemies = new ArrayList<Enemy>();
 		tileStart = false;
 		try
@@ -124,6 +128,10 @@ public class Boss1State extends PlayState
 
 	public void update()
 	{
+		if(super.isFadingIn)
+		{
+			super.fadeIn(500000000.0, Color.WHITE, 1);
+		}
 		basicChecks();
 		script();
 	}
@@ -191,7 +199,7 @@ public class Boss1State extends PlayState
 		if(player.getPlayerHealth() < 1 && deathTimer > 1500000000.0)
 		{
 			super.isFadingOut = true;
-			super.fadeOut(500000000, gsm, GameStateManager.BOSS1STATE, GameStateManager.OUTROSTATE);
+			super.fadeOut(500000000, Color.BLACK, 5, gsm, GameStateManager.BOSS1STATE, GameStateManager.OUTROSTATE);
 		}
 		else if (player.getPlayerHealth() < 1)
 		{
