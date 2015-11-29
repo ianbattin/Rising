@@ -14,8 +14,8 @@ import GameState.GameState;
 import GameState.Level1State;
 import GameState.PlayState;
 
-public class Pickups extends MapObject {	
-	
+public class Pickups extends MapObject 
+{		
 	private PlayState playState;
 	private Player player;
 	private TileMap tm;

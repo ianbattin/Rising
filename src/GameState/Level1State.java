@@ -51,7 +51,7 @@ public class Level1State extends PlayState
 		start = false;
 		try
 		{
-			bg = new Background("/Backgrounds/gamebackground.gif", 1);
+			bg = new Background("/Backgrounds/battlebackground.gif", 1);
 		}
 		catch(Exception e)
 		{

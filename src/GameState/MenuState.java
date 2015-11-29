@@ -41,7 +41,7 @@ public class MenuState extends GameState
 		//This is going to try to set the background from a certain file path
 		try
 		{
-			bg = new Background("/Backgrounds/gamebackground.gif", 1);
+			bg = new Background("/Backgrounds/battlebackground.gif", 1);
 			title = ImageIO.read(getClass().getResourceAsStream("/Text/TitlePlaceholder2.png"));
 			bg.setVector(0, -5.0); //moves the background
 		}

@@ -217,6 +217,7 @@ public class TileMap
 			t.setX(t.getX() + x);
 		}
 	}
+	
 	public void setY( int y) 
 	{	
 		yMove = y;

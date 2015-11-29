@@ -96,10 +96,39 @@ public class Background
 			this.x = (x * moveScale) % GamePanel.WIDTH;
 			this.y = (y * moveScale) % GamePanel.HEIGHT;
 		}
+		if(x < 0 && y < 0)
+		{
+			g.drawImage(image, (int)x + GamePanel.WIDTH, (int)y + GamePanel.HEIGHT, null);
+			this.x = (x * moveScale) % GamePanel.WIDTH;
+			this.y = (y * moveScale) % GamePanel.HEIGHT;
+		}
+		if(x > 0 && y < 0)
+		{
+			g.drawImage(image, (int)x - GamePanel.WIDTH, (int)y + GamePanel.HEIGHT, null);
+			this.x = (x * moveScale) % GamePanel.WIDTH;
+			this.y = (y * moveScale) % GamePanel.HEIGHT;
+		}
+		if(x < 0 && y > 0)
+		{
+			g.drawImage(image, (int)x + GamePanel.WIDTH, (int)y - GamePanel.HEIGHT, null);
+			this.x = (x * moveScale) % GamePanel.WIDTH;
+			this.y = (y * moveScale) % GamePanel.HEIGHT;
+		}
+		if(x > 0 && y > 0)
+		{
+			g.drawImage(image, (int)x - GamePanel.WIDTH, (int)y - GamePanel.HEIGHT, null);
+			this.x = (x * moveScale) % GamePanel.WIDTH;
+			this.y = (y * moveScale) % GamePanel.HEIGHT;
+		}
 	}
 
 	public double getYPosition() 
 	{
 		return y;
+	}
+
+	public void setXVector(double bgVectorX) 
+	{
+		this.dx = bgVectorX;
 	}
 }

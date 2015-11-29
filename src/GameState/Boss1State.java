@@ -114,7 +114,7 @@ public class Boss1State extends PlayState
 		tileStart = false;
 		try
 		{
-			bg = new Background("/Backgrounds/gamebackground.gif", 1);
+			bg = new Background("/Backgrounds/battlebackground.gif", 1);
 		}
 		catch(Exception e)
 		{
@@ -228,9 +228,14 @@ public class Boss1State extends PlayState
 				{
 					if(player.getDY() <= 0)
 					{
-						setBackgroundVector(10.0, 0);
 						if(tileMap.getYMove() > 0)
 						{
+							if(bg.getYPosition() != 0)
+							{
+								if(bg.getYPosition() <= 400) setBackgroundVector(10.0, -1);
+								else setBackgroundVector(10.0, 1);
+							}
+							setBackgroundXVector(10.0);
 							tileMap.setYVector(-1.0);
 						}
 						else
@@ -377,7 +382,7 @@ public class Boss1State extends PlayState
 				System.out.println("WAHHHHHH");
 		}
 	}
-
+	
 	private void drawCrossHair(Graphics2D g) 
 	{
 		g.setColor(Color.BLACK);
