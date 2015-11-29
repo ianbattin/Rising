@@ -28,7 +28,7 @@ public class TransitionState extends GameState {
 		switch(path)
 		{
 			case "Intro":
-				totalFrames = 5;
+				totalFrames = 6;
 				break;
 			case "Outro":
 				totalFrames = 1;
@@ -59,17 +59,17 @@ public class TransitionState extends GameState {
 	{
 		if(super.isFadingIn)
 		{
-			super.fadeIn(500000000.0);
+			super.fadeIn(500000000.0, Color.BLACK, 5);
 		}
 		else if (super.isFadingOut)
 		{
 			switch(path)
 			{
 				case "Intro":
-					super.fadeOut(1000000000.0, gsm, GameStateManager.INTROSTATE, GameStateManager.LEVEL1STATE);
+					super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.INTROSTATE, GameStateManager.LEVEL1STATE);
 					break;
 				case "Outro":
-					super.fadeOut(1000000000.0, gsm, GameStateManager.TRANSITION1STATE, GameStateManager.BOSS1STATE);
+					super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.TRANSITION1STATE, GameStateManager.BOSS1STATE);
 			}
 			
 		}
