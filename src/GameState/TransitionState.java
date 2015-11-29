@@ -28,7 +28,7 @@ public class TransitionState extends GameState {
 		switch(path)
 		{
 			case "Intro":
-				totalFrames = 6;
+				totalFrames = 8;
 				break;
 			case "Outro":
 				totalFrames = 1;
