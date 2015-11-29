@@ -97,4 +97,9 @@ public class Background
 			this.y = (y * moveScale) % GamePanel.HEIGHT;
 		}
 	}
+
+	public double getYPosition() 
+	{
+		return y;
+	}
 }

@@ -24,6 +24,11 @@ public abstract class PlayState extends GameState
 		bg.setVector(bgVectorX, bgVectorY);
 	}
 	
+	public void setBackgroundPosition(double x, double y)
+	{
+		bg.setPosition(x, y);
+	}
+	
 	public void setDebrisVectors(double vector)
 	{
 		debrisVector = vector;

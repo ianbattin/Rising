@@ -158,7 +158,7 @@ public class PlaneBoss extends Enemy {
 			relX = (int) (this.x - (int)player.getX());
 			relY = (int) (this.y - (int)player.getY());
 			angle = Math.atan2(-relY, -relX);
-			angle += Math.random()*Math.PI/12 - Math.PI/12;
+			angle += Math.random()*Math.PI/2 - Math.PI/2;
 
 			firing = true;
 

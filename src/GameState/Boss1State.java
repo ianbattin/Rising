@@ -35,7 +35,6 @@ public class Boss1State extends PlayState
 	private boolean mouseUpdate;
 	private MouseEvent mouse;
 
-	private Background bg;
 	private Player player;
 	private Player otherPlayer;
 	private Pickups pickups;
