@@ -17,6 +17,11 @@ public class PlaneBoss extends Enemy {
 	private boolean setMovement;
 	private boolean moveComplete;
 	private int typeAttack;
+	
+	//animation
+		private ArrayList<BufferedImage[]> playerSprites;
+		private ArrayList<BufferedImage[]> playerHurtSprites;
+		private final int[] numFrames = { 1 };
 
 	public PlaneBoss(int x, int y, TileMap tm, Player player) 
 	{
@@ -29,7 +34,7 @@ public class PlaneBoss extends Enemy {
 		
 		setMovement = false;
 		
-		recoverLength = 20;
+		recoverLength = 40;
 		
 		moveSpeed = 10.0;
 		maxSpeedY = 3.0;
@@ -40,12 +45,65 @@ public class PlaneBoss extends Enemy {
 		maxFallSpeed = 7.0;
 		jumpStart = -3.0;
 		
-		width = 250;
-		height = 100;
-		cwidth = 250;
-		cheight = 100;
+		width = 307;
+		height = 114;
+		cwidth = 307;
+		cheight = 114;
 
 		facingRight = false;
+		
+		try
+		{
+			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Tiles/Stuka.png"));
+			playerSprites = new ArrayList<BufferedImage[]>();
+			for(int i = 0; i < numFrames.length; i++)
+			{
+				BufferedImage[] bi = new BufferedImage[numFrames[i]];
+				for(int j = 0; j < numFrames[i]; j++)
+				{
+					bi[j] = spritesheet.getSubimage(j * width, i * height, width, height);
+				}
+				playerSprites.add(bi);
+			}
+			
+			//make the spritesheet for when the player is blinking red
+			BufferedImage playerHurtSpritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Tiles/Stuka.png"));
+			for (int i = 0; i < playerHurtSpritesheet.getWidth(); i++)
+			{
+				for (int j = 0; j < playerHurtSpritesheet.getHeight(); j++)
+				{
+					int rgb = playerHurtSpritesheet.getRGB(i, j);
+					int a = (rgb >> 24) & 0xFF;
+					int r = (rgb >> 16) & 0xFF;
+					int g = (rgb >> 8) & 0xFF;
+					int b = rgb & 0xFF;
+					if (r+150 > 255) r = 255;
+					else r += 150;
+					playerHurtSpritesheet.setRGB(i, j, (a*16777216)+(r*65536)+(g*256)+b);
+				}
+			}
+			
+			playerHurtSprites = new ArrayList<BufferedImage[]>();
+			for(int i = 0; i < numFrames.length; i++)
+			{
+				BufferedImage[] bi = new BufferedImage[numFrames[i]];
+				for(int j = 0; j < numFrames[i]; j++)
+				{
+					bi[j] = playerHurtSpritesheet.getSubimage(j * width, i * height, width, height);
+				}
+				//sprites.add(bi);
+				playerHurtSprites.add(bi);
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		animation = new Animation();
+		currentAction = 0;
+		animation.setFrames(playerSprites.get(0));
+		animation.setDelay(200);
 		
 		//health
 		health = 100;
@@ -68,8 +126,8 @@ public class PlaneBoss extends Enemy {
 		x += tm.getDX();
 		y += tm.getDY();
 		
-		getAnimation();
 		getBulletCollision();
+		getAnimation();
 
 		if (numOfFramesToAnimHealth  > 0 && timesToLoop%2 == 1)
 		{
@@ -98,18 +156,14 @@ public class PlaneBoss extends Enemy {
 	{
 		setMapPosition();
 
-		if(recovering) g.setColor(Color.RED);
-		else g.setColor(Color.BLACK);
-			
-		g.fillRect((int)x, (int)y, width, height);
-//		if(facingRight)
-//		{
-//			g.drawImage(animation.getImage(), (int)(x + xmap - width / 2), (int)(y + ymap - height / 2), width, height, null);
-//		}
-//		else
-//		{
-//			g.drawImage(animation.getImage(), (int)(x + xmap - width / 2 + width), (int)(y + ymap - height / 2), -width, height, null);
-//		}
+		if(facingRight)
+		{
+			g.drawImage(animation.getImage(), (int)(x + xmap), (int)(y + ymap), width, height, null);
+		}
+		else
+		{
+			g.drawImage(animation.getImage(), (int)(x + xmap) + width, (int)(y + ymap), -width, height, null);
+		}
 		
 		for(Projectile p: bullets)
 		{
@@ -146,7 +200,7 @@ public class PlaneBoss extends Enemy {
 						long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 						if(fireDelay <= elapsed*(0.5*super.slowDown))
 						{
-							bullets.add(new Projectile(x, y, angle, 3, tm));
+							bullets.add(new Projectile(x + width/2, y+height, angle, 3, tm));
 							fireTimer = System.nanoTime();
 						}
 					}
@@ -168,7 +222,7 @@ public class PlaneBoss extends Enemy {
 				long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 				if(fireDelay <= elapsed*(0.5*super.slowDown))
 				{
-					bullets.add(new Projectile(x, y, angle, 2, tm));
+					bullets.add(new Projectile(x + width/2, y+height, angle, 2, tm));
 					fireTimer = System.nanoTime();
 				}
 			}
@@ -188,7 +242,7 @@ public class PlaneBoss extends Enemy {
 				long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 				if(fireDelay <= elapsed*(0.5*super.slowDown))
 				{
-					bullets.add(new Projectile(x, y, angle, 4, tm));
+					bullets.add(new Projectile(x+width/2, y+height, angle, 4, tm));
 					fireTimer = System.nanoTime();
 				}
 			}
@@ -279,9 +333,15 @@ public class PlaneBoss extends Enemy {
 	}
 	
 	@Override
-	public void getAnimation() {
-		// TODO Auto-generated method stub
-
+	public void getAnimation() 
+	{
+		if(dx > 0) facingRight = true;
+		else facingRight = false;
+		
+		if (recovering) animation.changeFrames(playerHurtSprites.get(currentAction));
+		else animation.changeFrames(playerSprites.get(currentAction));
+		
+		animation.update();	
 	}
 
 	@Override
