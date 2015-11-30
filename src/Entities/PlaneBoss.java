@@ -2,6 +2,7 @@ package Entities;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -19,9 +20,13 @@ public class PlaneBoss extends Enemy {
 	private int typeAttack;
 	
 	//animation
-		private ArrayList<BufferedImage[]> playerSprites;
-		private ArrayList<BufferedImage[]> playerHurtSprites;
-		private final int[] numFrames = { 1 };
+	private ArrayList<BufferedImage[]> playerSprites;
+	private ArrayList<BufferedImage[]> playerHurtSprites;
+	private final int[] numFrames = { 1 };
+	
+	private Rectangle cockpit;
+	private int cockpitX;
+	private int cockpitY;
 
 	public PlaneBoss(int x, int y, TileMap tm, Player player) 
 	{
@@ -47,8 +52,8 @@ public class PlaneBoss extends Enemy {
 		
 		width = 307;
 		height = 114;
-		cwidth = 307;
-		cheight = 114;
+		cwidth = 200;
+		cheight = 75;
 
 		facingRight = false;
 		
@@ -105,6 +110,10 @@ public class PlaneBoss extends Enemy {
 		animation.setFrames(playerSprites.get(0));
 		animation.setDelay(200);
 		
+		cockpitX = x + 90;
+		cockpitY = y + 10;
+		cockpit = new Rectangle(cockpitX, cockpitY, 80, 25);
+		
 		//health
 		health = 100;
 	}
@@ -149,6 +158,8 @@ public class PlaneBoss extends Enemy {
 				numOfFramesToAnimHealth = 10;
 			}
 		}
+		
+		checkPlayerCollision();
 	}
 
 	@Override
@@ -156,6 +167,13 @@ public class PlaneBoss extends Enemy {
 	{
 		setMapPosition();
 
+		if(tm.getShowCollisonBox())
+		{
+			g.setColor(Color.RED);
+			g.draw(cockpit);
+			g.draw(this.getRectangle());
+		}
+		
 		if(facingRight)
 		{
 			g.drawImage(animation.getImage(), (int)(x + xmap), (int)(y + ymap), width, height, null);
@@ -171,6 +189,31 @@ public class PlaneBoss extends Enemy {
 		}
 	}
 
+	public void checkPlayerCollision()
+	{
+		if(!facingRight)
+		{
+			cockpitX = (int) (x + 90);
+			cockpitY = (int) (y + 10);
+		}
+		else
+		{
+			cockpitX = (int) (x + 140);
+			cockpitY = (int) (y + 10);
+		}
+		cockpit.setLocation(cockpitX, cockpitY);
+		
+		if(cockpit.intersects(player.getRectangle()) && player.getDY() > 0)
+		{
+			playerHurt(20);
+			player.setYVector(-10.0);
+		}
+		else if(this.intersects(player))
+		{
+			player.playerHurt(1);
+		}
+	}
+	
 	@Override
 	public void getAttack() 
 	{
@@ -351,7 +394,8 @@ public class PlaneBoss extends Enemy {
 	}
 
 	@Override
-	public void collided(MapObject m) {
+	public void collided(MapObject m) 
+	{
 		// TODO Auto-generated method stub
 
 	}

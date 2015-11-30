@@ -1,5 +1,6 @@
 package Entities;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -155,13 +156,19 @@ public class Jetpacker extends Enemy
 	{
 		setMapPosition();
 
+		if(tm.getShowCollisonBox())
+		{
+			g.setColor(Color.RED);
+			g.draw(this.getRectangle());
+		}
+		
 		if(facingRight)
 		{
-			g.drawImage(animation.getImage(), (int)(x + xmap - width / 2), (int)(y + ymap - height / 2), width, height, null);
+			g.drawImage(animation.getImage(), (int)(x + xmap), (int)(y + ymap), width, height, null);
 		}
 		else
 		{
-			g.drawImage(animation.getImage(), (int)(x + xmap - width / 2 + width), (int)(y + ymap - height / 2), -width, height, null);
+			g.drawImage(animation.getImage(), (int)(x + xmap) + width, (int)(y + ymap), -width, height, null);
 		}
 		
 		for(Projectile p: bullets)

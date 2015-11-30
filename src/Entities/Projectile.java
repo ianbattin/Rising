@@ -77,6 +77,9 @@ public class Projectile extends MapObject
 				break;
 			}
 		}
+		
+		cwidth = width/2;
+		cheight = height/2;
 	}
 
 	public void update() 
@@ -99,13 +102,19 @@ public class Projectile extends MapObject
 		{
 			g.setColor(Color.BLACK);
 			g.fillOval((int)x, (int)y, width, height);
+			
+			if(tm.getShowCollisonBox())
+			{
+				g.setColor(Color.RED);
+				g.draw(this.getRectangle());
+			}
 		}
 	}
 	
 	@Override
 	public void collided(int type, Tile t) 
 	{
-		if(t.getBulletCollision())
+		if(t.getBulletCollision() && !remove)
 		{
 			if(t.getType() == 17)
 			{
@@ -119,9 +128,9 @@ public class Projectile extends MapObject
 			}
 			else if(this.type == 4)
 			{
+				remove = true;
 				getTiles().add(new Tile(t.getX(), t.getY() - 25, 17, t.getSize(), tileMap));
 				getTiles().get(getTiles().size()-1).init();
-				remove = true;
 			}
 			else
 				remove = true;

@@ -115,7 +115,7 @@ public abstract class MapObject
 	
 	public Rectangle getRectangle()
 	{
-		return new Rectangle((int)x, (int)y, width, height);
+		return new Rectangle((int)x + (width - cwidth)/2, (int)y + (height - cheight)/2, cwidth, cheight);
 	}
 	
 	public void calculateCorners(double x, double y)
@@ -148,13 +148,13 @@ public abstract class MapObject
 			double collisionTop = t.top;
 			double collisionBottom = t.bottom;
 
-			if((collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 && y + height/2 < collisionBottom) && !drop)
+			if((collisionLeft <= x + width/2 && x + width/2  < collisionRight) && (collisionTop <= y + cheight && y + cheight < collisionBottom) && !drop)
 			{
 				if(t.getType() < 17 || (32 <= t.getType() && t.getType() <= 57))
 				{
 					if(dy >= 0)
 					{
-						y = t.top - cheight/2 - 0.5;
+						y = t.top - cheight - 0.5;
 						dy = tm.getDY();
 						jumped  = false;
 						doubleJumped = false;
@@ -172,7 +172,7 @@ public abstract class MapObject
 				}
 					
 			}
-			if(!collided && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + height/2 + 1 && y + height/2 + 1 < collisionBottom && !drop)) 
+			if(!collided && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + cheight + 1 && y + cheight + 1 < collisionBottom && !drop)) 
 			{
 				collided = true;
 			}

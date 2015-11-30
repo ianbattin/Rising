@@ -108,7 +108,7 @@ public class Player extends MapObject
 		
 		width = 50;
 		height = 70;
-		cwidth = 50;
+		cwidth = 25;
 		cheight = 70;
 
 		facingRight = true;
@@ -329,6 +329,12 @@ public class Player extends MapObject
 	
 	public void draw(Graphics2D g) 
 	{
+		if(tm.getShowCollisonBox())
+		{
+			g.setColor(Color.RED);
+			g.draw(this.getRectangle());
+		}
+		
 		if (isFlashing)
 		{
 			for (int i = 0; i < 5; i++)
@@ -839,11 +845,11 @@ public class Player extends MapObject
 			}
 			if(facingRight)
 			{
-				g.drawImage(animation.getImage(), (int)(x + xmap - width / 2), (int)(y + ymap - height / 2), width, height, null);
+				g.drawImage(animation.getImage(), (int)(x + xmap), (int)(y + ymap), width, height, null);
 			}
 			else
 			{
-				g.drawImage(animation.getImage(), (int)(x + xmap - width / 2 + width), (int)(y + ymap - height / 2), -width, height, null);
+				g.drawImage(animation.getImage(), (int)(x + xmap) + width, (int)(y + ymap), -width, height, null);
 			}
 		}
 	
