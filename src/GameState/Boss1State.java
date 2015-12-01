@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import Entities.Player;
 import Entities.Projectile;
+import Entities.Rifleman;
 import Entities.Enemy;
 import Entities.Jetpacker;
 import Entities.Pickups;
@@ -334,7 +335,6 @@ public class Boss1State extends PlayState
 		//Attacking stage at 80-100 health;
 		else if(stage == 2)
 		{
-			System.out.println(count + "      " + step + "     " + planeX + "      " + planeY);
 			if(enemies.get(0).getHealth() > 0)
 			{
 				switch(step)
@@ -347,27 +347,50 @@ public class Boss1State extends PlayState
 							((PlaneBoss) enemies.get(0)).setMovement(-1500, 200, 1500, 200, 1, 0);
 						}
 						
-						if(enemies.size() == 1 && (180 < planeX  && planeX < 220))
+						if(count == 0)
 						{
-							enemies.add(new Jetpacker(planeX, planeY, tileMap, player));
+							if(enemies.size() == 1 && (180 < planeX  && planeX < 220))
+							{
+								enemies.add(new Jetpacker(planeX, planeY, tileMap, player));
+							}
+							else if(enemies.size() == 2 && (380 < planeX && planeX < 420))
+							{
+								enemies.add(new Jetpacker(planeX, planeY, tileMap, player));
+							}
+							else if(enemies.size() == 3 && (580 < planeX && planeX < 620))
+							{
+								enemies.add(new Jetpacker(planeX, planeY, tileMap, player));
+							}
+							else if(enemies.size() == 1 && planeX > 800)
+							{
+								count++;
+								if(count % 3 == 0)
+									step = 2;
+								else
+									step = 1;
+								((PlaneBoss) enemies.get(0)).setMoveComplete(false);
+							}	
 						}
-						else if(enemies.size() == 2 && (380 < planeX && planeX < 420))
+						else if(count == 2)
 						{
-							enemies.add(new Jetpacker(planeX, planeY, tileMap, player));
+							if(enemies.size() == 1 && (180 < planeX  && planeX < 220))
+							{
+								enemies.add(new Rifleman(planeX, planeY, tileMap, player));
+							}
+							else if(enemies.size() == 2 && (580 < planeX && planeX < 620))
+							{
+								enemies.add(new Rifleman(planeX, planeY, tileMap, player));
+							}
+							else if(enemies.size() == 1 && planeX > 800)
+							{
+								count++;
+								if(count % 3 == 0)
+									step = 2;
+								else
+									step = 1;
+								((PlaneBoss) enemies.get(0)).setMoveComplete(false);
+							}	
 						}
-						else if(enemies.size() == 3 && (580 < planeX && planeX < 620))
-						{
-							enemies.add(new Jetpacker(planeX, planeY, tileMap, player));
-						}
-						else if(enemies.size() == 1 && planeX > 800)
-						{
-							count++;
-							if(count % 3 == 0)
-								step = 2;
-							else
-								step = 1;
-							((PlaneBoss) enemies.get(0)).setMoveComplete(false);
-						}	
 						break;
 					}
 

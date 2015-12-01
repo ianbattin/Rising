@@ -14,6 +14,7 @@ import java.util.TimerTask;
 import java.util.ArrayList;
 
 import Entities.Player;
+import Entities.Rifleman;
 import Entities.Enemy;
 import Entities.Jetpacker;
 import Entities.Pickups;
