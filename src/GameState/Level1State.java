@@ -87,7 +87,7 @@ public class Level1State extends PlayState
 	{
 		tileMap = new TileMap("Resources/Maps/level5.txt");
 		player = new Player(tileMap, this);
-		player.setPosition(400, -100);
+		player.setPosition(375, -100);
 		player.setTileMapMoving(true);
 		enemies = new ArrayList<Enemy>();
 		int[] pickupsToSpawn = {Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST};

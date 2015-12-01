@@ -409,9 +409,7 @@ public class Player extends MapObject
 		
 		setMapPosition();
 		drawEffects(g);
-		
-		g.drawOval((int)(x + width/2), (int)(y + cheight), 5, 5);
-		
+
 		for(Projectile p: bullets)
 		{
 			p.draw(g);
