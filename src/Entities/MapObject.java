@@ -148,13 +148,13 @@ public abstract class MapObject
 			double collisionTop = t.top;
 			double collisionBottom = t.bottom;
 
-			if((collisionLeft <= x + width/2 && x + width/2  < collisionRight) && (collisionTop <= y + cheight && y + cheight < collisionBottom) && !drop)
+			if((collisionLeft <= x + width/2 && x + width/2  <= collisionRight) && (collisionTop <= y + cheight && y + cheight <= collisionBottom) && !drop)
 			{
 				if(t.getType() < 17 || (32 <= t.getType() && t.getType() <= 57))
 				{
 					if(dy >= 0)
 					{
-						y = t.top - cheight - 0.5;
+						y = t.top - cheight - 0.1;
 						dy = tm.getDY();
 						jumped  = false;
 						doubleJumped = false;
@@ -172,7 +172,7 @@ public abstract class MapObject
 				}
 					
 			}
-			if(!collided && (collisionLeft <= x && x < collisionRight) && (collisionTop <= y + cheight + 1 && y + cheight + 1 < collisionBottom && !drop)) 
+			if(!collided && (collisionLeft <= x + width/2 && x + width/2 < collisionRight) && (collisionTop <= y + cheight + 1 && y + cheight + 1 < collisionBottom && !drop)) 
 			{
 				collided = true;
 			}

@@ -410,6 +410,8 @@ public class Player extends MapObject
 		setMapPosition();
 		drawEffects(g);
 		
+		g.drawOval((int)(x + width/2), (int)(y + cheight), 5, 5);
+		
 		for(Projectile p: bullets)
 		{
 			p.draw(g);
@@ -457,7 +459,7 @@ public class Player extends MapObject
 			long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 			if(fireDelay <= elapsed)
 			{
-				bullets.add(new Projectile(x, y, angle, 1, tm));
+				bullets.add(new Projectile(x + width/2, y + height/2, angle, 1, tm));
 				fireTimer = System.nanoTime();
 			}
 		}
