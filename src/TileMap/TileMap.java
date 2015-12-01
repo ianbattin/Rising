@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import Entities.Explosion;
 //import Entities.MapObject;
 import GameState.GameStateManager;
 //import GameState.PlayState;
@@ -37,6 +38,8 @@ public class TileMap
 	public ArrayList<Tile> tiles;
 	public static BufferedImage[] sprites;
 	public BufferedImage spritesheet;
+	
+	private ArrayList<Explosion> explosions;
 	
 	public TileMap(String s)
 	{
@@ -115,6 +118,8 @@ public class TileMap
 		{
 			t.init();
 		}
+		
+		explosions = new ArrayList<Explosion>();
 	}
 	
 	public void update()
@@ -129,6 +134,14 @@ public class TileMap
 			else
 				tiles.get(i).update(dx, dy);
 		}
+		
+		for(int i = 0; i < explosions.size(); i++)
+		{
+			if(explosions.get(i).getType() == 0)
+				explosions.remove(i);
+			else
+				explosions.get(i).update();
+		}
 	}
 	
 	public void draw(Graphics2D g)
@@ -137,6 +150,11 @@ public class TileMap
 		for(Tile t: tiles)
 		{
 			t.draw(g, t.getType());
+		}
+		
+		for(Explosion e: explosions)
+		{
+			e.draw(g);
 		}
 	}
 	
@@ -197,6 +215,11 @@ public class TileMap
 	public ArrayList<Tile> getTiles()
 	{
 		return tiles;
+	}
+	
+	public ArrayList<Explosion> getExplosions()
+	{
+		return explosions;
 	}
 	
 	public void setShowCollisonBox(boolean b)

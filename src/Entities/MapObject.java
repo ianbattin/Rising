@@ -288,6 +288,27 @@ public abstract class MapObject
 		ymap = tileMap.getY();
 	}
 	
+	public void playerHurt(int amount)
+	{
+		if(recovering)
+		{
+			long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
+			if(recoverLength <= elapsed)
+			{
+				recovering = false;
+			}
+		}
+		else
+		{
+			health -= amount;
+			recovering = true;
+			if(health > 0)
+				recoverTimer = System.nanoTime();
+			else
+				recoverTimer = System.nanoTime();
+		}
+	}
+
 	public int getHealth()
 	{
 		return health;

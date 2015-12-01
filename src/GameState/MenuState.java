@@ -10,11 +10,17 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import Entities.MapObject;
+import Entities.Explosion;
+import Entities.PlaneBoss;
+import Entities.Projectile;
 import Main.GamePanel;
 import TileMap.Background;
+import TileMap.TileMap;
 
 public class MenuState extends GameState 
 {
@@ -28,9 +34,16 @@ public class MenuState extends GameState
 	private Font optionsFont;
 	private int titleAlphaLevel;
 	
+	private TileMap tm  = new TileMap("Resources/Maps/level5.txt");
+	private ArrayList<MapObject> entities;
+	
+	private long timer;
+	
 	public MenuState(GameStateManager gsm)
 	{
+		init();
 		this.gsm = gsm;
+		timer = System.nanoTime();;
 
 		super.isFadingOut = false;
 		super.alphaLevel = 0;
@@ -54,13 +67,24 @@ public class MenuState extends GameState
 	//Don't need to initialize anything here really...
 	public void init() 
 	{
-
+		entities = new ArrayList<MapObject>();
 	}
 
 	//Only thing being updated is the background for movement
 	public void update()
 	{
 		bg.update();
+		
+		long elapsed = (System.nanoTime() - timer) / 1000000;
+		if(100 <= elapsed)
+		{
+			int randomNumber = (int)(Math.random()*10 + 1);
+			if(randomNumber < 10)
+				entities.add(new Explosion((int)(Math.random()*800), (int)(Math.random()*800), 1, tm));
+			else
+				entities.add(new Explosion((int)(Math.random()*800), (int)(Math.random()*800), 2, tm));
+			timer = System.nanoTime();
+		}
 		
 		if (super.isFadingOut)
 		{
@@ -71,12 +95,21 @@ public class MenuState extends GameState
 				titleAlphaLevel += 1;
 			}
 		}
+		
+		for(MapObject mo: entities)
+		{
+			mo.update();
+		}
 	}
 
 
 	public void draw(Graphics2D g)
-	{
+	{	
 		bg.draw(g);
+		for(MapObject mo: entities)
+		{
+			mo.draw(g);
+		}
 		
 		//Draws out our options menu
 		for(int i = 0; i < options.length; i++)
