@@ -187,6 +187,13 @@ public class Projectile extends MapObject
 				((PlaneBoss) m).playerHurt(damage);
 				remove = true;
 			}
+			
+			if(this.type == 5)
+			{
+				remove = true;
+				tm.getExplosions().add(new Explosion(x, y, 1, tileMap));
+				tm.getExplosions().get(tm.getExplosions().size()-1).collided(m);
+			}
 		}
 	}
 	
