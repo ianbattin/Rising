@@ -457,7 +457,7 @@ public class Player extends MapObject
 			long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 			if(fireDelay <= elapsed)
 			{
-				bullets.add(new Projectile(x + width/2, y + height/2, angle, 1, tm));
+				bullets.add(new Projectile(x + width/2, y + height/2, angle, 5, tm));
 				fireTimer = System.nanoTime();
 			}
 		}

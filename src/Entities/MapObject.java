@@ -1,8 +1,12 @@
 package Entities;
 
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import Main.GamePanel;
@@ -338,5 +342,25 @@ public abstract class MapObject
 	{
 		return x + xmap + width < 0 || x + xmap - width > GamePanel.WIDTH || 
 				y + ymap + height < 0 || y + ymap - height > GamePanel.HEIGHT;
+	}
+	
+	public void playSound(final String fileName)
+	{
+		Thread thread = new Thread(new Runnable()
+		{
+			public void run()
+			{
+				try 
+				{
+					AudioClip clip = Applet.newAudioClip(new URL("file:Resources/Sound/" + fileName));
+					clip.play();
+				} 
+				catch (MalformedURLException murle)
+				{
+					System.out.println(murle);
+				}
+			}
+		});
+		thread.start();
 	}
 }

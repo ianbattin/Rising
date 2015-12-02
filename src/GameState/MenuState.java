@@ -68,6 +68,7 @@ public class MenuState extends GameState
 	public void init() 
 	{
 		entities = new ArrayList<MapObject>();
+		
 	}
 
 	//Only thing being updated is the background for movement

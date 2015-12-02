@@ -1,10 +1,14 @@
 package Entities;
 
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -111,6 +115,8 @@ public class Explosion extends MapObject
 				explosionArea[i][j] = (int)(Math.random()*2);
 			}
 		}
+		
+		playSound("bombexplosion.wav");
 	}
 	
 	@Override
