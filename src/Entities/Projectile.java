@@ -74,6 +74,24 @@ public class Projectile extends MapObject
 				playerCollide = false;
 				break;
 			}
+			case 5:
+			{
+				moveSpeed = 25.0;
+				width = 10;
+				height = 10;
+				damage = 0;
+				playerCollide = true;
+				break;
+			}
+			case 6:
+			{
+				moveSpeed = 10.0;
+				width = 30;
+				height = 30;
+				damage = 0;
+				playerCollide = true;
+				break;
+			}
 		}
 		
 		cwidth = width/2;
@@ -129,6 +147,16 @@ public class Projectile extends MapObject
 				remove = true;
 				getTiles().add(new Tile(t.getX(), t.getY() - 25, 17, t.getSize(), tileMap));
 				getTiles().get(getTiles().size()-1).init();
+			}
+			else if(this.type == 5)
+			{
+				remove = true;
+				tileMap.getExplosions().add(new Explosion(x, y, 1, tileMap));
+			}
+			else if(this.type == 6)
+			{
+				remove = true;
+				tileMap.getExplosions().add(new Explosion(x, y, 2, tileMap));
 			}
 			else
 				remove = true;

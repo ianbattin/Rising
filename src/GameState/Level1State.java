@@ -14,6 +14,7 @@ import java.util.TimerTask;
 import java.util.ArrayList;
 
 import Entities.Player;
+import Entities.Rifleman;
 import Entities.Enemy;
 import Entities.Jetpacker;
 import Entities.Pickups;
@@ -338,8 +339,8 @@ public class Level1State extends PlayState
 	{
 		mouseX = (int)(e.getX()/GamePanel.scaleWidth);
 		mouseY = (int)(e.getY()/GamePanel.scaleHeight);
-		relX = mouseX - (int)player.getX();
-		relY = mouseY - (int)player.getY();
+		relX = mouseX - (int)player.getX() - player.getWidth()/2;
+		relY = mouseY - (int)player.getY() - player.getHeight()/2;
 		player.setAngle(Math.atan2(relY, relX));
 
 	}
@@ -349,8 +350,8 @@ public class Level1State extends PlayState
 	{
 		mouseX = (int)(e.getX()/GamePanel.scaleWidth);
 		mouseY = (int)(e.getY()/GamePanel.scaleHeight);
-		relX = mouseX - (int)player.getX();
-		relY = mouseY - (int)player.getY();
+		relX = mouseX - (int)player.getX() - player.getWidth()/2;
+		relY = mouseY - (int)player.getY() - player.getHeight()/2;
 		player.setAngle(Math.atan2(relY, relX));
 	}
 }

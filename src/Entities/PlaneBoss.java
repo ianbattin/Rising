@@ -205,7 +205,7 @@ public class PlaneBoss extends Enemy {
 		
 		if(cockpit.intersects(player.getRectangle()) && player.getDY() > 0)
 		{
-			playerHurt(20);
+			playerHurt(10);
 			player.setYVector(-10.0);
 		}
 		else if(this.intersects(player))
@@ -221,13 +221,13 @@ public class PlaneBoss extends Enemy {
 		{
 			for(Tile t: tileMap.getTiles())
 			{
-				if(t.onScreen() && t.getType() != 0)
+				if(t.onScreen() == true && t.getType() != 0)
 				{
-					relX = (int) (this.x - (int)t.getX());
-					relY = (int) (this.y - (int)t.getY());
+					relX = (int) (x + width/2 - (int)t.getX());
+					relY = (int) (y + height - (int)t.getY());
 					angle = Math.atan2(-relY, -relX);
-					if(angle > 3.5) angle = 3.5;
-					if(angle < 2.5) angle = 2.5;
+					if(angle > 3.75) angle = 3.75;
+					if(angle < 1.25) angle = 1.25;
 					angle +=  Math.random()*Math.PI/58 - Math.PI/58;
 
 					if(relX < 1000)
@@ -243,7 +243,7 @@ public class PlaneBoss extends Enemy {
 						long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 						if(fireDelay <= elapsed*(0.5*super.slowDown))
 						{
-							bullets.add(new Projectile(x + width/2, y+height, angle, 3, tm));
+							bullets.add(new Projectile(x + width/2, y+height, angle, 5, tm));
 							fireTimer = System.nanoTime();
 						}
 					}

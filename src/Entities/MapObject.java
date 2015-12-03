@@ -1,8 +1,12 @@
 package Entities;
 
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import Main.GamePanel;
@@ -288,6 +292,27 @@ public abstract class MapObject
 		ymap = tileMap.getY();
 	}
 	
+	public void playerHurt(int amount)
+	{
+		if(recovering)
+		{
+			long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
+			if(recoverLength <= elapsed)
+			{
+				recovering = false;
+			}
+		}
+		else
+		{
+			health -= amount;
+			recovering = true;
+			if(health > 0)
+				recoverTimer = System.nanoTime();
+			else
+				recoverTimer = System.nanoTime();
+		}
+	}
+
 	public int getHealth()
 	{
 		return health;
@@ -324,5 +349,25 @@ public abstract class MapObject
 	{
 		return x + xmap + width < 0 || x + xmap - width > GamePanel.WIDTH || 
 				y + ymap + height < 0 || y + ymap - height > GamePanel.HEIGHT;
+	}
+	
+	public void playSound(final String fileName)
+	{
+		Thread thread = new Thread(new Runnable()
+		{
+			public void run()
+			{
+				try 
+				{
+					AudioClip clip = Applet.newAudioClip(new URL("file:Resources/Sound/" + fileName));
+					clip.play();
+				} 
+				catch (MalformedURLException murle)
+				{
+					System.out.println(murle);
+				}
+			}
+		});
+		thread.start();
 	}
 }
