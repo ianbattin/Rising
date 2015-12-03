@@ -8,16 +8,13 @@ import java.awt.event.MouseEvent;
 import Main.GamePanel;
 import TileMap.Background;
 
-public class OutroState extends PlayState{
-	
-	private String points;
+public class OutroState extends TransitionState
+{
 	private float timer;
 	
-	public OutroState(GameStateManager gsm)
+	public OutroState(GameStateManager gsm, String path)
 	{
-		this.gsm = gsm;
-		
-		bg = new Background("/Outro/gameOver.gif", 1);
+		super(gsm, path);
 	}
 	
 	public void init() 
@@ -26,7 +23,6 @@ public class OutroState extends PlayState{
 		super.alphaLevel = 255;
 		
 		timer = 0;
-		points = Integer.toString(player.getPoints());
 	}
 
 	public void update() 
@@ -51,7 +47,7 @@ public class OutroState extends PlayState{
 		bg.draw(g);
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("RusselSquare", Font.PLAIN, 24));
-		g.drawString("Score: " + points, centerStringX("Score: " + points, 0, GamePanel.WIDTH, g), 480);
+		g.drawString("Score: " + score, centerStringX("Score: " + score, 0, GamePanel.WIDTH, g), 480);
 		super.drawFade(g);
 	}
 

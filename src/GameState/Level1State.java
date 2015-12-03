@@ -35,7 +35,6 @@ public class Level1State extends PlayState
 	private boolean start, isStillAlive;
 	private float timer;
 	public static boolean tileStart;
-	private TileMap tileMap;
 	
 	private boolean transition;
 	private double transitionDY;
@@ -100,6 +99,7 @@ public class Level1State extends PlayState
 		if(start)
 		{
 			bg.update();
+			backGroundParallaxUpdate();
 			tileMap.update();
 			pickups.update();
 			player.update();

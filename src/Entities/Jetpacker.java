@@ -35,6 +35,8 @@ public class Jetpacker extends Enemy
 		recoverLength = 100;
 		
 		moveSpeed = 0.1;
+		moveSpeedLeft = 0.3;
+		moveSpeedRight = 0.3;
 		maxSpeedY = 6.0;
 		maxSpeedX = 3.0;
 		stopSpeed = 0.4;
@@ -207,12 +209,12 @@ public class Jetpacker extends Enemy
 	{
 		if(relX > 200)
 		{
-			dx -= moveSpeed;
+			dx -= moveSpeedLeft;
 			if(dx < -(maxSpeedX*super.slowDown)) dx = -(maxSpeedX*super.slowDown);
 		}
 		else if(relX < -200)
 		{
-			dx += moveSpeed;
+			dx += moveSpeedRight;
 			if(dx > (maxSpeedX*super.slowDown)) dx = (maxSpeedX*super.slowDown);
 		}
 		if(relY > 200)

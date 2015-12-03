@@ -31,6 +31,7 @@ public abstract class GameState
 	protected int alphaLevel;
 	protected float timeKeeper = 0;
 	private int fadeRed, fadeBlue, fadeGreen;
+	protected static int score;
 	
 	public abstract void init();
 	public abstract void update();
@@ -46,7 +47,7 @@ public abstract class GameState
 	public abstract void mouseMoved(MouseEvent e);
 	
 	//return the saved data
-	public String saveState()
+	public String getSavedState()
 	{
 		return data;
 	}
@@ -161,5 +162,15 @@ public abstract class GameState
 			}
 		});
 		thread.start();
+	}
+	
+	public void setScore(int i)
+	{
+		score = i;
+	}
+	
+	public int getScore()
+	{
+		return score;
 	}
 }

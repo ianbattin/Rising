@@ -151,4 +151,9 @@ public class Background
 	{
 		this.dx = bgVectorX;
 	}
+	
+	public void setYVector(double bgVectorY) 
+	{
+		this.dy = bgVectorY;
+	}
 }

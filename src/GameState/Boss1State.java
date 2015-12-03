@@ -46,7 +46,6 @@ public class Boss1State extends PlayState
 	private boolean start, isStillAlive;
 	private float deathTimer;
 	public static boolean tileStart;
-	private TileMap tileMap;
 	private Font healthFont, generalFont;
 	
 	private long timer;
@@ -125,6 +124,7 @@ public class Boss1State extends PlayState
 		setBackgroundVector(0, 5.0);
 		setDebrisVectors(1);
 		
+		System.out.println("Left: " + player.getMoveSpeedLeft() + " Right: " + player.getMoveSpeedRight() + " MaxLeft: " + player.getMaxSpeedLeft() + " MaxRight: " + player.getMaxSpeedRight());
 	}
 
 	public void update()
@@ -187,6 +187,7 @@ public class Boss1State extends PlayState
 		tileMap.update();
 		pickups.update();
 		aimUpdate();
+		backGroundParallaxUpdate();
 		player.update();
 		for(int i = 0; i < enemies.size(); i++)
 		{
@@ -209,6 +210,18 @@ public class Boss1State extends PlayState
 
 		//save data (in this case the points)
 		super.data = Integer.toString(player.getPoints());
+		
+		/*for(Enemy e: enemies)
+		{
+			e.setMoveSpeedLeft(0.2);//player.getMoveSpeedLeft()/2);
+			e.setMaxSpeedLeft(3);//player.getMaxSpeedLeft()*2);
+			e.setMoveSpeedRight(0.5);//player.getMoveSpeedRight()/2);
+			e.setMaxSpeedRight(8);//player.getMaxSpeedRight()*2);
+		}
+		player.setMoveSpeedLeft(0.2);//player.getMoveSpeedLeft()/2);
+		player.setMaxSpeedLeft(3);//player.getMaxSpeedLeft()*2);
+		player.setMoveSpeedRight(0.5);//player.getMoveSpeedRight()/2);
+		player.setMaxSpeedRight(8);//player.getMaxSpeedRight()*2);*/
 	}
 	
 	private void script()

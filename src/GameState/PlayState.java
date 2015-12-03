@@ -16,6 +16,7 @@ import TileMap.TileMap;
 
 public abstract class PlayState extends GameState
 {
+	protected TileMap tileMap;
 	protected Background bg;
 	protected double bgVectorX, bgVectorY;
 	protected double debrisVector;
@@ -57,6 +58,36 @@ public abstract class PlayState extends GameState
 	{
 		for(Enemy e: enemies)
 			e.setSlowDownRate(speed);
+	}
+
+	public void backGroundParallaxUpdate()
+	{
+		if(tileMap.getMoving())
+		{
+			if(player.getY() < 300) 
+			{
+				if(Level1State.tileStart && tileMap.getMoving())
+				{
+
+					if (player.getDY() >= 0)
+					{
+						bg.setYVector(bgVectorY);
+					}
+					else
+					{
+						bg.setYVector(bgVectorY - player.getDY()/5);
+					}
+				}
+			}
+		}
+		if (player.getDX() >= 0)
+		{
+			bg.setXVector(bgVectorX + player.getDX()/5);
+		}
+		else
+		{
+			bg.setXVector(bgVectorX - player.getDX()/5);
+		}
 	}
 	
 	public void aimUpdate()

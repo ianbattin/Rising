@@ -37,7 +37,11 @@ public class Rifleman extends Enemy
 		recoverLength = 100;
 		
 		moveSpeed = 0.3;
+		moveSpeedLeft = 0.3;
+		moveSpeedRight = 0.3;
 		maxSpeed = 5.0;
+		maxSpeedLeft = 5.0;
+		maxSpeedRight = 5.0;
 		stopSpeed = 0.4;
 		fallSpeed = 0.25;
 		maxFallSpeed = 7.0;
@@ -257,14 +261,14 @@ public class Rifleman extends Enemy
 		//MOVING LEFT AND RIGHT
 		if(left)
 		{
-			dx -= moveSpeed;
-			if(dx < -maxSpeed) dx = -maxSpeed;
+			dx -= moveSpeedLeft;
+			if(dx < -maxSpeedLeft) dx = -maxSpeedLeft;
 		}
 
 		if(right)
 		{
-			dx += moveSpeed;
-			if(dx > maxSpeed) dx = maxSpeed;
+			dx += moveSpeedRight;
+			if(dx > maxSpeedRight) dx = maxSpeedRight;
 		}
 
 		if(!left && !right)

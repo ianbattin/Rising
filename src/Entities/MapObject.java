@@ -82,7 +82,11 @@ public abstract class MapObject
 	
 	//movement attributes
 	protected double moveSpeed;
+	protected double moveSpeedLeft;
+	protected double moveSpeedRight;
 	protected double maxSpeed;
+	protected double maxSpeedLeft;
+	protected double maxSpeedRight;
 	protected double maxSpeedY;
 	protected double maxSpeedX;
 	protected double stopSpeed;
@@ -375,6 +379,15 @@ public abstract class MapObject
 	public void setUp(boolean b) { 	jump = b;	}
 	public void setDown(boolean b) { 	drop = b;	}
 	public void setJumping(boolean b) { 	jump = b;	}
+	
+	public double getMoveSpeedLeft() { return moveSpeedLeft; }
+	public double getMoveSpeedRight() { return moveSpeedRight; }
+	public double getMaxSpeedLeft() { return maxSpeedLeft; }
+	public double getMaxSpeedRight() { return maxSpeedRight; }
+	public void setMoveSpeedLeft(double speed) { moveSpeedLeft = speed; }
+	public void setMoveSpeedRight(double speed) { moveSpeedRight = speed; }
+	public void setMaxSpeedLeft(double speed) { maxSpeedLeft = speed; }
+	public void setMaxSpeedRight(double speed) { maxSpeedRight = speed; }
 	
 	public boolean notOnScreen()
 	{

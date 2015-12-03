@@ -23,6 +23,7 @@ import javax.imageio.ImageIO;
 import GameState.GameStateManager;
 import GameState.Level1State;
 import GameState.PlayState;
+import GameState.GameState;
 import Main.GamePanel;
 import TileMap.Tile;
 import TileMap.TileMap;
@@ -55,7 +56,6 @@ public class Player extends MapObject
 	private ArrayList<Integer> charBlurPos;
 	
 	//score system
-	private int points;
 	int heightScore;
 
 	//character position relative to bottom of tileMap
@@ -84,10 +84,10 @@ public class Player extends MapObject
 	private static final int HOVERING = 5;
 	private static final int DOUBLEJUMP = 6;
 	
-	public Player(TileMap tm, PlayState ps)
+	public Player(TileMap tm, PlayState playState)
 	{	
 		super(tm);
-		this.playState = ps;
+		this.playState = playState;
 		
 		bullets = new ArrayList<Projectile>();
 		angle = 0.0;
@@ -97,8 +97,11 @@ public class Player extends MapObject
 		
 		recoverLength = 3000;
 		
-		moveSpeed = 0.3;
+		moveSpeedLeft = 0.3;
+		moveSpeedRight = 0.3;
 		maxSpeed = 5.0;
+		maxSpeedLeft = 5.0;
+		maxSpeedRight = 5.0;
 		stopSpeed = 0.4;
 		fallSpeed = 0.25;
 		maxFallSpeed = 7.0;
@@ -110,8 +113,6 @@ public class Player extends MapObject
 		cheight = 70;
 
 		facingRight = true;
-		
-		points = 0;
 		
 		try
 		{
@@ -276,7 +277,7 @@ public class Player extends MapObject
 		if(dy < 0 && heightScore <= yFromBottom)
 		{
 			heightScore = (int)yFromBottom;
-			points += -dy;
+			playState.setScore((int) (playState.getScore() + -dy));
 		}
 		
 		if (y > GamePanel.HEIGHT + 150 + height)
@@ -485,14 +486,14 @@ public class Player extends MapObject
 		//MOVING LEFT AND RIGHT
 		if(left)
 		{
-			dx -= moveSpeed;
-			if(dx < -maxSpeed) dx = -maxSpeed;
+			dx -= moveSpeedLeft;
+			if(dx < -maxSpeedLeft) dx = -maxSpeedLeft;
 		}
 
 		if(right)
 		{
-			dx += moveSpeed;
-			if(dx > maxSpeed) dx = maxSpeed;
+			dx += moveSpeedRight;
+			if(dx > maxSpeedRight) dx = maxSpeedRight;
 		}
 
 		if(!left && !right)
@@ -617,6 +618,7 @@ public class Player extends MapObject
 			else{ facingRight = false;	}
 			if(currentAction != WALKING && currentAction != FALLING && currentAction != JUMPING)
 			{
+				animation.setDone(false);
 				currentAction = WALKING;
 				animation.setFrames(playerSprites.get(WALKING));
 				animation.setDelay(200);
@@ -921,7 +923,7 @@ public class Player extends MapObject
 	
 	public int getPoints()
 	{
-		return points;
+		return playState.getScore();
 	}
 	
 	public void keyPressed(int k)
@@ -964,10 +966,6 @@ public class Player extends MapObject
 			{
 				gliding = true;
 				idle = false;
-			}
-			if(k == KeyEvent.VK_C)
-			{
-				points = 10000;
 			}
 			if(k == GameStateManager.action && hasBird)
 			{
