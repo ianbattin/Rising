@@ -137,7 +137,7 @@ public abstract class MapObject
 		
 	}
 	
-	public void myCheckCollision(TileMap tm)
+	public void myCheckCollision()
 	{
 		boolean collided = false;
 		for(int i = 0; i < tiles.size(); i++)
@@ -155,7 +155,7 @@ public abstract class MapObject
 					if(dy >= 0)
 					{
 						y = t.top - cheight - 0.1;
-						dy = tm.getDY();
+						dy = tileMap.getDY();
 						jumped  = false;
 						doubleJumped = false;
 						falling = false;
@@ -305,6 +305,13 @@ public abstract class MapObject
 	public void setYVector(double dy) 
 	{
 		this.dy = dy;
+	}
+	
+	public void setTileMap(TileMap tm)
+	{
+		tileMap = tm;
+		tiles = tm.tiles;
+		tileSize = tm.getTileSize();
 	}
 	
 	public void setLeft(boolean b) { 	left = b;	}

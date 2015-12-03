@@ -44,9 +44,10 @@ public class Level1State extends PlayState
 	private boolean transition;
 	private double transitionDY;
 	
+	public boolean hasInited;
+	
 	public Level1State(GameStateManager gsm)
 	{
-		init();
 		this.gsm = gsm;
 		start = false;
 		try
@@ -89,10 +90,13 @@ public class Level1State extends PlayState
 		player = new Player(tileMap, this);
 		player.setPosition(375, -100);
 		player.setTileMapMoving(true);
+		
 		enemies = new ArrayList<Enemy>();
 		int[] pickupsToSpawn = {Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST};
 		pickups = new Pickups(player, tileMap, this, pickupsToSpawn);
 		tileStart = false;
+		
+		hasInited = true;
 	}
 
 	public void update()
@@ -263,6 +267,7 @@ public class Level1State extends PlayState
 		}
 		if(k == GameStateManager.reset)
 		{
+			gsm.setState(GameStateManager.MENUSTATE);
 			gsm.resetState(GameStateManager.LEVEL1STATE);
 		}
 		if(k == GameStateManager.pause)
@@ -275,7 +280,7 @@ public class Level1State extends PlayState
 		}
 		if(k == KeyEvent.VK_N)
 		{
-			gsm.setCurrentState(GameStateManager.BOSS1STATE);
+			gsm.setState(GameStateManager.BOSS1STATE);
 			gsm.resetState(GameStateManager.LEVEL1STATE);
 		}
 	}

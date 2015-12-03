@@ -10,10 +10,11 @@ import TileMap.TileMap;
 
 public abstract class PlayState extends GameState
 {
+	
 	protected Background bg;
 	protected double bgVectorX, bgVectorY;
 	protected double debrisVector;
-	protected Player player;
+	protected static Player player;
 	protected Pickups pickups;
 	protected ArrayList<Enemy> enemies;
 	

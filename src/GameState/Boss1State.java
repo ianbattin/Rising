@@ -35,8 +35,6 @@ public class Boss1State extends PlayState
 	private boolean mouseUpdate;
 	private MouseEvent mouse;
 
-	private Player player;
-	private Player otherPlayer;
 	private Pickups pickups;
 	private ArrayList<Enemy> enemies;
 	private int[][] debrisInfo;
@@ -61,15 +59,12 @@ public class Boss1State extends PlayState
 	private double debrisVector;
 	private boolean drawBossHealth;
 
-	public Boss1State(GameStateManager gsm, Player player)
+	public Boss1State(GameStateManager gsm)
 	{
-		init();
 		stage = 0;
 		step = 0;
 		count = 0;
 		done = false;
-		
-		otherPlayer = player;
 		
 		this.gsm = gsm;
 		start = false;
@@ -108,8 +103,8 @@ public class Boss1State extends PlayState
 		tileMap = new TileMap("Resources/Maps/boss1.txt");
 		tileMap.setVector(0, 0);
 		tileMap.setY(tileMap.getY() + 175);
-		player = new Player(tileMap, this);
 		player.setTileMapMoving(false);
+		player.setTileMap(tileMap);
 		int[] pickupsToSpawn = {Pickups.ARMORBOOST, Pickups.HEALBOOST, Pickups.SLOWTIMEBOOST, Pickups.BIRDBOOST};
 		pickups = new Pickups(player, tileMap, this, pickupsToSpawn);
 		enemies = new ArrayList<Enemy>();
@@ -125,6 +120,7 @@ public class Boss1State extends PlayState
 		
 		setBackgroundVector(0, 5.0);
 		setDebrisVectors(1);
+		
 	}
 
 	public void update()
@@ -142,7 +138,6 @@ public class Boss1State extends PlayState
 		bg.draw(g);
 		tileMap.draw(g);
 		player.draw(g);
-		
 		pickups.draw(g);
 		for(Enemy e: enemies)
 			e.draw(g);
@@ -179,8 +174,8 @@ public class Boss1State extends PlayState
 	{
 		if(!setUp)
 		{
-			this.player.setPosition(400, -300);
-			//this.player.setHealth(otherPlayer.getHealth());
+			player.setPosition(400, -300);
+
 			setUp = true;
 		}
 		
@@ -213,7 +208,7 @@ public class Boss1State extends PlayState
 	
 	private void script()
 	{
-		if(enemies.size() == 0)
+		if(enemies.isEmpty())
 		{
 			enemies.add(new PlaneBoss(-2000, 200, tileMap, player));
 		}
@@ -495,6 +490,7 @@ public class Boss1State extends PlayState
 
 		if(k == GameStateManager.reset)
 		{
+			gsm.setState(GameStateManager.MENUSTATE);
 			gsm.resetState(GameStateManager.BOSS1STATE);
 		}
 		if(k == GameStateManager.pause)

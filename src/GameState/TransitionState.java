@@ -8,10 +8,8 @@ import Main.GamePanel;
 import TileMap.Background;
 
 
-public class TransitionState extends GameState {
+public class TransitionState extends PlayState {
 
-	private Background bg;
-	private GameStateManager gsm;
 	private String path;
 	
 	private float timer;
@@ -103,13 +101,13 @@ public class TransitionState extends GameState {
 	{
 		if(k == GameStateManager.select)
 		{
-			gsm.resetState(GameStateManager.INTROSTATE);
 			gsm.setState(GameStateManager.LEVEL1STATE);
+			gsm.resetState(GameStateManager.INTROSTATE);
 		} 
 		else if (k == GameStateManager.reset)
 		{
-			gsm.resetState(GameStateManager.INTROSTATE);
 			gsm.setState(GameStateManager.MENUSTATE);
+			gsm.resetState(GameStateManager.INTROSTATE);
 		}
 	}
 

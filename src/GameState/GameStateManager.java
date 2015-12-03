@@ -1,5 +1,6 @@
 package GameState;
 
+import Entities.Player;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -11,7 +12,8 @@ public class GameStateManager
 {
 	private static ArrayList<GameState> gameStates;
 	private static int currentState;
-	private String[] data;
+	
+	private Player player;
 	
 	public static final int SPLASHSTATE = 0; //Splash screen
 	public static final int MENUSTATE = 1; //Menu
@@ -57,16 +59,15 @@ public class GameStateManager
 		gameStates.add(new TransitionState(this, "Intro"));
 		gameStates.add(new Level1State(this));
 		gameStates.add(new TransitionState(this, "Outro"));
-		gameStates.add(new Boss1State(this, ((PlayState) (gameStates.get(LEVEL1STATE))).getPlayer()));
+		gameStates.add(new Boss1State(this));
 		gameStates.add(new OutroState(this));
-		data = new String[gameStates.size()];
 	}
 	
 	public void setState(int state)
 	{
+		gameStates.get(state).init();
+		gameStates.get(state).update();
 		currentState = state;
-		gameStates.get(currentState).init();
-		gameStates.get(currentState).update();
 	}
 	
 	public void update()
@@ -89,11 +90,6 @@ public class GameStateManager
 		currentState = state;
 	}
 	
-	public String getDataForState(int state)
-	{
-		return data[state];
-	}
-	
 	//Resets a state by deleting and re adding a new version of a state (Decided it actually makes sense
 	//to have this method in the GSM as the GSM is managing the states, which reseting is a part of
 	public void resetState(int state)
@@ -106,8 +102,8 @@ public class GameStateManager
 		else if(stateAtPos instanceof CreditState) gameStates.add(state, new CreditState(this));
 		else if(stateAtPos instanceof TransitionState) gameStates.add(state, new TransitionState(this, "Intro"));
 		else if(stateAtPos instanceof Level1State) gameStates.add(state, new Level1State(this));
+		else if(stateAtPos instanceof Boss1State) gameStates.add(state, new Boss1State(this));
 		else if(stateAtPos instanceof OutroState) gameStates.add(state, new OutroState(this));
-		data[state] = stateAtPos.data;
 	}
 	
 	public void keyPressed(int k)
