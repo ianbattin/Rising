@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import Main.GamePanel;
+import TileMap.Background;
 import TileMap.Tile;
 import TileMap.TileMap;
 
@@ -140,6 +141,36 @@ public abstract class MapObject
 		bottomRight = br == Tile.AIR;
 		
 	}
+	
+	/*public void checkPixelColorCollision(TileMap tm)
+	{
+		boolean blocked = true;
+		int collideYLoc = 0;
+		
+		for(int color: Background.getPixelColors())
+		{
+			if(GamePanel.getImage().getRGB((int)x, (int)(y+cheight)) == color)
+			{
+				blocked = false;
+			}
+		}
+
+		if(blocked && dy >= 0)
+		{
+			y = y;
+			dy = tm.getDY();
+			jumped  = false;
+			doubleJumped = false;
+			falling = false;
+			//landing = true;
+			//gliding = false;
+			idle = true;
+			fallingAnim = false;
+			//System.out.println("BLOCKED");
+		}
+		else
+			falling = true;
+	}*/
 	
 	public void myCheckCollision(TileMap tm)
 	{

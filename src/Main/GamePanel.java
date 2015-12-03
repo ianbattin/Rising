@@ -37,7 +37,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	private boolean displayFPS = false;
 	
 	//image
-	private BufferedImage image;
+	private static BufferedImage image;
 	private static Graphics2D g;
 	
 	//game state (Level 1 State, Menu State, etc.)
@@ -166,8 +166,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	{
 		return elapsedTime;
 	}
-
 	
+	public static BufferedImage getImage()
+	{
+		return image;
+	}
+
 	//processes key presses
 	public void keyPressed(KeyEvent key) 
 	{

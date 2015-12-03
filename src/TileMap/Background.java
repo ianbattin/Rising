@@ -2,6 +2,8 @@ package TileMap;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -9,7 +11,8 @@ import Main.GamePanel;
 
 public class Background 
 {
-	private Image image;
+	private BufferedImage image;
+	private static ArrayList<Integer> pixelColors;
 	
 	private double x; //xPosition
 	private double y; //yPosition
@@ -24,6 +27,18 @@ public class Background
 		try
 		{
 			image = ImageIO.read(getClass().getResourceAsStream(s));
+			
+			pixelColors = new ArrayList<Integer>();
+			for(int i = 0; i < image.getWidth(); i++)
+			{
+				for(int j = 0; j < image.getHeight(); j++)
+				{
+					int color = image.getRGB(i, j);
+					if(!pixelColors.contains(color))
+						pixelColors.add(color);
+				}
+			}
+			
 			moveScale = ms;
 		}
 		catch(Exception e)
@@ -122,6 +137,11 @@ public class Background
 		}
 	}
 
+	public static ArrayList<Integer> getPixelColors()
+	{
+		return pixelColors;
+	}
+	
 	public double getYPosition() 
 	{
 		return y;

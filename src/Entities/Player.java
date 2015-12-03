@@ -241,6 +241,7 @@ public class Player extends MapObject
 		if (health > 0)
 		{
 			myCheckCollision(tm);
+			//if(onScreen()) checkPixelColorCollision(tm);
 			getAttack();
 		}
 		else
@@ -1092,5 +1093,10 @@ public class Player extends MapObject
 	public double getTotalHeight() 
 	{
 		return yFromBottom;
+	}
+	
+	public boolean onScreen()
+	{
+		return (-width <= x && x <= GamePanel.WIDTH+width && -height <= y && y <= GamePanel.HEIGHT+height);
 	}
 }
