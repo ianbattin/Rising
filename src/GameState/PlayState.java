@@ -1,10 +1,16 @@
 package GameState;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.MouseInfo;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import Entities.Enemy;
 import Entities.Pickups;
 import Entities.Player;
+import Main.Main;
 import TileMap.Background;
 import TileMap.TileMap;
 
@@ -13,9 +19,16 @@ public abstract class PlayState extends GameState
 	protected Background bg;
 	protected double bgVectorX, bgVectorY;
 	protected double debrisVector;
-	protected Player player;
+	protected static Player player;
 	protected Pickups pickups;
 	protected ArrayList<Enemy> enemies;
+	
+	//Mouse
+	protected int mouseX;
+	protected int mouseY;
+	protected int relX;
+	protected int relY;
+	protected boolean mouseUpdate;
 	
 	public void setBackgroundVector(double vectorX, double vectorY)
 	{
@@ -46,6 +59,29 @@ public abstract class PlayState extends GameState
 			e.setSlowDownRate(speed);
 	}
 	
+	public void aimUpdate()
+	{
+		if(mouseUpdate)
+		{
+			mouseX = (int) (MouseInfo.getPointerInfo().getLocation().getX() - Main.window.getLocation().getX()) - 3;
+			mouseY = (int) (MouseInfo.getPointerInfo().getLocation().getY() - Main.window.getLocation().getY()) - 25;
+			relX = mouseX - (int)player.getX() - player.getWidth()/2;
+			relY = mouseY - (int)player.getY() - player.getHeight()/2;
+			player.setAngle(Math.atan2(relY, relX));
+		}
+	}
+	
+	public void drawCrossHair(Graphics2D g) 
+	{
+		mouseX = (int) (MouseInfo.getPointerInfo().getLocation().getX() - Main.window.getLocation().getX()) - 3;
+		mouseY = (int) (MouseInfo.getPointerInfo().getLocation().getY() - Main.window.getLocation().getY()) - 25;
+		
+		g.setColor(Color.BLACK);
+		g.setStroke(new BasicStroke(2));
+		g.drawLine(mouseX - 5, mouseY, mouseX + 5, mouseY);
+		g.drawLine(mouseX, mouseY - 5, mouseX, mouseY + 5);
+	}
+	
 	public Player getPlayer()
 	{
 		return player;
@@ -54,5 +90,56 @@ public abstract class PlayState extends GameState
 	public ArrayList<Enemy> getEnemies() 
 	{
 		return enemies;
+	}
+	
+	public void mouseClicked(MouseEvent e)
+	{
+		mouseUpdate = true;
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) 
+	{
+		mouseUpdate = true;
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) 
+	{
+		mouseUpdate = false;
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) 
+	{
+		mouseUpdate = true;
+		if(e.getButton() == MouseEvent.BUTTON1)
+		{
+			player.setFiring(true);
+			player.setMouseHeld(true);
+		}
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) 
+	{
+		mouseUpdate = true;
+		if(e.getButton() == MouseEvent.BUTTON1)
+		{
+			player.setFiring(false);
+			player.setMouseHeld(false);
+		}
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) 
+	{
+		mouseUpdate = true;
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) 
+	{
+		mouseUpdate = true;
 	}
 }

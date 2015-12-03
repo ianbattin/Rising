@@ -8,10 +8,7 @@ import java.awt.event.MouseEvent;
 import Main.GamePanel;
 import TileMap.Background;
 
-public class OutroState extends GameState{
-
-	private Background bg;
-	private GameStateManager gsm;
+public class OutroState extends PlayState{
 	
 	private String points;
 	private float timer;
@@ -29,7 +26,7 @@ public class OutroState extends GameState{
 		super.alphaLevel = 255;
 		
 		timer = 0;
-		points = gsm.getDataForState(GameStateManager.LEVEL1STATE);
+		points = Integer.toString(player.getPoints());
 	}
 
 	public void update() 

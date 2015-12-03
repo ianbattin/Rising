@@ -45,7 +45,6 @@ public class Explosion extends MapObject
 	public Explosion(double x, double y, int type, TileMap tm) 
 	{
 		super(tm);
-		this.tm = tm;
 		
 		this.x = x;
 		this.y = y;
@@ -124,15 +123,15 @@ public class Explosion extends MapObject
 	{
 		if(!remove)
 		{
-			this.myCheckCollision(tileMap);
+			this.myCheckCollision();
 			getAnimation();
 
 			x += dx;
 			y += dy;
-			x += tm.getDX();
-			y += tm.getDY();
+			x += tileMap.getDX();
+			y += tileMap.getDY();
 			
-			for(Tile tile: tm.getTiles())
+			for(Tile tile: tileMap.getTiles())
 			{
 				if(this.intersects(tile))
 				{
@@ -154,7 +153,7 @@ public class Explosion extends MapObject
 				// Drawing the rotated image at the required drawing locations
 				g.drawImage(op.filter(animation.getImage(), null), (int)(x + xmap), (int)(y + ymap), null);
 
-				if(tm.getShowCollisonBox())
+				if(tileMap.getShowCollisonBox())
 				{
 					g.setColor(Color.RED);
 					g.draw(this.getRectangle());
@@ -175,7 +174,7 @@ public class Explosion extends MapObject
 					}
 				}
 
-				if(tm.getShowCollisonBox())
+				if(tileMap.getShowCollisonBox())
 				{
 					g.setColor(Color.RED);
 					g.draw(this.getRectangle());

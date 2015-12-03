@@ -145,11 +145,11 @@ public class MenuState extends GameState
 		}
 		if(currentChoice == 1)
 		{
-			gsm.setCurrentState(GameStateManager.CONTROLSTATE);
+			gsm.setState(GameStateManager.CONTROLSTATE);
 		}
 		if(currentChoice == 2)
 		{
-			gsm.setCurrentState(GameStateManager.CREDITSTATE);
+			gsm.setState(GameStateManager.CREDITSTATE);
 		}
 		if(currentChoice == 3)
 		{
@@ -166,8 +166,8 @@ public class MenuState extends GameState
 		} 
 		else if (k == GameStateManager.select)
 		{
+			gsm.setState(GameStateManager.LEVEL1STATE);
 			gsm.resetState(GameStateManager.MENUSTATE);
-			gsm.setCurrentState(GameStateManager.LEVEL1STATE);
 		}
 		
 		if (k == GameStateManager.reset)

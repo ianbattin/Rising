@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
 import java.awt.Stroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -20,20 +21,14 @@ import Entities.Jetpacker;
 import Entities.Pickups;
 import Entities.PlaneBoss;
 import Main.GamePanel;
+import Main.Main;
 import TileMap.Background;
 import TileMap.TileMap;
 
 
 public class Level1State extends PlayState
 {
-	//Mouse
-	private int mouseX;
-	private int mouseY;
-	private int relX;
-	private int relY;
 	private int debrisLoop;
-	private boolean mouseUpdate;
-	private MouseEvent mouse;
 	
 	private int[][] debrisInfo;
 	private ArrayList<Color> colors;
@@ -45,9 +40,10 @@ public class Level1State extends PlayState
 	private boolean transition;
 	private double transitionDY;
 	
+	public boolean hasInited;
+	
 	public Level1State(GameStateManager gsm)
 	{
-		init();
 		this.gsm = gsm;
 		start = false;
 		try
@@ -90,10 +86,13 @@ public class Level1State extends PlayState
 		player = new Player(tileMap, this);
 		player.setPosition(375, -100);
 		player.setTileMapMoving(true);
+		
 		enemies = new ArrayList<Enemy>();
 		int[] pickupsToSpawn = {Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST};
 		pickups = new Pickups(player, tileMap, this, pickupsToSpawn);
 		tileStart = false;
+		
+		hasInited = true;
 	}
 
 	public void update()
@@ -106,6 +105,7 @@ public class Level1State extends PlayState
 			player.update();
 			for(Enemy e: enemies)
 				e.update();
+			aimUpdate();
 			
 			//Camera left and right movement (Player always stays centered)
 			tileMap.setXVector(-player.getDX());
@@ -191,14 +191,6 @@ public class Level1State extends PlayState
 	{
 		return player;
 	}
-	
-	private void drawCrossHair(Graphics2D g) 
-	{
-		g.setColor(Color.BLACK);
-		g.setStroke(new BasicStroke(2));
-		g.drawLine(mouseX - 5, mouseY, mouseX + 5, mouseY);
-		g.drawLine(mouseX, mouseY - 5, mouseX, mouseY + 5);
-	}
 
 	//update and draw the debris
 	public void debris(Graphics2D g)
@@ -264,6 +256,7 @@ public class Level1State extends PlayState
 		}
 		if(k == GameStateManager.reset)
 		{
+			gsm.setState(GameStateManager.MENUSTATE);
 			gsm.resetState(GameStateManager.LEVEL1STATE);
 		}
 		if(k == GameStateManager.pause)
@@ -276,7 +269,7 @@ public class Level1State extends PlayState
 		}
 		if(k == KeyEvent.VK_N)
 		{
-			gsm.setCurrentState(GameStateManager.BOSS1STATE);
+			gsm.setState(GameStateManager.BOSS1STATE);
 			gsm.resetState(GameStateManager.LEVEL1STATE);
 		}
 	}
@@ -284,69 +277,5 @@ public class Level1State extends PlayState
 	public void keyReleased(int k) 
 	{
 		player.keyReleased(k);
-	}
-
-	@Override
-
-	public void mouseClicked(MouseEvent e)
-	{
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) 
-	{
-		mouseUpdate = true;
-		mouse = e;
-	}
-
-	
-
-	@Override
-	public void mouseExited(MouseEvent e) 
-	{
-		mouseUpdate = false;
-		mouse = e;
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) 
-	{
-		if(e.getButton() == MouseEvent.BUTTON1)
-		{
-			player.setFiring(true);
-			player.setMouseHeld(true);
-		}
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) 
-	{
-		if(e.getButton() == MouseEvent.BUTTON1)
-		{
-			player.setFiring(false);
-			player.setMouseHeld(false);
-		}
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) 
-	{
-		mouseX = (int)(e.getX()/GamePanel.scaleWidth);
-		mouseY = (int)(e.getY()/GamePanel.scaleHeight);
-		relX = mouseX - (int)player.getX() - player.getWidth()/2;
-		relY = mouseY - (int)player.getY() - player.getHeight()/2;
-		player.setAngle(Math.atan2(relY, relX));
-
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) 
-	{
-		mouseX = (int)(e.getX()/GamePanel.scaleWidth);
-		mouseY = (int)(e.getY()/GamePanel.scaleHeight);
-		relX = mouseX - (int)player.getX() - player.getWidth()/2;
-		relY = mouseY - (int)player.getY() - player.getHeight()/2;
-		player.setAngle(Math.atan2(relY, relX));
 	}
 }

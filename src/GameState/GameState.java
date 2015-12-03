@@ -23,6 +23,8 @@ import sun.audio.*;
 public abstract class GameState
 {
 	protected GameStateManager gsm;
+	protected Background bg;
+	
 	//store data from each state
 	protected String data;
 	protected boolean isFadingOut, isFadingIn;

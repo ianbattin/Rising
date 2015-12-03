@@ -117,7 +117,7 @@ public class Rifleman extends Enemy
 		if (health > 0)
 		{
 			getMovement();
-			myCheckCollision(tm);
+			myCheckCollision();
 			getAttack();
 		}
 		else
@@ -126,8 +126,8 @@ public class Rifleman extends Enemy
 			y += dy;
 		}
 		
-		x += tm.getDX();
-		y += tm.getDY();
+		x += tileMap.getDX();
+		y += tileMap.getDY();
 		
 		getAnimation();
 		getBulletCollision();

@@ -15,8 +15,8 @@ public class CreditState extends GameState
 	private Background bg;
 	private Color titleColor;
 	private Font titleFont, optionsFont, subTextFont;
-	private String[] creditsNames = {"Ian Battin - Progammer", "Maxence Weyrich - Programmer", 
-			"Sarah MacDougall - Level Design", "Rhea Bae - Art and Design", "Taage Storey - Design and Storyline"};
+	private String[] creditsNames = {"Ian Battin - Lead Progammer", "Maxence Weyrich - Programmer", 
+			"Taage Storey - Game Design and Lead Artist", "Sarah MacDougall - Level Design", "Rhea Bae - Art and Design"};
 	
 	public CreditState(GameStateManager gsm)
 	{

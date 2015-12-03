@@ -9,7 +9,6 @@ import TileMap.TileMap;
 
 public class Projectile extends MapObject
 {
-	private TileMap tm;
 	private double direction;
 	private int damage;
 	private int type;
@@ -25,7 +24,6 @@ public class Projectile extends MapObject
 	public Projectile(double x, double y, double direction, int type, TileMap tm) 
 	{
 		super(tm);
-		this.tm = tm;
 		
 		this.x = x;
 		this.y = y;
@@ -102,11 +100,11 @@ public class Projectile extends MapObject
 
 	public void update() 
 	{
-		this.myCheckCollision(tileMap);
+		this.myCheckCollision();
 		dx = Math.cos(direction) * (moveSpeed*slowTime);
 		dy = Math.sin(direction) * (moveSpeed*slowTime);
-		dx += tm.getDX();
-		dy += tm.getDY();
+		dx += tileMap.getDX();
+		dy += tileMap.getDY();
 			
 		x += dx;
 		y += dy;
@@ -121,7 +119,7 @@ public class Projectile extends MapObject
 			g.setColor(Color.BLACK);
 			g.fillOval((int)x, (int)y, width, height);
 			
-			if(tm.getShowCollisonBox())
+			if(tileMap.getShowCollisonBox())
 			{
 				g.setColor(Color.RED);
 				g.draw(this.getRectangle());
@@ -153,12 +151,12 @@ public class Projectile extends MapObject
 			else if(this.type == 5)
 			{
 				remove = true;
-				tm.getExplosions().add(new Explosion(x, y, 1, tileMap));
+				tileMap.getExplosions().add(new Explosion(x, y, 1, tileMap));
 			}
 			else if(this.type == 6)
 			{
 				remove = true;
-				tm.getExplosions().add(new Explosion(x, y, 2, tileMap));
+				tileMap.getExplosions().add(new Explosion(x, y, 2, tileMap));
 			}
 			else
 				remove = true;
@@ -191,8 +189,8 @@ public class Projectile extends MapObject
 			if(this.type == 5)
 			{
 				remove = true;
-				tm.getExplosions().add(new Explosion(x, y, 1, tileMap));
-				tm.getExplosions().get(tm.getExplosions().size()-1).collided(m);
+				tileMap.getExplosions().add(new Explosion(x, y, 1, tileMap));
+				tileMap.getExplosions().get(tileMap.getExplosions().size()-1).collided(m);
 			}
 		}
 	}

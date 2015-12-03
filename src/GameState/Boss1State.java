@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
 import java.awt.Polygon;
 import java.awt.Stroke;
 import java.awt.event.KeyEvent;
@@ -22,6 +23,7 @@ import Entities.Jetpacker;
 import Entities.Pickups;
 import Entities.PlaneBoss;
 import Main.GamePanel;
+import Main.Main;
 import TileMap.Background;
 import TileMap.Tile;
 import TileMap.TileMap;
@@ -37,8 +39,6 @@ public class Boss1State extends PlayState
 	private boolean mouseUpdate;
 	private MouseEvent mouse;
 
-	private Player player;
-	private Player otherPlayer;
 	private Pickups pickups;
 	private ArrayList<Enemy> enemies;
 	private int[][] debrisInfo;
@@ -63,15 +63,12 @@ public class Boss1State extends PlayState
 	private double debrisVector;
 	private boolean drawBossHealth;
 
-	public Boss1State(GameStateManager gsm, Player player)
+	public Boss1State(GameStateManager gsm)
 	{
-		init();
 		stage = 0;
 		step = 0;
 		count = 0;
 		done = false;
-		
-		otherPlayer = player;
 		
 		this.gsm = gsm;
 		start = false;
@@ -110,8 +107,8 @@ public class Boss1State extends PlayState
 		tileMap = new TileMap("Resources/Maps/boss1.txt");
 		tileMap.setVector(0, 0);
 		tileMap.setY(tileMap.getY() + 175);
-		player = new Player(tileMap, this);
 		player.setTileMapMoving(false);
+		player.setTileMap(tileMap);
 		int[] pickupsToSpawn = {Pickups.ARMORBOOST, Pickups.HEALBOOST, Pickups.SLOWTIMEBOOST, Pickups.BIRDBOOST};
 		pickups = new Pickups(player, tileMap, this, pickupsToSpawn);
 		enemies = new ArrayList<Enemy>();
@@ -127,6 +124,7 @@ public class Boss1State extends PlayState
 		
 		setBackgroundVector(0, 5.0);
 		setDebrisVectors(1);
+		
 	}
 
 	public void update()
@@ -144,7 +142,6 @@ public class Boss1State extends PlayState
 		bg.draw(g);
 		tileMap.draw(g);
 		player.draw(g);
-		
 		pickups.draw(g);
 		for(Enemy e: enemies)
 			e.draw(g);
@@ -181,14 +178,15 @@ public class Boss1State extends PlayState
 	{
 		if(!setUp)
 		{
-			this.player.setPosition(400, -300);
-			//this.player.setHealth(otherPlayer.getHealth());
+			player.setPosition(400, -300);
+
 			setUp = true;
 		}
 		
 		bg.update();
 		tileMap.update();
 		pickups.update();
+		aimUpdate();
 		player.update();
 		for(int i = 0; i < enemies.size(); i++)
 		{
@@ -215,7 +213,7 @@ public class Boss1State extends PlayState
 	
 	private void script()
 	{
-		if(enemies.size() == 0)
+		if(enemies.isEmpty())
 		{
 			enemies.add(new PlaneBoss(-2000, 200, tileMap, player));
 		}
@@ -464,14 +462,6 @@ public class Boss1State extends PlayState
 				System.out.println("WAHHHHHH");
 		}
 	}
-	
-	private void drawCrossHair(Graphics2D g) 
-	{
-		g.setColor(Color.BLACK);
-		g.setStroke(new BasicStroke(2));
-		g.drawLine(mouseX - 5, mouseY, mouseX + 5, mouseY);
-		g.drawLine(mouseX, mouseY - 5, mouseX, mouseY + 5);
-	}
 
 	//update and draw the debris
 	public void debris(Graphics2D g)
@@ -519,6 +509,7 @@ public class Boss1State extends PlayState
 
 		if(k == GameStateManager.reset)
 		{
+			gsm.setState(GameStateManager.MENUSTATE);
 			gsm.resetState(GameStateManager.BOSS1STATE);
 		}
 		if(k == GameStateManager.pause)
@@ -530,69 +521,5 @@ public class Boss1State extends PlayState
 	public void keyReleased(int k) 
 	{
 		player.keyReleased(k);
-	}
-
-	@Override
-
-	public void mouseClicked(MouseEvent e)
-	{
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) 
-	{
-		mouseUpdate = true;
-		mouse = e;
-	}
-
-
-
-	@Override
-	public void mouseExited(MouseEvent e) 
-	{
-		mouseUpdate = false;
-		mouse = e;
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) 
-	{
-		if(e.getButton() == MouseEvent.BUTTON1)
-		{
-			player.setFiring(true);
-			player.setMouseHeld(true);
-		}
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) 
-	{
-		if(e.getButton() == MouseEvent.BUTTON1)
-		{
-			player.setFiring(false);
-			player.setMouseHeld(false);
-		}
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) 
-	{
-		mouseX = (int)(e.getX()/GamePanel.scaleWidth);
-		mouseY = (int)(e.getY()/GamePanel.scaleHeight);
-		relX = mouseX - (int)player.getX();
-		relY = mouseY - (int)player.getY();
-		player.setAngle(Math.atan2(relY, relX));
-
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) 
-	{
-		mouseX = (int)(e.getX()/GamePanel.scaleWidth);
-		mouseY = (int)(e.getY()/GamePanel.scaleHeight);
-		relX = mouseX - (int)player.getX();
-		relY = mouseY - (int)player.getY();
-		player.setAngle(Math.atan2(relY, relX));
 	}
 }

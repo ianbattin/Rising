@@ -32,7 +32,6 @@ public class Player extends MapObject
 {	
 	//TileMap
 	private PlayState playState;
-	private TileMap tm;
 	
 	//Attacks
 	private boolean shootUp;
@@ -88,7 +87,6 @@ public class Player extends MapObject
 	public Player(TileMap tm, PlayState ps)
 	{	
 		super(tm);
-		this.tm = tm;
 		this.playState = ps;
 		
 		bullets = new ArrayList<Projectile>();
@@ -240,8 +238,9 @@ public class Player extends MapObject
 	{	
 		if (health > 0)
 		{
-			myCheckCollision(tm);
+			myCheckCollision();
 			//if(onScreen()) checkPixelColorCollision(tm);
+			myCheckCollision();
 			getAttack();
 		}
 		else
@@ -265,7 +264,7 @@ public class Player extends MapObject
 			if(bullets.get(i).notOnScreen()) bullets.remove(i);
 		}
 		
-		yFromBottom += (-dy + tm.getDY());
+		yFromBottom += (-dy + tileMap.getDY());
 		
 		if(x - width/2 < 0) x = width/2;
 		if(x + width/2 > GamePanel.WIDTH) x = GamePanel.WIDTH - width/2;
@@ -330,7 +329,7 @@ public class Player extends MapObject
 	
 	public void draw(Graphics2D g) 
 	{
-		if(tm.getShowCollisonBox())
+		if(tileMap.getShowCollisonBox())
 		{
 			g.setColor(Color.RED);
 			g.draw(this.getRectangle());
@@ -458,7 +457,7 @@ public class Player extends MapObject
 			long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 			if(fireDelay <= elapsed)
 			{
-				bullets.add(new Projectile(x + width/2, y + height/2, angle, 5, tm));
+				bullets.add(new Projectile(x + width/2, y + height/2, angle, 1, tileMap));
 				fireTimer = System.nanoTime();
 			}
 		}
@@ -467,6 +466,11 @@ public class Player extends MapObject
 	public void setMouseHeld(boolean b)
 	{
 		mouseHeld = b;
+	}
+	
+	public boolean getMouseHeld()
+	{
+		return mouseHeld;
 	}
 	
 	public void setPosition(int x, int y)
@@ -566,16 +570,16 @@ public class Player extends MapObject
 		else
 			fallingAnim = false;
 		
-		x += (dx + tm.getDX());
+		x += (dx + tileMap.getDX());
 		if(tileMapMoving)
 		{
 			if(y < 300) 
 			{
-				if(Level1State.tileStart && tm.getMoving())
+				if(Level1State.tileStart && tileMap.getMoving())
 				{
 
-					if (dy >= 0) tm.setYVector(2.0);
-					else tm.setYVector(-dy + 2);
+					if (dy >= 0) tileMap.setYVector(2.0);
+					else tileMap.setYVector(-dy + 2);
 					if(dy > 0) y += (dy);
 				}
 				else
@@ -585,8 +589,8 @@ public class Player extends MapObject
 			}
 			else 
 			{	
-				if(slowTime) tm.setYVector(0.5);
-				else if(Level1State.tileStart) tm.setYVector(2.0);
+				if(slowTime) tileMap.setYVector(0.5);
+				else if(Level1State.tileStart) tileMap.setYVector(2.0);
 				y += dy;
 			}
 		}
@@ -997,12 +1001,12 @@ public class Player extends MapObject
 			}
 			if(k == KeyEvent.VK_T)
 			{
-				if(tm.getShowCollisonBox())
+				if(tileMap.getShowCollisonBox())
 				{
-					tm.setShowCollisonBox(false);
+					tileMap.setShowCollisonBox(false);
 				}
 				else
-					tm.setShowCollisonBox(true);
+					tileMap.setShowCollisonBox(true);
 			}
 		}
 	}
