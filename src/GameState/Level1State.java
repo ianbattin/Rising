@@ -28,9 +28,8 @@ import TileMap.TileMap;
 
 public class Level1State extends PlayState
 {
-	private int debrisLoop;
-	
 	private int[][] debrisInfo;
+	private int[][] smallDebrisInfo;
 	private ArrayList<Color> colors;
 	private boolean start, isStillAlive;
 	private float timer;
@@ -56,12 +55,13 @@ public class Level1State extends PlayState
 		timer = 0;
 		//create & stores all the necessary colors (avoid creating too many color objects)
 		colors = new ArrayList<Color>();
-		for(int i = 25; i < 195; i++)
+		for(int i = 65; i < 195; i++)
 		{
 			colors.add(new Color(i, i, i));
 		}
 		//create the initial debris
 		debrisInfo = new int[200][4];
+		smallDebrisInfo = new int[debrisInfo.length][4];
 		for(int i = 0; i < debrisInfo.length; i++)
 		{
 			for(int j = 0; j < debrisInfo[i].length; j++)
@@ -69,14 +69,14 @@ public class Level1State extends PlayState
 				debrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
 				debrisInfo[i][1] = -2000 + (int)((Math.random()*2000)-1000);
 				debrisInfo[i][2] = (int)(Math.random()*5)+2;
-				debrisInfo[i][3] = (int)(Math.random()*170);
+				debrisInfo[i][3] = (int)(Math.random()*130);
 			}
 		}
+		
 		tileStart = false;
 		bgVectorX = 0;
 		bgVectorY = 0;
 		debrisVector = 0;
-		debrisLoop = 0;
 	}
 
 	public void init() 
@@ -90,8 +90,7 @@ public class Level1State extends PlayState
 		int[] pickupsToSpawn = {Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST};
 		pickups = new Pickups(player, tileMap, this, pickupsToSpawn);
 		tileStart = false;
-		
-		hasInited = true;
+		score = 0;
 	}
 
 	public void update()
@@ -164,6 +163,7 @@ public class Level1State extends PlayState
 	public void draw(Graphics2D g)
 	{
 		bg.draw(g);
+		//smallDebris(g);
 		player.draw(g);
 		tileMap.draw(g);
 		pickups.draw(g);
@@ -218,7 +218,38 @@ public class Level1State extends PlayState
 					debrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
 					debrisInfo[i][1] = -2000 + (int)((Math.random()*2000)-1000);
 					debrisInfo[i][2] = (int)(Math.random()*5)+2;
-					debrisInfo[i][3] = (int)(Math.random()*170);
+					debrisInfo[i][3] = (int)(Math.random()*130);
+				}
+			}
+		}
+	}
+	
+	public void smallDebris(Graphics2D g)
+	{
+		int highestLoc = debrisInfo[0][1];
+		for(int i = 0; i < debrisInfo.length; i++)
+		{
+			for(int j = 0; j < debrisInfo[i].length; j++)
+			{
+				g.setColor(colors.get(debrisInfo[i][3]));
+				g.fillRect(debrisInfo[i][0], debrisInfo[i][1], debrisInfo[i][2], debrisInfo[i][2]);
+				if(debrisInfo[i][1] < 0) debrisInfo[i][1] += 2*debrisVector;
+				else debrisInfo[i][1] += debrisInfo[i][2]*debrisVector;
+				
+				if(debrisInfo[i][1] < highestLoc) highestLoc = debrisInfo[i][1];
+			}
+		}
+		if (highestLoc > GamePanel.HEIGHT)
+		{
+			for(int i = 0; i < debrisInfo.length; i++)
+			{
+				for(int j = 0; j < debrisInfo[i].length; j++)
+				{
+			
+					debrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
+					debrisInfo[i][1] = -2000 + (int)((Math.random()*2000)-1000);
+					debrisInfo[i][2] = (int)(Math.random()*5)+2;
+					debrisInfo[i][3] = (int)(Math.random()*130);
 				}
 			}
 		}

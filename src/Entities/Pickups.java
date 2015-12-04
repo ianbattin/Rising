@@ -25,7 +25,7 @@ public class Pickups extends MapObject
 	//sprites loading
 	private ArrayList<BufferedImage[]> sprites;
 	private final int[] numFrames = {
-			1
+			2, 2, 2, 2, 2, 2
 	};
 	
 	//effect types
@@ -60,9 +60,9 @@ public class Pickups extends MapObject
 		try
 		{
 			//will have to be fixed to get an image from a large sprites image rather than a single image for each pickup
-			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Tiles/pickups.png"));
+			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Tiles/pickupsSpritesheet.png"));
 			sprites = new ArrayList<BufferedImage[]>();
-			for(int i = 0; i < 1; i++)
+			for(int i = 0; i < numFrames.length; i++)
 			{
 				BufferedImage[] bi = new BufferedImage[numFrames[i]];
 				for(int j = 0; j < numFrames[i]; j++)
@@ -100,7 +100,8 @@ public class Pickups extends MapObject
 			checkPickups();
 		}
 		else if(willDrawPickup)
-		{									
+		{				
+			animation.update();
 			if (yLoc < GamePanel.HEIGHT + 50)
 			{
 				yLoc += 0.5 + ((tm.getDY() - 2)*0.25);
@@ -140,7 +141,8 @@ public class Pickups extends MapObject
 				willDrawPickup = true;
 				//set the pickup type.
 				effectType = pickupsToSpawn[(int)(Math.random()*pickupsToSpawn.length)];
-				
+				//get the animation of the pickup
+				getAnimation();
 				//sets starting points for the spawning of the pickups
 				startingPositionOffset = -(Math.random()*GamePanel.HEIGHTSCALED/2);
 			}
@@ -156,7 +158,6 @@ public class Pickups extends MapObject
 	{			
 		if (willDrawPickup)
 		{
-			getAnimation();
 			g.drawImage(animation.getImage(), (int)(xLoc+xShift), (int)yLoc, (int)(width), (int)(height), null);
 		}
 	}
@@ -174,31 +175,31 @@ public class Pickups extends MapObject
 			}
 			case 1:
 			{
-				animation.setFrames(sprites.get(GLIDEBOOST)); //switch to playerheal when ready
+				animation.setFrames(sprites.get(HEALBOOST)); //switch to playerheal when ready
 				animation.setDelay(200);
 				break;
 			}
 			case 2:
 			{
-				animation.setFrames(sprites.get(GLIDEBOOST)); //switch to launcherboost
+				animation.setFrames(sprites.get(LAUNCHERBOOST)); //switch to launcherboost
 				animation.setDelay(200);
 				break;
 			}
 			case 3: 
 			{
-				animation.setFrames(sprites.get(GLIDEBOOST)); //switch to birdboost
+				animation.setFrames(sprites.get(BIRDBOOST)); //switch to birdboost
 				animation.setDelay(200);
 				break;
 			}
 			case 4:
 			{
-				animation.setFrames(sprites.get(GLIDEBOOST)); //switch to armorboost
+				animation.setFrames(sprites.get(ARMORBOOST)); //switch to armorboost
 				animation.setDelay(200);
 				break;
 			}
 			case 5:
 			{			
-				animation.setFrames(sprites.get(GLIDEBOOST)); //switch to timeboost
+				animation.setFrames(sprites.get(SLOWTIMEBOOST)); //switch to timeboost
 				animation.setDelay(200);
 				break;
 			}

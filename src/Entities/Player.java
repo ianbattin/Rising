@@ -72,6 +72,8 @@ public class Player extends MapObject
 	//animation
 	private ArrayList<BufferedImage[]> playerSprites;
 	private ArrayList<BufferedImage[]> playerHurtSprites;
+	private BufferedImage[] birdPickupSprites;
+	private Animation birdAnimation;
 	private final int[] numFrames = { 1, 4, 3, 3, 4 };
 	private boolean tileMapMoving;
 	
@@ -156,6 +158,13 @@ public class Player extends MapObject
 				playerHurtSprites.add(bi);
 			}
 			
+			BufferedImage birdPickupSpritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Tiles/birdSprite.png"));
+			birdPickupSprites = new BufferedImage[2];
+			for(int i = 0; i < 2; i++)
+			{
+				birdPickupSprites[i] = (birdPickupSpritesheet.getSubimage(i * 15, 0, 15, 15));
+			}
+			
 			//get sprites for heart. This will be improved if we make the two hearts be on the same spritesheet image
 			heartImages = new ArrayList<BufferedImage>();
 			BufferedImage h1 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/fullHeart2.png"));
@@ -197,6 +206,11 @@ public class Player extends MapObject
 		{
 			e.printStackTrace();
 		}
+		
+		//these are always the same; there is no change in the animations of the bird
+		birdAnimation = new Animation();
+		birdAnimation.setFrames(birdPickupSprites);
+		birdAnimation.setDelay(200);
 		
 		animation = new Animation();
 				
@@ -252,6 +266,10 @@ public class Player extends MapObject
 		getMovement();
 		getAnimation();
 		
+		if(hasBird)
+		{
+			birdAnimation.update();
+		}
 		
 		for(int i = 0; i < bullets.size(); i++)
 		{	
@@ -865,21 +883,31 @@ public class Player extends MapObject
 			//replace with image when bird is drawn. Use current X & Y calculations for the position however
 			birdX = (x+(50*Math.cos(Math.toRadians(birdPos))));
 			birdY = (y-50-(5*Math.sin(Math.toRadians(birdPos))));
-			g.fillRect((int)birdX, (int)birdY, 10, 10);
+			if((-50*Math.sin(Math.toRadians(birdPos)) > 0))
+			{
+				g.drawImage(birdAnimation.getImage(), (int)birdX, (int)birdY, 15, 15, null);
+			}
+			else
+			{
+				g.drawImage(birdAnimation.getImage(), (int)birdX+15, (int)birdY, -15, 15, null);
+			}
+			
 
 		}
 		else if(hasBird && birdActive)
 		{
 		    double slope = (chosenEnemy.getY()-birdY)/(chosenEnemy.getX()-birdX);
 		    double angle = Math.atan((double)slope);
-		    
+		    boolean enemyIsRight = false;
 			if(chosenEnemy.getX() < birdX && chosenEnemy.getX() > 0)
 			{
 				birdX = birdX -(8*Math.cos(angle));
+				enemyIsRight = false;
 			}
 			else if(chosenEnemy.getX() > birdX && chosenEnemy.getX() > 0)
 			{
 				birdX = birdX + (8*Math.cos(angle));
+				enemyIsRight = true;
 			}
 			
 			if(chosenEnemy.getY() < birdY && chosenEnemy.getY() > 0)
@@ -897,7 +925,16 @@ public class Player extends MapObject
 				hasBird = false;
 				birdActive = false;
 			}
-			g.fillRect((int)birdX, (int)birdY, 10, 10);
+			
+			if(enemyIsRight)
+			{
+				g.drawImage(birdAnimation.getImage(), (int)birdX, (int)birdY, 15, 15, null);
+			}
+			else
+			{
+				g.drawImage(birdAnimation.getImage(), (int)birdX+15, (int)birdY, -15, 15, null);
+			}
+			//g.fillRect((int)birdX, (int)birdY, 10, 10);
 		}
 		
 		if(healing)
@@ -974,7 +1011,6 @@ public class Player extends MapObject
 				{
 					this.chosenEnemy = enemies.get((int)(Math.random()*enemies.size()));
 					birdActive = true;
-					System.out.println("NEUTRALIZE ENEMY");
 				}
 			}
 			if(k == GameStateManager.shootUp)
