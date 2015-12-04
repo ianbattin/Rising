@@ -27,8 +27,6 @@ public abstract class GameState
 	protected GameStateManager gsm;
 	protected Background bg;
 	
-	//store data from each state
-	protected String data;
 	protected boolean isFadingOut, isFadingIn;
 	protected int alphaLevel;
 	protected float timeKeeper = 0;
@@ -61,12 +59,6 @@ public abstract class GameState
 		     e.printStackTrace();
 		}
 	}
-	
-	//return the saved data
-	public String getSavedState()
-	{
-		return data;
-	}
 		
 	//Centers string between the xPos and endPos x coordinates
 	public static int centerStringX(String s, int xPos, int endPos, Graphics2D g)
@@ -85,12 +77,15 @@ public abstract class GameState
 		fadeGreen = myColor.getGreen();
 		fadeBlue = myColor.getBlue();
 		
-		timeKeeper += GamePanel.getElapsedTime();
-		
-		if(timeKeeper > timeToWait)
+		if(timeToWait > timeKeeper)
+		{
+			timeKeeper += GamePanel.getElapsedTime();
+		}
+		else
 		{
 			alphaLevel -= speed;
-			if (alphaLevel <= 0){
+			if (alphaLevel <= 0)
+			{
 				alphaLevel = 0;
 				isFadingIn = false;
 				timeKeeper = 0; 
@@ -104,7 +99,9 @@ public abstract class GameState
 		fadeRed = myColor.getRed();
 		fadeGreen = myColor.getGreen();
 		fadeBlue = myColor.getBlue();
-		if (alphaLevel+speed < 255){
+		
+		if (alphaLevel+speed < 255)
+		{
 			alphaLevel += speed;
 		} 
 		else
@@ -144,7 +141,7 @@ public abstract class GameState
         {
             InputStream music = new FileInputStream(fileName);
             BGM = new AudioStream(music);
-            AudioPlayer.player.start(BGM);
+            //AudioPlayer.player.start(BGM);
             MD = BGM.getData();
             loop = new ContinuousAudioDataStream(MD);
         }
@@ -169,7 +166,7 @@ public abstract class GameState
 				try 
 				{
 					AudioClip clip = Applet.newAudioClip(new URL("file:Resources/Sound/" + fileName));
-					clip.play();
+					//clip.play();
 				} 
 				catch (MalformedURLException murle)
 				{

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import Entities.Enemy;
 import Entities.Pickups;
 import Entities.Player;
+import Main.GamePanel;
 import Main.Main;
 import TileMap.Background;
 import TileMap.TileMap;
@@ -99,8 +100,8 @@ public abstract class PlayState extends GameState
 	{
 		if(mouseUpdate)
 		{
-			mouseX = (int) (MouseInfo.getPointerInfo().getLocation().getX() - Main.window.getLocation().getX()) - 3;
-			mouseY = (int) (MouseInfo.getPointerInfo().getLocation().getY() - Main.window.getLocation().getY()) - 25;
+			mouseX = (int) (((MouseInfo.getPointerInfo().getLocation().getX() - Main.window.getLocation().getX()) - 3)/GamePanel.scaleWidth);
+			mouseY = (int) (((MouseInfo.getPointerInfo().getLocation().getY() - Main.window.getLocation().getY()) - 25)/GamePanel.scaleHeight);
 			relX = mouseX - (int)player.getX() - player.getWidth()/2;
 			relY = mouseY - (int)player.getY() - player.getHeight()/2;
 			player.setAngle(Math.atan2(relY, relX));
@@ -109,8 +110,8 @@ public abstract class PlayState extends GameState
 	
 	public void drawCrossHair(Graphics2D g) 
 	{
-		mouseX = (int) (MouseInfo.getPointerInfo().getLocation().getX() - Main.window.getLocation().getX()) - 3;
-		mouseY = (int) (MouseInfo.getPointerInfo().getLocation().getY() - Main.window.getLocation().getY()) - 25;
+		mouseX = (int) (((MouseInfo.getPointerInfo().getLocation().getX() - Main.window.getLocation().getX()) - 3)/GamePanel.scaleWidth);
+		mouseY = (int) (((MouseInfo.getPointerInfo().getLocation().getY() - Main.window.getLocation().getY()) - 25)/GamePanel.scaleHeight);
 		
 		g.setColor(Color.BLACK);
 		g.setStroke(new BasicStroke(2));

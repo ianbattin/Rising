@@ -206,9 +206,6 @@ public class Boss1State extends PlayState
 		{
 			deathTimer += GamePanel.getElapsedTime();
 		}
-
-		//save data (in this case the points)
-		super.data = Integer.toString(player.getPoints());
 		
 		/*for(Enemy e: enemies)
 		{
