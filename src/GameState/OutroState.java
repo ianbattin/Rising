@@ -46,7 +46,7 @@ public class OutroState extends TransitionState
 	{
 		bg.draw(g);
 		g.setColor(Color.WHITE);
-		g.setFont(new Font("RusselSquare", Font.PLAIN, 24));
+		g.setFont(new Font("Munro", Font.PLAIN, 24));
 		g.drawString("Score: " + score, centerStringX("Score: " + score, 0, GamePanel.WIDTH, g), 480);
 		super.drawFade(g);
 	}

@@ -17,6 +17,7 @@ public class TransitionState extends GameState {
 	
 	public TransitionState(GameStateManager gsm, String path)
 	{
+		super();
 		this.gsm = gsm;
 		this.path = path;
 		

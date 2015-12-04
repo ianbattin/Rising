@@ -3,6 +3,7 @@ package GameState;
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseEvent;
 import java.io.*;
 import java.net.MalformedURLException;
@@ -13,6 +14,7 @@ import Entities.Enemy;
 import Entities.Player;
 
 import java.awt.Color;
+import java.awt.Font;
 
 import Main.GamePanel;
 import TileMap.Background;
@@ -45,6 +47,20 @@ public abstract class GameState
 	public abstract void mouseReleased(MouseEvent e);
 	public abstract void mouseDragged(MouseEvent e);
 	public abstract void mouseMoved(MouseEvent e);
+	
+	public GameState()
+	{
+		try
+		{
+			InputStream myStream = new BufferedInputStream(new FileInputStream("Resources/Text/Fonts/Munro.ttf"));
+		    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		    ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, myStream));
+		} 
+		catch (Exception e) 
+		{
+		     e.printStackTrace();
+		}
+	}
 	
 	//return the saved data
 	public String getSavedState()

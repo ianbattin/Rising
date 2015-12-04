@@ -31,6 +31,11 @@ public abstract class PlayState extends GameState
 	protected int relY;
 	protected boolean mouseUpdate;
 	
+	public PlayState()
+	{
+		super();
+	}
+	
 	public void setBackgroundVector(double vectorX, double vectorY)
 	{
 		bgVectorX = vectorX;

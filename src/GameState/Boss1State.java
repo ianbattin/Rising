@@ -46,7 +46,7 @@ public class Boss1State extends PlayState
 	private boolean start, isStillAlive;
 	private float deathTimer;
 	public static boolean tileStart;
-	private Font healthFont, generalFont;
+	private Font healthFont;
 	
 	private long timer;
 	
@@ -64,6 +64,7 @@ public class Boss1State extends PlayState
 
 	public Boss1State(GameStateManager gsm)
 	{
+		super();
 		stage = 0;
 		step = 0;
 		count = 0;
@@ -95,7 +96,6 @@ public class Boss1State extends PlayState
 		debrisVector = 0;
 		
 		healthFont = new Font("RusselSquare", Font.PLAIN, (int)(24*(GamePanel.scaleWidth*GamePanel.scaleWidth*GamePanel.scaleWidth)));
-		generalFont = new Font("RusselSquare", Font.PLAIN, 24);
 		
 		super.isFadingIn = true;
 		super.alphaLevel = 255;
@@ -149,7 +149,6 @@ public class Boss1State extends PlayState
 		drawCrossHair(g);
 
 		g.setColor(Color.WHITE);
-		g.setFont(generalFont);
 		g.drawString("Score: " + player.getPoints(), centerStringX("Score: " + player.getPoints(), 0, GamePanel.WIDTH, g), 30);
 		
 		if(drawBossHealth) drawBossHealth(g);

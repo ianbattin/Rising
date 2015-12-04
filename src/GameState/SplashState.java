@@ -13,6 +13,7 @@ public class SplashState extends GameState
 	
 	public SplashState(GameStateManager gsm)
 	{
+		super();
 		init();
 		this.gsm = gsm;
 		

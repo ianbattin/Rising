@@ -42,6 +42,7 @@ public class Level1State extends PlayState
 	
 	public Level1State(GameStateManager gsm)
 	{
+		super();
 		this.gsm = gsm;
 		start = false;
 		try
@@ -174,7 +175,6 @@ public class Level1State extends PlayState
 		drawCrossHair(g);
 		
 		g.setColor(Color.WHITE);
-		g.setFont(new Font("RusselSquare", Font.PLAIN, 24));
 		if(!start) 
 		{
 			String[] notStarted = {"PRESS ENTER TO START", "PRESS BACKSPACE TO RETURN TO MENU" };

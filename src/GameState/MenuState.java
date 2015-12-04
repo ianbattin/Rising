@@ -5,6 +5,7 @@ import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -41,20 +42,22 @@ public class MenuState extends GameState
 	
 	public MenuState(GameStateManager gsm)
 	{
+		super();
 		init();
 		this.gsm = gsm;
 		timer = System.nanoTime();;
 
 		super.isFadingOut = false;
 		super.alphaLevel = 0;
+		
 		titleAlphaLevel = 0;
-		titleFont = new Font("RussellSquare", Font.BOLD, 60);
-		optionsFont = new Font("RusselSquare", Font.PLAIN, 24);
+		//titleFont = new Font("RussellSquare", Font.BOLD, 60);
+		optionsFont = new Font("Munro", Font.PLAIN, 24);
 		
 		//This is going to try to set the background from a certain file path
 		try
 		{
-			bg = new Background("/Backgrounds/battlebackground.gif", 1);
+			bg = new Background("/Backgrounds/MenuBackground.png", 0);
 			title = ImageIO.read(getClass().getResourceAsStream("/Text/TitlePlaceholder2.png"));
 			bg.setVector(0, -5.0); //moves the background
 		}
@@ -76,7 +79,7 @@ public class MenuState extends GameState
 	{
 		bg.update();
 		
-		long elapsed = (System.nanoTime() - timer) / 1000000;
+		/*long elapsed = (System.nanoTime() - timer) / 1000000;
 		if(100 <= elapsed)
 		{
 			int randomNumber = (int)(Math.random()*10 + 1);
@@ -85,7 +88,7 @@ public class MenuState extends GameState
 			else
 				entities.add(new Explosion((int)(Math.random()*800), (int)(Math.random()*800), 2, tm));
 			timer = System.nanoTime();
-		}
+		}*/
 		
 		if (super.isFadingOut)
 		{

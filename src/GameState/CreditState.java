@@ -20,13 +20,14 @@ public class CreditState extends GameState
 	
 	public CreditState(GameStateManager gsm)
 	{
+		super();
 		this.gsm = gsm;
 		bg = new Background("/Backgrounds/menubackground.gif", 1);
 		bg.setVector(0, -5.0); //moves the background
 		titleColor = new Color(255, 60 ,0);
-		titleFont = new Font("RussellSquare", Font.BOLD, 40);
-		optionsFont = new Font("RusselSquare", Font.PLAIN, 24);
-		subTextFont = new Font("RusselSquare", Font.PLAIN, 20);
+		titleFont = new Font("Munro", Font.BOLD, 40);
+		optionsFont = new Font("Munro", Font.PLAIN, 24);
+		subTextFont = new Font("Munro", Font.PLAIN, 20);
 	}
 	
 	//nothing to init
