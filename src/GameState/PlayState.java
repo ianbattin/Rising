@@ -74,7 +74,6 @@ public abstract class PlayState extends GameState
 			{
 				if(Level1State.tileStart && tileMap.getMoving())
 				{
-
 					if (player.getDY() >= 0)
 					{
 						bg.setYVector(bgVectorY);

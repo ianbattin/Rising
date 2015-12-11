@@ -131,7 +131,7 @@ public class Boss1State extends PlayState
 	{
 		if(super.isFadingIn)
 		{
-			super.fadeIn(500000000.0, Color.WHITE, 1);
+			super.fadeIn(500000000.0, Color.WHITE, 2);
 		}
 		basicChecks();
 		script();
@@ -147,12 +147,12 @@ public class Boss1State extends PlayState
 			e.draw(g);
 
 		drawCrossHair(g);
-
+		
 		g.setColor(Color.WHITE);
 		g.drawString("Score: " + player.getPoints(), centerStringX("Score: " + player.getPoints(), 0, GamePanel.WIDTH, g), 30);
 		
 		if(drawBossHealth) drawBossHealth(g);
-
+		
 		super.drawFade(g);
 	}
 	

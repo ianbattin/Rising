@@ -1,14 +1,2 @@
-/Entities/
-<<<<<<< HEAD
-/GameState/
-=======
-/Sound/
-/Sprites/
->>>>>>> origin/master
-/Intro/
-/TileMap/
-/Main/
-/Backgrounds/
 /Maps/
-/Outro/
-/Text/
+/TileMapEditor/

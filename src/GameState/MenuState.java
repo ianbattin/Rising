@@ -131,10 +131,10 @@ public class MenuState extends GameState
 		
 			super.drawFade(g);
 			
-			g.drawImage(title, GamePanel.WIDTH/2 - 175/2, GamePanel.HEIGHT/4, 175, 100, null);
+			//g.drawImage(title, GamePanel.WIDTH/2 - 175/2, GamePanel.HEIGHT/4, 175, 100, null);
 			//title fading
-			g.setColor(new Color(0,0,0,titleAlphaLevel));
-			g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+			//g.setColor(new Color(0,0,0,titleAlphaLevel));
+			//g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 		}
 	}
 
