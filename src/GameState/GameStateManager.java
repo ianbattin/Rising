@@ -51,6 +51,12 @@ public class GameStateManager
 		gameStates = new ArrayList<GameState>();
 		currentState = SPLASHSTATE;
 		gameStates.add(new SplashState(this));		
+
+	}
+	
+	//this method to be called by splashscreen state so that it can offload all tasks until after the splashscreen has displayed
+	public void gameStateManagerLoad()
+	{
 		gameStates.add(new MenuState(this));
 		gameStates.add(new ControlsState(this));
 		gameStates.add(new CreditState(this));

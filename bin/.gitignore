@@ -1,10 +1,9 @@
-/Maps/
-/TileMapEditor/
-/Backgrounds/
-/Entities/
 /GameState/
-/Intro/
+/Entities/
 /Main/
+/TileMap/
+/Backgrounds/
+/Intro/
 /Sprites/
 /Text/
-/TileMap/
+/TileMapEditor/
