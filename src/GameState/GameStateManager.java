@@ -13,15 +13,13 @@ public class GameStateManager
 	private static ArrayList<GameState> gameStates;
 	private static int currentState;
 	
-	private Player player;
-	
 	public static final int SPLASHSTATE = 0; //Splash screen
 	public static final int MENUSTATE = 1; //Menu
 	public static final int CONTROLSTATE = 2; //Lists controls
 	public static final int CREDITSTATE = 3; //Show credits
-	public static final int INTROSTATE = 4; //Planes crash/background story
+	public static final int TRANSITION_INTROSTATE = 4; //Planes crash/background story
 	public static final int LEVEL1STATE = 5; //Actually playing
-	public static final int TRANSITION1STATE = 6;
+	public static final int TRANSITION_OUTROSTATE = 6;
 	public static final int BOSS1STATE = 7;
 	//public static final int LEVEL2STATE = 7;
 	//public static final int BOSS2STATE = 8;
@@ -52,7 +50,7 @@ public class GameStateManager
 	{
 		gameStates = new ArrayList<GameState>();
 		currentState = SPLASHSTATE;
-		gameStates.add(new SplashState(this));
+		gameStates.add(new SplashState(this));		
 		gameStates.add(new MenuState(this));
 		gameStates.add(new ControlsState(this));
 		gameStates.add(new CreditState(this));
@@ -95,15 +93,15 @@ public class GameStateManager
 	public void resetState(int state)
 	{
 		GameState stateAtPos = gameStates.get(state);
-		gameStates.remove(state);
-		if(stateAtPos instanceof SplashState) gameStates.add(state, new SplashState(this));
-		else if(stateAtPos instanceof MenuState) gameStates.add(state, new MenuState(this));
-		else if(stateAtPos instanceof ControlsState) gameStates.add(state, new ControlsState(this));
-		else if(stateAtPos instanceof CreditState) gameStates.add(state, new CreditState(this));
-		else if(stateAtPos instanceof TransitionState) gameStates.add(state, new TransitionState(this, "Intro"));
-		else if(stateAtPos instanceof Level1State) gameStates.add(state, new Level1State(this));
-		else if(stateAtPos instanceof Boss1State) gameStates.add(state, new Boss1State(this));
-		else if(stateAtPos instanceof OutroState) gameStates.add(state, new OutroState(this, ""));
+		if(stateAtPos instanceof SplashState) gameStates.set(state, new SplashState(this));
+		else if(stateAtPos instanceof MenuState) gameStates.set(state, new MenuState(this));
+		else if(stateAtPos instanceof ControlsState) gameStates.set(state, new ControlsState(this));
+		else if(stateAtPos instanceof CreditState) gameStates.set(state, new CreditState(this));
+		else if(stateAtPos instanceof TransitionState && state == GameStateManager.TRANSITION_INTROSTATE) gameStates.set(state, new TransitionState(this, "Intro"));
+		else if(stateAtPos instanceof TransitionState && state == GameStateManager.TRANSITION_OUTROSTATE) gameStates.set(state, new TransitionState(this, "Outro"));
+		else if(stateAtPos instanceof Level1State) gameStates.set(state, new Level1State(this));
+		else if(stateAtPos instanceof Boss1State) gameStates.set(state, new Boss1State(this));
+		else if(stateAtPos instanceof OutroState) gameStates.set(state, new OutroState(this, "Outro"));
 	}
 	
 	public void keyPressed(int k)

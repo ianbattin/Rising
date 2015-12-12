@@ -65,10 +65,11 @@ public class TransitionState extends GameState {
 			switch(path)
 			{
 				case "Intro":
-					super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.INTROSTATE, GameStateManager.LEVEL1STATE);
+					super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.TRANSITION_INTROSTATE, GameStateManager.LEVEL1STATE);
 					break;
 				case "Outro":
-					super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.TRANSITION1STATE, GameStateManager.BOSS1STATE);
+					super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.TRANSITION_OUTROSTATE, GameStateManager.BOSS1STATE);
+					break;
 			}
 			
 		}
@@ -103,12 +104,12 @@ public class TransitionState extends GameState {
 		if(k == GameStateManager.select)
 		{
 			gsm.setState(GameStateManager.LEVEL1STATE);
-			gsm.resetState(GameStateManager.INTROSTATE);
+			gsm.resetState(GameStateManager.TRANSITION_INTROSTATE);
 		} 
 		else if (k == GameStateManager.reset)
 		{
 			gsm.setState(GameStateManager.MENUSTATE);
-			gsm.resetState(GameStateManager.INTROSTATE);
+			gsm.resetState(GameStateManager.TRANSITION_INTROSTATE);
 		}
 	}
 

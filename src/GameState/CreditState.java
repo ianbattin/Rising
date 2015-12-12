@@ -22,8 +22,8 @@ public class CreditState extends GameState
 	{
 		super();
 		this.gsm = gsm;
-		bg = new Background("/Backgrounds/menubackground.gif", 1);
-		bg.setVector(0, -5.0); //moves the background
+		bg = new Background("/Backgrounds/menubackground.png", 1);
+		//bg.setVector(0, -5.0); //moves the background
 		titleColor = new Color(255, 60 ,0);
 		titleFont = new Font("Munro", Font.BOLD, 40);
 		optionsFont = new Font("Munro", Font.PLAIN, 24);

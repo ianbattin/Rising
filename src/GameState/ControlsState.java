@@ -30,8 +30,8 @@ public class ControlsState extends GameState {
 		super();
 		this.gsm = gsm;
 		
-		bg = new Background("/Backgrounds/menubackground.gif", 1);
-		bg.setVector(0, -5.0); //moves the background
+		bg = new Background("/Backgrounds/menubackground.png", 1);
+		//bg.setVector(0, -5.0); //moves the background
 		
 		selection = 0;
 		isListeningToKey = false;

@@ -59,9 +59,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 		if(thread == null)
 		{
 			thread = new Thread(this);
-			addKeyListener(this);
-			addMouseListener(this);
-			addMouseMotionListener(this);
 			thread.start();
 		}
 	}
@@ -73,6 +70,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 		g = (Graphics2D) image.getGraphics(); //do graphics stuff
 		g.scale(scaleWidth, scaleHeight);
 		gsm = new GameStateManager(); //create new GameStateManager
+		addKeyListener(this); //add the listeners for the mouse & keyboard actions
+		addMouseListener(this);
+		addMouseMotionListener(this);
 		running = true; //game initialized, so running is true
 	}
 	
