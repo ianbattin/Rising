@@ -2,6 +2,7 @@ package Main;
 
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
@@ -20,5 +21,6 @@ public class Main
 		//window.setUndecorated(true); //get rids of the windows border
 		window.pack(); //sets the size of the content to fit the window
 		window.setVisible(true); //spawns the window on top of other windows
+		window.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB), new Point(), "invisCursor"));
 	}
 }

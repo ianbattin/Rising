@@ -13,7 +13,13 @@ public class TransitionState extends GameState {
 	private String path;
 	
 	private float timer;
-	private int currFrame, totalFrames;//, alphaLevel;
+	private int currFrame, totalFrames;
+
+	//these are the arrays that we can use to modify the "base time" for each of the intro frames. 
+	//The arrays must be the length of the total frames
+	private final int[] secondsToAdd_IntroFrames = {-3, 0, 2, 0, 0, 0, 0, 0};
+	private final int[] secondsToAdd_OutroFrames = {0};
+	private int[] timeModifierToUse;
 	
 	public TransitionState(GameStateManager gsm, String path)
 	{
@@ -27,9 +33,11 @@ public class TransitionState extends GameState {
 		switch(path)
 		{
 			case "Intro":
+				timeModifierToUse = secondsToAdd_IntroFrames;
 				totalFrames = 8;
 				break;
 			case "Outro":
+				timeModifierToUse = secondsToAdd_OutroFrames;
 				totalFrames = 1;
 				break;
 		}
@@ -55,7 +63,7 @@ public class TransitionState extends GameState {
 
 	//update bgrnd
 	public void update() 
-	{
+	{		
 		if(super.isFadingIn)
 		{
 			super.fadeIn(500000000.0, Color.BLACK, 5);
@@ -75,7 +83,7 @@ public class TransitionState extends GameState {
 		}
 		else
 		{
-			if(timer > 7000000000.0)
+			if(timer > (7000000000.0 + timeModifierToUse[currFrame-1]*1000000000.0))
 			{
 				timer = 0;
 				if (currFrame < totalFrames)
