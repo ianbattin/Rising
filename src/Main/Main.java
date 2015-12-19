@@ -21,6 +21,6 @@ public class Main
 		//window.setUndecorated(true); //get rids of the windows border
 		window.pack(); //sets the size of the content to fit the window
 		window.setVisible(true); //spawns the window on top of other windows
-		window.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB), new Point(), "invisCursor"));
+		window.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR), new Point(), "invisCursor"));
 	}
 }

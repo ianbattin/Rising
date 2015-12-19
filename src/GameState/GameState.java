@@ -1,5 +1,10 @@
 package GameState;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.Graphics2D;
@@ -17,8 +22,8 @@ import java.awt.Color;
 import java.awt.Font;
 
 import Main.GamePanel;
+import Main.SoundPlayer;
 import TileMap.Background;
-import sun.audio.*;
 
 //Every game state will have each of these things. 
 //Abstraction makes it more organized
@@ -26,12 +31,13 @@ public abstract class GameState
 {
 	protected GameStateManager gsm;
 	protected Background bg;
+	protected SoundPlayer soundPlayer;
 	
 	protected boolean isFadingOut, isFadingIn;
 	protected int alphaLevel;
 	protected float timeKeeper = 0;
 	private int fadeRed, fadeBlue, fadeGreen;
-	protected static int score;
+	protected static int score; 
 	
 	public abstract void init();
 	public abstract void update();
@@ -58,6 +64,7 @@ public abstract class GameState
 		{
 		     e.printStackTrace();
 		}
+		soundPlayer = new SoundPlayer();
 	}
 		
 	//Centers string between the xPos and endPos x coordinates
@@ -130,52 +137,38 @@ public abstract class GameState
 		
 	
 	public void music(String fileName) 
-    {       
-        AudioPlayer MGP = AudioPlayer.player;
-        AudioStream BGM;
-        AudioData MD;
-
-        ContinuousAudioDataStream loop = null;
-
+    {   
+		soundPlayer.startBackgroundMusic(fileName, true);
+		/*
+		SoundPlayer sound = new SoundPlayer();
+		
+		AudioPlayer mediaPlayer = AudioPlayer.player;
+        AudioStream mediaStream;
+        AudioDataStream mediaData;
+        
         try
         {
             InputStream music = new FileInputStream(fileName);
-            BGM = new AudioStream(music);
-            //AudioPlayer.player.start(BGM);
-            MD = BGM.getData();
-            loop = new ContinuousAudioDataStream(MD);
+            mediaStream = new AudioStream(music);
+            
+            mediaPlayer.start(mediaStream); 
         }
         catch(FileNotFoundException e)
         {
             System.out.print(e.toString());
         }
-        catch(IOException error)
+        catch(IOException e)
         {
-            System.out.print(error.toString());
+            System.out.print(e.toString());
         }
-        MGP.start(loop);
+        */
     }
 	
-	//getting an error on eclipse here (but not other machines... its weird). setting final to the parameter should solve the error. (runs the same)
-	public void playSound(final String fileName)
+	/*public void playSound(String fileName)
 	{
-		Thread thread = new Thread(new Runnable()
-		{
-			public void run()
-			{
-				try 
-				{
-					AudioClip clip = Applet.newAudioClip(new URL("file:Resources/Sound/" + fileName));
-					//clip.play();
-				} 
-				catch (MalformedURLException murle)
-				{
-					System.out.println(murle);
-				}
-			}
-		});
-		thread.start();
+		SoundPlayer.playClip(fileName);
 	}
+	*/
 	
 	public void setScore(int i)
 	{

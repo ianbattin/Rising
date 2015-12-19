@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import Main.GamePanel;
+import Main.SoundPlayer;
 import TileMap.Background;
 import TileMap.Tile;
 import TileMap.TileMap;
@@ -393,25 +394,5 @@ public abstract class MapObject
 	{
 		return x + xmap + width < 0 || x + xmap - width > GamePanel.WIDTH || 
 				y + ymap + height < 0 || y + ymap - height > GamePanel.HEIGHT;
-	}
-	
-	public void playSound(final String fileName)
-	{
-		Thread thread = new Thread(new Runnable()
-		{
-			public void run()
-			{
-				try 
-				{
-					AudioClip clip = Applet.newAudioClip(new URL("file:Resources/Sound/" + fileName));
-					clip.play();
-				} 
-				catch (MalformedURLException murle)
-				{
-					System.out.println(murle);
-				}
-			}
-		});
-		thread.start();
 	}
 }

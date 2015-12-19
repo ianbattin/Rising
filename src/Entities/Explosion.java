@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import Main.GamePanel;
+import Main.SoundPlayer;
 import TileMap.Tile;
 import TileMap.TileMap;
 
@@ -36,7 +37,7 @@ public class Explosion extends MapObject
 	private ArrayList<BufferedImage[]> sprites;
 	private final int[] numFrames = { 4 };
 	
-	private AffineTransform transform;
+	//private AffineTransform transform;
 	private AffineTransformOp op;
 	private double rotation;
 	
@@ -100,9 +101,9 @@ public class Explosion extends MapObject
 		animation.setFrames(sprites.get(0));
 		animation.setDelay(50);
 		
-		transform = new AffineTransform();
+		//transform = new AffineTransform();
 		rotation = Math.random()*360;
-		op = new AffineTransformOp(transform.getRotateInstance(rotation, width/2, height/2), AffineTransformOp.TYPE_BILINEAR);
+		op = new AffineTransformOp(AffineTransform.getRotateInstance(rotation, width/2, height/2), AffineTransformOp.TYPE_BILINEAR);
 	}
 
 	public void init()
@@ -115,7 +116,7 @@ public class Explosion extends MapObject
 			}
 		}
 		
-		playSound("bombexplosion.wav");
+		SoundPlayer.playClip("bombexplosion.wav");
 	}
 	
 	@Override
@@ -169,7 +170,7 @@ public class Explosion extends MapObject
 						{
 							g.drawImage(op.filter(animation.getImage(), null), (int)(x - cwidth/2 + xmap + i*20), (int)(y - cheight/2 + ymap + j*20), null);
 							rotation = Math.random()*360;
-							op = new AffineTransformOp(transform.getRotateInstance(rotation, width/2, height/2), AffineTransformOp.TYPE_BILINEAR);
+							op = new AffineTransformOp(AffineTransform.getRotateInstance(rotation, width/2, height/2), AffineTransformOp.TYPE_BILINEAR);
 						}
 					}
 				}

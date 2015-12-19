@@ -20,64 +20,56 @@ import Entities.Explosion;
 import Entities.PlaneBoss;
 import Entities.Projectile;
 import Main.GamePanel;
+import Main.SoundPlayer;
 import TileMap.Background;
 import TileMap.TileMap;
 
 public class MenuState extends GameState 
 {
-	private Background bg;
-	private BufferedImage title;
+	private static Background bg;
+	private static Background topBg;
 	
 	private String[] options = {"Play", "Controls", "Credits", "Quit" };
 	private int currentChoice = 0;
 	
-	private Font titleFont;
 	private Font optionsFont;
-	private int titleAlphaLevel;
+	private int secondaryFadingAlphaLevel;
 	
-	private TileMap tm  = new TileMap("Resources/Maps/level5.txt");
 	private ArrayList<MapObject> entities;
-	
-	private long timer;
 	
 	public MenuState(GameStateManager gsm)
 	{
 		super();
 		init();
 		this.gsm = gsm;
-		timer = System.nanoTime();;
 
 		super.isFadingOut = false;
 		super.alphaLevel = 0;
 		
-		titleAlphaLevel = 0;
-		//titleFont = new Font("RussellSquare", Font.BOLD, 60);
+		secondaryFadingAlphaLevel = 0;
 		optionsFont = new Font("Munro", Font.PLAIN, 24);
 		
 		//This is going to try to set the background from a certain file path
-		try
+		//the bg takes a long time to init; and since it doesnt change we dont need to re-init it every time 
+		if(bg == null || topBg == null)
 		{
 			bg = new Background("/Backgrounds/MenuBackground.png", 0);
-			title = ImageIO.read(getClass().getResourceAsStream("/Text/TitlePlaceholder2.png"));
-			bg.setVector(0, -5.0); //moves the background
+			topBg = new Background("/Backgrounds/MenuBackgroundTop.png", 0);
 		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
+		
+		
 	}
 
-	//Don't need to initialize anything here really...
 	public void init() 
 	{
 		entities = new ArrayList<MapObject>();
-		
 	}
 
 	//Only thing being updated is the background for movement
 	public void update()
 	{
 		bg.update();
+		topBg.update();
 		
 		/*long elapsed = (System.nanoTime() - timer) / 1000000;
 		if(100 <= elapsed)
@@ -92,11 +84,11 @@ public class MenuState extends GameState
 		
 		if (super.isFadingOut)
 		{
-			super.fadeOut(5000000000.0, Color.BLACK, 5, gsm, GameStateManager.MENUSTATE, GameStateManager.TRANSITION_INTROSTATE);
-			//title fading
-			if (titleAlphaLevel < 255)
+			super.fadeOut(4000000000.0, Color.BLACK, 3, gsm, GameStateManager.MENUSTATE, GameStateManager.TRANSITION_INTROSTATE);
+			//top part of image fading
+			if (secondaryFadingAlphaLevel < 255)
 			{
-				titleAlphaLevel += 1;
+				secondaryFadingAlphaLevel += 1;
 			}
 		}
 		
@@ -128,20 +120,22 @@ public class MenuState extends GameState
 			}
 			g.setFont(optionsFont);
 			g.drawString(options[i], centerStringX(options[i], 0, GamePanel.WIDTH, g), GamePanel.HEIGHT/2 + 40 + i * 25); //uses the i variable from the for loop to correctly position options on top of eachother
-		
-			super.drawFade(g);
-			
-			//g.drawImage(title, GamePanel.WIDTH/2 - 175/2, GamePanel.HEIGHT/4, 175, 100, null);
-			//title fading
-			//g.setColor(new Color(0,0,0,titleAlphaLevel));
-			//g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 		}
+		super.drawFade(g);
+		
+		if(super.isFadingOut)
+		{
+			topBg.draw(g);
+			g.setColor(new Color(0,0,0,secondaryFadingAlphaLevel));
+			g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+		}
+		
 	}
 
 	//Selects the current game state
 	private void select()
 	{
-		playSound("select.wav");
+		SoundPlayer.playClip("select.wav");
 	    if(currentChoice == 0)
 		{
 			super.isFadingOut = true;
@@ -184,7 +178,7 @@ public class MenuState extends GameState
 			//If you press the up key, the selected option go up
 			if(k == GameStateManager.up)
 			{
-				playSound("changeselection.wav");
+				SoundPlayer.playClip("changeselection.wav");
 				currentChoice--;
 				//Unless you reach the top in which case it loops back to the bottom
 				if(currentChoice == -1)
@@ -196,7 +190,7 @@ public class MenuState extends GameState
 			//If you press the down key, the selected option goes down
 			if(k == GameStateManager.down)
 			{
-				playSound("changeselection.wav");
+				SoundPlayer.playClip("changeselection.wav");
 				currentChoice++;
 				//Unless you reach the bottom in which case it loops back to the top
 				if(currentChoice == options.length)
