@@ -30,7 +30,7 @@ public class SplashState extends GameState
 	
 	public void init() 
 	{
-		music("Resources/Sound/Modero.wav");
+		music("Modero.wav");
 	}
 
 

@@ -470,7 +470,10 @@ public class Boss1State extends PlayState
 				}
 			}
 			else
+			{
 				System.out.println("WAHHHHHH");
+				
+			}
 		}
 	}
 

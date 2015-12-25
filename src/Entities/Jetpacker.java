@@ -14,9 +14,7 @@ import TileMap.TileMap;
 public class Jetpacker extends Enemy
 {
 	//animation
-	private ArrayList<BufferedImage[]> playerSprites;
-	private ArrayList<BufferedImage[]> playerHurtSprites;
-	private final int[] numFrames = { 1, 4, 3, 3};
+	private final int[] numFrames = {1, 4, 3, 3};
 	
 	//animation actions
 	private static final int IDLE = 0;
@@ -54,7 +52,7 @@ public class Jetpacker extends Enemy
 		try
 		{
 			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/MainCharacterSpriteSheet.png"));
-			playerSprites = new ArrayList<BufferedImage[]>();
+			entitySprites = new ArrayList<BufferedImage[]>();
 			for(int i = 0; i < numFrames.length; i++)
 			{
 				BufferedImage[] bi = new BufferedImage[numFrames[i]];
@@ -62,7 +60,7 @@ public class Jetpacker extends Enemy
 				{
 					bi[j] = spritesheet.getSubimage(j * width, i * height, width, height);
 				}
-				playerSprites.add(bi);
+				entitySprites.add(bi);
 			}
 			
 			//make the spritesheet for when the player is blinking red
@@ -82,7 +80,7 @@ public class Jetpacker extends Enemy
 				}
 			}
 			
-			playerHurtSprites = new ArrayList<BufferedImage[]>();
+			entityHurtSprites = new ArrayList<BufferedImage[]>();
 			for(int i = 0; i < numFrames.length; i++)
 			{
 				BufferedImage[] bi = new BufferedImage[numFrames[i]];
@@ -91,8 +89,17 @@ public class Jetpacker extends Enemy
 					bi[j] = playerHurtSpritesheet.getSubimage(j * width, i * height, width, height);
 				}
 				//sprites.add(bi);
-				playerHurtSprites.add(bi);
+				entityHurtSprites.add(bi);
 			}
+			
+			//make the spritesheet for the gun
+			BufferedImage gunSpriteSheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/gunSprite.png"));
+			gunSprites = new BufferedImage[2];
+			for(int i = 0; i < gunSprites.length; i++)
+			{
+				gunSprites[i] = (gunSpriteSheet.getSubimage(i * 25, 0, 25, 15)); //set the second number to select gun type (intervals of 15)
+			}
+
 		}
 		catch(Exception e)
 		{
@@ -101,8 +108,16 @@ public class Jetpacker extends Enemy
 		
 		animation = new Animation();
 		currentAction = FALLING;
-		animation.setFrames(playerSprites.get(FALLING));
+		animation.setFrames(entitySprites.get(FALLING));
 		animation.setDelay(200);
+		
+		//create the animation for the gun
+		gunAnimation = new Animation();
+		gunAnimation.setFrames(gunSprites);
+		gunAnimation.setDelay(200);
+		
+		gunPosX = 10;
+		gunPosY = 18;
 		
 		falling = true;
 		
@@ -177,6 +192,8 @@ public class Jetpacker extends Enemy
 		{
 			p.draw(g);
 		}
+		
+		drawGun(g);
 	}
 	
 	public void getAttack()
@@ -199,7 +216,7 @@ public class Jetpacker extends Enemy
 			long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 			if(fireDelay <= elapsed*(0.5*super.slowDown))
 			{
-				bullets.add(new Projectile(x, y, angle, 2, tm));
+				bullets.add(new Projectile(x + this.gunPosX, y + this.gunPosY, angle, 2, tm));
 				fireTimer = System.nanoTime();
 			}
 		}
@@ -226,6 +243,14 @@ public class Jetpacker extends Enemy
 		{
 			dy += moveSpeed;
 			if(dy > (maxSpeedY*super.slowDown)) dy = (maxSpeedY*super.slowDown);
+		}
+		if(player.getX() > this.getX())
+		{
+			this.facingRight = true;
+		}
+		else
+		{
+			this.facingRight = false;
 		}
 		//MOVING LEFT AND RIGHT
 		/*if(left)
@@ -319,7 +344,7 @@ public class Jetpacker extends Enemy
 			if(currentAction != IDLE && currentAction != WALKING)
 			{
 				currentAction = IDLE;
-				animation.setFrames(playerSprites.get(IDLE));
+				animation.setFrames(entitySprites.get(IDLE));
 				animation.setDelay(200);
 				width = 50;
 				height = 70;
@@ -332,7 +357,7 @@ public class Jetpacker extends Enemy
 			if(currentAction != WALKING && currentAction != FALLING && currentAction != JUMPING && !idle)
 			{
 				currentAction = WALKING;
-				animation.setFrames(playerSprites.get(WALKING));
+				animation.setFrames(entitySprites.get(WALKING));
 				animation.setDelay(200);
 				width = 50;
 				height = 70;
@@ -343,7 +368,7 @@ public class Jetpacker extends Enemy
 			if(currentAction != JUMPING && !fallingAnim)
 			{
 				currentAction = JUMPING;
-				animation.setFrames(playerSprites.get(JUMPING));
+				animation.setFrames(entitySprites.get(JUMPING));
 				animation.setDelay(200);
 				animation.setDone(true);
 				width = 50;
@@ -355,15 +380,15 @@ public class Jetpacker extends Enemy
 			if(currentAction != FALLING)
 			{
 				currentAction = FALLING;
-				animation.setFrames(playerSprites.get(FALLING));
+				animation.setFrames(entitySprites.get(FALLING));
 				animation.setDelay(200);
 				width = 50;
 				height = 70;
 			}
 		}
 		
-		if (isFlashing) animation.changeFrames(playerHurtSprites.get(currentAction));
-		else animation.changeFrames(playerSprites.get(currentAction));
+		if (isFlashing) animation.changeFrames(entityHurtSprites.get(currentAction));
+		else animation.changeFrames(entitySprites.get(currentAction));
 		
 		animation.update();		
 	}

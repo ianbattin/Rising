@@ -2,6 +2,8 @@ package Entities;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -31,6 +33,8 @@ public abstract class Enemy extends MapObject
 	protected static int fireDelay;
 	protected static boolean firing;
 	protected double angle;
+	protected int gunPosX;
+	protected int gunPosY;
 	
 	//character position relative to bottom of tileMap
 	protected double yFromBottom;
@@ -43,7 +47,8 @@ public abstract class Enemy extends MapObject
 	//animation
 	protected ArrayList<BufferedImage[]> entitySprites;
 	protected ArrayList<BufferedImage[]> entityHurtSprites;
-	protected int[] numFrames;
+	protected BufferedImage[] gunSprites;
+	protected Animation gunAnimation;
 	
 	//slowdown (when player picks up powerup)
 	protected float slowDown;
@@ -174,5 +179,19 @@ public abstract class Enemy extends MapObject
 		{
 			bullets.get(i).setSlowTime(this.slowDown);
 		}
+	}
+	
+	/**
+	 * Draws the gun on top of the enemy and orients it to aim towards the player
+	 * Requires that the gunAnimation, gunPosX and gunPosY have been initialized
+	 * 
+	 * @param g The Graphics2D object
+	 */
+	protected void drawGun(Graphics2D g)
+	{		
+		if(facingRight)
+			g.drawImage(new AffineTransformOp(AffineTransform.getRotateInstance(angle, 12.5, 7.5), AffineTransformOp.TYPE_BILINEAR).filter(gunAnimation.getImage(), null), (int)(x + xmap) + gunPosX, (int)(y + ymap) + gunPosY, 50, 30, null);
+		else
+			g.drawImage(new AffineTransformOp(AffineTransform.getRotateInstance(-angle, 12.5, 7.5), AffineTransformOp.TYPE_BILINEAR).filter(gunAnimation.getImage(), null), (int)(x + xmap) + gunPosX, (int)(y + ymap) + gunPosY + 30, 50, -30, null);
 	}
 }

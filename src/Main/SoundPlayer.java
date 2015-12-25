@@ -57,7 +57,7 @@ public class SoundPlayer implements LineListener, Runnable
 	 */
 	public void startBackgroundMusic(String fileName, boolean willLoop)
 	{
-		this.backgroundFileName = fileName;
+		this.backgroundFileName = "Resources/Sound/" + fileName;
 		this.willLoopBackgroundMusic = willLoop;
 
 		if(IS_PLAYING)
