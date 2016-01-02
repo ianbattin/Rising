@@ -37,11 +37,7 @@ public class SplashState extends GameState
 	public void update() 
 	{
 		elapsedTime += GamePanel.getElapsedTime();
-		if(elapsedTime < 200000000.0) 
-		{
-			bg.update(); 
-		}
-		else
+		if(elapsedTime > 200000000.0) 
 		{	
 			gsm.gameStateManagerLoad();
 			gsm.setState(GameStateManager.MENUSTATE);

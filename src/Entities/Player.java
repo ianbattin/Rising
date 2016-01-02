@@ -255,7 +255,6 @@ public class Player extends MapObject
 		{
 			myCheckCollision();
 			//if(onScreen()) checkPixelColorCollision(tm);
-			myCheckCollision();
 			getAttack();
 		}
 		else
@@ -298,7 +297,7 @@ public class Player extends MapObject
 			playState.setScore((int) (playState.getScore() + -dy));
 		}
 		
-		if (y > GamePanel.HEIGHT + 150 + height)
+		if (y > GamePanel.HEIGHT + 75 + height)
 		{
 			playerHurt(50);
 		}

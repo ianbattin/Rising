@@ -74,6 +74,7 @@ public class TileMap
 					map[row][col] = Integer.parseInt(wholeRow[col]);
 				}
 			}
+			br.close();
 		}
 		catch(Exception e)
 		{
@@ -130,7 +131,10 @@ public class TileMap
 		for(int i = 0; i < tiles.size(); i++)
 		{
 			if(tiles.get(i).pastBottom())
+			{
 				tiles.remove(i);
+				i--;
+			}
 			else
 				tiles.get(i).update(dx, dy);
 		}
