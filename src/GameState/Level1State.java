@@ -113,9 +113,6 @@ public class Level1State extends PlayState
 			for(Enemy e: enemies)
 				e.update();
 			aimUpdate();
-			
-			//Camera left and right movement (Player always stays centered)
-			tileMap.setXVector(-player.getDX());
 		}
 		if(player.getPoints() > 1000 && enemies.size() == 0)
 		{
@@ -197,6 +194,7 @@ public class Level1State extends PlayState
 	{
 		return player;
 	}
+	
 
 	//update and draw the debris
 	public void debris(Graphics2D g)

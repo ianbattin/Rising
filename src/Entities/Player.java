@@ -589,7 +589,7 @@ public class Player extends MapObject
 		else
 			fallingAnim = false;
 		
-		x += (dx + tileMap.getDX());
+		moveTileMapX();
 		if(tileMapMoving)
 		{
 			if(y < 300) 
@@ -707,6 +707,34 @@ public class Player extends MapObject
 		animation.update();
 			
 	}
+	
+	public void moveTileMapX()
+	{
+		if(-tileMap.getXMove() <= -tileMap.getTotalWidth()/2 || -tileMap.getXMove() >= tileMap.getTotalWidth() - GamePanel.WIDTH)
+		{
+			x += dx;
+			tileMap.setXVector(0);
+			System.out.println(-tileMap.getXMove() + "     " + -tileMap.getTotalWidth()/2 + "     " + (tileMap.getTotalWidth() - GamePanel.WIDTH));
+			
+			if(-tileMap.getXMove() <= -tileMap.getTotalWidth()/2 && x >= GamePanel.WIDTH/2)
+			{
+				x += (dx + tileMap.getDX());
+				tileMap.setXVector(-this.getDX());
+			}
+			else if(-tileMap.getXMove() >= tileMap.getTotalWidth() - GamePanel.WIDTH && x <= GamePanel.WIDTH/2)
+			{
+				x += (dx + tileMap.getDX());
+				tileMap.setXVector(-this.getDX());
+			}
+		}
+		else
+		{
+			x += (dx + tileMap.getDX());
+			tileMap.setXVector(-this.getDX());
+			System.out.println(-tileMap.getXMove() + "     " + -tileMap.getTotalWidth()/2 + "     " + (tileMap.getTotalWidth() - GamePanel.WIDTH));
+		}
+	}
+	
 	public double getCharacterY()
 	{
 		return this.yFromBottom;

@@ -31,6 +31,8 @@ public class TileMap
 	
 	private int width; //total width in tiles
 	private int height; //total height in tiles
+	private int extraWidth;
+	private int totalWidth;
 	private int[][] map; //our 2d array of tiles
 	
 	private int tileSize; //width and height of individual tiles
@@ -45,6 +47,9 @@ public class TileMap
 	{
 		x = 0;
 		y = 0;
+		dx = 0;
+		dy = 0;
+		extraWidth = 1;
 		xMove = 0;
 		yMove = 0;
 		moving = false;
@@ -74,6 +79,8 @@ public class TileMap
 					map[row][col] = Integer.parseInt(wholeRow[col]);
 				}
 			}
+			
+			totalWidth = width*tileSize + (width*tileSize)*extraWidth;
 		}
 		catch(Exception e)
 		{
@@ -92,8 +99,11 @@ public class TileMap
 				if(tile != 0) 
 				{
 					tiles.add(new Tile(col * tileSize + x, row * tileSize - height * tileSize + GamePanel.HEIGHT, tile, tileSize, this));
-					tiles.add(new Tile(col * tileSize + x + GamePanel.WIDTH, row * tileSize - height * tileSize + GamePanel.HEIGHT + y, tile, tileSize, this));
-					tiles.add(new Tile(col * tileSize + x - GamePanel.WIDTH, row * tileSize - height * tileSize + GamePanel.HEIGHT + y, tile, tileSize, this));
+					for(int i = 1; i <= extraWidth; i++)
+					{
+						tiles.add(new Tile(col * tileSize + x + GamePanel.WIDTH*i, row * tileSize - height * tileSize + GamePanel.HEIGHT + y, tile, tileSize, this));
+						tiles.add(new Tile(col * tileSize + x - GamePanel.WIDTH*i, row * tileSize - height * tileSize + GamePanel.HEIGHT + y, tile, tileSize, this));
+					}
 				}
 				if(tile > minType)
 				{
@@ -255,4 +265,9 @@ public class TileMap
 	public double getYMove() {	return yMove;	}
 	public double getDX() { return dx; }
 	public double getDY() { return dy; }
+
+	public int getTotalWidth() 
+	{
+		return totalWidth;
+	}
 }
