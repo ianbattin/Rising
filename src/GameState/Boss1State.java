@@ -46,7 +46,7 @@ public class Boss1State extends PlayState
 	private boolean start, isStillAlive;
 	private float deathTimer;
 	public static boolean tileStart;
-	private Font healthFont, scoreFont;
+	private Font scoreFont;
 	
 	private long timer;
 	
@@ -96,7 +96,6 @@ public class Boss1State extends PlayState
 		debrisVector = 0;
 		
 		scoreFont = new Font("Munro", Font.PLAIN, 24);		
-		healthFont = new Font("Munro", Font.BOLD, 16);
 		
 		super.isFadingIn = true;
 		super.alphaLevel = 255;
@@ -160,19 +159,12 @@ public class Boss1State extends PlayState
 	
 	private void drawBossHealth(Graphics2D g) 
 	{
+		g.setColor(Color.white);
+		g.fillRect(197, 97, 406, 36);
+		g.setColor(Color.BLACK);
+		g.fillRect(200, 100, 400, 30);
 		g.setColor(Color.RED);
-		g.setFont(healthFont);
-		String s = "[";
-		for(int i = 0; i < enemies.get(0).getHealth(); i++)
-		{
-			s += "|";
-		}
-		for(int i = 0; i < 100-enemies.get(0).getHealth(); i++)
-		{
-			s += " ";
-		}
-		s += "]";
-		g.drawString(s, centerStringX(s, 0, GamePanel.WIDTH, g), 100);
+		g.fillRect(200, 100, enemies.get(0).getHealth()*4, 30);
 	}
 
 	private void basicChecks() 
@@ -471,6 +463,7 @@ public class Boss1State extends PlayState
 			}
 			else
 			{
+				drawBossHealth = false;
 				System.out.println("WAHHHHHH");
 				
 			}

@@ -147,7 +147,7 @@ public class Tile
 	{
 		return (y > GamePanel.HEIGHT + 200);
 	}
-	
+		
 	public int getType() {	return type;	}
 	public void setType(int i) { type = i; };
 	public double getX(){	return x;	}

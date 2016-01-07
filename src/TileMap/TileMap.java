@@ -81,6 +81,7 @@ public class TileMap
 			}
 			
 			totalWidth = width*tileSize + (width*tileSize)*extraWidth;
+			br.close();
 		}
 		catch(Exception e)
 		{
@@ -140,7 +141,10 @@ public class TileMap
 		for(int i = 0; i < tiles.size(); i++)
 		{
 			if(tiles.get(i).pastBottom())
+			{
 				tiles.remove(i);
+				i--;
+			}
 			else
 				tiles.get(i).update(dx, dy);
 		}
