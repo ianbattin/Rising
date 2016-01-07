@@ -402,4 +402,9 @@ public class Jetpacker extends Enemy
 	{
 
 	}
+	
+	public void onDeath()
+	{
+		player.increasePoints(500);
+	}
 }

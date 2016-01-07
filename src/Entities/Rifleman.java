@@ -408,4 +408,9 @@ public class Rifleman extends Enemy
 	{
 
 	}
+	
+	public void onDeath()
+	{
+		player.increasePoints(750);
+	}
 }

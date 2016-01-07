@@ -200,6 +200,11 @@ public class Explosion extends MapObject
 		return type;
 	}
 	
+	public boolean getRemove()
+	{
+		return remove;
+	}
+	
 	@Override
 	public void collided(int type, Tile t) 
 	{

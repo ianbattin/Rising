@@ -1,6 +1,7 @@
 package Main;
 
 import java.applet.Applet;
+import java.applet.AudioClip;
 import java.io.File;
 import java.net.URL;
 
@@ -8,11 +9,14 @@ import javax.sound.sampled.*;
 
 
 public class SoundPlayer implements LineListener, Runnable
-{
+{	
 	//How many bytes are being read ahead (for the background music)
 	private final static int BUFFER_SIZE = 8192;
 	//Indicates whether another instance of SoundPlayer is playing the background sound. If set to false, it will cease playback in other instances
 	private static boolean IS_PLAYING;
+	
+	//preload the most used sounds
+	private static AudioClip shootingClip;
 	
 	//thread that handles the background playback
 	private Thread backgroundPlaybackThread;
@@ -29,6 +33,27 @@ public class SoundPlayer implements LineListener, Runnable
 	{
 	}
 	
+	/**
+	 * To be used for playing the shooting noise; this is separate of the playClip for optimization reasons
+	 */
+	public static void playShootingClip()
+	{
+		if(shootingClip == null)
+		{
+			try
+			{
+				shootingClip = Applet.newAudioClip(new URL("file:Resources/Sound/shoot.wav"));
+			}
+			catch (Exception e)
+			{
+				System.out.println(e.toString());
+			}
+		}
+		else
+		{
+			shootingClip.play();
+		}
+	}
 	
 	/**
 	 * To be used to play short sound clips. This method is static, and does not need a SoundPlayer object.
@@ -46,7 +71,6 @@ public class SoundPlayer implements LineListener, Runnable
 			System.out.println(e.toString());
 		}
 	}
-	
 	
 	/**
 	 * To be used to play longer music, such as background theme songs, or other longer songs. This spawns a new thread to play in the background.
@@ -87,7 +111,7 @@ public class SoundPlayer implements LineListener, Runnable
 		try
 		{
 			File mediaFile = new File(this.backgroundFileName);
-			while(IS_PLAYING && this.willLoopBackgroundMusic)
+			while(IS_PLAYING)
 			{
 				AudioInputStream audioStream = AudioSystem.getAudioInputStream(mediaFile);
 				AudioFormat audioFormat = audioStream.getFormat();
@@ -108,6 +132,9 @@ public class SoundPlayer implements LineListener, Runnable
 				audioLine.drain();
 				audioLine.close();
 				audioStream.close();
+				
+				if(!this.willLoopBackgroundMusic)
+					IS_PLAYING = false;
 			}
 		}
 		catch (Exception e)

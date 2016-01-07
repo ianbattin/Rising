@@ -218,7 +218,7 @@ public class Boss1State extends PlayState
 	{
 		if(enemies.isEmpty())
 		{
-			enemies.add(new PlaneBoss(-2000, 200, tileMap, player));
+			enemies.add(new PlaneBoss(-2000, 200, tileMap, player, 0));
 		}
 		
 		planeX = ((PlaneBoss) enemies.get(0)).getX();

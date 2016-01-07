@@ -10,6 +10,7 @@ import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
+import Main.SoundPlayer;
 import TileMap.Tile;
 import TileMap.TileMap;
 
@@ -28,14 +29,14 @@ public class PlaneBoss extends Enemy {
 	private int cockpitX;
 	private int cockpitY;
 
-	public PlaneBoss(int x, int y, TileMap tm, Player player) 
+	public PlaneBoss(int x, int y, TileMap tm, Player player, int typeAttack) 
 	{
 		super(x, y, tm, player);
 		
 		bullets = new ArrayList<Projectile>();
 		firing = false;
 		fireDelay = 10;
-		typeAttack = 1;
+		this.typeAttack = typeAttack;
 		
 		setMovement = false;
 		
@@ -400,6 +401,11 @@ public class PlaneBoss extends Enemy {
 
 	}
 
+	public void onDeath()
+	{
+		player.increasePoints(5000);
+	}
+	
 	public void setMoveComplete(boolean b) 
 	{
 		moveComplete = b;

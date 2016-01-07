@@ -15,7 +15,7 @@ public class ControlsState extends GameState {
 	private GameStateManager gsm;
 
 	private Color titleColor;
-	private Font titleFont, optionsFont, subTextFont;
+	private Font titleFont, optionsFont, subTextFont, backupFont;
 	
 	private int selection;
 	private boolean isListeningToKey; //true if next key press will set controls
@@ -37,6 +37,7 @@ public class ControlsState extends GameState {
 		isListeningToKey = false;
 		
 		titleColor = new Color(255, 60 ,0);
+		backupFont = new Font("Times", Font.PLAIN, 24);
 		titleFont = new Font("Munro", Font.BOLD, 40);
 		optionsFont = new Font("Munro", Font.PLAIN, 24);
 		subTextFont = new Font("Munro", Font.PLAIN, 20);
@@ -74,7 +75,12 @@ public class ControlsState extends GameState {
 				g.setColor(Color.WHITE);
 			
 			//TODO Figure out how to apply the centerStringX() method to this?
+			if(movementKeys[i].length() == 1 && !titleFont.canDisplay(movementKeys[i].toCharArray()[0]))
+			{
+				g.setFont(backupFont);
+			}
 			g.drawString(movementKeys[i],  GamePanel.WIDTH/2+30, 50+GamePanel.HEIGHT/4+(i*40));
+			g.setFont(optionsFont);
 			g.setColor(Color.WHITE);
 			g.drawString(movementTypes[i], GamePanel.WIDTH/2-70, 50+GamePanel.HEIGHT/4+(i*40));
 		}

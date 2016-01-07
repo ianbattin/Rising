@@ -25,6 +25,7 @@ import GameState.Level1State;
 import GameState.PlayState;
 import GameState.GameState;
 import Main.GamePanel;
+import Main.SoundPlayer;
 import TileMap.Tile;
 import TileMap.TileMap;
 
@@ -52,11 +53,13 @@ public class Player extends MapObject
 	private boolean hasJetpack, hasBird, birdActive, hasArmor, slowTime, canGlide;
 	private int birdMaxDy, birdMaxDx;
 	private double birdX, birdY;
+	private Explosion explosions;
 	private Enemy chosenEnemy;
 	private ArrayList<Integer> charBlurPos;
 	
 	//score system
-	int heightScore;
+	private int heightScore;
+	private ArrayList<int[]> bonusScores;
 
 	//character position relative to bottom of tileMap
 	private double yFromBottom;
@@ -246,6 +249,7 @@ public class Player extends MapObject
 		jumpHeightFactor = 1;
 		healthPos = 0;
 		heightScore = 0;
+		bonusScores = new ArrayList<int[]>();
 		charBlurPos = new ArrayList<Integer>();
 	}
 	
@@ -269,6 +273,14 @@ public class Player extends MapObject
 		{
 			birdAnimation.update();
 		}
+		
+		if(explosions != null && !explosions.getRemove())
+		{
+			if(explosions.getRemove())
+				explosions = null;
+			else
+				explosions.update();
+		} 
 		
 		for(int i = 0; i < bullets.size(); i++)
 		{	
@@ -353,6 +365,11 @@ public class Player extends MapObject
 			g.draw(this.getRectangle());
 		}
 		
+		if(explosions != null)
+		{
+			explosions.draw(g);
+		}
+		
 		if (isFlashing)
 		{
 			for (int i = 0; i < 5; i++)
@@ -431,7 +448,7 @@ public class Player extends MapObject
 		for(Projectile p: bullets)
 		{
 			p.draw(g);
-		}
+		}	
 	}
 	
 	public void collided(int type, Tile t)
@@ -468,7 +485,7 @@ public class Player extends MapObject
 		
 		if(!shootUp && !shootDown && !shootLeft && !shootRight && !mouseHeld) firing = false;
 		
-	
+	    
 		if(firing)
 		{
 			
@@ -744,9 +761,21 @@ public class Player extends MapObject
 		tileMapMoving = b;
 	}
 
-	public int getScore()
+	public int getPoints()
 	{
-		return heightScore;
+		return playState.getScore();
+	}
+	
+	public void increasePoints(int amount)
+	{
+		int[] data = {amount, 255};
+		bonusScores.add(data);
+		playState.setScore(playState.getScore() + amount);	
+	}
+	
+	public ArrayList<int[]> getBonusScores()
+	{
+		return bonusScores;
 	}
 	
 	public int getPlayerHealth()
@@ -918,8 +947,6 @@ public class Player extends MapObject
 			{
 				g.drawImage(birdAnimation.getImage(), (int)birdX+15, (int)birdY, -15, 15, null);
 			}
-			
-
 		}
 		else if(hasBird && birdActive)
 		{
@@ -949,6 +976,7 @@ public class Player extends MapObject
 			if(birdY+10 >= chosenEnemy.getY() && birdY-10 <= chosenEnemy.getY() && birdX+10 >= chosenEnemy.getX() && birdX-10 <= chosenEnemy.getX()) 
 			{
 				chosenEnemy.playerHurt(50);
+				this.explosions = new Explosion(birdX, birdY, 1, tileMap);
 				hasBird = false;
 				birdActive = false;
 			}
@@ -983,11 +1011,6 @@ public class Player extends MapObject
 				healing = false;
 			}
 		}
-	}
-	
-	public int getPoints()
-	{
-		return playState.getScore();
 	}
 	
 	public void keyPressed(int k)

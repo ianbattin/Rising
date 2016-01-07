@@ -83,6 +83,7 @@ public abstract class Enemy extends MapObject
 	public abstract void getAnimation();
 	public abstract void collided(int type, Tile t);
 	public abstract void collided(MapObject m);	
+	public abstract void onDeath();
 
 	protected void getBulletCollision()
 	{
@@ -154,6 +155,10 @@ public abstract class Enemy extends MapObject
 			else dx = 8.0;
 			recovering = true;
 			recoverTimer = System.nanoTime();
+			if(health <= 0)
+			{
+				this.onDeath();
+			}
 		}
 	}
 	

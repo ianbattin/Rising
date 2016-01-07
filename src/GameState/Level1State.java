@@ -31,6 +31,8 @@ public class Level1State extends PlayState
 	private int[][] debrisInfo;
 	private int[][] smallDebrisInfo;
 	private ArrayList<Color> colors;
+	private ArrayList<int[]> bonusScores;
+	private Font bonusScoreFont, scoreFont;
 	private boolean start, isStillAlive;
 	private float timer;
 	public static boolean tileStart, debrisAlternator;
@@ -99,6 +101,10 @@ public class Level1State extends PlayState
 		pickups = new Pickups(player, tileMap, this, pickupsToSpawn);
 		tileStart = false;
 		score = 0;
+		
+		this.bonusScores = player.getBonusScores();
+		bonusScoreFont = new Font("Munro", Font.BOLD, 35);
+		scoreFont = new Font("Munro", Font.PLAIN, 24);
 	}
 
 	public void update()
@@ -127,6 +133,22 @@ public class Level1State extends PlayState
 		{
 			timer += GamePanel.getElapsedTime();
 		}
+	    
+		if(!bonusScores.isEmpty())
+		{
+			for(int i = 0; i < bonusScores.size(); i++)
+			{
+				if(bonusScores.get(i)[1] > 0)
+				{
+					bonusScores.get(i)[1]--;
+				}
+				else
+				{
+					bonusScores.remove(i);
+					i--;
+				}
+			}
+		}
 		
 		if(tileMap.getYMove() >= tileMap.getTileMapHeight() - 700)
 		{	
@@ -149,7 +171,7 @@ public class Level1State extends PlayState
 				}
 				if(enemies.size() <= 1)
 				{
-					enemies.add(new PlaneBoss(2000, -200, tileMap, player));
+					enemies.add(new PlaneBoss(2000, -200, tileMap, player, 1));
 				}
 			}
 			tileMap.setYVector(transitionDY);
@@ -186,7 +208,16 @@ public class Level1State extends PlayState
 		}
 		else
 			g.drawString("Score: " + player.getPoints(), centerStringX("Score: " + player.getPoints(), 0, GamePanel.WIDTH, g), 30);
-		
+		if(!bonusScores.isEmpty())
+		{
+			for(int i = 0; i < bonusScores.size(); i++)
+			{
+				g.setColor(new Color(100, 200, 100, bonusScores.get(i)[1]));
+				g.setFont(bonusScoreFont);
+				g.drawString("+" + bonusScores.get(i)[0], centerStringX("+" + bonusScores.get(i)[0], 0, GamePanel.WIDTH, g), 35 + (255-bonusScores.get(i)[1])/2);
+				g.setFont(scoreFont);
+			}
+		}
 		super.drawFade(g);
 	}
 	
@@ -301,7 +332,7 @@ public class Level1State extends PlayState
 		}
 		if(k == KeyEvent.VK_P)
 		{
-			enemies.add(new PlaneBoss(1000, 100, tileMap, player));
+			enemies.add(new PlaneBoss(1000, 100, tileMap, player, 1));
 		}
 		if(k == KeyEvent.VK_N)
 		{

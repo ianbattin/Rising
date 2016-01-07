@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
+import Main.SoundPlayer;
 import TileMap.Tile;
 import TileMap.TileMap;
 
@@ -45,6 +46,7 @@ public class Projectile extends MapObject
 				height = 7;
 				damage = 1;
 				playerCollide = true;
+				SoundPlayer.playShootingClip();
 				break;
 			}
 			case 2:
@@ -54,6 +56,7 @@ public class Projectile extends MapObject
 				height = 14;
 				damage = 2;
 				playerCollide = true;
+				SoundPlayer.playShootingClip();
 				break;
 			}
 			case 3:
@@ -63,6 +66,7 @@ public class Projectile extends MapObject
 				height = 10;
 				damage = 0;
 				playerCollide = false;
+				SoundPlayer.playShootingClip();
 				break;
 			}
 			case 4:
@@ -72,6 +76,7 @@ public class Projectile extends MapObject
 				height = 15;
 				damage = 0;
 				playerCollide = false;
+				SoundPlayer.playShootingClip();
 				break;
 			}
 			case 5:
@@ -81,6 +86,7 @@ public class Projectile extends MapObject
 				height = 10;
 				damage = 0;
 				playerCollide = true;
+				SoundPlayer.playShootingClip();
 				break;
 			}
 			case 6:
@@ -90,6 +96,7 @@ public class Projectile extends MapObject
 				height = 30;
 				damage = 0;
 				playerCollide = true;
+				SoundPlayer.playShootingClip();
 				break;
 			}
 		}
