@@ -43,10 +43,11 @@ public class Boss1State extends PlayState
 	private ArrayList<Enemy> enemies;
 	private int[][] debrisInfo;
 	private ArrayList<Color> colors;
+	private ArrayList<int[]> bonusScores;
+	private Font bonusScoreFont, scoreFont;
 	private boolean start, isStillAlive;
 	private float deathTimer;
 	public static boolean tileStart;
-	private Font scoreFont;
 	
 	private long timer;
 	
@@ -95,8 +96,9 @@ public class Boss1State extends PlayState
 		bgVectorY = 0;
 		debrisVector = 0;
 		
-		scoreFont = new Font("Munro", Font.PLAIN, 24);		
-		
+		scoreFont = new Font("Munro", Font.PLAIN, 24);				
+		bonusScoreFont = new Font("Munro", Font.BOLD, 35);
+
 		super.isFadingIn = true;
 		super.alphaLevel = 255;
 	}
@@ -125,6 +127,8 @@ public class Boss1State extends PlayState
 		setDebrisVectors(1);
 		
 		System.out.println("Left: " + player.getMoveSpeedLeft() + " Right: " + player.getMoveSpeedRight() + " MaxLeft: " + player.getMaxSpeedLeft() + " MaxRight: " + player.getMaxSpeedRight());
+	
+		this.bonusScores = player.getBonusScores();
 	}
 
 	public void update()
@@ -135,6 +139,22 @@ public class Boss1State extends PlayState
 		}
 		basicChecks();
 		script();
+		
+		if(!bonusScores.isEmpty())
+		{
+			for(int i = 0; i < bonusScores.size(); i++)
+			{
+				if(bonusScores.get(i)[1] > 0)
+				{
+					bonusScores.get(i)[1]--;
+				}
+				else
+				{
+					bonusScores.remove(i);
+					i--;
+				}
+			}
+		}
 	}
 
 	public void draw(Graphics2D g)
@@ -153,6 +173,17 @@ public class Boss1State extends PlayState
 		g.drawString("Score: " + player.getPoints(), centerStringX("Score: " + player.getPoints(), 0, GamePanel.WIDTH, g), 30);
 		
 		if(drawBossHealth) drawBossHealth(g);
+		
+		if(!bonusScores.isEmpty())
+		{
+			for(int i = 0; i < bonusScores.size(); i++)
+			{
+				g.setColor(new Color(100, 200, 100, bonusScores.get(i)[1]));
+				g.setFont(bonusScoreFont);
+				g.drawString("+" + bonusScores.get(i)[0], centerStringX("+" + bonusScores.get(i)[0], 0, GamePanel.WIDTH, g), 35 + (255-bonusScores.get(i)[1])/2);
+				g.setFont(scoreFont);
+			}
+		}
 		
 		super.drawFade(g);
 	}
