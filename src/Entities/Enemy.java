@@ -33,6 +33,7 @@ public abstract class Enemy extends MapObject
 	protected static int fireDelay;
 	protected static boolean firing;
 	protected double angle;
+	protected double lastAngle;
 	protected int gunPosX;
 	protected int gunPosY;
 	
@@ -194,9 +195,12 @@ public abstract class Enemy extends MapObject
 	 */
 	protected void drawGun(Graphics2D g)
 	{		
+		if(angle > lastAngle + 0.2 || angle < lastAngle - 0.2)
+			lastAngle = angle;
+			
 		if(facingRight)
-			g.drawImage(new AffineTransformOp(AffineTransform.getRotateInstance(angle, 12.5, 7.5), AffineTransformOp.TYPE_BILINEAR).filter(gunAnimation.getImage(), null), (int)(x + xmap) + gunPosX, (int)(y + ymap) + gunPosY, 50, 30, null);
+			g.drawImage(new AffineTransformOp(AffineTransform.getRotateInstance((float)lastAngle, 12.5, 7.5), AffineTransformOp.TYPE_BILINEAR).filter(gunAnimation.getImage(), null), (int)(x + xmap) + gunPosX, (int)(y + ymap) + gunPosY, 50, 30, null);
 		else
-			g.drawImage(new AffineTransformOp(AffineTransform.getRotateInstance(-angle, 12.5, 7.5), AffineTransformOp.TYPE_BILINEAR).filter(gunAnimation.getImage(), null), (int)(x + xmap) + gunPosX, (int)(y + ymap) + gunPosY + 30, 50, -30, null);
+			g.drawImage(new AffineTransformOp(AffineTransform.getRotateInstance((float)-lastAngle, 12.5, 7.5), AffineTransformOp.TYPE_BILINEAR).filter(gunAnimation.getImage(), null), (int)(x + xmap) + gunPosX, (int)(y + ymap) + gunPosY + 30, 50, -30, null);
 	}
 }
