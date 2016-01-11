@@ -726,13 +726,12 @@ public class Player extends MapObject
 	
 	public void moveTileMapX()
 	{
-		if(-tileMap.getXMove() <= -tileMap.getTotalWidth()/2 || -tileMap.getXMove() >= tileMap.getTotalWidth() - GamePanel.WIDTH)
+		if(-tileMap.getXMove() <= -tileMap.getTotalWidth() + GamePanel.WIDTH || -tileMap.getXMove() >= tileMap.getTotalWidth() - GamePanel.WIDTH)
 		{
 			x += dx;
 			tileMap.setXVector(0);
-			System.out.println(-tileMap.getXMove() + "     " + -tileMap.getTotalWidth()/2 + "     " + (tileMap.getTotalWidth() - GamePanel.WIDTH));
 			
-			if(-tileMap.getXMove() <= -tileMap.getTotalWidth()/2 && x >= GamePanel.WIDTH/2)
+			if(-tileMap.getXMove() <= -tileMap.getTotalWidth()  + GamePanel.WIDTH && x >= GamePanel.WIDTH/2)
 			{
 				x += (dx + tileMap.getDX());
 				tileMap.setXVector(-this.getDX());
@@ -747,7 +746,6 @@ public class Player extends MapObject
 		{
 			x += (dx + tileMap.getDX());
 			tileMap.setXVector(-this.getDX());
-			System.out.println(-tileMap.getXMove() + "     " + -tileMap.getTotalWidth()/2 + "     " + (tileMap.getTotalWidth() - GamePanel.WIDTH));
 		}
 	}
 	

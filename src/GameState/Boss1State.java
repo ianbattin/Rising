@@ -105,7 +105,7 @@ public class Boss1State extends PlayState
 
 	public void init() 
 	{
-		tileMap = new TileMap("Resources/Maps/boss1.txt");
+		tileMap = new TileMap("Resources/Maps/boss1.txt", 0);
 		tileMap.setVector(0, 0);
 		tileMap.setY(tileMap.getY() + 175);
 		player.setTileMapMoving(false);

@@ -43,13 +43,13 @@ public class TileMap
 	
 	private ArrayList<Explosion> explosions;
 	
-	public TileMap(String s)
+	public TileMap(String s, int extraWidth)
 	{
 		x = 0;
 		y = 0;
 		dx = 0;
 		dy = 0;
-		extraWidth = 1;
+		this.extraWidth = extraWidth;
 		xMove = 0;
 		yMove = 0;
 		moving = false;
@@ -80,7 +80,7 @@ public class TileMap
 				}
 			}
 			
-			totalWidth = width*tileSize + (width*tileSize)*extraWidth;
+			totalWidth = width*tileSize + ((width*tileSize)*extraWidth);
 			br.close();
 		}
 		catch(Exception e)
