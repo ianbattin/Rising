@@ -39,8 +39,6 @@ public class Boss1State extends PlayState
 	private boolean mouseUpdate;
 	private MouseEvent mouse;
 
-	private Pickups pickups;
-	private ArrayList<Enemy> enemies;
 	private int[][] debrisInfo;
 	private ArrayList<Color> colors;
 	private ArrayList<int[]> bonusScores;
@@ -59,7 +57,6 @@ public class Boss1State extends PlayState
 	
 	private double planeX, planeY;
 
-	private double bgVectorX, bgVectorY;
 	private double debrisVector;
 	private boolean drawBossHealth;
 
@@ -110,8 +107,10 @@ public class Boss1State extends PlayState
 		tileMap.setY(tileMap.getY() + 175);
 		player.setTileMapMoving(false);
 		player.setTileMap(tileMap);
+		player.setPlayState(this);
 		int[] pickupsToSpawn = {Pickups.ARMORBOOST, Pickups.HEALBOOST, Pickups.SLOWTIMEBOOST, Pickups.BIRDBOOST};
-		pickups = new Pickups(player, tileMap, this, pickupsToSpawn);
+		//int[] pickupsToSpawn = {Pickups.SLOWTIMEBOOST};
+		pickups = new Pickups(player, tileMap, this, pickupsToSpawn, 50000000000L);
 		enemies = new ArrayList<Enemy>();
 		tileStart = false;
 		try
@@ -140,6 +139,8 @@ public class Boss1State extends PlayState
 		basicChecks();
 		script();
 		
+		pickups.update();
+		
 		if(!bonusScores.isEmpty())
 		{
 			for(int i = 0; i < bonusScores.size(); i++)
@@ -165,14 +166,12 @@ public class Boss1State extends PlayState
 		pickups.draw(g);
 		for(Enemy e: enemies)
 			e.draw(g);
-
-		drawCrossHair(g);
+		
+		if(drawBossHealth) drawBossHealth(g);
 		
 		g.setFont(scoreFont);
 		g.setColor(Color.WHITE);
 		g.drawString("Score: " + player.getPoints(), centerStringX("Score: " + player.getPoints(), 0, GamePanel.WIDTH, g), 30);
-		
-		if(drawBossHealth) drawBossHealth(g);
 		
 		if(!bonusScores.isEmpty())
 		{
@@ -184,6 +183,8 @@ public class Boss1State extends PlayState
 				g.setFont(scoreFont);
 			}
 		}
+		
+		drawCrossHair(g);
 		
 		super.drawFade(g);
 	}
@@ -523,13 +524,6 @@ public class Boss1State extends PlayState
 		}
 	}
 
-	public void setBackgroundVector(double vectorX, double vectorY)
-	{
-		bgVectorX = vectorX;
-		bgVectorY = vectorY;
-		bg.setVector(bgVectorX, bgVectorY);
-	}
-
 	public void setDebrisVectors(double vector)
 	{
 		debrisVector = vector;
@@ -540,7 +534,19 @@ public class Boss1State extends PlayState
 		for(Enemy e: enemies)
 			e.setSlowDownRate(speed);
 	}
-
+	
+	public void slowTimeStart()
+	{
+		setBackgroundVector(2, -0.2);
+		setEntitiySpeed(0.2f);
+	}
+	
+	public void slowTimeEnd()
+	{
+		setBackgroundVector(10, -1.0);
+		setEntitiySpeed(1);
+	}
+	
 	public void keyPressed(int k) 
 	{
 		player.keyPressed(k);

@@ -104,7 +104,8 @@ public class Level1State extends PlayState
 		enemies = new ArrayList<Enemy>();
 		mapObjects = new ArrayList<MapObject>();
 		int[] pickupsToSpawn = {Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST};
-		pickups = new Pickups(player, tileMap, this, pickupsToSpawn);
+		//int[] pickupsToSpawn = {Pickups.SLOWTIMEBOOST};
+		pickups = new Pickups(player, tileMap, this, pickupsToSpawn, 10000000000L);
 		tileStart = false;
 		score = 0;
 		
@@ -218,8 +219,6 @@ public class Level1State extends PlayState
 		if(!debrisAlternator)
 			debris(g);
 		
-		drawCrossHair(g);
-		
 		g.setColor(Color.WHITE);
 		if(!start) 
 		{
@@ -239,6 +238,8 @@ public class Level1State extends PlayState
 				g.setFont(scoreFont);
 			}
 		}
+		
+		drawCrossHair(g);
 		super.drawFade(g);
 	}
 	
@@ -310,6 +311,20 @@ public class Level1State extends PlayState
 				}
 			}
 		}
+	}
+	
+	public void slowTimeStart()
+	{
+		setBackgroundVector(0, -1);
+		setDebrisVectors(0.5);
+		setEntitiySpeed(0.2f);
+	}
+	
+	public void slowTimeEnd()
+	{
+		setBackgroundVector(0, -5);
+		setDebrisVectors(1);
+		setEntitiySpeed(1);
 	}
 	
 	public ArrayList<Enemy> getEnemies()

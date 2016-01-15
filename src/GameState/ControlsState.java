@@ -19,6 +19,7 @@ public class ControlsState extends GameState {
 	
 	private int selection;
 	private boolean isListeningToKey; //true if next key press will set controls
+	private static int dimensions;
 
 	private String[] movementTypes = {"Jump:", "Drop:", "Right:", "Left:", "Glide:", "Select:", "Reset:", "Action:"};
 	private String[] movementKeys = {KeyEvent.getKeyText(GameStateManager.up), KeyEvent.getKeyText(GameStateManager.down), KeyEvent.getKeyText(GameStateManager.right), 
@@ -95,6 +96,24 @@ public class ControlsState extends GameState {
 		}
 		
 		g.setFont(subTextFont);
+		if(dimensions == 0)
+		{
+			g.drawString("Change Display Settings:  Currently optimized for your screen", centerStringX("Change Display Settings: Currently optimized for your screen", 0, GamePanel.WIDTH, g), GamePanel.HEIGHT-200);
+		}
+		else
+		{
+			g.drawString("Change Display Settings: " + dimensions + "x" + dimensions, centerStringX("Change Display Settings: " + dimensions + "x" + dimensions, 0, GamePanel.WIDTH, g), GamePanel.HEIGHT-200);
+		}
+		
+		if (selection == movementTypes.length + 1)
+		{
+			g.setColor(new Color(255,150,0));
+		}
+		else 
+		{
+			g.setColor(Color.WHITE);
+		}
+		
 		g.drawString("Return to Menu", centerStringX("Return to Menu", 0, GamePanel.WIDTH, g), GamePanel.HEIGHT-100);
 	}
 	
@@ -103,8 +122,29 @@ public class ControlsState extends GameState {
 	{
 		if (selection == movementTypes.length)
 		{
-			gsm.setState(GameStateManager.MENUSTATE);
+			if(dimensions > 500)
+			{
+				dimensions = (dimensions/100)*100;
+				dimensions -= 100;
+			}
+			else
+			{
+				if(GamePanel.scaleWidth != 1)
+				{
+					dimensions = GamePanel.WIDTHSCALED;
+				}
+				else
+				{
+					dimensions = 800;
+				}
+			}
+			
+			GamePanel.setNewSize(dimensions);
 		} 
+		else if (selection == movementTypes.length + 1)
+		{
+			gsm.setState(GameStateManager.MENUSTATE);
+		}
 		else 
 		{
 			for (int i = 0; i < movementTypes.length; i++)
@@ -161,13 +201,13 @@ public class ControlsState extends GameState {
 				selection--;
 				if (selection < 0)
 				{
-					selection = movementTypes.length;
+					selection = movementTypes.length+1;
 				}
 			} 
 			else if (k == GameStateManager.down)
 			{
 				selection++;
-				if (selection == movementTypes.length+1)
+				if (selection == movementTypes.length+2)
 				{
 					selection = 0;
 				}

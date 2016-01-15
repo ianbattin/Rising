@@ -302,8 +302,8 @@ public class PlaneBoss extends Enemy {
 			if(dx < -(maxSpeedX*super.slowDown)) dx = -(maxSpeedX*super.slowDown);
 		}
 		
-		x += dx;
-		y += dy;
+		x += dx*super.slowDown;
+		y += dy*super.slowDown;
 	}
 	
 	public void setMovement(double startX, double startY, double endX, double endY, double speed, int typeAttack)

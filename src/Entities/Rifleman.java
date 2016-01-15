@@ -339,8 +339,8 @@ public class Rifleman extends Enemy
 			fallingAnim = false;
 		}
 		
-		x += dx;
-		y += dy;
+		x += dx*super.slowDown;
+		y += dy*super.slowDown;
 	}
 	
 	public void getAnimation()

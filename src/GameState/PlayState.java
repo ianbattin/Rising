@@ -130,10 +130,15 @@ public abstract class PlayState extends GameState
 		return enemies;
 	}
 	
+<<<<<<< HEAD
 	public ArrayList<MapObject> getMapObjects() 
 	{
 		return mapObjects;
 	}
+=======
+	abstract public void slowTimeStart();
+	abstract public void slowTimeEnd();
+>>>>>>> origin/master
 	
 	public void mouseClicked(MouseEvent e)
 	{

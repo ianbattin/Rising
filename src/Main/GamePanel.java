@@ -25,6 +25,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	public static final int HEIGHT = 800;
 	public static final int WIDTHSCALED = (int)(WIDTH * scaleWidth);
 	public static final int HEIGHTSCALED = (int)(HEIGHT * scaleHeight);
+	public static boolean modifiedDimensions = false;
+	public static int dimensions;
 	
 	//run
 	private Thread thread;
@@ -128,6 +130,20 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 				frameCount = 0;
 				totalTime = 0;
 			}
+			
+			if (modifiedDimensions)
+			{
+				Main.window.setSize(dimensions, dimensions);
+				setPreferredSize(new Dimension(dimensions, dimensions));
+				scaleWidth = scaleHeight = dimensions/800.0;
+				removeKeyListener(this);
+				removeMouseListener(this);
+				removeMouseMotionListener(this);
+				//SoundPlayer.stopBackgroundMusic();
+				init();
+				modifiedDimensions = false;
+			}
+			
 		}
 	}
 	
@@ -170,6 +186,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	public static BufferedImage getImage()
 	{
 		return image;
+	}
+	
+	public static void setNewSize(int dimension)
+	{
+		modifiedDimensions = true;
+		dimensions = dimension;
 	}
 
 	//processes key presses
