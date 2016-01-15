@@ -27,6 +27,7 @@ public class Explosion extends MapObject
 	
 	private boolean remove;
 	private boolean playerCollide;
+	private boolean willDestroyBlocks;
 	
 	private long lifeTime;
 	
@@ -63,6 +64,8 @@ public class Explosion extends MapObject
 				height = 50;
 				cwidth = width*2;
 				cheight = height*2;
+				willDestroyBlocks  = true;
+				break;
 			}
 			case 2:
 			{
@@ -70,7 +73,19 @@ public class Explosion extends MapObject
 				height = 50;
 				cwidth = height*4;
 				cheight = height*4;
+				willDestroyBlocks = true;
 				init();
+				break;
+			}
+			case 3:
+			{
+				//same as case 1, except it wont destroy tiles
+				width = 50;
+				height = 50;
+				cwidth = width*2;
+				cheight = height*2;
+				willDestroyBlocks = false;
+				break;
 			}
 		}
 		
@@ -132,11 +147,14 @@ public class Explosion extends MapObject
 			x += tileMap.getDX();
 			y += tileMap.getDY();
 			
-			for(Tile tile: tileMap.getTiles())
+			if(willDestroyBlocks)
 			{
-				if(this.intersects(tile))
+				for(Tile tile: tileMap.getTiles())
 				{
-					tile.setType(0);
+					if(this.intersects(tile))
+					{
+						tile.setType(0);
+					}
 				}
 			}
 		}
@@ -149,7 +167,7 @@ public class Explosion extends MapObject
 	{
 		if(!remove)
 		{
-			if(type == 1)
+			if(type == 1 || type == 3)
 			{
 				// Drawing the rotated image at the required drawing locations
 				g.drawImage(op.filter(animation.getImage(), null), (int)(x + xmap), (int)(y + ymap), null);

@@ -986,7 +986,7 @@ public class Player extends MapObject
 			if(birdY+10 >= chosenEnemy.getY() && birdY-10 <= chosenEnemy.getY() && birdX+10 >= chosenEnemy.getX() && birdX-10 <= chosenEnemy.getX()) 
 			{
 				chosenEnemy.playerHurt(50);
-				this.explosions = new Explosion(birdX, birdY, 1, tileMap);
+				this.explosions = new Explosion(birdX, birdY, 3, tileMap);
 				hasBird = false;
 				birdActive = false;
 			}

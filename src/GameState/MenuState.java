@@ -119,7 +119,7 @@ public class MenuState extends GameState
 				g.setColor(Color.WHITE);
 			}
 			g.setFont(optionsFont);
-			g.drawString(options[i], centerStringX(options[i], 0, GamePanel.WIDTH, g), GamePanel.HEIGHT/2 + 40 + i * 25); //uses the i variable from the for loop to correctly position options on top of eachother
+			g.drawString(options[i], GamePanel.WIDTH/4 + 30 + i*(120)-(int)(g.getFontMetrics().getStringBounds(options[i], g).getWidth())/2, GamePanel.HEIGHT/2 + 80); //uses the i variable from the for loop to correctly position options on top of eachother
 		}
 		super.drawFade(g);
 		
