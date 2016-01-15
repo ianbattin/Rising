@@ -128,6 +128,9 @@ public abstract class PlayState extends GameState
 		return enemies;
 	}
 	
+	abstract public void slowTimeStart();
+	abstract public void slowTimeEnd();
+	
 	public void mouseClicked(MouseEvent e)
 	{
 		mouseUpdate = true;

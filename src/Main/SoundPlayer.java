@@ -1,9 +1,7 @@
 package Main;
 
-import java.applet.Applet;
-import java.applet.AudioClip;
+import javafx.scene.media.*;
 import java.io.File;
-import java.net.URL;
 
 import javax.sound.sampled.*;
 
@@ -11,9 +9,10 @@ import javax.sound.sampled.*;
 public class SoundPlayer implements LineListener, Runnable
 {	
 	//How many bytes are being read ahead (for the background music)
-	private final static int BUFFER_SIZE = 8192;
+	private final static int BUFFER_SIZE = 2048;
 	//Indicates whether another instance of SoundPlayer is playing the background sound. If set to false, it will cease playback in other instances
 	private static boolean IS_PLAYING;
+	private static SourceDataLine AUDIO_LINE;
 	
 	//preload the most used sounds
 	private static AudioClip shootingClip;
@@ -30,8 +29,7 @@ public class SoundPlayer implements LineListener, Runnable
 	 * Initiates the SoundPlayer Object. 
 	 */
 	public SoundPlayer()
-	{
-	}
+	{}
 	
 	/**
 	 * To be used for playing the shooting noise; this is separate of the playClip for optimization reasons
@@ -42,7 +40,7 @@ public class SoundPlayer implements LineListener, Runnable
 		{
 			try
 			{
-				shootingClip = Applet.newAudioClip(new URL("file:Resources/Sound/shoot.wav"));
+				shootingClip = new AudioClip("file:Resources/Sound/shoot.wav");
 			}
 			catch (Exception e)
 			{
@@ -64,7 +62,28 @@ public class SoundPlayer implements LineListener, Runnable
 	{
 		try
 		{
-			Applet.newAudioClip(new URL("file:Resources/Sound/" + fileName)).play();
+			new AudioClip("file:Resources/Sound/" + fileName).play();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+	
+	/**
+	 * To be used to play short sound clips. This method is static, and does not need a SoundPlayer object.
+	 * Allows for a clip to be played at a specified volume
+	 * 
+	 * @param fileName String representation of the file name (located in the Resources/Sound folder)
+	 * @param volume Double representation of the volume the clip is to be played at (volume <= 1.0 && volume >= 0.0)
+	 */
+	public static void playClipWithVolume(String fileName, double volume)
+	{
+		try
+		{
+			AudioClip clip = new AudioClip("file:Resources/Sound/");
+			clip.setVolume(volume);
+			clip.play();
 		}
 		catch (Exception e)
 		{
@@ -99,6 +118,9 @@ public class SoundPlayer implements LineListener, Runnable
 	public void stopBackgroundMusic()
 	{
 		IS_PLAYING = false;
+		SoundPlayer.AUDIO_LINE.drain();
+		SoundPlayer.AUDIO_LINE.close();
+		
 	}
 
 	
@@ -111,31 +133,31 @@ public class SoundPlayer implements LineListener, Runnable
 		try
 		{
 			File mediaFile = new File(this.backgroundFileName);
+			AudioInputStream audioStream = AudioSystem.getAudioInputStream(mediaFile);
+			AudioFormat audioFormat = audioStream.getFormat();
+			DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
+			SoundPlayer.AUDIO_LINE = (SourceDataLine) AudioSystem.getLine(info);
+			SoundPlayer.AUDIO_LINE.open(audioFormat);
+			SoundPlayer.AUDIO_LINE.start();
+			
 			while(IS_PLAYING)
 			{
-				AudioInputStream audioStream = AudioSystem.getAudioInputStream(mediaFile);
-				AudioFormat audioFormat = audioStream.getFormat();
-				DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
-				SourceDataLine audioLine = (SourceDataLine) AudioSystem.getLine(info);
-				
-				audioLine.open(audioFormat);
-				audioLine.start();
 				
 				byte[] bytesBuffer = new byte[BUFFER_SIZE];
 				int bytesRead = -1;
 				
 				while((bytesRead = audioStream.read(bytesBuffer)) != -1 && IS_PLAYING)
 				{
-					audioLine.write(bytesBuffer, 0, bytesRead);
+					SoundPlayer.AUDIO_LINE.write(bytesBuffer, 0, bytesRead);
 				}
-				
-				audioLine.drain();
-				audioLine.close();
-				audioStream.close();
 				
 				if(!this.willLoopBackgroundMusic)
 					IS_PLAYING = false;
 			}
+			
+			SoundPlayer.AUDIO_LINE.drain();
+			SoundPlayer.AUDIO_LINE.close();
+			audioStream.close();
 		}
 		catch (Exception e)
 		{

@@ -1,6 +1,7 @@
 package Entities; 
 
 import Main.GamePanel;
+import Main.SoundPlayer;
 import TileMap.Tile;
 import TileMap.TileMap;
 import java.awt.Color;
@@ -42,7 +43,7 @@ public class Pickups extends MapObject
 	private boolean willDrawPickup, isUnderEffect;
 	private double xLoc, yLoc, startingPositionOffset, tmDyPositionOffset, xShift;
 	
-	public Pickups(Player player, TileMap tileMap, PlayState playState, int[] avaliablePickups)
+	public Pickups(Player player, TileMap tileMap, PlayState playState, int[] avaliablePickups, long initialDelay)
 	{
 		super (tileMap);
 		
@@ -50,7 +51,7 @@ public class Pickups extends MapObject
 		this.player = player;
 		this.tm = tileMap;
 		pickupsToSpawn = avaliablePickups;
-		coolDownTime = 10000000000L;
+		coolDownTime = initialDelay;
 		
 		tileMapWidth = tileMap.getTileMapWidth()/2;
 		
@@ -105,6 +106,10 @@ public class Pickups extends MapObject
 			if (yLoc < GamePanel.HEIGHT + 50)
 			{
 				yLoc += 0.5 + ((tm.getDY() - 2)*0.25);
+				if (tm.getDY() == 0)
+				{
+					yLoc += 0.5;
+				}
 				if (tm.getDY() > 2){
 					tmDyPositionOffset += ((tm.getDY() - 2)*0.25);
 				}
@@ -130,14 +135,14 @@ public class Pickups extends MapObject
 		else if (isUnderEffect)
 		{
 			resetEffects();
-			coolDownTime = 100000000000L;
+			coolDownTime = 10000000000L;
 			init();
 		}
 		else 
 		{
-			if ((int)(Math.random()*0) == 0)//edit probability of spawning here
+			if ((int)(Math.random()*0) == 0)//edit probability of spawning here. Currently 100% chance of spawning
 			{
-				coolDownTime = 100000000000L;
+				coolDownTime = 50000000000L;
 				willDrawPickup = true;
 				//set the pickup type.
 				effectType = pickupsToSpawn[(int)(Math.random()*pickupsToSpawn.length)];
@@ -230,11 +235,10 @@ public class Pickups extends MapObject
 	
 	public void effectStart()
 	{
+		SoundPlayer.playClip("pickup.wav");
 		if(effectType == 5)
 		{
-			playState.setBackgroundVector(0, -1);
-			playState.setDebrisVectors(0.5);
-			playState.setEntitiySpeed(0.2f);
+			playState.slowTimeStart();
 		}
 		player.effectStart(effectType);
 	}
@@ -243,9 +247,7 @@ public class Pickups extends MapObject
 	{
 		if(effectType == 5)
 		{
-			playState.setBackgroundVector(0, -5);
-			playState.setDebrisVectors(1);
-			playState.setEntitiySpeed(1);
+			playState.slowTimeEnd();
 		}
 		player.resetEffects();
 	}

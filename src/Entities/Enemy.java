@@ -52,7 +52,7 @@ public abstract class Enemy extends MapObject
 	protected Animation gunAnimation;
 	
 	//slowdown (when player picks up powerup)
-	protected float slowDown;
+	protected static float slowDown;
 	
 	public Enemy(double x, double y, TileMap tm, Player player)
 	{

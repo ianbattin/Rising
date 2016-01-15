@@ -556,6 +556,7 @@ public class Player extends MapObject
 					public void run()
 					{	
 						jumpHeight = yFromBottom + (100*jumpHeightFactor);
+						if(!jumped) SoundPlayer.playClip("jump.wav");
 						jumped = true;
 					}
 					
@@ -826,6 +827,10 @@ public class Player extends MapObject
 					recoverTimer = System.nanoTime();
 				}
 			}
+			if(health > 0)
+				SoundPlayer.playClip("hurt.wav");
+			else
+				SoundPlayer.playClip("dies.wav");
 		}
 	}
 		
@@ -885,6 +890,7 @@ public class Player extends MapObject
 		canGlide = gliding = false;
 		charBlurPos = new ArrayList<Integer>();
 		jumpHeightFactor = 1;
+		healthPos = 0;
 		System.out.println("Effect ended");
 	}
 	
@@ -919,8 +925,8 @@ public class Player extends MapObject
 					charBlurPos.remove(0);
 				}
 				
-				charBlurPos.add((int)(x + xmap - width / 2));
-				charBlurPos.add((int)(y + ymap - height / 2));
+				charBlurPos.add((int)(x));
+				charBlurPos.add((int)(y));
 			}
 			if(facingRight)
 			{
@@ -1055,10 +1061,23 @@ public class Player extends MapObject
 			if(k == GameStateManager.action && hasBird)
 			{
 				ArrayList<Enemy> enemies = playState.getEnemies();
+				System.out.println("HERE" + enemies.size());
 				if(enemies != null && enemies.size() > 0)
 				{
-					this.chosenEnemy = enemies.get((int)(Math.random()*enemies.size()));
-					birdActive = true;
+					ArrayList<Enemy> possibleEnemies = new ArrayList<Enemy>();
+					for(Enemy e: enemies)
+					{
+						System.out.println(e.getClass().getName());
+						if(e.getHealth() > 0 && !(e instanceof PlaneBoss))
+						{
+							possibleEnemies.add(e);
+						}
+					}
+					if(!possibleEnemies.isEmpty())
+					{
+						this.chosenEnemy = possibleEnemies.get((int)(Math.random()*possibleEnemies.size()));
+						birdActive = true;
+					}
 				}
 			}
 			if(k == GameStateManager.shootUp)
@@ -1184,5 +1203,10 @@ public class Player extends MapObject
 	public boolean onScreen()
 	{
 		return (-width <= x && x <= GamePanel.WIDTH+width && -height <= y && y <= GamePanel.HEIGHT+height);
+	}
+	
+	public void setPlayState(PlayState playState)
+	{
+		this.playState = playState;
 	}
 }
