@@ -18,9 +18,12 @@ public class ControlsState extends GameState {
 	private Font titleFont, optionsFont, subTextFont, backupFont;
 	
 	private int selection;
+	private int resSelection;
 	private boolean isListeningToKey; //true if next key press will set controls
-	private static int dimensions;
-
+	private boolean isChangingResolution;
+	private double newScale;
+	private double[] resOption = {0.7, 0.8, 0.9, 1.0};
+	
 	private String[] movementTypes = {"Jump:", "Drop:", "Right:", "Left:", "Glide:", "Select:", "Reset:", "Action:"};
 	private String[] movementKeys = {KeyEvent.getKeyText(GameStateManager.up), KeyEvent.getKeyText(GameStateManager.down), KeyEvent.getKeyText(GameStateManager.right), 
 			KeyEvent.getKeyText(GameStateManager.left), KeyEvent.getKeyText(GameStateManager.glide), KeyEvent.getKeyText(GameStateManager.select), KeyEvent.getKeyText(GameStateManager.reset), KeyEvent.getKeyText(GameStateManager.action)};
@@ -35,7 +38,10 @@ public class ControlsState extends GameState {
 		//bg.setVector(0, -5.0); //moves the background
 		
 		selection = 0;
+		resSelection = 0;
+		newScale = GamePanel.scaleHeight;
 		isListeningToKey = false;
+		isChangingResolution = false;
 		
 		titleColor = new Color(255, 60 ,0);
 		backupFont = new Font("Times", Font.PLAIN, 24);
@@ -96,15 +102,27 @@ public class ControlsState extends GameState {
 		}
 		
 		g.setFont(subTextFont);
-		if(dimensions == 0)
+		if (isChangingResolution)
 		{
-			g.drawString("Change Display Settings:  Currently optimized for your screen", centerStringX("Change Display Settings: Currently optimized for your screen", 0, GamePanel.WIDTH, g), GamePanel.HEIGHT-200);
+			g.setColor(Color.WHITE);
+			g.drawString("Change Display Settings: ", centerStringX("Change Display Settings: " + (int)(GamePanel.WIDTH*newScale) + "x" + (int)(GamePanel.WIDTH*newScale), 0, GamePanel.WIDTH, g), GamePanel.HEIGHT-200);
+			g.setColor(new Color(255,150,0));
+			
+			for(int i = 0; i < resOption.length; i++)
+			{
+				if(resSelection == i)
+					g.setColor(new Color(255,150,0));
+				else if (resOption[i] == GamePanel.scaleHeight)
+					g.setColor(Color.ORANGE);
+				else
+					g.setColor(Color.WHITE);
+				g.drawString((int)(GamePanel.WIDTH*resOption[i]) + "x" + (int)(GamePanel.WIDTH*resOption[i]), centerStringX("Change Display Settings: 800x800", 0, GamePanel.WIDTH, g) + (int)g.getFontMetrics().getStringBounds("Change Display Settings:  ", g).getWidth(), GamePanel.HEIGHT-230+(30*i));
+			}
 		}
 		else
 		{
-			g.drawString("Change Display Settings: " + dimensions + "x" + dimensions, centerStringX("Change Display Settings: " + dimensions + "x" + dimensions, 0, GamePanel.WIDTH, g), GamePanel.HEIGHT-200);
+			g.drawString("Change Display Settings: " + (int)(GamePanel.WIDTH*newScale) + "x" + (int)(GamePanel.WIDTH*newScale), centerStringX("Change Display Settings: " + (int)(GamePanel.WIDTH*newScale) + "x" + (int)(GamePanel.WIDTH*newScale), 0, GamePanel.WIDTH, g), GamePanel.HEIGHT-200);
 		}
-		
 		if (selection == movementTypes.length + 1)
 		{
 			g.setColor(new Color(255,150,0));
@@ -122,24 +140,15 @@ public class ControlsState extends GameState {
 	{
 		if (selection == movementTypes.length)
 		{
-			if(dimensions > 500)
+			
+			if(isChangingResolution && resOption[resSelection] != GamePanel.scaleHeight)
 			{
-				dimensions = (dimensions/100)*100;
-				dimensions -= 100;
+				GamePanel.setNewSize(resOption[resSelection]);
 			}
 			else
 			{
-				if(GamePanel.scaleWidth != 1)
-				{
-					dimensions = GamePanel.WIDTHSCALED;
-				}
-				else
-				{
-					dimensions = 800;
-				}
+				isChangingResolution = !isChangingResolution;
 			}
-			
-			GamePanel.setNewSize(dimensions);
 		} 
 		else if (selection == movementTypes.length + 1)
 		{
@@ -190,7 +199,7 @@ public class ControlsState extends GameState {
 
 	public void keyPressed(int k) 
 	{
-		if(!isListeningToKey)
+		if(!isListeningToKey && !isChangingResolution)
 		{
 			if(k == GameStateManager.select)
 			{
@@ -213,9 +222,33 @@ public class ControlsState extends GameState {
 				}
 			}
 		} 
-		else 
+		else if(isListeningToKey)
 		{
 			this.setKey(k);
+		}
+		else if(isChangingResolution)
+		{
+			if(k == GameStateManager.select)
+			{
+				this.selection();
+			} 
+			else if (k == GameStateManager.up)
+			{
+				resSelection--;
+				if (resSelection < 0)
+				{
+					resSelection = resOption.length-1;
+				}
+			} 
+			else if (k == GameStateManager.down)
+			{
+				resSelection++;
+				if (resSelection == resOption.length)
+				{
+					resSelection = 0;
+				}
+			}
+
 		}
 	}
 

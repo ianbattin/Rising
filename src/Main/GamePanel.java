@@ -19,14 +19,13 @@ import GameState.GameStateManager;
 public class GamePanel extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener
 {
 	//window size TODO: Allow the user to edit the SCALEWIDTH and SCALEHEIGHT
-	public static double scaleWidth = Math.min(((Toolkit.getDefaultToolkit().getScreenSize().height-50.0)/GamePanel.HEIGHT), 1);
-	public static double scaleHeight = Math.min(((Toolkit.getDefaultToolkit().getScreenSize().height-50.0)/GamePanel.HEIGHT), 1);
+	public static double scaleWidth = Math.min((((int)((Toolkit.getDefaultToolkit().getScreenSize().height-50.0)/GamePanel.HEIGHT*10)))/10.0, 1);
+	public static double scaleHeight = Math.min((((int)((Toolkit.getDefaultToolkit().getScreenSize().height-50.0)/GamePanel.HEIGHT*10)))/10.0, 1);
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 800;
-	public static final int WIDTHSCALED = (int)(WIDTH * scaleWidth);
-	public static final int HEIGHTSCALED = (int)(HEIGHT * scaleHeight);
+	public static int WIDTHSCALED = (int)(WIDTH * scaleWidth);
+	public static int HEIGHTSCALED = (int)(HEIGHT * scaleHeight);
 	public static boolean modifiedDimensions = false;
-	public static int dimensions;
 	
 	//run
 	private Thread thread;
@@ -49,6 +48,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	public GamePanel()
 	{
 		super(); //used since it extends/implements JPanel, Runnable, and KeyListener so it will be able to access their methods
+			
 		setPreferredSize(new Dimension(WIDTHSCALED, HEIGHTSCALED)); //sets the size of the GamePanel
 		setFocusable(true); //like when you click the window, allows for key inputs
 		requestFocus(); //does the above
@@ -68,7 +68,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	//initialize the game
 	public void init()
 	{
-		image = new BufferedImage(WIDTHSCALED, HEIGHTSCALED, BufferedImage.TYPE_INT_RGB);
+		image = new BufferedImage((int)(WIDTH*scaleWidth), (int)(HEIGHT*scaleHeight), BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D) image.getGraphics(); //do graphics stuff
 		g.scale(scaleWidth, scaleHeight);
 		gsm = new GameStateManager(); //create new GameStateManager
@@ -133,13 +133,15 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 			
 			if (modifiedDimensions)
 			{
-				Main.window.setSize(dimensions, dimensions);
-				setPreferredSize(new Dimension(dimensions, dimensions));
-				scaleWidth = scaleHeight = dimensions/800.0;
+				WIDTHSCALED = (int)(WIDTH*scaleWidth);
+				HEIGHTSCALED = (int)(HEIGHT*scaleHeight);
+				
+				Main.window.setSize((int)(WIDTH*scaleWidth), (int)(HEIGHT*scaleHeight));
+				setPreferredSize(new Dimension((int)(WIDTH*scaleWidth), (int)(HEIGHT*scaleHeight)));
 				removeKeyListener(this);
 				removeMouseListener(this);
 				removeMouseMotionListener(this);
-				//SoundPlayer.stopBackgroundMusic();
+				
 				init();
 				modifiedDimensions = false;
 			}
@@ -188,10 +190,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 		return image;
 	}
 	
-	public static void setNewSize(int dimension)
+	public static void setNewSize(double newScale)
 	{
 		modifiedDimensions = true;
-		dimensions = dimension;
+		scaleWidth = scaleHeight = newScale;
 	}
 
 	//processes key presses

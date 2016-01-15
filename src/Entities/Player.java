@@ -1067,13 +1067,11 @@ public class Player extends MapObject
 			if(k == GameStateManager.action && hasBird)
 			{
 				ArrayList<Enemy> enemies = playState.getEnemies();
-				System.out.println("HERE" + enemies.size());
 				if(enemies != null && enemies.size() > 0)
 				{
 					ArrayList<Enemy> possibleEnemies = new ArrayList<Enemy>();
 					for(Enemy e: enemies)
 					{
-						System.out.println(e.getClass().getName());
 						if(e.getHealth() > 0 && !(e instanceof PlaneBoss))
 						{
 							possibleEnemies.add(e);

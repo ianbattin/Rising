@@ -96,7 +96,7 @@ public class Level1State extends PlayState
 
 	public void init() 
 	{
-		tileMap = new TileMap("Resources/Maps/level5.txt", 0);
+		tileMap = new TileMap("Resources/Maps/level5.txt", 2);
 		player = new Player(tileMap, this);
 		player.setPosition(375, -100);
 		player.setTileMapMoving(true);
@@ -104,7 +104,7 @@ public class Level1State extends PlayState
 		enemies = new ArrayList<Enemy>();
 		mapObjects = new ArrayList<MapObject>();
 		int[] pickupsToSpawn = {Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST};
-		//int[] pickupsToSpawn = {Pickups.SLOWTIMEBOOST};
+		//int[] pickupsToSpawn = {Pickups.BIRDBOOST};
 		pickups = new Pickups(player, tileMap, this, pickupsToSpawn, 10000000000L);
 		tileStart = false;
 		score = 0;

@@ -109,7 +109,7 @@ public class Boss1State extends PlayState
 		player.setTileMap(tileMap);
 		player.setPlayState(this);
 		int[] pickupsToSpawn = {Pickups.ARMORBOOST, Pickups.HEALBOOST, Pickups.SLOWTIMEBOOST, Pickups.BIRDBOOST};
-		//int[] pickupsToSpawn = {Pickups.SLOWTIMEBOOST};
+		//int[] pickupsToSpawn = {Pickups.BIRDBOOST};
 		pickups = new Pickups(player, tileMap, this, pickupsToSpawn, 50000000000L);
 		enemies = new ArrayList<Enemy>();
 		tileStart = false;

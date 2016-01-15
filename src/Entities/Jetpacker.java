@@ -14,13 +14,16 @@ import TileMap.TileMap;
 public class Jetpacker extends Enemy
 {
 	//animation
-	private final int[] numFrames = {1, 4, 3, 3};
+	private final int[] numFrames = {1};
 	
 	//animation actions
 	private static final int IDLE = 0;
 	private static final int WALKING = 1;
 	private static final int JUMPING = 2;
 	private static final int FALLING = 3;
+	
+	//parachute
+	BufferedImage parachute;
 	
 	public Jetpacker(double x, double y, TileMap tm, Player player) 
 	{
@@ -51,7 +54,9 @@ public class Jetpacker extends Enemy
 		
 		try
 		{
-			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/MainCharacterSpriteSheet.png"));
+			parachute = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/parachute.png"));
+			
+			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/parachuter.png"));
 			entitySprites = new ArrayList<BufferedImage[]>();
 			for(int i = 0; i < numFrames.length; i++)
 			{
@@ -64,7 +69,7 @@ public class Jetpacker extends Enemy
 			}
 			
 			//make the spritesheet for when the player is blinking red
-			BufferedImage playerHurtSpritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/MainCharacterSpriteSheet.png"));
+			BufferedImage playerHurtSpritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/parachuter.png"));
 			for (int i = 0; i < playerHurtSpritesheet.getWidth(); i++)
 			{
 				for (int j = 0; j < playerHurtSpritesheet.getHeight(); j++)
@@ -107,8 +112,8 @@ public class Jetpacker extends Enemy
 		}
 		
 		animation = new Animation();
-		currentAction = FALLING;
-		animation.setFrames(entitySprites.get(FALLING));
+		currentAction = IDLE;
+		animation.setFrames(entitySprites.get(IDLE));
 		animation.setDelay(200);
 		
 		//create the animation for the gun
@@ -187,6 +192,8 @@ public class Jetpacker extends Enemy
 		{
 			g.drawImage(animation.getImage(), (int)(x + xmap) + width, (int)(y + ymap), -width, height, null);
 		}
+		
+		g.drawImage(parachute, (int)(x+(25-(parachute.getWidth()/2))), (int)(y-33), parachute.getWidth(), parachute.getHeight(), null);
 		
 		for(Projectile p: bullets)
 		{
