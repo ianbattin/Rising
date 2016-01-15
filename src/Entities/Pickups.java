@@ -60,7 +60,7 @@ public class Pickups extends MapObject
 		try
 		{
 			//will have to be fixed to get an image from a large sprites image rather than a single image for each pickup
-			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Tiles/pickupsSpritesheet.png"));
+			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Pickups/pickupsSpritesheet.png"));
 			sprites = new ArrayList<BufferedImage[]>();
 			for(int i = 0; i < numFrames.length; i++)
 			{

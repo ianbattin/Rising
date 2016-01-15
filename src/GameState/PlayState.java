@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import Entities.Enemy;
+import Entities.MapObject;
 import Entities.Pickups;
 import Entities.Player;
 import Main.GamePanel;
@@ -24,6 +25,7 @@ public abstract class PlayState extends GameState
 	protected static Player player;
 	protected Pickups pickups;
 	protected ArrayList<Enemy> enemies;
+	protected ArrayList<MapObject> mapObjects;
 	
 	//Mouse
 	protected int mouseX;
@@ -126,6 +128,11 @@ public abstract class PlayState extends GameState
 	public ArrayList<Enemy> getEnemies() 
 	{
 		return enemies;
+	}
+	
+	public ArrayList<MapObject> getMapObjects() 
+	{
+		return mapObjects;
 	}
 	
 	public void mouseClicked(MouseEvent e)

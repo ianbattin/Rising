@@ -726,26 +726,32 @@ public class Player extends MapObject
 	
 	public void moveTileMapX()
 	{
-		if(-tileMap.getXMove() <= -tileMap.getTotalWidth() + GamePanel.WIDTH || -tileMap.getXMove() >= tileMap.getTotalWidth() - GamePanel.WIDTH)
+		if(tileMap.getTotalWidth() == 800)
+		{
+			x += (dx + tileMap.getDX());
+			tileMap.setXVector(0);
+			tileMap.setX(0);
+		}
+		else if(-tileMap.getXMove() <= -tileMap.getTotalWidth() + GamePanel.WIDTH || -tileMap.getXMove() >= tileMap.getTotalWidth() - GamePanel.WIDTH)
 		{
 			x += dx;
 			tileMap.setXVector(0);
 			
-			if(-tileMap.getXMove() <= -tileMap.getTotalWidth()  + GamePanel.WIDTH && x >= GamePanel.WIDTH/2)
+			if(-tileMap.getXMove() <= -tileMap.getTotalWidth() + GamePanel.WIDTH && x > GamePanel.WIDTH/2)
 			{
-				x += (dx + tileMap.getDX());
 				tileMap.setXVector(-this.getDX());
+				x += (dx + tileMap.getDX());
 			}
-			else if(-tileMap.getXMove() >= tileMap.getTotalWidth() - GamePanel.WIDTH && x <= GamePanel.WIDTH/2)
+			else if(-tileMap.getXMove() >= tileMap.getTotalWidth() - GamePanel.WIDTH && x < GamePanel.WIDTH/2)
 			{
-				x += (dx + tileMap.getDX());
 				tileMap.setXVector(-this.getDX());
+				x += (dx + tileMap.getDX());
 			}
 		}
 		else
 		{
-			x += (dx + tileMap.getDX());
 			tileMap.setXVector(-this.getDX());
+			x += (dx + tileMap.getDX());
 		}
 	}
 	

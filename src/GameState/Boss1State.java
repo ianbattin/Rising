@@ -232,17 +232,17 @@ public class Boss1State extends PlayState
 			deathTimer += GamePanel.getElapsedTime();
 		}
 		
-		/*for(Enemy e: enemies)
+		for(Enemy e: enemies)
 		{
-			e.setMoveSpeedLeft(0.2);//player.getMoveSpeedLeft()/2);
-			e.setMaxSpeedLeft(3);//player.getMaxSpeedLeft()*2);
-			e.setMoveSpeedRight(0.5);//player.getMoveSpeedRight()/2);
-			e.setMaxSpeedRight(8);//player.getMaxSpeedRight()*2);
+			e.setMoveSpeedLeft(0.3);//player.getMoveSpeedLeft()/2);
+			e.setMaxSpeedLeft(2.5);//player.getMaxSpeedLeft()*2);
+			e.setMoveSpeedRight(0.4);//player.getMoveSpeedRight()/2);
+			e.setMaxSpeedRight(6);//player.getMaxSpeedRight()*2);
 		}
-		player.setMoveSpeedLeft(0.2);//player.getMoveSpeedLeft()/2);
-		player.setMaxSpeedLeft(3);//player.getMaxSpeedLeft()*2);
-		player.setMoveSpeedRight(0.5);//player.getMoveSpeedRight()/2);
-		player.setMaxSpeedRight(8);//player.getMaxSpeedRight()*2);*/
+		player.setMoveSpeedLeft(0.3);//player.getMoveSpeedLeft()/2);
+		player.setMaxSpeedLeft(2.5);//player.getMaxSpeedLeft()*2);
+		player.setMoveSpeedRight(0.4);//player.getMoveSpeedRight()/2);
+		player.setMaxSpeedRight(6);//player.getMaxSpeedRight()*2);
 	}
 	
 	private void script()

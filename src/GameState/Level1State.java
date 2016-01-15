@@ -16,8 +16,10 @@ import java.util.ArrayList;
 
 import Entities.Player;
 import Entities.Rifleman;
+import Entities.SmallStuka;
 import Entities.Enemy;
 import Entities.Jetpacker;
+import Entities.MapObject;
 import Entities.Pickups;
 import Entities.PlaneBoss;
 import Main.GamePanel;
@@ -41,6 +43,9 @@ public class Level1State extends PlayState
 	private double transitionDY;
 	
 	public boolean hasInited;
+	
+	public SmallStuka stuka;
+	public boolean stukaSpawned = false;
 	
 	public Level1State(GameStateManager gsm)
 	{
@@ -97,6 +102,7 @@ public class Level1State extends PlayState
 		player.setTileMapMoving(true);
 		
 		enemies = new ArrayList<Enemy>();
+		mapObjects = new ArrayList<MapObject>();
 		int[] pickupsToSpawn = {Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST};
 		pickups = new Pickups(player, tileMap, this, pickupsToSpawn);
 		tileStart = false;
@@ -105,6 +111,8 @@ public class Level1State extends PlayState
 		this.bonusScores = player.getBonusScores();
 		bonusScoreFont = new Font("Munro", Font.BOLD, 35);
 		scoreFont = new Font("Munro", Font.PLAIN, 24);
+		
+		stuka = new SmallStuka(tileMap);
 	}
 
 	public void update()
@@ -118,12 +126,23 @@ public class Level1State extends PlayState
 			player.update();
 			for(Enemy e: enemies)
 				e.update();
+			for(MapObject m: mapObjects)
+				m.update();
 			aimUpdate();
 		}
 		if(player.getPoints() > 1000 && enemies.size() == 0)
 		{
 			enemies.add(new Jetpacker(-100, 300, tileMap, player));
 		}
+		
+		if(player.getPoints() > 6000 && !stukaSpawned )
+		{
+			mapObjects.add(stuka);
+			stukaSpawned = true;
+		}
+		else if(player.getPoints() > 7000)
+			mapObjects.remove(stuka);
+			
 		if(player.getPlayerHealth() < 1 && timer > 1500000000.0)
 		{
 			super.isFadingOut = true;
@@ -187,6 +206,8 @@ public class Level1State extends PlayState
 	public void draw(Graphics2D g)
 	{
 		bg.draw(g);
+		for(MapObject m: mapObjects)
+			m.draw(g);
 		if (debrisAlternator)
 			smallDebris(g);
 		player.draw(g);
