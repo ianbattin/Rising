@@ -8,7 +8,7 @@ import javax.sound.sampled.*;
 
 public class SoundPlayer implements LineListener, Runnable
 {	
-	//How many bytes are being read ahead (for the background music)
+	//How many bytes are being put in the playback buffer (for the background music)
 	private final static int BUFFER_SIZE = 2048;
 	//Indicates whether another instance of SoundPlayer is playing the background sound. If set to false, it will cease playback in other instances
 	private static boolean IS_PLAYING;
@@ -24,7 +24,6 @@ public class SoundPlayer implements LineListener, Runnable
 	private String backgroundFileName;
 	private boolean willLoopBackgroundMusic;
 
-	
 	/**
 	 * Initiates the SoundPlayer Object. 
 	 */
@@ -47,10 +46,7 @@ public class SoundPlayer implements LineListener, Runnable
 				System.out.println(e.toString());
 			}
 		}
-		else
-		{
-			shootingClip.play();
-		}
+		shootingClip.play();
 	}
 	
 	/**
@@ -81,7 +77,7 @@ public class SoundPlayer implements LineListener, Runnable
 	{
 		try
 		{
-			AudioClip clip = new AudioClip("file:Resources/Sound/");
+			AudioClip clip = new AudioClip("file:Resources/Sound/" + fileName);
 			clip.setVolume(volume);
 			clip.play();
 		}
@@ -111,7 +107,6 @@ public class SoundPlayer implements LineListener, Runnable
 		backgroundPlaybackThread.start();
 	}
 	
-	
 	/**
 	 * Stops the current background music playback
 	 */
@@ -122,7 +117,6 @@ public class SoundPlayer implements LineListener, Runnable
 		SoundPlayer.AUDIO_LINE.close();
 		
 	}
-
 	
 	/**
 	 * This is the run method for the background playback thread
@@ -133,15 +127,14 @@ public class SoundPlayer implements LineListener, Runnable
 		try
 		{
 			File mediaFile = new File(this.backgroundFileName);
-			AudioInputStream audioStream = AudioSystem.getAudioInputStream(mediaFile);
-			AudioFormat audioFormat = audioStream.getFormat();
-			DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
-			SoundPlayer.AUDIO_LINE = (SourceDataLine) AudioSystem.getLine(info);
-			SoundPlayer.AUDIO_LINE.open(audioFormat);
-			SoundPlayer.AUDIO_LINE.start();
-			
 			while(IS_PLAYING)
 			{
+				AudioInputStream audioStream = AudioSystem.getAudioInputStream(mediaFile);
+				AudioFormat audioFormat = audioStream.getFormat();
+				DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
+				SoundPlayer.AUDIO_LINE = (SourceDataLine) AudioSystem.getLine(info);
+				SoundPlayer.AUDIO_LINE.open(audioFormat);
+				SoundPlayer.AUDIO_LINE.start();
 				
 				byte[] bytesBuffer = new byte[BUFFER_SIZE];
 				int bytesRead = -1;
@@ -152,12 +145,14 @@ public class SoundPlayer implements LineListener, Runnable
 				}
 				
 				if(!this.willLoopBackgroundMusic)
+				{
 					IS_PLAYING = false;
+				}
+				
+				SoundPlayer.AUDIO_LINE.drain();
+				SoundPlayer.AUDIO_LINE.close();
+				audioStream.close();
 			}
-			
-			SoundPlayer.AUDIO_LINE.drain();
-			SoundPlayer.AUDIO_LINE.close();
-			audioStream.close();
 		}
 		catch (Exception e)
 		{
@@ -165,7 +160,6 @@ public class SoundPlayer implements LineListener, Runnable
 		}
 		IS_PLAYING = false;
 	}
-	
 	
 	/**
 	 * Listens to start and end calls of the LineListener.
@@ -177,5 +171,4 @@ public class SoundPlayer implements LineListener, Runnable
 	{
 		System.out.println(event.toString());
 	}
-	
 }

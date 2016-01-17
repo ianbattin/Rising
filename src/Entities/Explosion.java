@@ -65,6 +65,7 @@ public class Explosion extends MapObject
 				cwidth = width*2;
 				cheight = height*2;
 				willDestroyBlocks  = true;
+				init();
 				break;
 			}
 			case 2:
@@ -85,6 +86,7 @@ public class Explosion extends MapObject
 				cwidth = width*2;
 				cheight = height*2;
 				willDestroyBlocks = false;
+				init();
 				break;
 			}
 		}

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import Main.GamePanel;
+import Main.SoundPlayer;
 import TileMap.Tile;
 import TileMap.TileMap;
 
@@ -28,7 +29,7 @@ public class SmallStuka extends MapObject
 		super(tm);
 		
 		x = -150;
-		y = 300;
+		y = 400;
 		dx = 0;
 		dy = 0;
 		
@@ -99,6 +100,12 @@ public class SmallStuka extends MapObject
 		animation.setDelay(200);
 	}
 
+	//Do anything before starting to show the stuka on the screen
+	public void init()
+	{
+		SoundPlayer.playClipWithVolume("stukaDiving.wav", 1);
+	}
+	
 	@Override
 	public void collided(int type, Tile t) 
 	{
@@ -152,8 +159,10 @@ public class SmallStuka extends MapObject
 		//else
 			//dx = -maxSpeedX;
 		
+		dy = -1.5;
+		
 		x += dx;
-		//y += dy;
+		y += dy;
 	}
 	
 	public void getAnimation() 
