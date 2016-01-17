@@ -323,7 +323,7 @@ public class Level1State extends PlayState
 	
 	public void slowTimeEnd()
 	{
-		setBackgroundVector(0, -5);
+		setBackgroundVector(0, -4);
 		setDebrisVectors(1);
 		setEntitiySpeed(1);
 	}
@@ -341,7 +341,7 @@ public class Level1State extends PlayState
 			if(!start)
 			{
 				start = true;
-				setBackgroundVector(0, -5.0);
+				setBackgroundVector(0, -4);
 				setDebrisVectors(1);
 				if(!tileStart)
 				{

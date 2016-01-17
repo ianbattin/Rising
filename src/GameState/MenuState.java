@@ -40,7 +40,6 @@ public class MenuState extends GameState
 	public MenuState(GameStateManager gsm)
 	{
 		super();
-		init();
 		this.gsm = gsm;
 
 		super.isFadingOut = false;
@@ -62,6 +61,7 @@ public class MenuState extends GameState
 
 	public void init() 
 	{
+		music("Determination.wav");
 		entities = new ArrayList<MapObject>();
 	}
 

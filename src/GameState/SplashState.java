@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 
 import Main.GamePanel;
+import Main.SoundPlayer;
 import TileMap.Background;
 
 public class SplashState extends GameState 
@@ -30,7 +31,7 @@ public class SplashState extends GameState
 	
 	public void init() 
 	{
-		music("Modero.wav");
+		SoundPlayer.playClip("bombexplosion.wav");
 	}
 
 
@@ -38,7 +39,7 @@ public class SplashState extends GameState
 	{
 		elapsedTime += GamePanel.getElapsedTime();
 		if(elapsedTime > 200000000.0) 
-		{	
+		{
 			gsm.gameStateManagerLoad();
 			gsm.setState(GameStateManager.MENUSTATE);
 		}

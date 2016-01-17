@@ -11,7 +11,7 @@ import TileMap.Background;
 
 public class ControlsState extends GameState {
 	
-	private Background bg;	
+	private Background bgUpperHalf, bgLowerHalf;	
 	private GameStateManager gsm;
 
 	private Color titleColor;
@@ -34,8 +34,8 @@ public class ControlsState extends GameState {
 		super();
 		this.gsm = gsm;
 		
-		bg = new Background("/Backgrounds/menubackgroundNoText.png", 1);
-		//bg.setVector(0, -5.0); //moves the background
+		bgLowerHalf = new Background("/Backgrounds/MenuBackgroundTop.png", 1);
+		bgUpperHalf = new Background("/Backgrounds/LowerBackground.png", 1);	
 		
 		selection = 0;
 		resSelection = 0;
@@ -58,13 +58,15 @@ public class ControlsState extends GameState {
 	//nothing to update
 	public void update() 
 	{
-		bg.update();
+		bgLowerHalf.update();
+		bgUpperHalf.update();
 	}
 
 	//draw the controls
 	public void draw(Graphics2D g) 
 	{
-		bg.draw(g); //draw the background
+		bgUpperHalf.draw(g); //draw the background
+		bgLowerHalf.draw(g);
 		
 		//set the style of the title of the page
 		g.setColor(titleColor);

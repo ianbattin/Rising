@@ -12,7 +12,7 @@ import TileMap.Background;
 public class CreditState extends GameState 
 {
 	private GameStateManager gsm;
-	private Background bg;
+	private Background bgUpperHalf, bgLowerHalf;
 	private Color titleColor;
 	private Font titleFont, optionsFont, subTextFont;
 	private String[] creditsNames = {"Ian Battin - Lead Progammer", "Maxence Weyrich - Programmer", 
@@ -22,7 +22,8 @@ public class CreditState extends GameState
 	{
 		super();
 		this.gsm = gsm;
-		bg = new Background("/Backgrounds/menubackgroundNoText.png", 1);
+		bgLowerHalf = new Background("/Backgrounds/MenuBackgroundTop.png", 1);
+		bgUpperHalf = new Background("/Backgrounds/LowerBackground.png", 1);
 		//bg.setVector(0, -5.0); //moves the background
 		titleColor = new Color(255, 60 ,0);
 		titleFont = new Font("Munro", Font.BOLD, 40);
@@ -38,14 +39,16 @@ public class CreditState extends GameState
 	//update bgrnd
 	public void update() 
 	{
-		bg.update();	
+		bgLowerHalf.update();
+		bgUpperHalf.update();
 	}
 
 	//draw the text
 	public void draw(Graphics2D g) 
 	{
-		bg.draw(g);
-
+		bgUpperHalf.draw(g);
+		bgLowerHalf.draw(g);
+		
 		g.setColor(titleColor);
 		g.setFont(titleFont);
 		g.drawString("CREDITS", centerStringX("CREDITS", 0, GamePanel.WIDTH, g), GamePanel.HEIGHT/4); //This probably shouldn't be coded, but instead part of the background or an actual image
