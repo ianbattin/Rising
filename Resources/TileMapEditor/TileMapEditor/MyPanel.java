@@ -13,11 +13,12 @@ import java.awt.event.*;
 
 public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 	
-	public static final int WIDTH = 801;
-	public static final int HEIGHT = 1001;
+	public static final int WIDTH = 1601;
+	public static final int HEIGHT = 801;
 	public static final double SCALE = Math.min(((Toolkit.getDefaultToolkit().getScreenSize().height-50.0)/HEIGHT), 1);
 	public static int TILESIZE = 25;
 	public static int numRows;
+	public static int numCols;
 	
 	private String path = "Resources/Sprites/Tiles/";
 	private BufferedImage tileset;
@@ -117,10 +118,10 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 		try {
 			tileset = ImageIO.read(new File(path));
 			numRows = tileset.getHeight() / TILESIZE;
-			int width = tileset.getWidth() / TILESIZE;
-			numTiles = width * numRows;
-			tiles = new BufferedImage[numRows][width];
-			for(int i = 0; i < width; i++) {
+			numCols = tileset.getWidth() / TILESIZE;
+			numTiles = numCols * numRows;
+			tiles = new BufferedImage[numRows][numCols];
+			for(int i = 0; i < numCols; i++) {
 				for(int j = 0; j < numRows; j++) {
 					tiles[j][i] = tileset.getSubimage(
 							TILESIZE * i,
@@ -142,7 +143,7 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 		for(int i = 0; i < width; i++) {
 			for(int j = 0; j < numRows; j++) {
 				blocks[i + width*j] = new Block(tiles[j][i]);
-				blocks[i + width*j].setPosition(i * TILESIZE, HEIGHT - (numRows - j) * TILESIZE);
+				blocks[i + width*j].setPosition(i * TILESIZE, (j) * TILESIZE);
 			}
 		}
 	}
@@ -210,16 +211,19 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 		
 		// draw map dimensions
 		g.setColor(Color.RED);
+		g.setStroke(new BasicStroke(5));
 		g.drawRect(xmap, ymap, mapWidth * TILESIZE, mapHeight * TILESIZE);
-		
+		g.setStroke(new BasicStroke(1));
+
 		// draw map border
 		//g.setColor(Color.GREEN);
 		//g.drawRect(xmap + 10 * TILESIZE, ymap + 7 * TILESIZE, (mapWidth - 20) * TILESIZE, (mapHeight - 14) * TILESIZE);
 		
 		// draw clickable blocks
-		int bo = HEIGHT - numRows * TILESIZE;
+		int bh = 0;
+		int bw = WIDTH/2;
 		g.setColor(Color.WHITE);
-		g.fillRect(0, bo, WIDTH, numRows * TILESIZE);
+		g.fillRect(bw, bh, WIDTH/2, HEIGHT);
 		for(int i = 0; i < numTiles; i++) {
 			blocks[i].draw(g);
 		}
@@ -228,17 +232,25 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 		g.setColor(Color.RED);
 		int width = numTiles / numRows;
 		try {
-			g.drawRect((currentBlock % width) * TILESIZE + xblock, bo + TILESIZE * (currentBlock / width), TILESIZE, TILESIZE);
+			g.drawRect((currentBlock % width) * TILESIZE + xblock + bw, bh + TILESIZE * (currentBlock / width), TILESIZE, TILESIZE);
 		} catch(Exception e) {}
 		
 		// draw current block number
-		g.drawString("" + currentBlock, WIDTH - 100, 50);
+		g.drawString("Current Tile: " + currentBlock, WIDTH/2 - 100, 80);
 		
 		// draw position
 		g.setColor(Color.RED);
-		g.drawString(mousex + ", " + mousey, WIDTH - 100, 20);
-		g.drawString(tilex + ", " + tiley, WIDTH - 100, 35);
+		g.drawString("Pixel: " + mousex + ", " + mousey, WIDTH/2 - 100, 20);
+		g.drawString("Tile: " + tilex + ", " + tiley, WIDTH/2 - 100, 35);
 		
+		// draw map size in tiles
+		g.setColor(Color.RED);
+		g.drawString("Map Width: " + mapWidth, WIDTH/2 - 100, 50);
+		g.drawString("Map Height: " + mapHeight, WIDTH/2 - 100, 65);
+		
+		//draw tileset border
+		g.setColor(Color.RED);
+		g.drawRect(WIDTH/2, 0, WIDTH/2, tileset.getHeight());
 	}
 	
 	private void draw() {
@@ -524,17 +536,15 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 		}
 		if(k == KeyEvent.VK_UP) {
 			if(shiftDown) {
-				mapHeight--;
+				mapHeight++;
 				int[][] temp = new int[mapHeight][mapWidth];
-				for(int row = 0; row < mapHeight; row++) {
+				for(int row = 0; row < mapHeight - 1; row++) {
 					for(int col = 0; col < mapWidth; col++) {
-						try {
-							temp[row-1][col] = map[row][col];
-						} catch(Exception e) {
-							 }
+						temp[row+1][col] = map[row][col];
 					}
 				}
 				map = temp;
+				ymap -= TILESIZE;
 			}
 			else if(altDown) {
 				for(int col = 0; col < mapWidth; col++) {
@@ -550,11 +560,14 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 		}
 		if(k == KeyEvent.VK_DOWN) {
 			if(shiftDown) {
-				mapHeight++;
+				mapHeight--;
 				int[][] temp = new int[mapHeight][mapWidth];
-				for(int row = 0; row < mapHeight - 1; row++) {
+				for(int row = 0; row < mapHeight; row++) {
 					for(int col = 0; col < mapWidth; col++) {
-						temp[row+1][col] = map[row][col];
+						try {
+							temp[row-1][col] = map[row][col];
+						} catch(Exception e) {
+							 }
 					}
 				}
 				map = temp;
@@ -594,19 +607,19 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 			int x = (int) (me.getX() / SCALE - xblock);
 			// clicked a block
 			int b = 0;
-			for(int i = 0; i < numRows; i++) {
-				if(y >= HEIGHT - (numRows - i) * TILESIZE) {
-					b = x / TILESIZE + i*numTiles / numRows;
+			if(y >= 0 && x >= WIDTH/2) {
+				b = x / TILESIZE - numCols + (y / TILESIZE)*numCols;
+				if(b >= 0) {
 					currentBlockImage = blocks[b].getImage();
 					currentBlock = b;
 				}
-				else {
-					y = (int) (me.getY() / SCALE - ymap);
-					x = (int) (me.getX() / SCALE - xmap);
-					if(x > 0 && x < mapWidth * TILESIZE &&
-							y > 0 && y < mapHeight * TILESIZE) {
-						map[y / TILESIZE][x / TILESIZE] = currentBlock;
-					}
+			}
+			else {
+				y = (int) (me.getY() / SCALE - ymap);
+				x = (int) (me.getX() / SCALE - xmap);
+				if(x < WIDTH/2 && x < mapWidth * TILESIZE &&
+						y > 0 && y < mapHeight * TILESIZE) {
+					map[y / TILESIZE][x / TILESIZE] = currentBlock;
 				}
 			}
 		}
@@ -624,7 +637,7 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 		}
 	}
 	public void mouseReleased(MouseEvent me) {}
-	
+
 	public void mouseMoved(MouseEvent me) {
 		mousex = me.getX() - xmap;
 		mousey = me.getY() - ymap;
@@ -634,7 +647,7 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 	public void mouseDragged(MouseEvent me) {
 		if(SwingUtilities.isLeftMouseButton(me)) {
 			int y = (int) (me.getY() / SCALE);
-			if(y >= HEIGHT - numRows * TILESIZE) {
+			if(y >= HEIGHT) {
 			}
 			else {
 				y = (int) (me.getY() / SCALE - ymap);

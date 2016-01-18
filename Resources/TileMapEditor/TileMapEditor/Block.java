@@ -23,7 +23,7 @@ public class Block {
 	}
 	
 	public void draw(Graphics2D g) {
-		g.drawImage(image, x, y, null);
+		g.drawImage(image, x + MyPanel.WIDTH/2, y, null);
 	}
 	
 }
