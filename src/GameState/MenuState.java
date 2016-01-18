@@ -35,8 +35,6 @@ public class MenuState extends GameState
 	private Font optionsFont;
 	private int secondaryFadingAlphaLevel;
 	
-	private ArrayList<MapObject> entities;
-	
 	public MenuState(GameStateManager gsm)
 	{
 		super();
@@ -62,7 +60,6 @@ public class MenuState extends GameState
 	public void init() 
 	{
 		music("Determination.wav");
-		entities = new ArrayList<MapObject>();
 	}
 
 	//Only thing being updated is the background for movement
@@ -91,21 +88,12 @@ public class MenuState extends GameState
 				secondaryFadingAlphaLevel += 1;
 			}
 		}
-		
-		for(MapObject mo: entities)
-		{
-			mo.update();
-		}
 	}
 
 
 	public void draw(Graphics2D g)
 	{	
 		bg.draw(g);
-		for(MapObject mo: entities)
-		{
-			mo.draw(g);
-		}
 		
 		//Draws out our options menu
 		for(int i = 0; i < options.length; i++)

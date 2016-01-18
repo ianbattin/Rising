@@ -136,8 +136,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 				WIDTHSCALED = (int)(WIDTH*scaleWidth);
 				HEIGHTSCALED = (int)(HEIGHT*scaleHeight);
 				
-				Main.window.setSize((int)(WIDTH*scaleWidth), (int)(HEIGHT*scaleHeight));
 				setPreferredSize(new Dimension((int)(WIDTH*scaleWidth), (int)(HEIGHT*scaleHeight)));
+				Main.window.pack();
 				removeKeyListener(this);
 				removeMouseListener(this);
 				removeMouseMotionListener(this);
