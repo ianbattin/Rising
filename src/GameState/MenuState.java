@@ -164,7 +164,7 @@ public class MenuState extends GameState
 		if(!super.isFadingOut)
 		{
 			//If you press the up key, the selected option go up
-			if(k == GameStateManager.up)
+			if(k == GameStateManager.up || k == GameStateManager.left)
 			{
 				SoundPlayer.playClip("changeselection.wav");
 				currentChoice--;
@@ -176,7 +176,7 @@ public class MenuState extends GameState
 			}
 			
 			//If you press the down key, the selected option goes down
-			if(k == GameStateManager.down)
+			if(k == GameStateManager.down || k == GameStateManager.right)
 			{
 				SoundPlayer.playClip("changeselection.wav");
 				currentChoice++;

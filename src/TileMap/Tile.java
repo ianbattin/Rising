@@ -125,7 +125,7 @@ public class Tile
 	{
 		if(onScreen())
 		{
-			g.drawImage(animation.getImage(), (int)x, (int)y, size, size, null);
+			g.drawImage(animation.getImage(), (int)x, (int)y, size+1, size, null);
 		}
 		
 		if(tm.getShowCollisonBox())
