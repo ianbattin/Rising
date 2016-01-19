@@ -156,6 +156,13 @@ public class Boss1State extends PlayState
 				}
 			}
 		}
+		
+		//Prevent player from dropping through plane
+		if(player.getY() > 700 - player.getHeight() && tileMap.getYMove() <= 0)
+		{
+			player.setY(700 - player.getHeight());
+			player.setDown(false);
+		}
 	}
 
 	public void draw(Graphics2D g)
@@ -204,7 +211,6 @@ public class Boss1State extends PlayState
 		if(!setUp)
 		{
 			player.setPosition(400, -300);
-
 			setUp = true;
 		}
 		
@@ -214,10 +220,11 @@ public class Boss1State extends PlayState
 		aimUpdate();
 		backGroundParallaxUpdate();
 		player.update();
+		
 		for(int i = 0; i < enemies.size(); i++)
 		{
 			enemies.get(i).update();
-			if(enemies.get(i).getHealth() == 0 && enemies.get(i).getY() > 810)
+			if(enemies.get(i).getHealth() <= 0 && enemies.get(i).getY() > 810)
 			{
 				enemies.remove(i);
 			}

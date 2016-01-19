@@ -136,6 +136,8 @@ public class PlaneBoss extends Enemy {
 		x += tm.getDX();
 		y += tm.getDY();
 		
+		System.out.println(dx + " " + dy);
+		
 		getBulletCollision();
 		getAnimation();
 
@@ -299,6 +301,7 @@ public class PlaneBoss extends Enemy {
 		if(tileMap.getSpriteSheet().equals("/Sprites/Tiles/FullTileSet.png") && !setMovement)
 		{
 			dx -= moveSpeed;
+			dy = -2.0;
 			if(dx < -(maxSpeedX*super.slowDown)) dx = -(maxSpeedX*super.slowDown);
 		}
 		
@@ -316,34 +319,22 @@ public class PlaneBoss extends Enemy {
 		double differenceY = endY - startY;
 		
 		if(differenceX < 0)
-		{
 			moveSpeed = -maxSpeed;
-		}
 		else
 			moveSpeed = maxSpeed;
 			
 		if((endX - 10 < x && x < endX + 10))
-		{
 			dx = 0;
-		}
 		else
-		{
 			dx = moveSpeed / (1/speed);
-		}
 		
 		if((endY - 10 < y && y < endY + 10))
-		{
 			dy = 0;
-		}
 		else
-		{
 			dy = dx * (differenceY / differenceX);
-		}
 		
 		if((dx == 0 && dy == 0) || (dx == -0 && dy == -0) || (dx == 0 && dy == -0) || (dx == -0 && dy == 0))
-		{
 			moveComplete = true;
-		}
 	}
 
 	@Override

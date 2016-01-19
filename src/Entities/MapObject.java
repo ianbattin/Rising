@@ -199,8 +199,7 @@ public abstract class MapObject
 						jumped  = false;
 						doubleJumped = false;
 						falling = false;
-						//landing = true;
-						//gliding = false;
+						gliding = false;
 						idle = true;
 						fallingAnim = false;
 					}
@@ -224,70 +223,72 @@ public abstract class MapObject
 		}
 	}
 	
-	public void checkTileMapCollision()
-	{
-		currCol = (int)x / tileSize;
-		currRow = (int)y / tileSize;
-		
-		xdest = x + dx;
-		ydest = y + dy;
-		
-		xtemp = x;
-		ytemp = y;
-		
-		calculateCorners(x, ydest);
-		if(dy < 0)
-		{
-			if(topLeft || topRight)
-			{
-				dy = 0;
-				ytemp = currRow * tileSize + cheight / 2;
-			}
-			else
-				ytemp += dy;
-		}
-		if(dy > 0)
-		{
-			if(bottomLeft || bottomRight)
-			{
-				dy = 0;
-				falling = false;
-				ytemp = (currRow + 1) * tileSize - cheight / 2;
-			}
-			else
-				ytemp += dy;
-		}
-		calculateCorners(xdest, y);
-		if(dx < 0)
-		{
-			if(topLeft || bottomLeft)
-			{
-				dx = 0;
-				xtemp = currCol * tileSize + cwidth / 2;
-			}
-			else
-				xtemp += dx;
-		}
-		if(dx > 0)
-		{
-			if(topRight || bottomRight)
-			{
-				dx = 0;
-				xtemp = (currCol +1) * tileSize - cwidth / 2;
-			}
-			else
-				xtemp += dx;
-		}
-		
-		if(!falling)
-		{
-			calculateCorners(x, ydest + 1);
-			if(!bottomLeft && !bottomRight)
-			{
-				falling = true;
-			}
-		}
-	}
+//  NEVER USED
+//
+//	public void checkTileMapCollision()
+//	{
+//		currCol = (int)x / tileSize;
+//		currRow = (int)y / tileSize;
+//
+//		xdest = x + dx;
+//		ydest = y + dy;
+//
+//		xtemp = x;
+//		ytemp = y;
+//
+//		calculateCorners(x, ydest);
+//		if(dy < 0)
+//		{
+//			if(topLeft || topRight)
+//			{
+//				dy = 0;
+//				ytemp = currRow * tileSize + cheight / 2;
+//			}
+//			else
+//				ytemp += dy;
+//		}
+//		if(dy > 0)
+//		{
+//			if(bottomLeft || bottomRight)
+//			{
+//				dy = 0;
+//				falling = false;
+//				ytemp = (currRow + 1) * tileSize - cheight / 2;
+//			}
+//			else
+//				ytemp += dy;
+//		}
+//		calculateCorners(xdest, y);
+//		if(dx < 0)
+//		{
+//			if(topLeft || bottomLeft)
+//			{
+//				dx = 0;
+//				xtemp = currCol * tileSize + cwidth / 2;
+//			}
+//			else
+//				xtemp += dx;
+//		}
+//		if(dx > 0)
+//		{
+//			if(topRight || bottomRight)
+//			{
+//				dx = 0;
+//				xtemp = (currCol +1) * tileSize - cwidth / 2;
+//			}
+//			else
+//				xtemp += dx;
+//		}
+//
+//		if(!falling)
+//		{
+//			calculateCorners(x, ydest + 1);
+//			if(!bottomLeft && !bottomRight)
+//			{
+//				falling = true;
+//			}
+//		}
+//	}
 
 	public void setX(double x) {	this.x = x;	}
 	public void setY(double y) { this.y = y;	}

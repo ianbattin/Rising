@@ -298,10 +298,6 @@ public class Player extends MapObject
 		
 		if(x - width/2 < 0) x = width/2;
 		if(x + width/2 > GamePanel.WIDTH) x = GamePanel.WIDTH - width/2;
-		if(y  + cheight/2 > GamePanel.HEIGHT)
-		{
-			//y = GamePanel.HEIGHT - cheight/2;
-		}
 		
 		if(dy < 0 && heightScore <= yFromBottom)
 		{
@@ -463,12 +459,12 @@ public class Player extends MapObject
 			dy = -20.0;
 			t.setAnimated(true);
 		}
-		if(type == 24)
+		/*if(type == 666)
 		{
 			t.setType(0);
 			falling = true;
 			dy = -60.0;
-		}
+		}*/
 	}
 	
 	public void getAttack()
@@ -684,23 +680,12 @@ public class Player extends MapObject
 				height = 70;
 			}
 		}
-		/*else if(landing)
-		{
-			if(currentAction != LANDING)
-			{
-				currentAction = LANDING;
-				animation.setFrames(sprites.get(LANDING));
-				animation.setDelay(200);
-				width = 50;
-				height = 70;
-			}
-		}
 		else if(gliding)
 		{
 			if(currentAction != HOVERING)
 			{
 				currentAction = HOVERING;
-				animation.setFrames(sprites.get(HOVERING));
+				//animation.setFrames(sprites.get(HOVERING));
 				animation.setDelay(200);
 				width = 50;
 				height = 70;
@@ -711,12 +696,12 @@ public class Player extends MapObject
 			if(currentAction != DOUBLEJUMP)
 			{
 				currentAction = DOUBLEJUMP;
-				animation.setFrames(sprites.get(DOUBLEJUMP));
+				//animation.setFrames(sprites.get(DOUBLEJUMP));
 				animation.setDelay(50);
 				width = 50;
 				height = 70;
 			}
-		}*/
+		}
 		
 		if (isFlashing)	animation.changeFrames(playerHurtSprites.get(currentAction));
 		else animation.changeFrames(playerSprites.get(currentAction));

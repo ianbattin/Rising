@@ -192,12 +192,13 @@ public class Level1State extends PlayState
 				}
 				if(enemies.size() <= 1)
 				{
-					enemies.add(new PlaneBoss(2000, -200, tileMap, player, 1));
+					enemies.add(new PlaneBoss(2000, 100, tileMap, player, 1));
 				}
 			}
 			tileMap.setYVector(transitionDY);
-			if(player.getY() > GamePanel.HEIGHT)
+			if(player.getY() > GamePanel.HEIGHT && enemies.get(1).getX() < GamePanel.WIDTH)
 			{
+				System.out.println("NOT DEAD");
 				player.setPosition(400, 900);
 				super.isFadingOut = true;
 				super.fadeOut(1000000000.0, Color.WHITE, 20, gsm, GameStateManager.LEVEL1STATE, GameStateManager.BOSS1STATE);
