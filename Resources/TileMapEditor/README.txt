@@ -30,6 +30,16 @@ Ctrl + o: Open saved map
 
 Ctrl + b: Import tileset
 
+===========================
+IMPLEMENTING MAP INTO GAME:
+===========================
+
+-Go into the class for the level you want to change (Example: Level1State.class)
+-Find the init() method
+-In the first line you should see something like "tileMap = new TileMap("Resources/Maps/level5.txt", 2);"
+-Change the the String parameter in the constructor to be the path to your map.
+	-If you placed the map in the correct folder, you should only have to change "level5.txt" to the "NAME_OF_YOUR_MAP.txt"
+-If you want to have your map copied to the left or right # of times in game, change the "2" to the amount you wish.
 
 ========
 EXAMPLE:
