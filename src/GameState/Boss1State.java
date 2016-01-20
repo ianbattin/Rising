@@ -299,6 +299,7 @@ public class Boss1State extends PlayState
 						if(t.getY() <= 675)
 						{
 							t.setBulletCollision(false);
+							t.setBlocked(false);
 						}
 					}
 					step = 0;

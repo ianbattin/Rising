@@ -190,7 +190,7 @@ public abstract class MapObject
 
 			if((collisionLeft <= x + width/2 && x + width/2  <= collisionRight) && (collisionTop <= y + cheight && y + cheight <= collisionBottom) && !drop)
 			{
-				if(t.getType() < 17 || (32 <= t.getType() && t.getType() <= 57))
+				if(t.getBlocked())
 				{
 					if(dy >= 0)
 					{
