@@ -320,6 +320,7 @@ public class Level1State extends PlayState
 		setBackgroundVector(0, -1);
 		setDebrisVectors(0.5);
 		setEntitiySpeed(0.2f);
+		System.out.println(Enemy.slowDown);
 	}
 	
 	public void slowTimeEnd()

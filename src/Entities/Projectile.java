@@ -108,13 +108,21 @@ public class Projectile extends MapObject
 	public void update() 
 	{
 		this.myCheckCollision();
-		dx = Math.cos(direction) * (moveSpeed*slowTime);
-		dy = Math.sin(direction) * (moveSpeed*slowTime);
+		dx = Math.cos(direction) * (moveSpeed);
+		dy = Math.sin(direction) * (moveSpeed);
 		dx += tileMap.getDX();
 		dy += tileMap.getDY();
 			
-		x += dx;
-		y += dy;
+		if(type != 1)
+		{
+			x += dx*slowTime;
+			y += dy*slowTime;
+		}
+		else
+		{
+			x += dx;
+			y += dy;
+		}
 		
 		lifeTime++;
 	}
@@ -207,9 +215,9 @@ public class Projectile extends MapObject
 		return remove;
 	}
 	
-	public void setSlowTime(double slowTime)
+	public static void setSlowTime(double slowTime)
 	{
-		this.slowTime = slowTime;
+		Projectile.slowTime = slowTime;
 	}
 
 	public long getLifeTime() 

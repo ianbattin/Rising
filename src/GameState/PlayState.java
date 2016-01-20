@@ -11,6 +11,7 @@ import Entities.Enemy;
 import Entities.MapObject;
 import Entities.Pickups;
 import Entities.Player;
+import Entities.Projectile;
 import Main.GamePanel;
 import Main.Main;
 import TileMap.Background;
@@ -64,8 +65,8 @@ public abstract class PlayState extends GameState
 	
 	public void setEntitiySpeed(float speed)
 	{
-		for(Enemy e: enemies)
-			e.setSlowDownRate(speed);
+		Enemy.setSlowDownRate(speed);
+		Projectile.setSlowTime(speed);
 	}
 
 	public void backGroundParallaxUpdate()

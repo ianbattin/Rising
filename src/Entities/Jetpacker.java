@@ -221,7 +221,7 @@ public class Jetpacker extends Enemy
 		{
 			
 			long elapsed= (System.nanoTime() - fireTimer) / 1000000;
-			if(fireDelay <= elapsed*(0.5*super.slowDown))
+			if(fireDelay <= elapsed*(0.5*Enemy.slowDown))
 			{
 				bullets.add(new Projectile(x + this.gunPosX, y + this.gunPosY, angle, 2, tm));
 				fireTimer = System.nanoTime();
@@ -234,22 +234,22 @@ public class Jetpacker extends Enemy
 		if(relX > 200)
 		{
 			dx -= moveSpeedLeft;
-			if(dx < -(maxSpeedX*super.slowDown)) dx = -(maxSpeedX*super.slowDown);
+			if(dx < -(maxSpeedX)) dx = -(maxSpeedX);
 		}
 		else if(relX < -200)
 		{
 			dx += moveSpeedRight;
-			if(dx > (maxSpeedX*super.slowDown)) dx = (maxSpeedX*super.slowDown);
+			if(dx > (maxSpeedX)) dx = (maxSpeedX);
 		}
 		if(relY > 200)
 		{
 			dy -= moveSpeed;
-			if(dy < -(maxSpeedY*super.slowDown)) dy = -(maxSpeedY*super.slowDown);
+			if(dy < -(maxSpeedY)) dy = -(maxSpeedY);
 		}
 		else if(relY < -200)
 		{
 			dy += moveSpeed;
-			if(dy > (maxSpeedY*super.slowDown)) dy = (maxSpeedY*super.slowDown);
+			if(dy > (maxSpeedY)) dy = (maxSpeedY);
 		}
 		if(player.getX() > this.getX())
 		{
@@ -340,8 +340,8 @@ public class Jetpacker extends Enemy
 			fallingAnim = false;
 		}*/
 		
-		x += dx;
-		y += dy;
+		x += dx*Enemy.slowDown;
+		y += dy*Enemy.slowDown;
 	}
 	
 	public void getAnimation()

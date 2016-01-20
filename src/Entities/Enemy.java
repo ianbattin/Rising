@@ -52,7 +52,7 @@ public abstract class Enemy extends MapObject
 	protected Animation gunAnimation;
 	
 	//slowdown (when player picks up powerup)
-	protected static float slowDown;
+	public static float slowDown;
 	
 	public Enemy(double x, double y, TileMap tm, Player player)
 	{
@@ -74,7 +74,7 @@ public abstract class Enemy extends MapObject
 		timesToLoop = 0;
 		isFlashing = false;
 		
-		slowDown = 1; // 1 is the normal speed
+		if (slowDown == 0) slowDown = 1;
 	}
 
 	public abstract void update();
@@ -178,13 +178,9 @@ public abstract class Enemy extends MapObject
 		return angle;
 	}
 	
-	public void setSlowDownRate(float slowDown)
+	public static void setSlowDownRate(float slowDown)
 	{
-		this.slowDown = slowDown;
-		for(int i = 0; i < bullets.size(); i++)
-		{
-			bullets.get(i).setSlowTime(this.slowDown);
-		}
+		Enemy.slowDown = slowDown;
 	}
 	
 	/**
