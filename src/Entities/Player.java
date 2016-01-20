@@ -80,6 +80,7 @@ public class Player extends MapObject
 	private Animation birdAnimation;
 	private final int[] numFrames = { 1, 4, 3, 3, 4 };
 	private boolean tileMapMoving;
+	private boolean canMove;
 	
 	//animation actions
 	private static final int IDLE = 0;
@@ -226,6 +227,7 @@ public class Player extends MapObject
 		animation.setDelay(200);
 		
 		falling = true;
+		canMove = true;
 		
 		//health
 		health = 5;
@@ -526,9 +528,20 @@ public class Player extends MapObject
 		yFromBottom = GamePanel.HEIGHTSCALED - y;
 	}
 	
+	public void setCanMove(boolean val)
+	{
+		canMove = val;
+	}
+	
 	public void getMovement()
 	{
 		//MOVING LEFT AND RIGHT
+		if(!canMove)
+		{
+			left = false;
+			right = false;
+			if(!jumped) jump = false;
+		}
 		if(left)
 		{
 			dx -= moveSpeedLeft;

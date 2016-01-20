@@ -2,8 +2,10 @@ package GameState;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
@@ -27,6 +29,10 @@ public abstract class PlayState extends GameState
 	protected Pickups pickups;
 	protected ArrayList<Enemy> enemies;
 	protected ArrayList<MapObject> mapObjects;
+	protected boolean start;
+	private ArrayList<int[]> bonusScores;
+	protected String[] notStarted;
+	protected Font bonusScoreFont, scoreFont, backupFont;
 	
 	//Mouse
 	protected int mouseX;
@@ -38,6 +44,25 @@ public abstract class PlayState extends GameState
 	public PlayState()
 	{
 		super();
+		
+		backupFont = new Font("Times", Font.PLAIN, 24);
+		scoreFont = new Font("Munro", Font.PLAIN, 24);				
+		bonusScoreFont = new Font("Munro", Font.BOLD, 35);
+	}
+	
+	public void init()
+	{
+		bonusScores = player.getBonusScores();
+		
+		enemies = new ArrayList<Enemy>();
+		mapObjects = new ArrayList<MapObject>();
+		
+		//create the pause text
+		notStarted = new String[4];
+		notStarted[0] = "GAME PAUSED";
+		notStarted[1] = " ";
+		notStarted[2] = "Press " + KeyEvent.getKeyText(GameStateManager.select) + " to resume";
+		notStarted[3] = "Press "+ KeyEvent.getKeyText(GameStateManager.reset) +" to return to the menu" ;
 	}
 	
 	public void setBackgroundVector(double vectorX, double vectorY)
@@ -110,6 +135,22 @@ public abstract class PlayState extends GameState
 		}
 	}
 	
+	public void updateBonusScores()
+	{
+		for(int i = 0; i < bonusScores.size(); i++)
+		{
+			if(bonusScores.get(i)[1] > 0)
+			{
+				bonusScores.get(i)[1]--;
+			}
+			else
+			{
+				bonusScores.remove(i);
+				i--;
+			}
+		}
+	}
+	
 	public void drawCrossHair(Graphics2D g) 
 	{
 		mouseX = (int) (((MouseInfo.getPointerInfo().getLocation().getX() - Main.window.getLocation().getX()) - 3)/GamePanel.scaleWidth);
@@ -119,6 +160,37 @@ public abstract class PlayState extends GameState
 		g.setStroke(new BasicStroke(2));
 		g.drawLine(mouseX - 5, mouseY, mouseX + 5, mouseY);
 		g.drawLine(mouseX, mouseY - 5, mouseX, mouseY + 5);
+	}
+	
+	public void drawBonusScores(Graphics2D g)
+	{
+		if(!bonusScores.isEmpty())
+		{
+			for(int i = 0; i < bonusScores.size(); i++)
+			{
+				g.setColor(new Color(100, 200, 100, bonusScores.get(i)[1]));
+				g.setFont(bonusScoreFont);
+				g.drawString("+" + bonusScores.get(i)[0], centerStringX("+" + bonusScores.get(i)[0], 0, GamePanel.WIDTH, g), 35 + (255-bonusScores.get(i)[1])/2);
+				g.setFont(scoreFont);
+			}
+		}
+	}
+	
+	public void drawPause(Graphics2D g)
+	{
+		for(int i = 0; i < notStarted.length; i++)
+		{
+			int offSet = 0;
+			for(int j = 0; j < notStarted[i].length(); j++)
+			{
+				if(!scoreFont.canDisplay(notStarted[i].charAt(j)))
+					g.setFont(backupFont);
+				else
+					g.setFont(scoreFont);
+				g.drawChars(notStarted[i].toCharArray(), j, 1, centerStringX(notStarted[i], 0, GamePanel.WIDTH, g) + offSet, 400 + (40 *i));
+				offSet += g.getFontMetrics().charWidth(notStarted[i].charAt(j));
+			}
+		}
 	}
 	
 	public Player getPlayer()

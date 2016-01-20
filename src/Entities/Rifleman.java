@@ -129,6 +129,7 @@ public class Rifleman extends Enemy
 			dy = 10.0;
 			y += dy;
 		}
+		if(y < -500) this.playerHurt(500);
 		
 		x += tileMap.getDX();
 		y += tileMap.getDY();

@@ -30,18 +30,17 @@ import TileMap.TileMap;
 
 public class Level1State extends PlayState
 {
+	private String[] notStarted;
+	
 	private int[][] debrisInfo;
 	private int[][] smallDebrisInfo;
 	private ArrayList<Color> colors;
 	private ArrayList<int[]> bonusScores;
-	private Font bonusScoreFont, scoreFont, backupFont;
-	private boolean start, isStillAlive;
+	private boolean isStillAlive;
 	private float timer;
 	public static boolean tileStart, debrisAlternator;
-	
 	private boolean transition;
 	private double transitionDY;
-	
 	public boolean hasInited;
 	
 	public SmallStuka stuka;
@@ -97,25 +96,19 @@ public class Level1State extends PlayState
 	}
 
 	public void init() 
-	{
+	{	
 		tileMap = new TileMap("Resources/Maps/level5.txt", 2);
 		tileMap.setY(-300);
 		player = new Player(tileMap, this);
 		player.setPosition(375, -100);
 		player.setTileMapMoving(true);
 		
-		enemies = new ArrayList<Enemy>();
-		mapObjects = new ArrayList<MapObject>();
+		super.init(); //requires the player to be inited first
+		
 		int[] pickupsToSpawn = {Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST};
-		//int[] pickupsToSpawn = {Pickups.BIRDBOOST};
 		pickups = new Pickups(player, tileMap, this, pickupsToSpawn, 10000000000L);
 		tileStart = false;
 		score = 0;
-		
-		this.bonusScores = player.getBonusScores();
-		bonusScoreFont = new Font("Munro", Font.BOLD, 35);
-		scoreFont = new Font("Munro", Font.PLAIN, 24);
-		backupFont = new Font("Times", Font.PLAIN, 24);
 		
 		stuka = new SmallStuka(tileMap);
 		
@@ -146,7 +139,6 @@ public class Level1State extends PlayState
 		if(start)
 		{
 			bg.update();
-			backGroundParallaxUpdate();
 			tileMap.update();
 			pickups.update();
 			player.update();
@@ -154,7 +146,9 @@ public class Level1State extends PlayState
 				e.update();
 			for(MapObject m: mapObjects)
 				m.update();
-			aimUpdate();
+			super.backGroundParallaxUpdate();
+			super.aimUpdate();
+			super.updateBonusScores();
 		}
 		if(player.getPoints() > 1000 && enemies.size() == 0)
 		{
@@ -178,22 +172,6 @@ public class Level1State extends PlayState
 		else if (player.getPlayerHealth() < 1)
 		{
 			timer += GamePanel.getElapsedTime();
-		}
-	    
-		if(!bonusScores.isEmpty())
-		{
-			for(int i = 0; i < bonusScores.size(); i++)
-			{
-				if(bonusScores.get(i)[1] > 0)
-				{
-					bonusScores.get(i)[1]--;
-				}
-				else
-				{
-					bonusScores.remove(i);
-					i--;
-				}
-			}
 		}
 		
 		if(tileMap.getYMove() >= tileMap.getTileMapHeight() - 700)
@@ -247,43 +225,16 @@ public class Level1State extends PlayState
 		if(!debrisAlternator)
 			debris(g);
 		
+		g.setFont(scoreFont);
 		g.setColor(Color.WHITE);
 		if(!start) 
 		{
-			
-			String[] notStarted = {"GAME PAUSED", " ", "Press " + KeyEvent.getKeyText(GameStateManager.select) + " to resume", "Press "+ KeyEvent.getKeyText(GameStateManager.reset) +" to return to the menu" };
-			for(int i = 0; i < notStarted.length; i++)
-			{
-				int offSet = 0;
-				for(int j = 0; j < notStarted[i].length(); j++)
-				{
-					if(!scoreFont.canDisplay(notStarted[i].toCharArray()[j]))
-					{
-						g.setFont(backupFont);
-					}
-					else
-					{
-						g.setFont(scoreFont);
-					}
-					g.drawChars(notStarted[i].toCharArray(), j, 1, centerStringX(notStarted[i], 0, GamePanel.WIDTH, g) + offSet, 400 + (40 *i));
-					offSet += g.getFontMetrics().charWidth(notStarted[i].toCharArray()[j]);
-				}
-				//g.drawString(notStarted[i], centerStringX(notStarted[i], 0, GamePanel.WIDTH, g), 400  + (40 * i));
-			}
+			super.drawPause(g);
 		}
 		g.drawString("Score: " + player.getPoints(), centerStringX("Score: " + player.getPoints(), 0, GamePanel.WIDTH, g), 30);
-		if(!bonusScores.isEmpty())
-		{
-			for(int i = 0; i < bonusScores.size(); i++)
-			{
-				g.setColor(new Color(100, 200, 100, bonusScores.get(i)[1]));
-				g.setFont(bonusScoreFont);
-				g.drawString("+" + bonusScores.get(i)[0], centerStringX("+" + bonusScores.get(i)[0], 0, GamePanel.WIDTH, g), 35 + (255-bonusScores.get(i)[1])/2);
-				g.setFont(scoreFont);
-			}
-		}
 		
-		drawCrossHair(g);
+		super.drawBonusScores(g);
+		super.drawCrossHair(g);
 		super.drawFade(g);
 	}
 	
@@ -291,7 +242,6 @@ public class Level1State extends PlayState
 	{
 		return player;
 	}
-	
 
 	//update and draw the debris
 	public void debris(Graphics2D g)
@@ -362,7 +312,6 @@ public class Level1State extends PlayState
 		setBackgroundVector(0, -1);
 		setDebrisVectors(0.5);
 		setEntitiySpeed(0.2f);
-		System.out.println(Enemy.slowDown);
 	}
 	
 	public void slowTimeEnd()

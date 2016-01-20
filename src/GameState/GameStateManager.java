@@ -21,11 +21,11 @@ public class GameStateManager
 	public static final int LEVEL1STATE = 5; //Actually playing
 	public static final int TRANSITION_OUTROSTATE = 6;
 	public static final int BOSS1STATE = 7;
-	//public static final int LEVEL2STATE = 7;
-	//public static final int BOSS2STATE = 8;
-	//public static final int LEVEL3STATE = 9;
-	//public static final int BOSS3STATE = 10;
-	public static final int OUTROSTATE = 8; //Outro state
+	//public static final int LEVEL2STATE = 8;
+	//public static final int BOSS2STATE = 9;
+	//public static final int LEVEL3STATE = 10;
+	//public static final int BOSS3STATE = 11;
+	public static final int OUTROSTATE = 8; //Outro state - must be greater than the last state (boss3state)
 	
 	
 	//these are the controls. Need to be set up here so that they are accessible gamewide.
