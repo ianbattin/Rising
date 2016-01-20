@@ -236,19 +236,16 @@ public class Pickups extends MapObject
 	public void effectStart()
 	{
 		SoundPlayer.playClip("pickup.wav");
-		if(effectType == 5)
-		{
-			playState.slowTimeStart();
-		}
 		player.effectStart(effectType);
 	}
 	
 	public void resetEffects()
 	{
-		if(effectType == 5)
-		{
-			playState.slowTimeEnd();
-		}
 		player.resetEffects();
+	}
+	
+	public long getCoolDown()
+	{
+		return coolDownTime;
 	}
 }

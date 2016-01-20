@@ -79,6 +79,13 @@ public class Tile
 			animated = false;
 			bulletCollision = false;
 		}
+		else if(type == 255)
+		{
+			frames = 1;
+			blocked = false;
+			animated = false;
+			bulletCollision = false;
+		}
 		else
 		{
 			bulletCollision = true;
@@ -123,7 +130,12 @@ public class Tile
 	
 	public void draw(Graphics2D g, int type)
 	{
-		if(onScreen())
+		if(type == 255)
+		{
+			g.setColor(Color.BLUE);
+			g.fillRect((int)x, (int)y, 25, 25);
+		}
+		else if(onScreen())
 		{
 			g.drawImage(animation.getImage(), (int)x, (int)y, size+1, size, null);
 		}
@@ -172,5 +184,10 @@ public class Tile
 	public Rectangle getRectangle() 
 	{
 		return new Rectangle((int)x - size, (int)y - size, size, size);
+	}
+
+	public void setBlocked(boolean b)
+	{
+		blocked = b;
 	}
 }

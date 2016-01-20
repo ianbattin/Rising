@@ -56,6 +56,7 @@ public class Player extends MapObject
 	private Explosion explosions;
 	private Enemy chosenEnemy;
 	private ArrayList<Integer> charBlurPos;
+	private long coolDownTime;
 	
 	//score system
 	private int heightScore;
@@ -101,6 +102,7 @@ public class Player extends MapObject
 		fireTimer = System.nanoTime();
 		
 		recoverLength = 3000;
+		coolDownTime = 0;
 		
 		moveSpeedLeft = 0.3;
 		moveSpeedRight = 0.3;
@@ -467,6 +469,11 @@ public class Player extends MapObject
 			dy = -20.0;
 			t.setAnimated(true);
 		}
+		if(type == 255)
+		{
+			this.effectStart(5);
+			t.setType(0);
+		}
 		/*if(type == 666)
 		{
 			t.setType(0);
@@ -702,11 +709,12 @@ public class Player extends MapObject
 		}
 		else if(doubleJump)
 		{
-			if(currentAction != DOUBLEJUMP)
+			if(currentAction != JUMPING && !fallingAnim)
 			{
-				currentAction = DOUBLEJUMP;
-				//animation.setFrames(sprites.get(DOUBLEJUMP));
-				animation.setDelay(50);
+				currentAction = JUMPING;
+				animation.setFrames(playerSprites.get(JUMPING));
+				animation.setDelay(200);
+				animation.setDone(true);
 				width = 50;
 				height = 70;
 			}
@@ -872,10 +880,12 @@ public class Player extends MapObject
 			case 5:
 			{
 				slowTime = true;
+				playState.slowTimeStart();
 				jumpHeightFactor = 1.2;
 				break;
 			}
 		}
+		coolDownTime = 10000000000L;
 		isUnderEffect = true;
 		System.out.println("Effect started: " + effect);
 	}
@@ -883,6 +893,7 @@ public class Player extends MapObject
 	//resets the effects
 	public void resetEffects()
 	{
+		playState.slowTimeEnd();
 		isUnderEffect = false;
 		hasJetpack = false;
 		slowTime = false;
@@ -1013,6 +1024,16 @@ public class Player extends MapObject
 				healthAphaVal = 255;
 				healing = false;
 			}
+		}
+		
+		if (coolDownTime > 0)
+		{
+			coolDownTime -= GamePanel.getElapsedTime();
+		} 
+		else if (isUnderEffect)
+		{
+			resetEffects();
+			coolDownTime = 10000000000L;
 		}
 	}
 	
