@@ -200,7 +200,7 @@ public abstract class MapObject
 						doubleJumped = false;
 						falling = false;
 						gliding = false;
-						idle = true;
+						//idle = true;
 						fallingAnim = false;
 					}
 					collided(t.getType(), t);

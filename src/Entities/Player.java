@@ -456,6 +456,14 @@ public class Player extends MapObject
 		if(type == 20)
 		{
 			falling = true;
+			//set the animation to be jumping
+			currentAction = JUMPING;
+			animation.setFrames(playerSprites.get(JUMPING));
+			animation.setDelay(150);
+			animation.setDone(true);
+			width = 50;
+			height = 70;
+
 			dy = -20.0;
 			t.setAnimated(true);
 		}
@@ -638,16 +646,17 @@ public class Player extends MapObject
 			{
 				currentAction = IDLE;
 				animation.setFrames(playerSprites.get(IDLE));
-				animation.setDelay(200);
+				animation.setDelay(50);
 				width = 50;
 				height = 70;
 			}
 		}
+		
 		if(left || right)
 		{
-			if(right){ facingRight = true;	}
-			else{ facingRight = false;	}
-			if(currentAction != WALKING && currentAction != FALLING && currentAction != JUMPING)
+			if(right) facingRight = true;
+			else facingRight = false;
+			if(currentAction != WALKING && !fallingAnim && currentAction != JUMPING)
 			{
 				animation.setDone(false);
 				currentAction = WALKING;
@@ -707,7 +716,6 @@ public class Player extends MapObject
 		else animation.changeFrames(playerSprites.get(currentAction));
 		
 		animation.update();
-			
 	}
 	
 	public void moveTileMapX()
