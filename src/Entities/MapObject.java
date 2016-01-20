@@ -194,13 +194,12 @@ public abstract class MapObject
 				{
 					if(dy >= 0)
 					{
-						y = t.top - cheight - 0.1;
 						dy = tileMap.getDY();
+						y = t.top - cheight - 1;
 						jumped  = false;
 						doubleJumped = false;
 						falling = false;
 						gliding = false;
-						//idle = true;
 						fallingAnim = false;
 					}
 					collided(t.getType(), t);

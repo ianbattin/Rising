@@ -34,7 +34,7 @@ public class Level1State extends PlayState
 	private int[][] smallDebrisInfo;
 	private ArrayList<Color> colors;
 	private ArrayList<int[]> bonusScores;
-	private Font bonusScoreFont, scoreFont;
+	private Font bonusScoreFont, scoreFont, backupFont;
 	private boolean start, isStillAlive;
 	private float timer;
 	public static boolean tileStart, debrisAlternator;
@@ -51,7 +51,6 @@ public class Level1State extends PlayState
 	{
 		super();
 		this.gsm = gsm;
-		start = false;
 		try
 		{
 			bg = new Background("/Backgrounds/battlebackground.gif", 1);
@@ -92,11 +91,15 @@ public class Level1State extends PlayState
 		bgVectorX = 0;
 		bgVectorY = 0;
 		debrisVector = 0;
+		
+		super.isFadingIn = true;
+		super.alphaLevel = 255;
 	}
 
 	public void init() 
 	{
 		tileMap = new TileMap("Resources/Maps/level5.txt", 2);
+		tileMap.setY(-300);
 		player = new Player(tileMap, this);
 		player.setPosition(375, -100);
 		player.setTileMapMoving(true);
@@ -112,12 +115,34 @@ public class Level1State extends PlayState
 		this.bonusScores = player.getBonusScores();
 		bonusScoreFont = new Font("Munro", Font.BOLD, 35);
 		scoreFont = new Font("Munro", Font.PLAIN, 24);
+		backupFont = new Font("Times", Font.PLAIN, 24);
 		
 		stuka = new SmallStuka(tileMap);
+		
+		setBackgroundVector(0, -4);
+		setDebrisVectors(1);
+		if(!tileStart)
+		{
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask()
+			{
+				public void run()
+				{
+					tileStart = true;
+					tileMap.setYVector(2.0);		
+				}
+				
+			}, 10);
+		}
+		start = true;
 	}
 
 	public void update()
 	{
+		if(super.isFadingIn)
+		{
+			super.fadeIn(0, Color.BLACK, 2);
+		}
 		if(start)
 		{
 			bg.update();
@@ -193,6 +218,7 @@ public class Level1State extends PlayState
 				if(enemies.size() <= 1)
 				{
 					enemies.add(new PlaneBoss(2000, 100, tileMap, player, 1));
+					System.out.println("STOP PLAYER MOVEMENT... SO WE CAN GET A NICE CUTSCREEN EVERY TIME");
 				}
 			}
 			tileMap.setYVector(transitionDY);
@@ -224,12 +250,28 @@ public class Level1State extends PlayState
 		g.setColor(Color.WHITE);
 		if(!start) 
 		{
-			String[] notStarted = {"PRESS ENTER TO START", "PRESS BACKSPACE TO RETURN TO MENU" };
+			
+			String[] notStarted = {"GAME PAUSED", " ", "Press " + KeyEvent.getKeyText(GameStateManager.select) + " to resume", "Press "+ KeyEvent.getKeyText(GameStateManager.reset) +" to return to the menu" };
 			for(int i = 0; i < notStarted.length; i++)
-				g.drawString(notStarted[i], centerStringX(notStarted[i], 0, GamePanel.WIDTH, g), 400  + (40 * i));
+			{
+				int offSet = 0;
+				for(int j = 0; j < notStarted[i].length(); j++)
+				{
+					if(!scoreFont.canDisplay(notStarted[i].toCharArray()[j]))
+					{
+						g.setFont(backupFont);
+					}
+					else
+					{
+						g.setFont(scoreFont);
+					}
+					g.drawChars(notStarted[i].toCharArray(), j, 1, centerStringX(notStarted[i], 0, GamePanel.WIDTH, g) + offSet, 400 + (40 *i));
+					offSet += g.getFontMetrics().charWidth(notStarted[i].toCharArray()[j]);
+				}
+				//g.drawString(notStarted[i], centerStringX(notStarted[i], 0, GamePanel.WIDTH, g), 400  + (40 * i));
+			}
 		}
-		else
-			g.drawString("Score: " + player.getPoints(), centerStringX("Score: " + player.getPoints(), 0, GamePanel.WIDTH, g), 30);
+		g.drawString("Score: " + player.getPoints(), centerStringX("Score: " + player.getPoints(), 0, GamePanel.WIDTH, g), 30);
 		if(!bonusScores.isEmpty())
 		{
 			for(int i = 0; i < bonusScores.size(); i++)
@@ -340,7 +382,8 @@ public class Level1State extends PlayState
 		player.keyPressed(k);
 		if(k == GameStateManager.select)
 		{
-			if(!start)
+			start = true;
+			/*if(!start)
 			{
 				start = true;
 				setBackgroundVector(0, -4);
@@ -358,7 +401,7 @@ public class Level1State extends PlayState
 						
 					}, 4000);
 				}
-			}
+			}*/
 		}
 		if(k == GameStateManager.reset)
 		{
