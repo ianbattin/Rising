@@ -200,7 +200,7 @@ public class Level1State extends PlayState
 				}
 			}
 			tileMap.setYVector(transitionDY);
-			if(player.getY() > GamePanel.HEIGHT && enemies.get(1).getX() < GamePanel.WIDTH)
+			if(player.getY() > GamePanel.HEIGHT && enemies.get(1).getX() < GamePanel.WIDTH && player.getPoints() > 7000)
 			{
 				System.out.println("NOT DEAD");
 				player.setPosition(400, 900);

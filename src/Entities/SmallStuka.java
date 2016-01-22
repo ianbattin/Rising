@@ -48,7 +48,7 @@ public class SmallStuka extends MapObject
 		
 		try
 		{
-			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/StukaFarAwayColor.png"));
+			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/StukaFarAway.png"));
 			playerSprites = new ArrayList<BufferedImage[]>();
 			for(int i = 0; i < numFrames.length; i++)
 			{
@@ -61,7 +61,7 @@ public class SmallStuka extends MapObject
 			}
 			
 			//make the spritesheet for when the player is blinking red
-			BufferedImage playerHurtSpritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/StukaFarAwayColor.png"));
+			BufferedImage playerHurtSpritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/StukaFarAway.png"));
 			for (int i = 0; i < playerHurtSpritesheet.getWidth(); i++)
 			{
 				for (int j = 0; j < playerHurtSpritesheet.getHeight(); j++)

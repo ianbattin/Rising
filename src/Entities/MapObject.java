@@ -183,8 +183,8 @@ public abstract class MapObject
 		for(int i = 0; i < tiles.size(); i++)
 		{
 			Tile t = tiles.get(i);
-			double collisionLeft = t.left;
-			double collisionRight = t.right;
+			double collisionLeft = t.left - 14;
+			double collisionRight = t.right + 14;
 			double collisionTop = t.top;
 			double collisionBottom = t.bottom;
 

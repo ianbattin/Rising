@@ -112,7 +112,7 @@ public class Rifleman extends Enemy
 		falling = true;
 		
 		//health
-		health = 1;
+		health = 2;
 	}
 	
 	public void update() 
