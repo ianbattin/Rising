@@ -342,15 +342,11 @@ public class PlaneBoss extends Enemy {
 	{
 		if(recovering || health <= 0)
 		{
-			Timer timer = new Timer();
-			timer.schedule(new TimerTask()
+			long elapsed = (System.nanoTime() - recoverTimer) / 10000;
+			if(recoverLength <= elapsed)
 			{
-				public void run()
-				{
-					recovering = false;		
-				}
-				
-			}, 10);
+				recovering = false;
+			}
 		}
 		else
 		{
@@ -372,8 +368,16 @@ public class PlaneBoss extends Enemy {
 	{
 		if(dx > 0) facingRight = true;
 		else facingRight = false;
-		
-		if (recovering) animation.changeFrames(playerHurtSprites.get(currentAction));
+	
+		if (recovering)
+		{
+			animation.changeFrames(playerHurtSprites.get(currentAction));
+			long elapsed = (System.nanoTime() - recoverTimer) / 10000;
+			if(recoverLength <= elapsed)
+			{
+				recovering = false;
+			}
+		}
 		else animation.changeFrames(playerSprites.get(currentAction));
 		
 		animation.update();	

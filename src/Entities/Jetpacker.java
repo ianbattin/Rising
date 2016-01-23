@@ -23,7 +23,7 @@ public class Jetpacker extends Enemy
 	private static final int FALLING = 3;
 	
 	//parachute
-	BufferedImage parachute;
+	private BufferedImage parachute;
 	
 	public Jetpacker(double x, double y, TileMap tm, Player player) 
 	{
@@ -121,8 +121,8 @@ public class Jetpacker extends Enemy
 		gunAnimation.setFrames(gunSprites);
 		gunAnimation.setDelay(200);
 		
-		gunPosX = 10;
-		gunPosY = 18;
+		super.gunPosX = 10;
+		super.gunPosY = 18;
 		
 		falling = true;
 		

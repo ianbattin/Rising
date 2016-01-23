@@ -4,6 +4,7 @@ import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
@@ -57,6 +58,7 @@ public class Player extends MapObject
 	private Enemy chosenEnemy;
 	private ArrayList<Integer> charBlurPos;
 	private long coolDownTime;
+	private Font backupFont, bannerFont;
 	
 	//score system
 	private int heightScore;
@@ -255,6 +257,8 @@ public class Player extends MapObject
 		heightScore = 0;
 		bonusScores = new ArrayList<int[]>();
 		charBlurPos = new ArrayList<Integer>();
+		backupFont = new Font("Times", Font.PLAIN, 20);
+		bannerFont = new Font("Munro", Font.PLAIN, 20);	
 	}
 	
 	public void update()
@@ -473,7 +477,7 @@ public class Player extends MapObject
 		}
 		if(type == 400)
 		{
-			this.effectStart(5);
+			this.effectStart(3);
 			t.setType(0);
 		}
 		/*if(type == 666)
@@ -963,7 +967,6 @@ public class Player extends MapObject
 	
 		if(hasBird && !birdActive)
 		{
-			//replace with image when bird is drawn. Use current X & Y calculations for the position however
 			birdX = (x+(50*Math.cos(Math.toRadians(birdPos))));
 			birdY = (y-50-(5*Math.sin(Math.toRadians(birdPos))));
 			if((-50*Math.sin(Math.toRadians(birdPos)) > 0))
@@ -973,6 +976,34 @@ public class Player extends MapObject
 			else
 			{
 				g.drawImage(birdAnimation.getImage(), (int)birdX+15, (int)birdY, -15, 15, null);
+			}
+			boolean displayMessage = false;
+			ArrayList<Enemy> enemies = playState.getEnemies();
+			if(enemies != null && enemies.size() > 0)
+			{
+				for(Enemy e: enemies)
+				{
+					if(e.getHealth() > 0 && !(e instanceof PlaneBoss))
+					{
+						displayMessage = true;
+					}
+				}
+			}
+			if(displayMessage)
+			{
+				g.setColor(Color.WHITE);
+				String banner = "Press "+ KeyEvent.getKeyText(GameStateManager.action) + " to lauch Clara!";
+				int offSet = 0;
+				for(int j = 0; j < banner.length(); j++)
+				{
+					if(!bannerFont.canDisplay(banner.charAt(j)))
+						g.setFont(backupFont);
+					else
+						g.setFont(bannerFont);
+	
+					g.drawChars(banner.toCharArray(), j, 1, (int)(x + super.width/2 - g.getFontMetrics().getStringBounds(banner, g).getWidth()/2 + offSet), (int)(y + super.height + 80));
+					offSet += g.getFontMetrics().charWidth(banner.charAt(j));
+				}
 			}
 		}
 		else if(hasBird && birdActive)

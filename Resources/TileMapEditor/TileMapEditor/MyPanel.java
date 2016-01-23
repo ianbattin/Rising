@@ -600,6 +600,7 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 		if(k == KeyEvent.VK_Z)
 		{
 			zoomFactor += 1;
+			if(zoomFactor > 5) zoomFactor = 5;
 		}
 		if(k == KeyEvent.VK_X)
 		{
@@ -629,7 +630,7 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 	public void mousePressed(MouseEvent me) {
 		if(SwingUtilities.isLeftMouseButton(me)) {
 			int y = (int) (me.getY() / SCALE);
-			int x = (int) (me.getX() / SCALE - xblock);
+			int x = (int) (me.getX() / SCALE - xblock -50);
 			// clicked a block
 			int b = 0;
 			if(y >= 0 && x >= WIDTH/2) {
