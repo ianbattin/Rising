@@ -55,6 +55,9 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 	private int tilex;
 	private int tiley;
 	
+	private int zoomFactor;
+	private boolean showLines;
+	
 	public MyPanel() {
 		super();
 		setPreferredSize(new Dimension((int)(WIDTH * SCALE), (int)(HEIGHT * SCALE)));
@@ -146,6 +149,8 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 				blocks[i + width*j].setPosition(i * TILESIZE, (j) * TILESIZE);
 			}
 		}
+		zoomFactor = 1;
+		showLines = true;
 	}
 	
 	private void loadTileSet(String s) {
@@ -200,19 +205,27 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 				try {
 					g.drawImage(
 						blocks[map[row][col]].getImage(),
-						col * TILESIZE + xmap,
-						row * TILESIZE + ymap,
+						col * (TILESIZE/zoomFactor) + xmap,
+						row * (TILESIZE/zoomFactor) + ymap, 
+						TILESIZE/zoomFactor, 
+						TILESIZE/zoomFactor, 
 						null
 					);
+					if(showLines)
+					{
+						g.setColor(Color.DARK_GRAY);
+						g.drawLine(xmap + col*(TILESIZE/zoomFactor), ymap, xmap+col*(TILESIZE/zoomFactor), ymap + mapHeight*(TILESIZE/zoomFactor));
+						g.drawLine(xmap, ymap + row*(TILESIZE/zoomFactor), xmap + mapWidth*(TILESIZE/zoomFactor), ymap+row*(TILESIZE/zoomFactor));
+					}
 				}
-				catch(Exception e) {}
+				catch(Exception e) { }
 			}
 		}
 		
 		// draw map dimensions
 		g.setColor(Color.RED);
 		g.setStroke(new BasicStroke(5));
-		g.drawRect(xmap, ymap, mapWidth * TILESIZE, mapHeight * TILESIZE);
+		g.drawRect(xmap, ymap, mapWidth * (TILESIZE/zoomFactor), mapHeight * (TILESIZE/zoomFactor));
 		g.setStroke(new BasicStroke(1));
 
 		// draw map border
@@ -584,6 +597,18 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 				ymap -= TILESIZE;
 			}
 		}
+		if(k == KeyEvent.VK_Z)
+		{
+			zoomFactor += 1;
+		}
+		if(k == KeyEvent.VK_X)
+		{
+			if((zoomFactor -= 1) == 0) zoomFactor = 1;
+		}
+		if(k == KeyEvent.VK_M)
+		{
+			showLines = !showLines;
+		}
 	}
 	public void keyReleased(KeyEvent key) {
 		int k = key.getKeyCode();
@@ -617,9 +642,9 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 			else {
 				y = (int) (me.getY() / SCALE - ymap);
 				x = (int) (me.getX() / SCALE - xmap);
-				if(x < WIDTH/2 && x < mapWidth * TILESIZE &&
-						y > 0 && y < mapHeight * TILESIZE) {
-					map[y / TILESIZE][x / TILESIZE] = currentBlock;
+				if(x < WIDTH/2 && x < mapWidth * (TILESIZE/zoomFactor) &&
+						y > 0 && y < mapHeight * (TILESIZE/zoomFactor)) {
+					map[y / (TILESIZE/zoomFactor)][x / (TILESIZE/zoomFactor)] = currentBlock;
 				}
 			}
 		}
@@ -652,9 +677,9 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 			else {
 				y = (int) (me.getY() / SCALE - ymap);
 				int x = (int) (me.getX() / SCALE - xmap);
-				if(x > 0 && x < mapWidth * TILESIZE &&
-					y > 0 && y < mapHeight * TILESIZE) {
-					map[y / TILESIZE][x / TILESIZE] = currentBlock;
+				if(x > 0 && x < mapWidth * (TILESIZE/zoomFactor) &&
+					y > 0 && y < mapHeight * (TILESIZE/zoomFactor)) {
+					map[y / (TILESIZE/zoomFactor)][x / (TILESIZE/zoomFactor)] = currentBlock;
 				}
 			}
 		}
@@ -683,7 +708,7 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 	public void mouseWheelMoved(MouseWheelEvent mwe) {
 		int notches = mwe.getWheelRotation();
 		if(notches < 0) {
-			currentBlock--;
+			if(--currentBlock < 0) currentBlock = 0;
 		}
 		else {
 			currentBlock++;

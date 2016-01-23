@@ -130,7 +130,7 @@ public class Tile
 	
 	public void draw(Graphics2D g, int type)
 	{
-		if(type == 255)
+		if(type == 400)
 		{
 			g.setColor(Color.BLUE);
 			g.fillRect((int)x, (int)y, 25, 25);

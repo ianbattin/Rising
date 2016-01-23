@@ -471,7 +471,7 @@ public class Player extends MapObject
 			dy = -20.0;
 			t.setAnimated(true);
 		}
-		if(type == 255)
+		if(type == 400)
 		{
 			this.effectStart(5);
 			t.setType(0);

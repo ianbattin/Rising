@@ -20,6 +20,12 @@ Alt + Arrow Key: Shift map
 
 t: Change tile size
 
+z: Zoom out
+
+x: Zoom in
+
+m: Toggle gridlines
+
 ===================
 SAVING AND LOADING:
 ===================
@@ -54,6 +60,9 @@ First thing to do is Ctrl + b, then type in "testtileset.gif" (or whatever tiles
 Click a block from the loaded tileset and click anywhere on the map.
 The red outline is the map boundary. You can ignore the green outline.
 Ctrl + s to save map and Ctrl + o to open map.
+
+NOTE: The blocks with the red X are placeholders to represent blocks that are invisible BUT THAT WILL CAUSE COLLISION IN GAME.
+Use block 0 for air (it's the only invisible block that doesn't have a red X) 
 
 ***
 This tilemap editor only uses a tileset with two types of tiles: blocked and nonblocked.
