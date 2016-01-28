@@ -41,6 +41,7 @@ public abstract class MapObject
 	//collision box
 	protected int cwidth;
 	protected int cheight;
+	protected boolean remove;
 	
 	//collision
 	protected int currRow;
@@ -147,7 +148,7 @@ public abstract class MapObject
 		
 	}
 	
-	/*public void checkPixelColorCollision(TileMap tm)
+	public void checkPixelColorCollision(TileMap tm)
 	{
 		boolean blocked = true;
 		int collideYLoc = 0;
@@ -175,7 +176,7 @@ public abstract class MapObject
 		}
 		else
 			falling = true;
-	}*/
+	}
 	
 	public void myCheckCollision()
 	{
@@ -188,7 +189,7 @@ public abstract class MapObject
 			double collisionTop = t.top;
 			double collisionBottom = t.bottom;
 
-			if((collisionLeft <= x + width/2 && x + width/2  <= collisionRight) && (collisionTop <= y + cheight && y + cheight <= collisionBottom) && !drop)
+			if((collisionLeft <= x + cwidth/2 && x + cwidth/2  <= collisionRight) && (collisionTop <= y + cheight && y + cheight <= collisionBottom) && !drop)
 			{
 				if(t.getBlocked())
 				{
@@ -210,7 +211,7 @@ public abstract class MapObject
 				}
 					
 			}
-			if(!collided && (collisionLeft <= x + width/2 && x + width/2 < collisionRight) && (collisionTop <= y + cheight + 1 && y + cheight + 1 < collisionBottom && !drop)) 
+			if(!collided && (collisionLeft <= x + cwidth/2 && x + cwidth/2 < collisionRight) && (collisionTop <= y + cheight + 1 && y + cheight + 1 < collisionBottom && !drop)) 
 			{
 				collided = true;
 			}
@@ -389,6 +390,12 @@ public abstract class MapObject
 	public void setMoveSpeedRight(double speed) { moveSpeedRight = speed; }
 	public void setMaxSpeedLeft(double speed) { maxSpeedLeft = speed; }
 	public void setMaxSpeedRight(double speed) { maxSpeedRight = speed; }
+	
+	
+	public boolean getRemove()
+	{
+		return remove;
+	}
 	
 	public boolean notOnScreen()
 	{

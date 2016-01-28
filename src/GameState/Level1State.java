@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import Entities.Player;
 import Entities.Rifleman;
 import Entities.SmallStuka;
+import Entities.Bomb;
 import Entities.Enemy;
+import Entities.Explosion;
 import Entities.Jetpacker;
 import Entities.MapObject;
 import Entities.Pickups;
@@ -42,6 +44,8 @@ public class Level1State extends PlayState
 	private boolean transition;
 	private double transitionDY;
 	public boolean hasInited;
+	
+	private boolean addBomb = false;
 	
 	public SmallStuka stuka;
 	public boolean stukaSpawned = false;
@@ -145,7 +149,9 @@ public class Level1State extends PlayState
 			for(Enemy e: enemies)
 				e.update();
 			for(MapObject m: mapObjects)
+			{
 				m.update();
+			}
 			super.backGroundParallaxUpdate();
 			super.aimUpdate();
 			super.updateBonusScores();
@@ -160,6 +166,11 @@ public class Level1State extends PlayState
 			stuka.init();
 			mapObjects.add(stuka);
 			stukaSpawned = true;
+		}
+		if(addBomb)
+		{
+			mapObjects.add(new Bomb((int)(Math.random() * 800), -100, tileMap, 1));
+			addBomb = false;
 		}
 		else if(player.getPoints() > 7000)
 			mapObjects.remove(stuka);
@@ -370,10 +381,23 @@ public class Level1State extends PlayState
 			gsm.setState(GameStateManager.BOSS1STATE);
 			gsm.resetState(GameStateManager.LEVEL1STATE);
 		}
+		if(k == KeyEvent.VK_B)
+		{
+			addBomb = true;
+		}
+		if(k == KeyEvent.VK_E)
+		{
+			tileMap.getExplosions().add(new Explosion(mouseX, mouseY, 2, tileMap));
+		}
 	}
 
 	public void keyReleased(int k) 
 	{
 		player.keyReleased(k);
+		
+		if(k == KeyEvent.VK_B)
+		{
+			addBomb = false;
+		}
 	}
 }

@@ -20,8 +20,7 @@ public class SmallStuka extends MapObject
 	private int typeAttack;
 	
 	//animation
-	private ArrayList<BufferedImage[]> playerSprites;
-	private ArrayList<BufferedImage[]> playerHurtSprites;
+	private ArrayList<BufferedImage[]> stukaSprites;
 	private final int[] numFrames = { 1 };
 	
 	public SmallStuka(TileMap tm) 
@@ -49,7 +48,7 @@ public class SmallStuka extends MapObject
 		try
 		{
 			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/StukaFarAway.png"));
-			playerSprites = new ArrayList<BufferedImage[]>();
+			stukaSprites = new ArrayList<BufferedImage[]>();
 			for(int i = 0; i < numFrames.length; i++)
 			{
 				BufferedImage[] bi = new BufferedImage[numFrames[i]];
@@ -57,7 +56,7 @@ public class SmallStuka extends MapObject
 				{
 					bi[j] = spritesheet.getSubimage(j * width, i * height, width, height);
 				}
-				playerSprites.add(bi);
+				stukaSprites.add(bi);
 			}
 			
 			//make the spritesheet for when the player is blinking red
@@ -76,18 +75,6 @@ public class SmallStuka extends MapObject
 					playerHurtSpritesheet.setRGB(i, j, (a*16777216)+(r*65536)+(g*256)+b);
 				}
 			}
-			
-			playerHurtSprites = new ArrayList<BufferedImage[]>();
-			for(int i = 0; i < numFrames.length; i++)
-			{
-				BufferedImage[] bi = new BufferedImage[numFrames[i]];
-				for(int j = 0; j < numFrames[i]; j++)
-				{
-					bi[j] = playerHurtSpritesheet.getSubimage(j * width, i * height, width, height);
-				}
-				//sprites.add(bi);
-				playerHurtSprites.add(bi);
-			}
 		}
 		catch(Exception e)
 		{
@@ -96,7 +83,7 @@ public class SmallStuka extends MapObject
 		
 		animation = new Animation();
 		currentAction = 0;
-		animation.setFrames(playerSprites.get(0));
+		animation.setFrames(stukaSprites.get(0));
 		animation.setDelay(200);
 	}
 
@@ -167,9 +154,7 @@ public class SmallStuka extends MapObject
 	
 	public void getAnimation() 
 	{
-		if (recovering) animation.changeFrames(playerHurtSprites.get(currentAction));
-		else animation.changeFrames(playerSprites.get(currentAction));
-		
+		animation.changeFrames(stukaSprites.get(currentAction));
 		animation.update();	
 	}
 }

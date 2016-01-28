@@ -133,8 +133,8 @@ public class PlaneBoss extends Enemy {
 			y += dy;
 		}
 
-		x += tm.getDX();
-		y += tm.getDY();
+		x += tileMap.getDX();
+		y += tileMap.getDY();
 		
 		System.out.println(dx + " " + dy);
 		
@@ -170,7 +170,7 @@ public class PlaneBoss extends Enemy {
 	{
 		setMapPosition();
 
-		if(tm.getShowCollisonBox())
+		if(tileMap.getShowCollisonBox())
 		{
 			g.setColor(Color.RED);
 			g.draw(cockpit);
@@ -246,7 +246,7 @@ public class PlaneBoss extends Enemy {
 						long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 						if(fireDelay <= elapsed*(0.5*super.slowDown))
 						{
-							bullets.add(new Projectile(x + width/2, y+height, angle, 5, tm));
+							bullets.add(new Projectile(x + width/2, y+height, angle, 5, tileMap));
 							fireTimer = System.nanoTime();
 						}
 					}
@@ -268,7 +268,7 @@ public class PlaneBoss extends Enemy {
 				long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 				if(fireDelay <= elapsed*(0.5*super.slowDown))
 				{
-					bullets.add(new Projectile(x + width/2, y+height, angle, 2, tm));
+					bullets.add(new Projectile(x + width/2, y+height, angle, 2, tileMap));
 					fireTimer = System.nanoTime();
 				}
 			}
@@ -288,7 +288,7 @@ public class PlaneBoss extends Enemy {
 				long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 				if(fireDelay <= elapsed*(0.5*super.slowDown))
 				{
-					bullets.add(new Projectile(x+width/2, y+height, angle, 4, tm));
+					bullets.add(new Projectile(x+width/2, y+height, angle, 4, tileMap));
 					fireTimer = System.nanoTime();
 				}
 			}

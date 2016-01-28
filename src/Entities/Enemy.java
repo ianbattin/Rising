@@ -24,7 +24,7 @@ public abstract class Enemy extends MapObject
 	protected boolean hasSight;
 	
 	//TileMap
-	protected TileMap tm;
+	protected TileMap tileMap;
 	protected Player player;
 	
 	//Attacks
@@ -59,7 +59,7 @@ public abstract class Enemy extends MapObject
 		super(tm);
 		this.x = x;
 		this.y = y;
-		this.tm = tm;
+		this.tileMap = tm;
 		this.player = player;
 		
 		angle = 0.0;
@@ -116,7 +116,7 @@ public abstract class Enemy extends MapObject
 	protected boolean lineOfSight() 
 	{
 		hasSight = false;
-		for(Tile t: tm.getTiles())
+		for(Tile t: tileMap.getTiles())
 		{
 			if(t.getRectangle().intersectsLine(x, y, player.getX(), player.getY()))
 			{

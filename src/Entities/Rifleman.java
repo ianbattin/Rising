@@ -157,7 +157,7 @@ public class Rifleman extends Enemy
 		getAnimation();
 		getBulletCollision();
 
-		yFromBottom += (-dy + tm.getDY());
+		yFromBottom += (-dy + tileMap.getDY());
 		
 		if (numOfFramesToAnimHealth  > 0 && timesToLoop%2 == 1)
 		{
@@ -185,7 +185,7 @@ public class Rifleman extends Enemy
 	{
 		setMapPosition();
 
-		if(tm.getShowCollisonBox())
+		if(tileMap.getShowCollisonBox())
 		{
 			g.setColor(Color.RED);
 			g.draw(this.getRectangle());
@@ -231,7 +231,7 @@ public class Rifleman extends Enemy
 			long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 			if(fireDelay <= elapsed*(0.5*Enemy.slowDown))
 			{
-				bullets.add(new Projectile(x, y, angle, 2, tm));
+				bullets.add(new Projectile(x, y, angle, 2, tileMap));
 				fireTimer = System.nanoTime();
 			}
 		}

@@ -266,7 +266,7 @@ public class Player extends MapObject
 		if (health > 0)
 		{
 			myCheckCollision();
-			//if(onScreen()) checkPixelColorCollision(tm);
+			//if(onScreen()) checkPixelColorCollision(tileMap);
 			getAttack();
 		}
 		else
