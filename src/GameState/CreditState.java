@@ -76,7 +76,7 @@ public class CreditState extends GameState
 		//if (k == GameStateManager.reset)
 		if (k == GameStateManager.select)
 		{
-			gsm.setState(GameStateManager.MENUSTATE);		
+			gsm.setCurrentState(GameStateManager.MENUSTATE);		
 		}	
 	}
 

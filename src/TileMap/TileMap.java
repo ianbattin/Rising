@@ -166,9 +166,9 @@ public class TileMap
 			t.draw(g, t.getType());
 		}
 		
-		for(Explosion e: explosions)
+		for(int i = 0; i < explosions.size(); i++)
 		{
-			e.draw(g);
+			explosions.get(i).draw(g);
 		}
 	}
 	

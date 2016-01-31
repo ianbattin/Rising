@@ -154,7 +154,7 @@ public class ControlsState extends GameState {
 		} 
 		else if (selection == movementTypes.length + 1)
 		{
-			gsm.setState(GameStateManager.MENUSTATE);
+			gsm.setCurrentState(GameStateManager.MENUSTATE);
 		}
 		else 
 		{

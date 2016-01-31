@@ -633,7 +633,7 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 			int x = (int) (me.getX() / SCALE - xblock -50);
 			// clicked a block
 			int b = 0;
-			if(y >= 0 && x >= WIDTH/2) {
+			if(y >= 0 && x >= WIDTH/2 - 50) {
 				b = x / TILESIZE - numCols + (y / TILESIZE)*numCols;
 				if(b >= 0) {
 					currentBlockImage = blocks[b].getImage();

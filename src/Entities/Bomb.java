@@ -22,10 +22,11 @@ public class Bomb extends MapObject
 	
 	private boolean exploding = false;
 	private boolean flashing = false;
-	private long explodeTimer;
+	private long explodeTimer, flashTimer;
 	
 	//sprites loading
 	private ArrayList<BufferedImage[]> sprites;
+	private ArrayList<BufferedImage[]> flashingSprites;
 	private final int[] numFrames = { 4 };
 	
 	public Bomb(double x, double y, TileMap tileMap, int type)
@@ -48,6 +49,7 @@ public class Bomb extends MapObject
 		
 		remove = false;
 		explodeTimer = 1000;
+		flashTimer = 100000000;
 		
 		try
 		{
@@ -63,6 +65,33 @@ public class Bomb extends MapObject
 				}
 				sprites.add(bi);
 			}
+
+			BufferedImage flashingSpritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/bomb.png"));
+			flashingSprites = new ArrayList<BufferedImage[]>();
+			for(int i = 0; i < numFrames.length; i++)
+			{
+				BufferedImage[] bi = new BufferedImage[numFrames[i]];
+				for(int j = 0; j < numFrames[i]; j++)
+				{
+					bi[j] = flashingSpritesheet.getSubimage(i * width, j * height, width, height);
+					for (int picX = 0; picX < bi[j].getWidth(); picX++)
+					{
+						for (int picY = 0; picY < bi[j].getHeight(); picY++)
+						{
+							int rgb = bi[j].getRGB(picX, picY);
+							int a = (rgb >> 24) & 0xFF;
+							int r = (rgb >> 16) & 0xFF;
+							int g = (rgb >> 8) & 0xFF;
+							int b = rgb & 0xFF;
+							if (r+150 > 255) r = 255;
+							else r += 150;
+							bi[j].setRGB(picX, picY, (a*16777216)+(r*65536)+(g*256)+b);
+						}
+					}
+				}
+				flashingSprites.add(bi);
+			}
+
 		}
 		catch(Exception e)
 		{
@@ -111,6 +140,21 @@ public class Bomb extends MapObject
 		{
 			animation.setFrame(3);
 			animation.setDelay(100);
+			
+			if (flashTimer > 0)
+			{
+				flashTimer -= GamePanel.getElapsedTime();
+			}
+			else
+			{
+				flashing = !flashing;
+				flashTimer = 100000000;
+				
+				if (flashing)
+					animation.changeFrames(flashingSprites.get(currentAction));
+				else
+					animation.changeFrames(sprites.get(currentAction));
+			}
 		}
 		else
 		{
