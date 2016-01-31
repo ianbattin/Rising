@@ -14,6 +14,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import Entities.Enemy;
 import Entities.Player;
@@ -169,6 +170,15 @@ public abstract class GameState
 		SoundPlayer.playClip(fileName);
 	}
 	*/
+	
+	public static <E> boolean containsInstance(List<E> list, Class<? extends E> clazz) {
+	    for (E e : list) {
+	        if (clazz.isInstance(e)) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
 	
 	public void setScore(int i)
 	{

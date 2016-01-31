@@ -13,6 +13,7 @@ import java.lang.Object.*;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import Entities.Player;
 import Entities.Rifleman;
@@ -148,13 +149,20 @@ public class Level1State extends PlayState
 			player.update();
 			for(Enemy e: enemies)
 				e.update();
-			for(MapObject m: mapObjects)
+			
+			Iterator<MapObject> iter = mapObjects.iterator();
+			while (iter.hasNext()) 
 			{
-				m.update();
+				MapObject m = iter.next();
+				if(m.getRemove())
+					iter.remove();
+				else
+					m.update();
 			}
 			super.backGroundParallaxUpdate();
 			super.aimUpdate();
 			super.updateBonusScores();
+			spawnBombs();
 		}
 		if(player.getPoints() > 1000 && enemies.size() == 0)
 		{
@@ -335,6 +343,25 @@ public class Level1State extends PlayState
 	public ArrayList<Enemy> getEnemies()
 	{
 		return enemies;
+	}
+	
+	public void spawnBombs()
+	{
+		if(!containsInstance(mapObjects, Bomb.class) && !addBomb)
+		{
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask()
+			{
+				public void run()
+				{	
+					if(!containsInstance(mapObjects, Bomb.class))
+					{
+						addBomb = true;
+					}
+				}
+				
+			}, 10000);
+		}
 	}
 	
 	public void keyPressed(int k) 
