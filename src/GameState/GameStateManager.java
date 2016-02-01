@@ -37,7 +37,7 @@ public class GameStateManager
 	public static int glide = KeyEvent.VK_SPACE;
 	public static int select = KeyEvent.VK_ENTER;
 	public static int reset = KeyEvent.VK_BACK_SPACE;
-	public static int action = KeyEvent.VK_SHIFT;
+	public static int action = KeyEvent.VK_E;
 	public static int pause = KeyEvent.VK_ESCAPE;
 	public static int shootUp = KeyEvent.VK_UP;
 	public static int shootDown = KeyEvent.VK_DOWN;
