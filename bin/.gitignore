@@ -1,8 +1,12 @@
+/Backgrounds/
+/Intro/
+/Maps/
+/Outro/
+/Sound/
+/Sprites/
+/Text/
 /Entities/
 /GameState/
-/Sprites/
-/Maps/
-/TileMapEditor/
-/Backgrounds/
-/Sound/
+/Main/
 /TileMap/
+/TileMapEditor/

@@ -51,14 +51,15 @@ public class Player extends MapObject
 	//effect variables
 	private boolean isUnderEffect;
 	private double jumpHeightFactor, birdPos, healthPos;
-	private boolean hasJetpack, hasBird, birdActive, hasArmor, slowTime, canGlide;
-	private int birdMaxDy, birdMaxDx;
+	private boolean hasBird, birdActive, hasArmor, slowTime, canGlide, hasGun;
+	private int ammoCount;
 	private double birdX, birdY;
 	private Explosion explosions;
 	private Enemy chosenEnemy;
 	private ArrayList<Integer> charBlurPos;
 	private long coolDownTime;
 	private Font backupFont, bannerFont;
+	private BufferedImage gunImage;
 	
 	//score system
 	private int heightScore;
@@ -209,6 +210,7 @@ public class Player extends MapObject
 					}
 				}
 			}
+			gunImage = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/gunIcon.png"));
 		}
 		catch(Exception e)
 		{
@@ -237,18 +239,15 @@ public class Player extends MapObject
 		numOfFramesToAnimHealth = 0;
 		healing = isFlashing = isBlinking = hasFlashed = false;
 		
-		//effects
-		hasJetpack = false; 
+		//effects 
 		hasBird = false; 
 		hasArmor = false;
-		slowTime = isUnderEffect = hasJetpack  = hasBird = false;
 		jumpHeightFactor = 1;
-		canGlide = slowTime = isUnderEffect = hasJetpack = birdActive = hasBird = false;
-		birdMaxDy = 4;
-		birdMaxDx = 4;
+		canGlide = slowTime = isUnderEffect = hasGun = birdActive = hasBird = false;
 		birdX = 0;
 		birdY = 0;
 		birdPos = 0;
+		ammoCount = 0;
 		armorBoostHealth = 0;
 		greenInc = blueInc = redInc = 1;
 		redChg = blueChg = greenChg = false;
@@ -446,6 +445,12 @@ public class Player extends MapObject
 			}
 		}
 		
+		if (hasGun)
+		{
+			g.setColor(Color.darkGray);
+			g.drawImage(gunImage, null, GamePanel.WIDTH-10-gunImage.getWidth(), 10);
+			g.drawString(Integer.toString(ammoCount), GamePanel.WIDTH-gunImage.getWidth()-20 , 40);
+		}
 		setMapPosition();
 		drawEffects(g);
 
@@ -475,9 +480,10 @@ public class Player extends MapObject
 			dy = -20.0;
 			t.setAnimated(true);
 		}
-		if(type == 400)
+		if(type == 24)
 		{
-			this.effectStart(3);
+			hasGun = true;
+			ammoCount += 50;
 			t.setType(0);
 		}
 		/*if(type == 666)
@@ -503,13 +509,15 @@ public class Player extends MapObject
 		if(!shootUp && !shootDown && !shootLeft && !shootRight && !mouseHeld) firing = false;
 		
 	    
-		if(firing)
+		if(firing && hasGun)
 		{
 			
 			long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 			if(fireDelay <= elapsed)
 			{
 				bullets.add(new Projectile(x + width/2, y + height/2, angle, 1, tileMap));
+				ammoCount--;
+				if(ammoCount <= 0) hasGun = false;
 				fireTimer = System.nanoTime();
 			}
 		}
@@ -877,7 +885,6 @@ public class Player extends MapObject
 			case 2:
 			{
 				dy = -60;
-				hasJetpack = true;
 				jump = true;
 				break;
 			}
@@ -912,7 +919,6 @@ public class Player extends MapObject
 	{
 		playState.slowTimeEnd();
 		isUnderEffect = false;
-		hasJetpack = false;
 		slowTime = false;
 		canGlide = gliding = false;
 		charBlurPos = new ArrayList<Integer>();
