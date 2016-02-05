@@ -270,10 +270,16 @@ public class Level1State extends PlayState
 		{
 			for(int j = 0; j < debrisInfo[i].length; j++)
 			{
-				g.setColor(colors.get(debrisInfo[i][3]));
-				g.fillRect(debrisInfo[i][0], debrisInfo[i][1], debrisInfo[i][2], debrisInfo[i][2]);
-				if(debrisInfo[i][1] < 0) debrisInfo[i][1] += 2*debrisVector;
-				else debrisInfo[i][1] += debrisInfo[i][2]*debrisVector;
+				if(debrisInfo[i][1] > 0 && debrisInfo[i][1] < GamePanel.HEIGHT)
+				{
+					g.setColor(colors.get(debrisInfo[i][3]));
+					g.fillRect(debrisInfo[i][0], debrisInfo[i][1], debrisInfo[i][2], debrisInfo[i][2]);
+					debrisInfo[i][1] += debrisInfo[i][2]*debrisVector;
+				}
+				else
+				{	
+					debrisInfo[i][1] += 2*debrisVector;
+				}
 				
 				if(debrisInfo[i][1] < highestLoc) highestLoc = debrisInfo[i][1];
 			}
@@ -285,7 +291,6 @@ public class Level1State extends PlayState
 			{
 				for(int j = 0; j < debrisInfo[i].length; j++)
 				{
-			
 					debrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
 					debrisInfo[i][1] = -2000 + (int)((Math.random()*2000)-1000);
 					debrisInfo[i][2] = (int)(Math.random()*5)+2;
@@ -301,11 +306,17 @@ public class Level1State extends PlayState
 		for(int i = 0; i < smallDebrisInfo.length; i++)
 		{
 			for(int j = 0; j < smallDebrisInfo[i].length; j++)
-			{
-				g.setColor(colors.get(smallDebrisInfo[i][3]));
-				g.fillRect(smallDebrisInfo[i][0], smallDebrisInfo[i][1], (int)(smallDebrisInfo[i][2]*0.75), (int)(smallDebrisInfo[i][2]*0.75));
-				if(smallDebrisInfo[i][1] < 0) smallDebrisInfo[i][1] += debrisVector;
-				else smallDebrisInfo[i][1] += smallDebrisInfo[i][2]*debrisVector;
+			{	
+				if(smallDebrisInfo[i][1] > 0 && smallDebrisInfo[i][1] < GamePanel.HEIGHT)
+				{
+					g.setColor(colors.get(smallDebrisInfo[i][3]));
+					g.fillRect(smallDebrisInfo[i][0], smallDebrisInfo[i][1], (int)(smallDebrisInfo[i][2]*0.75), (int)(smallDebrisInfo[i][2]*0.75));
+					smallDebrisInfo[i][1] += smallDebrisInfo[i][2]*debrisVector;
+				}
+				else
+				{
+					smallDebrisInfo[i][1] += debrisVector;
+				}
 				
 				if(smallDebrisInfo[i][1] < highestLoc) highestLoc = smallDebrisInfo[i][1];
 			}

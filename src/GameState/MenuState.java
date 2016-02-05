@@ -151,7 +151,7 @@ public class MenuState extends GameState
 		} 
 		else if (k == GameStateManager.select)
 		{
-			gsm.setState(GameStateManager.LEVEL1STATE);
+			gsm.setState(GameStateManager.TRANSITION_INTROSTATE);
 			gsm.resetState(GameStateManager.MENUSTATE);
 		}
 		

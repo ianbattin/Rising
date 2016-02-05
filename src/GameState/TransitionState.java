@@ -12,13 +12,13 @@ public class TransitionState extends GameState {
 
 	private String path;
 	
-	private float timer;
+	private long timer, coolDownTimer;
 	private int currFrame, totalFrames;
 
-	//these are the arrays that we can use to modify the "base time" for each of the intro frames. 
+	//these are the arrays that we can use to modify the time for each of the intro frames (each integer value = 1 second). 
 	//The arrays must be the length of the total frames
-	private final int[] secondsToAdd_IntroFrames = {-3, 0, 2, 0, 0, 0, 0, 0};
-	private final int[] secondsToAdd_OutroFrames = {0};
+	private final int[] secondsToAdd_IntroFrames = {4, 7, 9, 7, 7, 7, 7, 7};
+	private final int[] secondsToAdd_OutroFrames = {7};
 	private int[] timeModifierToUse;
 	
 	public TransitionState(GameStateManager gsm, String path)
@@ -27,6 +27,7 @@ public class TransitionState extends GameState {
 		this.gsm = gsm;
 		this.path = path;
 		
+		coolDownTimer = 0;
 		timer = 0;
 		currFrame = 1; //set the starting frame number.
 
@@ -83,7 +84,7 @@ public class TransitionState extends GameState {
 		}
 		else
 		{
-			if(timer > (7000000000.0 + timeModifierToUse[currFrame-1]*1000000000.0))
+			if(timer > (timeModifierToUse[currFrame-1]*1000000000.0))
 			{
 				timer = 0;
 				if (currFrame < totalFrames)
@@ -110,9 +111,22 @@ public class TransitionState extends GameState {
 	public void keyPressed(int k) 
 	{
 		if(k == GameStateManager.select)
-		{
-			gsm.setState(GameStateManager.LEVEL1STATE);
-			gsm.resetState(GameStateManager.TRANSITION_INTROSTATE);
+		{ 
+			if(System.currentTimeMillis() - coolDownTimer < 250)
+			{
+				gsm.setState(GameStateManager.LEVEL1STATE);
+				gsm.resetState(GameStateManager.TRANSITION_INTROSTATE);
+			}
+			if(currFrame < totalFrames)
+			{
+				timer += timeModifierToUse[currFrame-1]*1000000000.0;
+			}
+			else
+			{
+				gsm.setState(GameStateManager.LEVEL1STATE);
+				gsm.resetState(GameStateManager.TRANSITION_INTROSTATE);
+			}
+			coolDownTimer = System.currentTimeMillis();
 		} 
 		else if (k == GameStateManager.reset)
 		{
