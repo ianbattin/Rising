@@ -480,7 +480,7 @@ public class Player extends MapObject
 			dy = -20.0;
 			t.setAnimated(true);
 		}
-		if(type == 389)
+		if(type == 479)
 		{
 			hasGun = true;
 			ammoCount += 50;
