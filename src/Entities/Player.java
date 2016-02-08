@@ -298,7 +298,7 @@ public class Player extends MapObject
 				break;
 			}
 			bullets.get(i).update();
-			if(bullets.get(i).notOnScreen()) bullets.remove(i);
+			//if(bullets.get(i).notOnScreen()) bullets.remove(i);
 		}
 		
 		yFromBottom += (-dy + tileMap.getDY());
