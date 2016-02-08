@@ -21,6 +21,7 @@ public class Projectile extends MapObject
 	private double angle;
 	private int damage;
 	private int type;
+	private int ricochetCount;
 	
 	private boolean remove;
 	private boolean playerCollide;
@@ -114,6 +115,7 @@ public class Projectile extends MapObject
 			}
 			case 7:
 			{
+				ricochetCount = 0;
 				moveSpeed = 10.0;
 				dx = moveSpeed;
 				dy = moveSpeed;
@@ -274,9 +276,11 @@ public class Projectile extends MapObject
 			}
 			else if(this.type == 7)
 			{
-				if(dy > 0) y -= 5;
-				else y += 5;
+				if(dy > 0) y -= 10;
+				else y += 10;
 				dy = -dy;
+				ricochetCount++;
+				if(ricochetCount > 5) remove = true;
 			}
 			else
 				remove = true;
