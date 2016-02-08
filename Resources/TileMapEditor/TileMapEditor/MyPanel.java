@@ -36,7 +36,6 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 	private BufferedImage currentBlockImage;
 	private int currentBlock;
 	
-	private String name = "forest1";
 	private int[][] map;
 	private int mapWidth;
 	private int mapHeight;
@@ -240,6 +239,8 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 		for(int i = 0; i < numTiles; i++) {
 			blocks[i].draw(g);
 		}
+		
+		
 		
 		// draw current block
 		g.setColor(Color.RED);
@@ -653,8 +654,8 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 			int y = (int) (me.getY() / SCALE - ymap);
 			int x = (int) (me.getX() / SCALE - xmap);
 			if(x > 0 && x < mapWidth * TILESIZE &&
-					y > 0 && y < mapHeight * TILESIZE) {
-				map[y / TILESIZE][x / TILESIZE] = 0;
+					y > 0 && y < mapHeight * (TILESIZE/zoomFactor)) {
+				map[y / (TILESIZE/zoomFactor)][x / (TILESIZE/zoomFactor)] = 0;
 			}
 		}
 		else if(SwingUtilities.isMiddleMouseButton(me)) {
@@ -687,21 +688,21 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 		else if(SwingUtilities.isRightMouseButton(me)) {
 			int y = (int) (me.getY() / SCALE - ymap);
 			int x = (int) (me.getX() / SCALE - xmap);
-			if(x > 0 && x < mapWidth * TILESIZE &&
-				y > 0 && y < mapHeight * TILESIZE) {
-				map[y / TILESIZE][x / TILESIZE] = 0;
+			if(x > 0 && x < mapWidth * (TILESIZE/zoomFactor) &&
+				y > 0 && y < mapHeight * (TILESIZE/zoomFactor)) {
+				map[y / (TILESIZE/zoomFactor)][x / (TILESIZE/zoomFactor)] = 0;
 			}
 		}
 		else if(SwingUtilities.isMiddleMouseButton(me)) {
 			int y = me.getY();
 			int x = me.getX();
-			int dx = (x - mmx) / TILESIZE;
-			int dy = (y - mmy) / TILESIZE;
+			int dx = (x - mmx) / (TILESIZE/zoomFactor);
+			int dy = (y - mmy) / (TILESIZE/zoomFactor);
 			if(dx != 0 || dy != 0) {
 				mmx = me.getX();
 				mmy = me.getY();
-				xmap += dx * TILESIZE;
-				ymap += dy * TILESIZE;
+				xmap += dx * (TILESIZE/zoomFactor);
+				ymap += dy * (TILESIZE/zoomFactor);
 			}
 		}
 	}

@@ -33,6 +33,7 @@ public class Tile
 	private boolean animated = false;
 	
 	private boolean bulletCollision;
+	private boolean isVisible;
 	
 	private int type;
 	private boolean blocked = true;
@@ -59,6 +60,7 @@ public class Tile
 		this.type = type;
 		this.size = size;
 		animation = new Animation();
+		isVisible = true;
 
 		if(type < 17)
 		{
@@ -85,6 +87,14 @@ public class Tile
 			blocked = false;
 			animated = false;
 			bulletCollision = false;
+		}
+		else if(type >= 357 && type <= 359)
+		{
+			frames = 1;
+			blocked = false;
+			animated = false;
+			bulletCollision = false;
+			isVisible = false;
 		}
 		else
 		{
@@ -126,6 +136,13 @@ public class Tile
 			setX(-100);
 			setY(100000);
 		}
+		
+		//these are the special blocks, each will have their own special function 
+		if(type == 359 && y > -100 && y < -75 && -100 <= x && x <= GamePanel.WIDTH+100)
+		{
+			Level1State.spawnBombs((int)x);
+			type = 0;
+		}
 	}
 	
 	public void draw(Graphics2D g, int type)
@@ -135,7 +152,7 @@ public class Tile
 			g.setColor(Color.BLUE);
 			g.fillRect((int)x, (int)y, 25, 25);
 		}
-		else if(onScreen())
+		else if(onScreen() && isVisible)
 		{
 			g.drawImage(animation.getImage(), (int)x, (int)y, size+1, size, null);
 		}
