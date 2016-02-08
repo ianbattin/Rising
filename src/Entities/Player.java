@@ -1177,6 +1177,10 @@ public class Player extends MapObject
 				else
 					tileMap.setShowCollisonBox(true);
 			}
+			if(k == KeyEvent.VK_L)
+			{
+				bullets.add(new Projectile(400, -100, 45, 7, tileMap));
+			}
 		}
 	}
 	

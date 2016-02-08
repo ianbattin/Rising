@@ -3,7 +3,14 @@ package Entities;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+
+import Main.GamePanel;
 import Main.SoundPlayer;
 import TileMap.Tile;
 import TileMap.TileMap;
@@ -11,16 +18,22 @@ import TileMap.TileMap;
 public class Projectile extends MapObject
 {
 	private double direction;
+	private double angle;
 	private int damage;
 	private int type;
 	
 	private boolean remove;
 	private boolean playerCollide;
+	private boolean onScreen = false;
 	
 	private long lifeTime;
 	
 	//timeslow variable
 	private static double slowTime;
+	
+	//sprites loading
+	private ArrayList<BufferedImage[]> sprites;
+	private final int[] numFrames = { 1 };
 	
 	public Projectile(double x, double y, double direction, int type, TileMap tm) 
 	{
@@ -99,6 +112,43 @@ public class Projectile extends MapObject
 				SoundPlayer.playShootingClip();
 				break;
 			}
+			case 7:
+			{
+				moveSpeed = 10.0;
+				dx = moveSpeed;
+				dy = moveSpeed;
+				angle = Math.asin(dx/dy) - 90;
+				width = 30;
+				height = 30;
+				damage = 2;
+				playerCollide = true;
+				
+				try
+				{
+					//will have to be fixed to get an image from a large sprites image rather than a single image for each pickup
+					BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/Debris.png"));
+					sprites = new ArrayList<BufferedImage[]>();
+					for(int i = 0; i < numFrames.length; i++)
+					{
+						BufferedImage[] bi = new BufferedImage[numFrames[i]];
+						for(int j = 0; j < numFrames[i]; j++)
+						{
+							bi[j] = spritesheet.getSubimage(i * width, j * height, width, height);
+						}
+						sprites.add(bi);
+					}
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+				
+				animation = new Animation();
+				animation.setFrames(sprites.get(0));
+				animation.setDelay(200);
+				
+				break;
+			}
 		}
 		
 		cwidth = width/2;
@@ -108,10 +158,47 @@ public class Projectile extends MapObject
 	public void update() 
 	{
 		this.myCheckCollision();
-		dx = Math.cos(direction) * (moveSpeed);
-		dy = Math.sin(direction) * (moveSpeed);
-		dx += tileMap.getDX();
-		dy += tileMap.getDY();
+		if(this.type != 7)
+		{
+			dx = Math.cos(direction) * (moveSpeed);
+			dy = Math.sin(direction) * (moveSpeed);
+			
+			dx += tileMap.getDX();
+			dy += tileMap.getDY();
+		}
+		else
+		{
+			x += tileMap.getDX();
+			y += tileMap.getDY();
+			
+			if(0 < x && x < GamePanel.WIDTH && 0 < y && y < GamePanel.HEIGHT) onScreen = true;
+			if(x < 0)
+			{
+				x += 5;
+				dx = -dx;
+			}
+			else if(x > GamePanel.WIDTH)
+			{
+				x -= 5;
+				dx = -dx;
+			}
+			if(onScreen)
+			{
+				if(y < 0)
+				{
+					dy = -dy;
+					y += 5;
+				}
+				else if(y > GamePanel.HEIGHT)
+				{
+					dy = -dy;
+					y -= 5;
+				}
+			}
+			
+			if(Math.abs(dy) < 4) dy = moveSpeed;
+			angle = Math.asin(dx/dy) - 90;
+		}
 			
 		if(type != 1)
 		{
@@ -131,15 +218,27 @@ public class Projectile extends MapObject
 	{
 		if(!remove)
 		{
-			g.setColor(Color.BLACK);
-			g.fillOval((int)x, (int)y, width, height);
-			
-			if(tileMap.getShowCollisonBox())
+			/*if(this.type == 7)
 			{
-				g.setColor(Color.RED);
-				g.draw(this.getRectangle());
-			}
+				getAnimation();
+				if(dx >= 0)
+					g.drawImage(new AffineTransformOp(AffineTransform.getRotateInstance((float)angle, width/2, height/2), 
+							AffineTransformOp.TYPE_BILINEAR).filter(animation.getImage(), null), (int)(x + xmap), (int)(y + ymap), width, height, null);
+			}*/
+				g.setColor(Color.BLACK);
+				g.fillOval((int)x, (int)y, width, height);
+			
+				if(tileMap.getShowCollisonBox())
+				{
+					g.setColor(Color.RED);
+					g.draw(this.getRectangle());
+				}
 		}
+	}
+	
+	public void getAnimation()
+	{
+		animation.update();
 	}
 	
 	@Override
@@ -147,7 +246,7 @@ public class Projectile extends MapObject
 	{
 		if(t.getBulletCollision() && !remove)
 		{
-			if(t.getType() == 17)
+			if(t.getType() == 17 && this.type != 7)
 			{
 				t.setType(0);
 				remove = true;
@@ -172,6 +271,12 @@ public class Projectile extends MapObject
 			{
 				remove = true;
 				tileMap.getExplosions().add(new Explosion(x, y, 2, tileMap));
+			}
+			else if(this.type == 7)
+			{
+				if(dy > 0) y -= 5;
+				else y += 5;
+				dy = -dy;
 			}
 			else
 				remove = true;
