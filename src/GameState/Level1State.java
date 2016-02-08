@@ -44,7 +44,8 @@ public class Level1State extends PlayState
 	private double transitionDY;
 	public boolean hasInited;
 	
-	private boolean addBomb = false;
+	private static boolean addBomb = false;
+	private static int bombXLoc = 0;
 	
 	public SmallStuka stuka;
 	public boolean stukaSpawned = false;
@@ -160,23 +161,21 @@ public class Level1State extends PlayState
 			super.backGroundParallaxUpdate();
 			super.aimUpdate();
 			super.updateBonusScores();
-			spawnBombs();
 		}
 		if(player.getPoints() > 1000 && enemies.size() == 0)
 		{
 			enemies.add(new Jetpacker(-100, 300, tileMap, player));
 		}
-		
+		if (addBomb)
+		{
+			mapObjects.add(new Bomb(bombXLoc, -80, tileMap, 1));
+			addBomb = false;
+		}
 		if(player.getPoints() > 6000 && !stukaSpawned )
 		{
 			stuka.init();
 			mapObjects.add(stuka);
 			stukaSpawned = true;
-		}
-		if(addBomb)
-		{
-			mapObjects.add(new Bomb((int)(Math.random() * 800), -100, tileMap, 1));
-			addBomb = false;
 		}
 		else if(player.getPoints() > 7000)
 			mapObjects.remove(stuka);
@@ -354,8 +353,12 @@ public class Level1State extends PlayState
 		return enemies;
 	}
 	
-	public void spawnBombs()
+	public static void spawnBombs(int xLoc)
 	{
+		addBomb = true;
+		bombXLoc = xLoc;
+		
+		/*
 		if(!containsInstance(mapObjects, Bomb.class) && !addBomb)
 		{
 			Timer timer = new Timer();
@@ -371,6 +374,7 @@ public class Level1State extends PlayState
 				
 			}, 10000);
 		}
+		*/
 	}
 	
 	public void keyPressed(int k) 
@@ -417,6 +421,7 @@ public class Level1State extends PlayState
 			gsm.setState(GameStateManager.BOSS1STATE);
 			gsm.resetState(GameStateManager.LEVEL1STATE);
 		}
+		/*
 		if(k == KeyEvent.VK_B)
 		{
 			addBomb = true;
@@ -425,15 +430,18 @@ public class Level1State extends PlayState
 		{
 			tileMap.getExplosions().add(new Explosion(mouseX, mouseY, 2, tileMap));
 		}
+		*/
 	}
 
 	public void keyReleased(int k) 
 	{
 		player.keyReleased(k);
 		
+		/*
 		if(k == KeyEvent.VK_B)
 		{
 			addBomb = false;
 		}
+		*/
 	}
 }

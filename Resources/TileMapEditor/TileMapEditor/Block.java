@@ -21,7 +21,6 @@ public class Block {
 			for(int y = 0; y < image.getHeight(); y++)
 			{
 				int a = (image.getRGB(x, y) >> 24) & 0xFF;
-				System.out.println(a);
 				if(a != 0)	
 				{
 					isInvisible = false;
