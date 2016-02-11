@@ -11,7 +11,7 @@ import Main.GamePanel;
 import TileMap.Tile;
 import TileMap.TileMap;
 
-public class Jetpacker extends Enemy
+public class Walker extends Enemy
 {
 	//animation
 	private final int[] numFrames = {1};
@@ -22,10 +22,8 @@ public class Jetpacker extends Enemy
 	private static final int JUMPING = 2;
 	private static final int FALLING = 3;
 	
-	//parachute
-	private BufferedImage parachute;
-	
-	public Jetpacker(double x, double y, TileMap tm, Player player) 
+
+	public Walker(double x, double y, TileMap tm, Player player) 
 	{
 		super(x, y, tm, player);
 		
@@ -35,15 +33,15 @@ public class Jetpacker extends Enemy
 		
 		recoverLength = 100;
 		
-		moveSpeed = 0.1;
+		moveSpeed = 0.3;
 		moveSpeedLeft = 0.3;
 		moveSpeedRight = 0.3;
-		maxSpeedY = 2;
-		maxSpeedX = 2.5;
+		maxSpeed = 5.0;
+		maxSpeedLeft = 5.0;
+		maxSpeedRight = 5.0;
 		stopSpeed = 0.4;
 		fallSpeed = 0.25;
 		maxFallSpeed = 7.0;
-		jumpStart = -3.0;
 		
 		width = 50;
 		height = 70;
@@ -53,9 +51,7 @@ public class Jetpacker extends Enemy
 		facingRight = true;
 		
 		try
-		{
-			parachute = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/parachute.png"));
-			
+		{			
 			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/parachuter.png"));
 			entitySprites = new ArrayList<BufferedImage[]>();
 			for(int i = 0; i < numFrames.length; i++)
@@ -135,6 +131,7 @@ public class Jetpacker extends Enemy
 		if (health > 0)
 		{
 			getMovement();
+			myCheckCollision();
 			getAttack();
 		}
 		else
@@ -144,8 +141,8 @@ public class Jetpacker extends Enemy
 		}
 		
 		x += tileMap.getDX();
-		y += tileMap.getDY()/2;
-		
+		y += tileMap.getDY();
+				 
 		if (y > GamePanel.HEIGHT + 400)
 		{
 			//remove enemy as it is too low
@@ -199,9 +196,7 @@ public class Jetpacker extends Enemy
 		{
 			g.drawImage(animation.getImage(), (int)(x + xmap) + width, (int)(y + ymap), -width, height, null);
 		}
-		
-		g.drawImage(parachute, (int)(x+(25-(parachute.getWidth()/2))), (int)(y-33), parachute.getWidth(), parachute.getHeight(), null);
-		
+				
 		for(Projectile p: bullets)
 		{
 			p.draw(g);
@@ -238,19 +233,6 @@ public class Jetpacker extends Enemy
 
 	public void getMovement()
 	{
-		if(relX > 200)
-		{
-			dx -= moveSpeedLeft;
-			if(dx < -(maxSpeedX)) dx = -(maxSpeedX);
-		}
-		else if(relX < -200)
-		{
-			dx += moveSpeedRight;
-			if(dx > (maxSpeedX)) dx = (maxSpeedX);
-		}		
-		dy += moveSpeed;
-		if(dy > (maxSpeedY)) dy = (maxSpeedY);
-		
 		if(player.getX() > this.getX())
 		{
 			this.facingRight = true;
@@ -322,10 +304,9 @@ public class Jetpacker extends Enemy
 			}
 			falling = true;
 		}
-		
+		*/
 		if(falling)
 		{
-			jump = false;
 			if(dy > 0.0 && gliding)
 			{
 				dy = 1;
@@ -338,7 +319,7 @@ public class Jetpacker extends Enemy
 		else
 		{
 			fallingAnim = false;
-		}*/
+		}
 		
 		x += dx*Enemy.slowDown;
 		y += dy*Enemy.slowDown;
@@ -370,6 +351,7 @@ public class Jetpacker extends Enemy
 				height = 70;
 			}
 		}
+		/*
 		if(jump)
 		{
 			if(currentAction != JUMPING && !fallingAnim)
@@ -393,7 +375,7 @@ public class Jetpacker extends Enemy
 				height = 70;
 			}
 		}
-		
+		*/
 		if (isFlashing) animation.changeFrames(entityHurtSprites.get(currentAction));
 		else animation.changeFrames(entitySprites.get(currentAction));
 		

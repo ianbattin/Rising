@@ -9,7 +9,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import Entities.Bomb;
 import Entities.Enemy;
+import Entities.Jetpacker;
 import Entities.MapObject;
 import Entities.Pickups;
 import Entities.Player;
@@ -34,6 +36,11 @@ public abstract class PlayState extends GameState
 	protected String[] notStarted;
 	protected Font bonusScoreFont, scoreFont, backupFont;
 	
+	public final static int SPAWN_BOMB = 0;
+	public final static int SPAWN_PARACHUTER = 1;
+	public final static int SPAWN_WALKER = 2;
+	protected static ArrayList<int[]> itemsToSpawn;
+	
 	//Mouse
 	protected int mouseX;
 	protected int mouseY;
@@ -44,6 +51,8 @@ public abstract class PlayState extends GameState
 	public PlayState()
 	{
 		super();
+		
+		itemsToSpawn = new ArrayList<int[]>();
 		
 		backupFont = new Font("Times", Font.PLAIN, 24);
 		scoreFont = new Font("Munro", Font.PLAIN, 24);				
@@ -209,6 +218,13 @@ public abstract class PlayState extends GameState
 	}
 	abstract public void slowTimeStart();
 	abstract public void slowTimeEnd();
+	
+	public static void spawnObject(int type, int xLoc, int yLoc)
+	{
+		int[] item = {type, xLoc, yLoc};
+		itemsToSpawn.add(item);
+	}
+
 	
 	public void mouseClicked(MouseEvent e)
 	{

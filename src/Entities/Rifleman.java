@@ -137,7 +137,7 @@ public class Rifleman extends Enemy
 	
 	public void update() 
 	{
-		//if(idle) dy = dy + 1;
+		
 		if (health > 0)
 		{
 			getMovement();
@@ -149,7 +149,6 @@ public class Rifleman extends Enemy
 			dy = 10.0;
 			y += dy;
 		}
-		if(y < -500) this.playerHurt(500);
 		
 		x += tileMap.getDX();
 		y += tileMap.getDY();
@@ -178,6 +177,13 @@ public class Rifleman extends Enemy
 				timesToLoop--;
 				numOfFramesToAnimHealth = 10;
 			}
+		}
+
+		if (y > GamePanel.HEIGHT + 400)
+		{
+			//remove enemy as it is too low
+			System.out.println("Enemy below threshold");
+			this.remove = true;
 		}
 	}
 

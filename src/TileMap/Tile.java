@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import Entities.Animation;
 import GameState.Level1State;
+import GameState.PlayState;
 import Main.GamePanel;
 
 public class Tile 
@@ -136,11 +137,20 @@ public class Tile
 			setX(-100);
 			setY(100000);
 		}
-		
 		//these are the special blocks, each will have their own special function 
-		if(type == 449 && y > -100 && y < -75 && -100 <= x && x <= GamePanel.WIDTH+100)
+		else if(type == 447 && y > -100 && y < -75 && -100 <= x && x <= GamePanel.WIDTH+100)
 		{
-			Level1State.spawnBombs((int)x);
+			PlayState.spawnObject(PlayState.SPAWN_WALKER, (int)x, (int)y);
+			type = 0;
+		}
+		else if(type == 448 && y > -100 && y < -75 && -100 <= x && x <= GamePanel.WIDTH+100)
+		{
+			PlayState.spawnObject(PlayState.SPAWN_PARACHUTER, (int)x, 0);
+			type = 0;
+		}
+		else if(type == 449 && y > -100 && y < -75 && -100 <= x && x <= GamePanel.WIDTH+100)
+		{
+			PlayState.spawnObject(PlayState.SPAWN_BOMB, (int)x, 0);
 			type = 0;
 		}
 	}

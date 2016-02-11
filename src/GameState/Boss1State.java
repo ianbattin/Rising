@@ -180,9 +180,10 @@ public class Boss1State extends PlayState
 		for(int i = 0; i < enemies.size(); i++)
 		{
 			enemies.get(i).update();
-			if(enemies.get(i).getHealth() <= 0 && enemies.get(i).getY() > 850)
+			if (enemies.get(i).getRemove()) 
 			{
 				enemies.remove(i);
+				i--;
 			}
 		}
 

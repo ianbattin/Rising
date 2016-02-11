@@ -17,6 +17,7 @@ import java.util.Iterator;
 
 import Entities.Player;
 import Entities.Rifleman;
+import Entities.Walker;
 import Entities.SmallStuka;
 import Entities.Bomb;
 import Entities.Enemy;
@@ -43,9 +44,6 @@ public class Level1State extends PlayState
 	private boolean transition;
 	private double transitionDY;
 	public boolean hasInited;
-	
-	private static boolean addBomb = false;
-	private static int bombXLoc = 0;
 	
 	public SmallStuka stuka;
 	public boolean stukaSpawned = false;
@@ -146,8 +144,15 @@ public class Level1State extends PlayState
 			tileMap.update();
 			pickups.update();
 			player.update();
-			for(Enemy e: enemies)
-				e.update();
+			for(int i = 0; i < enemies.size(); i++)
+			{
+				enemies.get(i).update();
+				if (enemies.get(i).getRemove()) 
+				{
+					enemies.remove(i);
+					i--;
+				}
+			}
 			
 			Iterator<MapObject> iter = mapObjects.iterator();
 			while (iter.hasNext()) 
@@ -162,14 +167,21 @@ public class Level1State extends PlayState
 			super.aimUpdate();
 			super.updateBonusScores();
 		}
-		if(player.getPoints() > 1000 && enemies.size() == 0)
+		while(!PlayState.itemsToSpawn.isEmpty())
 		{
-			enemies.add(new Jetpacker(-100, 300, tileMap, player));
-		}
-		if (addBomb)
-		{
-			mapObjects.add(new Bomb(bombXLoc, -80, tileMap, 1));
-			addBomb = false;
+			if (PlayState.itemsToSpawn.get(0)[0] == 0)
+			{
+				mapObjects.add(new Bomb(PlayState.itemsToSpawn.get(0)[1], -80, tileMap, 1));
+			}	
+			if (PlayState.itemsToSpawn.get(0)[0] == 1)
+			{
+				enemies.add(new Jetpacker(PlayState.itemsToSpawn.get(0)[1], -100, tileMap, player));
+			}
+			if (PlayState.itemsToSpawn.get(0)[0] == 2)
+			{
+				enemies.add(new Walker(PlayState.itemsToSpawn.get(0)[1], PlayState.itemsToSpawn.get(0)[2]-45, tileMap, player));
+			}
+			PlayState.itemsToSpawn.remove(0);
 		}
 		if(player.getPoints() > 6000 && !stukaSpawned )
 		{
@@ -209,14 +221,14 @@ public class Level1State extends PlayState
 						enemies.get(i).playerHurt(50);
 					}
 				}
-				if(enemies.size() <= 1)
+				if(enemies.size() < 1)
 				{
 					enemies.add(new PlaneBoss(2000, 100, tileMap, player, 1));
 					System.out.println("STOP PLAYER MOVEMENT... SO WE CAN GET A NICE CUTSCREEN EVERY TIME");
 				}
 			}
 			tileMap.setYVector(transitionDY);
-			if(player.getY() > GamePanel.HEIGHT && !enemies.isEmpty() && enemies.get(1).getX() < GamePanel.WIDTH && player.getPoints() > 7000)
+			if(player.getY() > GamePanel.HEIGHT && !enemies.isEmpty() && enemies.get(0).getX() < GamePanel.WIDTH && player.getPoints() > 7000)
 			{
 				System.out.println("NOT DEAD");
 				player.setPosition(400, 900);
@@ -351,30 +363,6 @@ public class Level1State extends PlayState
 	public ArrayList<Enemy> getEnemies()
 	{
 		return enemies;
-	}
-	
-	public static void spawnBombs(int xLoc)
-	{
-		addBomb = true;
-		bombXLoc = xLoc;
-		
-		/*
-		if(!containsInstance(mapObjects, Bomb.class) && !addBomb)
-		{
-			Timer timer = new Timer();
-			timer.schedule(new TimerTask()
-			{
-				public void run()
-				{	
-					if(!containsInstance(mapObjects, Bomb.class))
-					{
-						addBomb = true;
-					}
-				}
-				
-			}, 10000);
-		}
-		*/
 	}
 	
 	public void keyPressed(int k) 
