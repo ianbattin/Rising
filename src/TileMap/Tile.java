@@ -82,13 +82,6 @@ public class Tile
 			animated = false;
 			bulletCollision = false;
 		}
-		else if(type == 255)
-		{
-			frames = 1;
-			blocked = false;
-			animated = false;
-			bulletCollision = false;
-		}
 		else if(type >= 447 && type <= 449)
 		{
 			frames = 1;
@@ -157,12 +150,7 @@ public class Tile
 	
 	public void draw(Graphics2D g, int type)
 	{
-		if(type == 400)
-		{
-			g.setColor(Color.BLUE);
-			g.fillRect((int)x, (int)y, 25, 25);
-		}
-		else if(onScreen() && isVisible)
+		if(onScreen() && isVisible)
 		{
 			g.drawImage(animation.getImage(), (int)x, (int)y, size+1, size, null);
 		}
