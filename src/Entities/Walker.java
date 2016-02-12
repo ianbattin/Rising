@@ -14,13 +14,15 @@ import TileMap.TileMap;
 public class Walker extends Enemy
 {
 	//animation
-	private final int[] numFrames = {1};
+	private final int[] numFrames = {1, 3};
+	
+	private Tile currentTile;
 	
 	//animation actions
 	private static final int IDLE = 0;
 	private static final int WALKING = 1;
-	private static final int JUMPING = 2;
-	private static final int FALLING = 3;
+	private static final int JUMPING = 0;
+	private static final int FALLING = 0;
 	
 
 	public Walker(double x, double y, TileMap tm, Player player) 
@@ -52,7 +54,7 @@ public class Walker extends Enemy
 		
 		try
 		{			
-			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/parachuter.png"));
+			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/enemyWalkingSprite.png"));
 			entitySprites = new ArrayList<BufferedImage[]>();
 			for(int i = 0; i < numFrames.length; i++)
 			{
@@ -65,7 +67,7 @@ public class Walker extends Enemy
 			}
 			
 			//make the spritesheet for when the player is blinking red
-			BufferedImage playerHurtSpritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/parachuter.png"));
+			BufferedImage playerHurtSpritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/enemyWalkingSprite.png"));
 			for (int i = 0; i < playerHurtSpritesheet.getWidth(); i++)
 			{
 				for (int j = 0; j < playerHurtSpritesheet.getHeight(); j++)
@@ -203,6 +205,10 @@ public class Walker extends Enemy
 		}
 		
 		drawGun(g);
+		g.setColor(Color.red);
+		g.fillRect((int)x, (int)y, 5, 5);
+		g.setColor(Color.blue);
+		g.fillRect((int)x+super.cwidth/2, (int)y, 5, 5);
 	}
 	
 	public void getAttack()
@@ -242,7 +248,9 @@ public class Walker extends Enemy
 			this.facingRight = false;
 		}
 		//MOVING LEFT AND RIGHT
-		/*if(left)
+		right = canGoRight() && this.facingRight;
+		left = canGoLeft() && !this.facingRight;
+		if(left)
 		{
 			dx -= moveSpeed;
 			if(dx < -maxSpeed) dx = -maxSpeed;
@@ -253,22 +261,12 @@ public class Walker extends Enemy
 			dx += moveSpeed;
 			if(dx > maxSpeed) dx = maxSpeed;
 		}
-
+	
 		if(!left && !right)
 		{
-			if(dx < 0.0) 
-			{
-				dx += stopSpeed;
-				if(dx > 0.0) dx = 0.0;
-			}
-			if(dx > 0.0) 
-			{
-				dx -= stopSpeed;
-				if(dx < 0.0) dx = 0.0;
-			}
-			dx = -player.getDX();
+			dx =  0;
 		}
-
+		/*
 		//JUMPING AND FALLING
 		if(jump)
 		{
@@ -307,6 +305,7 @@ public class Walker extends Enemy
 		*/
 		if(falling)
 		{
+			System.out.println("IS FALLING");
 			if(dy > 0.0 && gliding)
 			{
 				dy = 1;
@@ -382,9 +381,41 @@ public class Walker extends Enemy
 		animation.update();		
 	}
 	
+	private boolean canGoRight()
+	{
+		if (currentTile == null) return false;
+		for(int i = 0; i < tileMap.tiles.size(); i++)
+		{
+			Tile t = tileMap.tiles.get(i);
+			double top = t.top;
+			double left = t.left;
+			if (top == currentTile.top && left >= currentTile.right-4 && left <= currentTile.right+4)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean canGoLeft()
+	{
+		if (currentTile == null) return false;
+		for(int i = 0; i < tileMap.tiles.size(); i++)
+		{
+			Tile t = tileMap.tiles.get(i);
+			double top = t.top;
+			double right = t.right;
+			if (top == currentTile.top && right >= currentTile.left-4 && right <= currentTile.left+4)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void collided(int type, Tile t) 
 	{
-
+		currentTile = t;
 	}
 
 	public void collided(MapObject m) 

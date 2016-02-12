@@ -14,8 +14,6 @@ import TileMap.TileMap;
 public class Rifleman extends Enemy
 {
 	//animation
-	private ArrayList<BufferedImage[]> playerSprites;
-	private ArrayList<BufferedImage[]> playerHurtSprites;
 	private final int[] numFrames = {1, 3};
 	
 	private int proximity;
@@ -63,7 +61,7 @@ public class Rifleman extends Enemy
 			parachute = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/parachute.png"));
 			
 			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/enemyWalkingSprite.png"));
-			playerSprites = new ArrayList<BufferedImage[]>();
+			entitySprites = new ArrayList<BufferedImage[]>();
 			for(int i = 0; i < numFrames.length; i++)
 			{
 				BufferedImage[] bi = new BufferedImage[numFrames[i]];
@@ -71,7 +69,7 @@ public class Rifleman extends Enemy
 				{
 					bi[j] = spritesheet.getSubimage(j * width, i * height, width, height);
 				}
-				playerSprites.add(bi);
+				entitySprites.add(bi);
 			}
 			
 			//make the spritesheet for when the player is blinking red
@@ -91,7 +89,7 @@ public class Rifleman extends Enemy
 				}
 			}
 			
-			playerHurtSprites = new ArrayList<BufferedImage[]>();
+			entityHurtSprites = new ArrayList<BufferedImage[]>();
 			for(int i = 0; i < numFrames.length; i++)
 			{
 				BufferedImage[] bi = new BufferedImage[numFrames[i]];
@@ -100,7 +98,7 @@ public class Rifleman extends Enemy
 					bi[j] = playerHurtSpritesheet.getSubimage(j * width, i * height, width, height);
 				}
 				//sprites.add(bi);
-				playerHurtSprites.add(bi);
+				entityHurtSprites.add(bi);
 			}
 			
 			//make the spritesheet for the gun
@@ -118,7 +116,7 @@ public class Rifleman extends Enemy
 		
 		animation = new Animation();
 		currentAction = FALLING;
-		animation.setFrames(playerSprites.get(FALLING));
+		animation.setFrames(entitySprites.get(FALLING));
 		animation.setDelay(200);
 		
 		falling = true;
@@ -390,7 +388,7 @@ public class Rifleman extends Enemy
 			if(currentAction != IDLE && currentAction != WALKING)
 			{
 				currentAction = IDLE;
-				animation.setFrames(playerSprites.get(IDLE));
+				animation.setFrames(entitySprites.get(IDLE));
 				animation.setDelay(200);
 				width = 50;
 				height = 70;
@@ -403,7 +401,7 @@ public class Rifleman extends Enemy
 			if(currentAction != WALKING && !idle)
 			{
 				currentAction = WALKING;
-				animation.setFrames(playerSprites.get(WALKING));
+				animation.setFrames(entitySprites.get(WALKING));
 				animation.setDelay(200);
 				width = 50;
 				height = 70;
@@ -414,7 +412,7 @@ public class Rifleman extends Enemy
 			if(currentAction != JUMPING && !fallingAnim)
 			{
 				currentAction = JUMPING;
-				animation.setFrames(playerSprites.get(JUMPING));
+				animation.setFrames(entitySprites.get(JUMPING));
 				animation.setDelay(200);
 				animation.setDone(true);
 				width = 50;
@@ -426,7 +424,7 @@ public class Rifleman extends Enemy
 			if(currentAction != FALLING)
 			{
 				currentAction = FALLING;
-				animation.setFrames(playerSprites.get(FALLING));
+				animation.setFrames(entitySprites.get(FALLING));
 				animation.setDelay(200);
 				width = 50;
 				height = 70;
@@ -434,8 +432,8 @@ public class Rifleman extends Enemy
 		}
 		
 		
-		if (isFlashing) animation.changeFrames(playerHurtSprites.get(currentAction));
-		else animation.changeFrames(playerSprites.get(currentAction));
+		if (isFlashing) animation.changeFrames(entityHurtSprites.get(currentAction));
+		else animation.changeFrames(entitySprites.get(currentAction));
 		
 		animation.update();		
 	}

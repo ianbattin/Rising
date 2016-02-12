@@ -151,7 +151,6 @@ public abstract class MapObject
 	public void checkPixelColorCollision(TileMap tm)
 	{
 		boolean blocked = true;
-		int collideYLoc = 0;
 		
 		for(int color: Background.getPixelColors())
 		{
@@ -163,7 +162,6 @@ public abstract class MapObject
 
 		if(blocked && dy >= 0)
 		{
-			y = y;
 			dy = tm.getDY();
 			jumped  = false;
 			doubleJumped = false;
