@@ -23,7 +23,7 @@ public class PlaneBoss extends Enemy {
 	//animation
 	private ArrayList<BufferedImage[]> playerSprites;
 	private ArrayList<BufferedImage[]> playerHurtSprites;
-	private final int[] numFrames = { 1 };
+	private final int[] numFrames = { 4 };
 	
 	private Rectangle cockpit;
 	private int cockpitX;
@@ -60,7 +60,7 @@ public class PlaneBoss extends Enemy {
 		
 		try
 		{
-			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/Stuka.png"));
+			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/StukaSprites.png"));
 			playerSprites = new ArrayList<BufferedImage[]>();
 			for(int i = 0; i < numFrames.length; i++)
 			{
@@ -73,7 +73,7 @@ public class PlaneBoss extends Enemy {
 			}
 			
 			//make the spritesheet for when the player is blinking red
-			BufferedImage playerHurtSpritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/Stuka.png"));
+			BufferedImage playerHurtSpritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/StukaSprites.png"));
 			for (int i = 0; i < playerHurtSpritesheet.getWidth(); i++)
 			{
 				for (int j = 0; j < playerHurtSpritesheet.getHeight(); j++)
@@ -109,7 +109,7 @@ public class PlaneBoss extends Enemy {
 		animation = new Animation();
 		currentAction = 0;
 		animation.setFrames(playerSprites.get(0));
-		animation.setDelay(200);
+		animation.setDelay(2);
 		
 		cockpitX = x + 90;
 		cockpitY = y + 10;
