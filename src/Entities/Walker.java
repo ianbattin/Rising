@@ -21,8 +21,8 @@ public class Walker extends Enemy
 	//animation actions
 	private static final int IDLE = 0;
 	private static final int WALKING = 1;
-	private static final int JUMPING = 0;
-	private static final int FALLING = 0;
+	private static final int JUMPING = 2;
+	private static final int FALLING = 3;
 	
 
 	public Walker(double x, double y, TileMap tm, Player player) 
@@ -30,15 +30,12 @@ public class Walker extends Enemy
 		super(x, y, tm, player);
 		
 		bullets = new ArrayList<Projectile>();
-		firing = false;
-		fireDelay = 600;
-		
 		recoverLength = 100;
 		
 		moveSpeed = 0.3;
 		moveSpeedLeft = 0.3;
 		moveSpeedRight = 0.3;
-		maxSpeed = 5.0;
+		maxSpeed = 4.2;
 		maxSpeedLeft = 5.0;
 		maxSpeedRight = 5.0;
 		stopSpeed = 0.4;
@@ -94,14 +91,6 @@ public class Walker extends Enemy
 				//sprites.add(bi);
 				entityHurtSprites.add(bi);
 			}
-			
-			//make the spritesheet for the gun
-			BufferedImage gunSpriteSheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/gunSprite.png"));
-			gunSprites = new BufferedImage[2];
-			for(int i = 0; i < gunSprites.length; i++)
-			{
-				gunSprites[i] = (gunSpriteSheet.getSubimage(i * 25, 0, 25, 15)); //set the second number to select gun type (intervals of 15)
-			}
 
 		}
 		catch(Exception e)
@@ -113,14 +102,6 @@ public class Walker extends Enemy
 		currentAction = IDLE;
 		animation.setFrames(entitySprites.get(IDLE));
 		animation.setDelay(200);
-		
-		//create the animation for the gun
-		gunAnimation = new Animation();
-		gunAnimation.setFrames(gunSprites);
-		gunAnimation.setDelay(200);
-		
-		super.gunPosX = 10;
-		super.gunPosY = 18;
 		
 		falling = true;
 		
@@ -151,7 +132,6 @@ public class Walker extends Enemy
 			System.out.println("Enemy below threshold");
 			this.remove = true;
 		}
-		
 		
 		getAnimation();
 		getBulletCollision();
@@ -198,17 +178,6 @@ public class Walker extends Enemy
 		{
 			g.drawImage(animation.getImage(), (int)(x + xmap) + width, (int)(y + ymap), -width, height, null);
 		}
-				
-		for(Projectile p: bullets)
-		{
-			p.draw(g);
-		}
-		
-		drawGun(g);
-		g.setColor(Color.red);
-		g.fillRect((int)x, (int)y, 5, 5);
-		g.setColor(Color.blue);
-		g.fillRect((int)x+super.cwidth/2, (int)y, 5, 5);
 	}
 	
 	public void getAttack()
@@ -218,23 +187,12 @@ public class Walker extends Enemy
 		this.setAngle(Math.atan2(-relY, -relX));
 		this.setAngle(angle + Math.random()*Math.PI/12 - Math.PI/12);
 		
-		if(!lineOfSight())
+		if (player.getX() < this.getX()+ 30 && player.getX() > this.getX()-30 && player.getY() < this.getY()+100 && player.getY() > this.getY()-30)
 		{
-			firing = true;
+			System.out.println("PLAYER BASHED");
+			player.playerHurt(1);
 		}
-		else
-			firing = false;
 		
-		if(firing)
-		{
-			
-			long elapsed= (System.nanoTime() - fireTimer) / 1000000;
-			if(fireDelay <= elapsed*(0.5*Enemy.slowDown))
-			{
-				bullets.add(new Projectile(x + this.gunPosX, y + this.gunPosY, angle, 2, tileMap));
-				fireTimer = System.nanoTime();
-			}
-		}
 	}
 
 	public void getMovement()
@@ -248,8 +206,18 @@ public class Walker extends Enemy
 			this.facingRight = false;
 		}
 		//MOVING LEFT AND RIGHT
-		right = canGoRight() && this.facingRight;
-		left = canGoLeft() && !this.facingRight;
+		
+		if (player.getY() < this.getY()+150 && player.getY() > this.getY()-100 && !(player.getX() < this.getX()+ 20 && player.getX() > this.getX()-20))
+		{
+			right = canGoRight() && this.facingRight;
+			left = canGoLeft() && !this.facingRight;
+			idle = false;
+		}
+		else
+		{
+			right = left = false;
+			idle = true;
+		}
 		if(left)
 		{
 			dx -= moveSpeed;
@@ -305,7 +273,6 @@ public class Walker extends Enemy
 		*/
 		if(falling)
 		{
-			System.out.println("IS FALLING");
 			if(dy > 0.0 && gliding)
 			{
 				dy = 1;
@@ -328,7 +295,7 @@ public class Walker extends Enemy
 	{
 		if(idle)
 		{
-			if(currentAction != IDLE && currentAction != WALKING)
+			if(currentAction != IDLE)
 			{
 				currentAction = IDLE;
 				animation.setFrames(entitySprites.get(IDLE));
