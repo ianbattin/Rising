@@ -483,7 +483,7 @@ public class Player extends MapObject
 		if(type == 479)
 		{
 			hasGun = true;
-			ammoCount += 50;
+			ammoCount += 5;
 			t.setType(0);
 		}
 		/*if(type == 666)
