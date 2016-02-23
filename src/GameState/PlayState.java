@@ -177,10 +177,9 @@ public abstract class PlayState extends GameState
 		{
 			for(int i = 0; i < bonusScores.size(); i++)
 			{
-				g.setColor(new Color(100, 200, 100, bonusScores.get(i)[1]));
+				g.setColor(new Color(85, 213, 10, bonusScores.get(i)[1]));
 				g.setFont(bonusScoreFont);
 				g.drawString("+" + bonusScores.get(i)[0], centerStringX("+" + bonusScores.get(i)[0], 0, GamePanel.WIDTH, g), 35 + (255-bonusScores.get(i)[1])/2);
-				g.setFont(scoreFont);
 			}
 		}
 	}

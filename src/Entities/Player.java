@@ -47,6 +47,7 @@ public class Player extends MapObject
 	public boolean firing;
 	private boolean mouseHeld;
 	private double angle;
+	private boolean canDoubleJump;
 	
 	//effect variables
 	private boolean isUnderEffect;
@@ -60,6 +61,8 @@ public class Player extends MapObject
 	private long coolDownTime;
 	private Font backupFont, bannerFont;
 	private BufferedImage gunImage;
+	private boolean displayMessage;
+	private String banner;
 	
 	//score system
 	private int heightScore;
@@ -92,7 +95,7 @@ public class Player extends MapObject
 	private static final int FALLING = 3;
 	private static final int LANDING = 4;
 	private static final int HOVERING = 5;
-	private static final int DOUBLEJUMP = 6;
+	private static final int DOUBLEJUMP = 2; //for now, will be the same as normal jump
 	
 	public Player(TileMap tm, PlayState playState)
 	{	
@@ -231,6 +234,7 @@ public class Player extends MapObject
 		animation.setDelay(200);
 		
 		falling = true;
+		canDoubleJump = false;
 		canMove = true;
 		
 		//health
@@ -240,6 +244,8 @@ public class Player extends MapObject
 		healing = isFlashing = isBlinking = hasFlashed = false;
 		
 		//effects 
+		banner = null;
+		displayMessage = false;
 		hasBird = false; 
 		hasArmor = false;
 		jumpHeightFactor = 1;
@@ -466,7 +472,7 @@ public class Player extends MapObject
 		{
 			playerHurt(1);
 		}
-		if(type == 20)
+		else if(type == 20)
 		{
 			falling = true;
 			//set the animation to be jumping
@@ -480,18 +486,18 @@ public class Player extends MapObject
 			dy = -20.0;
 			t.setAnimated(true);
 		}
-		if(type == 479)
+		else if(type == 479)
 		{
 			hasGun = true;
 			ammoCount += 5;
 			t.setType(0);
 		}
-		/*if(type == 666)
+		else if(type == 358 || type == 359 || type == 388 || type == 389 || type == 418 || type == 419)
 		{
-			t.setType(0);
-			falling = true;
-			dy = -60.0;
-		}*/
+			this.dy = -35;
+			this.jump = true;
+			this.explosions = new Explosion(x, y, 3, tileMap);
+		}
 	}
 	
 	public void getAttack()
@@ -609,12 +615,13 @@ public class Player extends MapObject
 			}
 		}
 	
-		/*if(doubleJump)
+		if(doubleJump)
 		{
 			if(!doubleJumped)
 			{
 				jumpHeight = yFromBottom + (50.0*jumpHeightFactor);
 				doubleJumped = true;
+				SoundPlayer.playClip("doublejump.wav");
 			}
 			if(jumped)
 			{
@@ -625,7 +632,7 @@ public class Player extends MapObject
 				}
 			}
 			falling = true;
-		}*/
+		}
 		
 		if(falling)
 		{
@@ -698,7 +705,7 @@ public class Player extends MapObject
 				height = 70;
 			}
 		}
-		if(jump)
+		if(jump && !doubleJump)
 		{
 			if(currentAction != JUMPING && !fallingAnim)
 			{
@@ -734,11 +741,11 @@ public class Player extends MapObject
 		}
 		else if(doubleJump)
 		{
-			if(currentAction != JUMPING && !fallingAnim)
+			if(!fallingAnim && currentAction != DOUBLEJUMP)
 			{
-				currentAction = JUMPING;
-				animation.setFrames(playerSprites.get(JUMPING));
-				animation.setDelay(200);
+				currentAction = DOUBLEJUMP;
+				animation.setFrames(playerSprites.get(DOUBLEJUMP));
+				animation.setDelay(0);
 				animation.setDone(true);
 				width = 50;
 				height = 70;
@@ -983,7 +990,7 @@ public class Player extends MapObject
 			{
 				g.drawImage(birdAnimation.getImage(), (int)birdX+15, (int)birdY, -15, 15, null);
 			}
-			boolean displayMessage = false;
+			boolean willDisplay = false;
 			ArrayList<Enemy> enemies = playState.getEnemies();
 			if(enemies != null && enemies.size() > 0)
 			{
@@ -991,25 +998,17 @@ public class Player extends MapObject
 				{
 					if(e.getHealth() > 0 && !(e instanceof PlaneBoss))
 					{
-						displayMessage = true;
+						willDisplay = true;
 					}
 				}
 			}
-			if(displayMessage)
+			if (willDisplay)
 			{
-				g.setColor(Color.WHITE);
-				String banner = "Press "+ KeyEvent.getKeyText(GameStateManager.action) + " to lauch Clara!";
-				int offSet = 0;
-				for(int j = 0; j < banner.length(); j++)
-				{
-					if(!bannerFont.canDisplay(banner.charAt(j)))
-						g.setFont(backupFont);
-					else
-						g.setFont(bannerFont);
-	
-					g.drawChars(banner.toCharArray(), j, 1, (int)(x + super.width/2 - g.getFontMetrics().getStringBounds(banner, g).getWidth()/2 + offSet), (int)(y + super.height + 80));
-					offSet += g.getFontMetrics().charWidth(banner.charAt(j));
-				}
+				this.setPlayerBannerText("Press "+ KeyEvent.getKeyText(GameStateManager.action) + " to lauch Clara!");
+			}
+			else
+			{
+				this.hidePlayerBanner();
 			}
 		}
 		else if(hasBird && birdActive)
@@ -1053,7 +1052,7 @@ public class Player extends MapObject
 			{
 				g.drawImage(birdAnimation.getImage(), (int)birdX+15, (int)birdY, -15, 15, null);
 			}
-			//g.fillRect((int)birdX, (int)birdY, 10, 10);
+			//g.fillRect((int)birdX, (int)birdY, 10, 10);		
 		}
 		
 		if(healing)
@@ -1085,6 +1084,22 @@ public class Player extends MapObject
 			resetEffects();
 			coolDownTime = 10000000000L;
 		}
+		
+		if(displayMessage && banner != null)
+		{
+			g.setColor(Color.WHITE);
+			int offSet = 0;
+			for(int j = 0; j < banner.length(); j++)
+			{
+				if(!bannerFont.canDisplay(banner.charAt(j)))
+					g.setFont(backupFont);
+				else
+					g.setFont(bannerFont);
+
+				g.drawChars(banner.toCharArray(), j, 1, (int)(x + super.width/2 - g.getFontMetrics().getStringBounds(banner, g).getWidth()/2 + offSet), (int)(y + super.height + 80));
+				offSet += g.getFontMetrics().charWidth(banner.charAt(j));
+			}
+		}
 	}
 	
 	public void keyPressed(int k)
@@ -1099,13 +1114,13 @@ public class Player extends MapObject
 					jump = true;
 					doubleJumpable = false;
 				}
-				/*if(jumped && !doubleJump && doubleJumpable)
+				if(jumped && !doubleJump && doubleJumpable && canDoubleJump)
 				{
 					falling = false;
 					jump = false;
 					doubleJump = true;
 					idle = false;
-				}*/
+				}
 			}
 			if(k == GameStateManager.down)
 			{
@@ -1280,5 +1295,30 @@ public class Player extends MapObject
 	public void setPlayState(PlayState playState)
 	{
 		this.playState = playState;
+	}
+	
+	/**
+	 * Set whether the player can double jump or not
+	 * @param state: boolean value indicating whether player can (or can't) double jump
+	 */
+	public void setDoubleJump(boolean state)
+	{
+		this.canDoubleJump = state;
+	}
+	
+	/**
+	 * Sets the text in the message below the player
+	 * Also sets makes the text visible. Use hidePlayerBanner() to stop displaying it
+	 */
+	public void setPlayerBannerText(String text)
+	{
+		this.banner = text;
+		this.displayMessage = true;
+	}
+	
+	public void hidePlayerBanner()
+	{
+		this.banner = null;
+		this.displayMessage = false;
 	}
 }

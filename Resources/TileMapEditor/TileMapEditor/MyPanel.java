@@ -3,8 +3,6 @@ package TileMapEditor.TileMapEditor;
 import java.io.*;
 import javax.swing.*;
 
-import Main.GamePanel;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.*;
@@ -33,7 +31,6 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 	private Graphics2D g;
 	
 	private Block[] blocks;
-	private BufferedImage currentBlockImage;
 	private int currentBlock;
 	
 	private int[][] map;
@@ -387,6 +384,7 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 							map[row][col] = Integer.parseInt(tokens[col]);
 						}
 					}
+					br.close();
 				}
 				catch(Exception e) {
 					System.out.println("Couldn't load maps/" + str);
@@ -637,7 +635,6 @@ public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListe
 			if(y >= 0 && x >= WIDTH/2 - 50) {
 				b = x / TILESIZE - numCols + (y / TILESIZE)*numCols;
 				if(b >= 0) {
-					currentBlockImage = blocks[b].getImage();
 					currentBlock = b;
 				}
 			}
