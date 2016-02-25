@@ -84,7 +84,7 @@ public class Player extends MapObject
 	private ArrayList<BufferedImage[]> playerHurtSprites;
 	private BufferedImage[] birdPickupSprites;
 	private Animation birdAnimation;
-	private final int[] numFrames = { 1, 4, 3, 3, 4 };
+	private final int[] numFrames = { 1, 6, 3, 3, 3, 4 };
 	private boolean tileMapMoving;
 	private boolean canMove;
 	
@@ -94,8 +94,9 @@ public class Player extends MapObject
 	private static final int JUMPING = 2;
 	private static final int FALLING = 3;
 	private static final int LANDING = 4;
-	private static final int HOVERING = 5;
-	private static final int DOUBLEJUMP = 2; //for now, will be the same as normal jump
+	private static final int DOUBLEJUMP = 5;
+	private static final int HOVERING = 6;
+
 	
 	public Player(TileMap tm, PlayState playState)
 	{	
@@ -584,7 +585,7 @@ public class Player extends MapObject
 				dx -= stopSpeed;
 				if(dx < 0.0) dx = 0.0;
 			}
-			if(!jump && !falling) idle = true;
+			if(!jump && !falling && !doubleJump) idle = true;
 		}
 
 		//JUMPING AND FALLING
@@ -629,14 +630,16 @@ public class Player extends MapObject
 				if(yFromBottom >= jumpHeight) 
 				{
 					jumpHeight = -9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
+					falling = true;
 				}
 			}
-			falling = true;
+			
 		}
 		
 		if(falling)
 		{
 			jump = false;
+			doubleJump = false;
 			if(dy > 0.0 && gliding)
 			{
 				dy = 1;
@@ -695,7 +698,7 @@ public class Player extends MapObject
 		{
 			if(right) facingRight = true;
 			else facingRight = false;
-			if(currentAction != WALKING && !fallingAnim && currentAction != JUMPING)
+			if(currentAction != WALKING && !fallingAnim && currentAction != JUMPING && currentAction != DOUBLEJUMP)
 			{
 				animation.setDone(false);
 				currentAction = WALKING;
@@ -705,10 +708,11 @@ public class Player extends MapObject
 				height = 70;
 			}
 		}
-		if(jump && !doubleJump)
+		if(jump)
 		{
 			if(currentAction != JUMPING && !fallingAnim)
 			{
+				System.out.print("JUMP");
 				currentAction = JUMPING;
 				animation.setFrames(playerSprites.get(JUMPING));
 				animation.setDelay(200);
@@ -728,7 +732,7 @@ public class Player extends MapObject
 				height = 70;
 			}
 		}
-		else if(gliding)
+		if(gliding)
 		{
 			if(currentAction != HOVERING)
 			{
@@ -739,14 +743,14 @@ public class Player extends MapObject
 				height = 70;
 			}
 		}
-		else if(doubleJump)
+		if(doubleJump)
 		{
-			if(!fallingAnim && currentAction != DOUBLEJUMP)
+			if(currentAction != DOUBLEJUMP)
 			{
 				currentAction = DOUBLEJUMP;
 				animation.setFrames(playerSprites.get(DOUBLEJUMP));
-				animation.setDelay(0);
-				animation.setDone(true);
+				animation.setDelay(100);
+				animation.setDone(false);
 				width = 50;
 				height = 70;
 			}
