@@ -220,13 +220,15 @@ public class Projectile extends MapObject
 	{
 		if(!remove)
 		{
-			/*if(this.type == 7)
+			if(this.type == 7)
 			{
 				getAnimation();
 				if(dx >= 0)
 					g.drawImage(new AffineTransformOp(AffineTransform.getRotateInstance((float)angle, width/2, height/2), 
 							AffineTransformOp.TYPE_BILINEAR).filter(animation.getImage(), null), (int)(x + xmap), (int)(y + ymap), width, height, null);
-			}*/
+			}
+			else
+			{
 				g.setColor(Color.BLACK);
 				g.fillOval((int)x, (int)y, width, height);
 			
@@ -235,6 +237,7 @@ public class Projectile extends MapObject
 					g.setColor(Color.RED);
 					g.draw(this.getRectangle());
 				}
+			}
 		}
 	}
 	

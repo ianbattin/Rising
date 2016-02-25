@@ -136,8 +136,6 @@ public class PlaneBoss extends Enemy {
 		x += tileMap.getDX();
 		y += tileMap.getDY();
 		
-		System.out.println(dx + " " + dy);
-		
 		getBulletCollision();
 		getAnimation();
 

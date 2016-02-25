@@ -41,7 +41,6 @@ public class Background
 						pixelColors.add(color);
 				}
 			}
-			System.out.println(pixelColors.toString());
 			
 			moveScale = ms;
 		}

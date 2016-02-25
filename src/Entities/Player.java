@@ -84,7 +84,7 @@ public class Player extends MapObject
 	private ArrayList<BufferedImage[]> playerHurtSprites;
 	private BufferedImage[] birdPickupSprites;
 	private Animation birdAnimation;
-	private final int[] numFrames = { 1, 4, 3, 3, 4 };
+	private final int[] numFrames = { 1, 6, 3, 3, 3, 5 };
 	private boolean tileMapMoving;
 	private boolean canMove;
 	
@@ -94,8 +94,8 @@ public class Player extends MapObject
 	private static final int JUMPING = 2;
 	private static final int FALLING = 3;
 	private static final int LANDING = 4;
-	private static final int HOVERING = 5;
-	private static final int DOUBLEJUMP = 2; //for now, will be the same as normal jump
+	//private static final int HOVERING = 5;
+	private static final int DOUBLEJUMP = 5;
 	
 	public Player(TileMap tm, PlayState playState)
 	{	
@@ -584,7 +584,7 @@ public class Player extends MapObject
 				dx -= stopSpeed;
 				if(dx < 0.0) dx = 0.0;
 			}
-			if(!jump && !falling) idle = true;
+			if(!jump && !falling && !doubleJump) idle = true;
 		}
 
 		//JUMPING AND FALLING
@@ -623,15 +623,15 @@ public class Player extends MapObject
 				doubleJumped = true;
 				SoundPlayer.playClip("doublejump.wav");
 			}
-			if(jumped)
+			if(doubleJumped)
 			{
 				if(yFromBottom < jumpHeight) dy = jumpStart*2*jumpHeightFactor;
 				if(yFromBottom >= jumpHeight) 
 				{
 					jumpHeight = -9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
+					falling = true;
 				}
 			}
-			falling = true;
 		}
 		
 		if(falling)
@@ -695,7 +695,7 @@ public class Player extends MapObject
 		{
 			if(right) facingRight = true;
 			else facingRight = false;
-			if(currentAction != WALKING && !fallingAnim && currentAction != JUMPING)
+			if(currentAction != WALKING && !fallingAnim && currentAction != JUMPING && currentAction != DOUBLEJUMP)
 			{
 				animation.setDone(false);
 				currentAction = WALKING;
@@ -705,12 +705,37 @@ public class Player extends MapObject
 				height = 70;
 			}
 		}
-		if(jump && !doubleJump)
+		if(jump)
 		{
-			if(currentAction != JUMPING && !fallingAnim)
+			if(currentAction != JUMPING)
 			{
+				System.out.println("Jumping");
 				currentAction = JUMPING;
 				animation.setFrames(playerSprites.get(JUMPING));
+				animation.setDelay(200);
+				animation.setDone(true);
+				width = 50;
+				height = 70;
+			}
+		}
+		/*else if(gliding)
+		{
+			if(currentAction != HOVERING)
+			{
+				currentAction = HOVERING;
+				animation.setFrames(sprites.get(HOVERING));
+				animation.setDelay(200);
+				width = 50;
+				height = 70;
+			}
+		}*/
+		if(doubleJump)
+		{
+			if(currentAction != DOUBLEJUMP)
+			{
+				System.out.println("DOUBLE JUMPING");
+				currentAction = DOUBLEJUMP;
+				animation.setFrames(playerSprites.get(DOUBLEJUMP));
 				animation.setDelay(200);
 				animation.setDone(true);
 				width = 50;
@@ -724,29 +749,6 @@ public class Player extends MapObject
 				currentAction = FALLING;
 				animation.setFrames(playerSprites.get(FALLING));
 				animation.setDelay(200);
-				width = 50;
-				height = 70;
-			}
-		}
-		else if(gliding)
-		{
-			if(currentAction != HOVERING)
-			{
-				currentAction = HOVERING;
-				//animation.setFrames(sprites.get(HOVERING));
-				animation.setDelay(200);
-				width = 50;
-				height = 70;
-			}
-		}
-		else if(doubleJump)
-		{
-			if(!fallingAnim && currentAction != DOUBLEJUMP)
-			{
-				currentAction = DOUBLEJUMP;
-				animation.setFrames(playerSprites.get(DOUBLEJUMP));
-				animation.setDelay(0);
-				animation.setDone(true);
 				width = 50;
 				height = 70;
 			}
@@ -1112,14 +1114,17 @@ public class Player extends MapObject
 				{
 					idle = false;
 					jump = true;
-					doubleJumpable = false;
 				}
-				if(jumped && !doubleJump && doubleJumpable && canDoubleJump)
+				else if(jumped && !doubleJump && doubleJumpable && canDoubleJump)
 				{
 					falling = false;
 					jump = false;
 					doubleJump = true;
 					idle = false;
+				}
+				else
+				{
+					doubleJump = false;
 				}
 			}
 			if(k == GameStateManager.down)
@@ -1209,8 +1214,7 @@ public class Player extends MapObject
 				falling = true;
 				doubleJumpable = true;
 			}
-			
-			if(doubleJump)
+			if(doubleJumped)
 			{
 				doubleJump = false;
 				jump = false;

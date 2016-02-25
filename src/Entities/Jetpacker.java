@@ -153,7 +153,6 @@ public class Jetpacker extends Enemy
 			this.remove = true;
 		}
 		
-		
 		getAnimation();
 		getBulletCollision();
 
@@ -259,86 +258,6 @@ public class Jetpacker extends Enemy
 		{
 			this.facingRight = false;
 		}
-		//MOVING LEFT AND RIGHT
-		/*if(left)
-		{
-			dx -= moveSpeed;
-			if(dx < -maxSpeed) dx = -maxSpeed;
-		}
-
-		if(right)
-		{
-			dx += moveSpeed;
-			if(dx > maxSpeed) dx = maxSpeed;
-		}
-
-		if(!left && !right)
-		{
-			if(dx < 0.0) 
-			{
-				dx += stopSpeed;
-				if(dx > 0.0) dx = 0.0;
-			}
-			if(dx > 0.0) 
-			{
-				dx -= stopSpeed;
-				if(dx < 0.0) dx = 0.0;
-			}
-			dx = -player.getDX();
-		}
-
-		//JUMPING AND FALLING
-		if(jump)
-		{
-			if(!jumped)
-			{
-				jumpHeight = yFromBottom + (100); //edited to be "effectable"
-				jumped = true;
-			}
-			if(jumped)
-			{
-				if(yFromBottom < jumpHeight) dy = jumpStart*3;
-				if(yFromBottom >= jumpHeight) 
-				{
-					jumpHeight = -9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
-					falling = true;
-				}
-			}
-		}
-		if(doubleJump)
-		{
-			if(!doubleJumped)
-			{
-				jumpHeight = yFromBottom + (50.0); //edited to be "effectable"
-				doubleJumped = true;
-			}
-			if(jumped)
-			{
-				if(yFromBottom < jumpHeight) dy = jumpStart*2; //edited to be "effectable"
-				if(yFromBottom >= jumpHeight) 
-				{
-					jumpHeight = -9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
-				}
-			}
-			falling = true;
-		}
-		
-		if(falling)
-		{
-			jump = false;
-			if(dy > 0.0 && gliding)
-			{
-				dy = 1;
-			}
-			else if(dy < maxFallSpeed) dy += fallSpeed;
-			else dy = maxFallSpeed;
-			
-			if(!fallingAnim && dy > 0) fallingAnim = true;
-		}
-		else
-		{
-			fallingAnim = false;
-		}*/
 		
 		x += dx*Enemy.slowDown;
 		y += dy*Enemy.slowDown;
