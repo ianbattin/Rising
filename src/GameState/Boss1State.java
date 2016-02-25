@@ -297,6 +297,11 @@ public class Boss1State extends PlayState
 								timer = System.nanoTime();
 							}
 						}
+						
+						//enable the double jumping & display the banner
+						player.setDoubleJump(true);
+						player.setPlayerBannerText("Press "+ KeyEvent.getKeyText(GameStateManager.up)+ " twice to Double Jump!");
+						
 						break;
 					}
 						
@@ -315,6 +320,9 @@ public class Boss1State extends PlayState
 							stage = 2;
 							((PlaneBoss) enemies.get(0)).setMoveComplete(false);
 						}
+						
+						//hide the banner
+						player.hidePlayerBanner();
 						break;
 					}
 				}
