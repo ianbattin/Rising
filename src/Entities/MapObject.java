@@ -2,13 +2,19 @@ package Entities;
 
 import java.applet.Applet;
 import java.applet.AudioClip;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 
+import GameState.GameState;
+import GameState.GameStateManager;
+import GameState.Level1State;
+import GameState.PlayState;
 import Main.GamePanel;
 import Main.SoundPlayer;
 import TileMap.Background;
@@ -24,6 +30,7 @@ public abstract class MapObject
 	protected int tileSize;
 	protected double xmap;
 	protected double ymap;
+	protected ArrayList<Integer> bgColors;
 	
 	//position and vector
 	protected double x;
@@ -42,6 +49,7 @@ public abstract class MapObject
 	protected int cwidth;
 	protected int cheight;
 	protected boolean remove;
+	protected int color;
 	
 	//collision
 	protected int currRow;
@@ -103,6 +111,7 @@ public abstract class MapObject
 		tileMap = tm;
 		tiles = tm.tiles;
 		tileSize = tm.getTileSize();
+		bgColors = new Background("/Backgrounds/battlebackground.gif", 1).getPixelColors();
 	}
 	
 	public abstract void collided(int type, Tile t);
@@ -150,29 +159,24 @@ public abstract class MapObject
 	
 	public void checkPixelColorCollision(TileMap tm)
 	{
-		boolean blocked = true;
-		
-		for(int color: Background.getPixelColors())
-		{
-			if(GamePanel.getImage().getRGB((int)x, (int)(y+cheight)) == color)
-			{
-				blocked = false;
-			}
-		}
+		boolean collided = false;
+		color = GamePanel.getImage().getRGB((int)x, (int)(y+cheight));
+		int otherColor = color;
 
-		if(blocked && dy >= 0)
+		if(bgColors.contains(color))
+			collided = false;
+		else if(dy >= 0)
 		{
-			dy = tm.getDY();
+			dy = tileMap.getDY();
 			jumped  = false;
 			doubleJumped = false;
 			falling = false;
-			//landing = true;
-			//gliding = false;
-			idle = true;
+			gliding = false;
 			fallingAnim = false;
-			//System.out.println("BLOCKED");
+			collided = true;
 		}
-		else
+		
+		if(!collided && !jumped && !doubleJumped)
 			falling = true;
 	}
 	

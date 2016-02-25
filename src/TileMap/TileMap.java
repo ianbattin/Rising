@@ -16,7 +16,9 @@ import GameState.GameStateManager;
 import Main.GamePanel;
 
 public class TileMap
-{
+{	
+	GameStateManager gsm;
+	
 	private int x;
 	private int y;
 	private double xMove;
@@ -43,8 +45,9 @@ public class TileMap
 	
 	private ArrayList<Explosion> explosions;
 	
-	public TileMap(String s, int extraWidth)
+	public TileMap(String s, int extraWidth, GameStateManager gsm)
 	{
+		this.gsm = gsm;
 		x = 0;
 		y = 0;
 		dx = 0;
@@ -273,5 +276,10 @@ public class TileMap
 	public int getTotalWidth() 
 	{
 		return totalWidth;
+	}
+	
+	public GameStateManager getGSM()
+	{
+		return gsm;
 	}
 }

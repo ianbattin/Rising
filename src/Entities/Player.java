@@ -1274,7 +1274,7 @@ public class Player extends MapObject
 	
 	public boolean onScreen()
 	{
-		return (-width <= x && x <= GamePanel.WIDTH+width && -height <= y && y <= GamePanel.HEIGHT+height);
+		return (-width <= x && x <= GamePanel.WIDTH+width && 0 <= y+cheight && y+cheight < GamePanel.HEIGHT);
 	}
 	
 	public void setPlayState(PlayState playState)

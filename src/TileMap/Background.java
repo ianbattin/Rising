@@ -1,5 +1,6 @@
 package TileMap;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -13,6 +14,7 @@ public class Background
 {
 	private BufferedImage image;
 	private static ArrayList<Integer> pixelColors;
+	public String path;
 	
 	private double x; //xPosition
 	private double y; //yPosition
@@ -22,22 +24,24 @@ public class Background
 	private double moveScale;
 	
 	//Constructor reads the image into the image variable
-	public Background(String s, double ms)
+	public Background(String path, double ms)
 	{
 		try
 		{
-			image = ImageIO.read(getClass().getResourceAsStream(s));
+			this.path = path;
+			image = ImageIO.read(getClass().getResourceAsStream(path));
 			
 			pixelColors = new ArrayList<Integer>();
-			for(int i = 0; i < image.getWidth(); i++)
+			for(int i = 1; i < image.getWidth(); i++)
 			{
-				for(int j = 0; j < image.getHeight(); j++)
+				for(int j = 1; j < image.getHeight(); j++)
 				{
 					int color = image.getRGB(i, j);
 					if(!pixelColors.contains(color))
 						pixelColors.add(color);
 				}
 			}
+			System.out.println(pixelColors.toString());
 			
 			moveScale = ms;
 		}
@@ -137,7 +141,12 @@ public class Background
 		}
 	}
 
-	public static ArrayList<Integer> getPixelColors()
+	public String getPath()
+	{
+		return path;
+	}
+	
+	public ArrayList<Integer> getPixelColors()
 	{
 		return pixelColors;
 	}

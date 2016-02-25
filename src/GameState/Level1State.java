@@ -48,6 +48,8 @@ public class Level1State extends PlayState
 	public SmallStuka stuka;
 	public boolean stukaSpawned = false;
 	
+	public int bossHeight = 7000;
+	
 	public Level1State(GameStateManager gsm)
 	{
 		super();
@@ -99,7 +101,7 @@ public class Level1State extends PlayState
 
 	public void init() 
 	{	
-		tileMap = new TileMap("Resources/Maps/level1final.txt", 2);
+		tileMap = new TileMap("Resources/Maps/level1final.txt", 2, gsm);
 		tileMap.setY(-300);
 		player = new Player(tileMap, this);
 		player.setPosition(375, -100);
@@ -228,7 +230,7 @@ public class Level1State extends PlayState
 				}
 			}
 			tileMap.setYVector(transitionDY);
-			if(player.getY() > GamePanel.HEIGHT && !enemies.isEmpty() && enemies.get(0).getX() < GamePanel.WIDTH && player.getPoints() > 7000)
+			if(player.getY() > GamePanel.HEIGHT && !enemies.isEmpty() && enemies.get(0).getX() < GamePanel.WIDTH && player.getPoints() > bossHeight)
 			{
 				System.out.println("NOT DEAD");
 				player.setPosition(400, 900);

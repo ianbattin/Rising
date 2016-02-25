@@ -135,7 +135,11 @@ public abstract class GameState
 			g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 		}
 	}
-		
+	
+	public Background getBackground()
+	{
+		return bg;
+	}
 	
 	public void music(String fileName) 
     {   

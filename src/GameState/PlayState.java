@@ -24,7 +24,6 @@ import TileMap.TileMap;
 public abstract class PlayState extends GameState
 {
 	protected TileMap tileMap;
-	protected Background bg;
 	protected double bgVectorX, bgVectorY;
 	protected double debrisVector;
 	protected static Player player;
@@ -216,6 +215,7 @@ public abstract class PlayState extends GameState
 	{
 		return mapObjects;
 	}
+	
 	abstract public void slowTimeStart();
 	abstract public void slowTimeEnd();
 	
