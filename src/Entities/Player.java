@@ -1101,7 +1101,7 @@ public class Player extends MapObject
 				else
 					g.setFont(bannerFont);
 
-				g.drawChars(banner.toCharArray(), j, 1, (int)(x + super.width/2 - g.getFontMetrics().getStringBounds(banner, g).getWidth()/2 + offSet), (int)(y + super.height + 80));
+				g.drawChars(banner.toCharArray(), j, 1, (int)(x + super.width/2 - g.getFontMetrics().getStringBounds(banner, g).getWidth()/2 + offSet), (int)(y + super.height - 80));
 				offSet += g.getFontMetrics().charWidth(banner.charAt(j));
 			}
 		}

@@ -300,7 +300,7 @@ public class Boss1State extends PlayState
 						
 						//enable the double jumping & display the banner
 						player.setDoubleJump(true);
-						player.setPlayerBannerText("Press "+ KeyEvent.getKeyText(GameStateManager.up)+ " twice to Double Jump!");
+						player.setPlayerBannerText("Press "+ KeyEvent.getKeyText(GameStateManager.up)+ " twice to somersault!");
 						
 						break;
 					}
