@@ -10,6 +10,7 @@ import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
+import Main.GamePanel;
 import Main.SoundPlayer;
 import TileMap.Tile;
 import TileMap.TileMap;
@@ -35,7 +36,7 @@ public class PlaneBoss extends Enemy {
 		
 		bullets = new ArrayList<Projectile>();
 		firing = false;
-		fireDelay = 10;
+		fireDelay = 20;
 		this.typeAttack = typeAttack;
 		
 		setMovement = false;
@@ -171,7 +172,7 @@ public class PlaneBoss extends Enemy {
 				break;
 			}
 			bullets.get(i).update();
-			//if(bullets.get(i).notOnScreen()) bullets.remove(i);
+			if(bullets.get(i).getY() > GamePanel.HEIGHT) bullets.remove(i);
 		}
 	}
 

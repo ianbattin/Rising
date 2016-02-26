@@ -415,6 +415,10 @@ public class Level1State extends PlayState
 		{
 			tileMap.getExplosions().add(new Explosion(mouseX, mouseY, 2, tileMap));
 		}
+		if(k == KeyEvent.VK_B)
+		{
+			mapObjects.add(new Bomb(100, -80, tileMap, 1));
+		}
 		
 	}
 

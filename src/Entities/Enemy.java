@@ -90,13 +90,13 @@ public abstract class Enemy extends MapObject
 	{
 		for(int i = 0; i < bullets.size(); i++)
 		{
-			bullets.get(i).update();
 			if(bullets.get(i).getRemove())
 			{
 				bullets.remove(i);
 				i--;
 				break;
 			}
+			bullets.get(i).update();
 			if(bullets.get(i).intersects(player))
 			{
 				bullets.get(i).collided(player);
