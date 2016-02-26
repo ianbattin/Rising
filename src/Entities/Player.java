@@ -85,6 +85,7 @@ public class Player extends MapObject
 	private BufferedImage[] birdPickupSprites;
 	private Animation birdAnimation;
 	private final int[] numFrames = { 1, 6, 3, 3, 3, 5 };
+
 	private boolean tileMapMoving;
 	private boolean canMove;
 	
@@ -94,9 +95,9 @@ public class Player extends MapObject
 	private static final int JUMPING = 2;
 	private static final int FALLING = 3;
 	private static final int LANDING = 4;
-	//private static final int HOVERING = 5;
 	private static final int DOUBLEJUMP = 5;
-	
+	private static final int HOVERING = 6;
+
 	public Player(TileMap tm, PlayState playState)
 	{	
 		super(tm);
@@ -638,6 +639,7 @@ public class Player extends MapObject
 		if(falling)
 		{
 			jump = false;
+			doubleJump = false;
 			if(dy > 0.0 && gliding)
 			{
 				dy = 1;
@@ -710,6 +712,7 @@ public class Player extends MapObject
 		{
 			if(currentAction != JUMPING)
 			{
+				System.out.print("JUMP");
 				currentAction = JUMPING;
 				animation.setFrames(playerSprites.get(JUMPING));
 				animation.setDelay(200);
@@ -718,18 +721,7 @@ public class Player extends MapObject
 				height = 70;
 			}
 		}
-		/*else if(gliding)
-		{
-			if(currentAction != HOVERING)
-			{
-				currentAction = HOVERING;
-				animation.setFrames(sprites.get(HOVERING));
-				animation.setDelay(200);
-				width = 50;
-				height = 70;
-			}
-		}*/
-		if(doubleJump)
+		if(gliding)
 		{
 			if(currentAction != DOUBLEJUMP)
 			{
@@ -748,6 +740,18 @@ public class Player extends MapObject
 				currentAction = FALLING;
 				animation.setFrames(playerSprites.get(FALLING));
 				animation.setDelay(200);
+				width = 50;
+				height = 70;
+			}
+		}
+		if(doubleJump)
+		{
+			if(currentAction != DOUBLEJUMP)
+			{
+				currentAction = DOUBLEJUMP;
+				animation.setFrames(playerSprites.get(DOUBLEJUMP));
+				animation.setDelay(100);
+				animation.setDone(false);
 				width = 50;
 				height = 70;
 			}
