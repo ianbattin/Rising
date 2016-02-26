@@ -84,7 +84,7 @@ public class Player extends MapObject
 	private ArrayList<BufferedImage[]> playerHurtSprites;
 	private BufferedImage[] birdPickupSprites;
 	private Animation birdAnimation;
-	private final int[] numFrames = { 1, 6, 3, 3, 3, 5 };
+	private final int[] numFrames = { 1, 6, 3, 3, 3, 6 };
 
 	private boolean tileMapMoving;
 	private boolean canMove;
@@ -751,7 +751,7 @@ public class Player extends MapObject
 				currentAction = DOUBLEJUMP;
 				animation.setFrames(playerSprites.get(DOUBLEJUMP));
 				animation.setDelay(100);
-				animation.setDone(false);
+				animation.setDone(true);
 				width = 50;
 				height = 70;
 			}
