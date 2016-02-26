@@ -270,8 +270,8 @@ public class Player extends MapObject
 	{	
 		if (health > 0)
 		{
-			myCheckCollision();
-			//if(onScreen()) checkPixelColorCollision(tileMap);
+			if(onScreen()) checkPixelColorCollision(tileMap);
+			else myCheckCollision();
 			getAttack();
 		}
 		else
@@ -597,6 +597,7 @@ public class Player extends MapObject
 				{
 					public void run()
 					{	
+						y-=5;
 						jumpHeight = yFromBottom + (100*jumpHeightFactor);
 						if(!jumped) SoundPlayer.playClip("jump.wav");
 						jumped = true;
@@ -644,7 +645,7 @@ public class Player extends MapObject
 			else if(dy < maxFallSpeed) dy += fallSpeed;
 			else dy = maxFallSpeed;
 			
-			if(!fallingAnim && dy > 0) fallingAnim = true;
+			if(!fallingAnim && dy > 3) fallingAnim = true;
 		}
 		else
 			fallingAnim = false;
@@ -709,7 +710,6 @@ public class Player extends MapObject
 		{
 			if(currentAction != JUMPING)
 			{
-				System.out.println("Jumping");
 				currentAction = JUMPING;
 				animation.setFrames(playerSprites.get(JUMPING));
 				animation.setDelay(200);
@@ -733,7 +733,6 @@ public class Player extends MapObject
 		{
 			if(currentAction != DOUBLEJUMP)
 			{
-				System.out.println("DOUBLE JUMPING");
 				currentAction = DOUBLEJUMP;
 				animation.setFrames(playerSprites.get(DOUBLEJUMP));
 				animation.setDelay(200);
@@ -1293,7 +1292,7 @@ public class Player extends MapObject
 	
 	public boolean onScreen()
 	{
-		return (-width <= x && x <= GamePanel.WIDTH+width && 0 <= y+cheight && y+cheight < GamePanel.HEIGHT);
+		return (-width <= x && x <= GamePanel.WIDTH+width && 0 <= y+cheight && y+cheight < GamePanel.HEIGHT-1);
 	}
 	
 	public void setPlayState(PlayState playState)

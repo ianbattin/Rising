@@ -160,24 +160,47 @@ public abstract class MapObject
 	public void checkPixelColorCollision(TileMap tm)
 	{
 		boolean collided = false;
-		color = GamePanel.getImage().getRGB((int)x, (int)(y+cheight));
-		int otherColor = color;
-
+		color = GamePanel.getImage().getRGB((int)x+width/2, (int)(y+cheight+1));
+		int otherColor = GamePanel.getImage().getRGB((int)x+width/2, (int)(y+cheight));;
 		if(bgColors.contains(color))
-			collided = false;
-		else if(dy >= 0)
 		{
-			dy = tileMap.getDY();
-			jumped  = false;
-			doubleJumped = false;
-			falling = false;
-			gliding = false;
-			fallingAnim = false;
-			collided = true;
+			collided = false;
+			if(!jump && !jumped && !doubleJumped)falling = true;
 		}
-		
-		if(!collided && !jumped && !doubleJumped)
-			falling = true;
+		for(int i = 0; i < tiles.size(); i++)
+		{
+			Tile t = tiles.get(i);
+			double collisionLeft = t.left-10;
+			double collisionRight = t.right+10;
+			double collisionTop = t.top-10;
+			double collisionBottom = t.bottom+10;
+
+			if((collisionLeft <= x + cwidth/2 && x + cwidth/2  <= collisionRight) && (collisionTop <= y + cheight && y + cheight <= collisionBottom) && !drop)
+			{
+				if(dy >= 0 && !bgColors.contains(color))
+				{
+					collided = true;
+					dy = tileMap.getDY();
+					jumped  = false;
+					doubleJumped = false;
+					falling = false;
+					gliding = false;
+					fallingAnim = false;
+				}
+				if(collided)
+				{
+					if(!bgColors.contains(otherColor) && !jump)
+						y--;
+				}	
+			}
+			
+			collisionLeft = t.left - 14;
+			collisionRight = t.right + 14;
+			collisionTop = t.top;
+			collisionBottom = t.bottom;
+			if((collisionLeft <= x + cwidth/2 && x + cwidth/2  <= collisionRight) && (collisionTop <= y + cheight && y + cheight <= collisionBottom))
+				collided(t.getType(), t);
+		}
 	}
 	
 	public void myCheckCollision()
