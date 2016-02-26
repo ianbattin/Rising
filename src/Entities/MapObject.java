@@ -159,9 +159,11 @@ public abstract class MapObject
 	
 	public void checkPixelColorCollision(TileMap tm)
 	{
+		int xCol = (int)((x+width/2) * GamePanel.scaleWidth);
+		int yCol = (int)((y+cheight) * GamePanel.scaleWidth);
 		boolean collided = false;
-		color = GamePanel.getImage().getRGB((int)x+width/2, (int)(y+cheight+1));
-		int otherColor = GamePanel.getImage().getRGB((int)x+width/2, (int)(y+cheight));;
+		color = GamePanel.getImage().getRGB(xCol, yCol + 1);
+		int otherColor = GamePanel.getImage().getRGB(xCol, yCol);;
 		if(bgColors.contains(color))
 		{
 			collided = false;
