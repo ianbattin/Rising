@@ -305,7 +305,7 @@ public class Player extends MapObject
 				break;
 			}
 			bullets.get(i).update();
-			//if(bullets.get(i).notOnScreen()) bullets.remove(i);
+			if(bullets.get(i).notOnScreen()) bullets.remove(i);
 		}
 		
 		yFromBottom += (-dy + tileMap.getDY());
@@ -712,7 +712,6 @@ public class Player extends MapObject
 		{
 			if(currentAction != JUMPING)
 			{
-				System.out.print("JUMP");
 				currentAction = JUMPING;
 				animation.setFrames(playerSprites.get(JUMPING));
 				animation.setDelay(200);

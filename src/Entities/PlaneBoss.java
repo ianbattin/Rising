@@ -161,6 +161,18 @@ public class PlaneBoss extends Enemy {
 		}
 		
 		checkPlayerCollision();
+		
+		for(int i = 0; i < bullets.size(); i++)
+		{	
+			if(bullets.get(i).getRemove())
+			{
+				bullets.remove(i);
+				i--;
+				break;
+			}
+			bullets.get(i).update();
+			//if(bullets.get(i).notOnScreen()) bullets.remove(i);
+		}
 	}
 
 	@Override

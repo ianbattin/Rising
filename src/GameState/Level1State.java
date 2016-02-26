@@ -101,7 +101,7 @@ public class Level1State extends PlayState
 
 	public void init() 
 	{	
-		tileMap = new TileMap("Resources/Maps/level1final.txt", 2, gsm);
+		tileMap = new TileMap("Resources/Maps/level5.txt", 2, gsm);
 		tileMap.setY(-300);
 		player = new Player(tileMap, this);
 		player.setPosition(375, -100);
@@ -411,16 +411,11 @@ public class Level1State extends PlayState
 			gsm.setState(GameStateManager.BOSS1STATE);
 			gsm.resetState(GameStateManager.LEVEL1STATE);
 		}
-		/*
-		if(k == KeyEvent.VK_B)
-		{
-			addBomb = true;
-		}
 		if(k == KeyEvent.VK_E)
 		{
 			tileMap.getExplosions().add(new Explosion(mouseX, mouseY, 2, tileMap));
 		}
-		*/
+		
 	}
 
 	public void keyReleased(int k) 

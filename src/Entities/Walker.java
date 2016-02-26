@@ -158,6 +158,18 @@ public class Walker extends Enemy
 				numOfFramesToAnimHealth = 10;
 			}
 		}
+		
+		for(int i = 0; i < bullets.size(); i++)
+		{	
+			if(bullets.get(i).getRemove())
+			{
+				bullets.remove(i);
+				i--;
+				break;
+			}
+			bullets.get(i).update();
+			if(bullets.get(i).notOnScreen()) bullets.remove(i);
+		}
 	}
 
 	public void draw(Graphics2D g) 
