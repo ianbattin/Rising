@@ -49,6 +49,7 @@ public class Level1State extends PlayState
 	public boolean stukaSpawned = false;
 	
 	public int bossHeight = 7000;
+	public static final double SCROLLSPEED = 1.25;
 	
 	public Level1State(GameStateManager gsm)
 	{
@@ -126,7 +127,7 @@ public class Level1State extends PlayState
 				public void run()
 				{
 					tileStart = true;
-					tileMap.setYVector(2.0);		
+					tileMap.setYVector(SCROLLSPEED);		
 				}
 				
 			}, 10);

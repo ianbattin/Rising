@@ -85,6 +85,7 @@ public class Player extends MapObject
 	private BufferedImage[] birdPickupSprites;
 	private Animation birdAnimation;
 	private final int[] numFrames = { 1, 6, 3, 3, 3, 6 };
+	private final int jumpDelay = 200;
 
 	private boolean tileMapMoving;
 	private boolean canMove;
@@ -604,7 +605,7 @@ public class Player extends MapObject
 						jumped = true;
 					}
 					
-				}, 200);
+				}, jumpDelay);
 			}
 			if(jumped)
 			{
@@ -660,8 +661,8 @@ public class Player extends MapObject
 				if(Level1State.tileStart && tileMap.getMoving())
 				{
 
-					if (dy >= 0) tileMap.setYVector(2.0);
-					else tileMap.setYVector(-dy + 2);
+					if (dy >= 0) tileMap.setYVector(Level1State.SCROLLSPEED);
+					else tileMap.setYVector(-dy + Level1State.SCROLLSPEED);
 					if(dy > 0) y += (dy);
 				}
 				else
@@ -671,8 +672,8 @@ public class Player extends MapObject
 			}
 			else 
 			{	
-				if(slowTime) tileMap.setYVector(0.5);
-				else if(Level1State.tileStart) tileMap.setYVector(2.0);
+				if(slowTime) tileMap.setYVector(Level1State.SCROLLSPEED/4);
+				else if(Level1State.tileStart) tileMap.setYVector(Level1State.SCROLLSPEED);
 				y += dy;
 			}
 		}
