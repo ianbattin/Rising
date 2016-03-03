@@ -306,7 +306,7 @@ public class Player extends MapObject
 				break;
 			}
 			bullets.get(i).update();
-			if(bullets.get(i).notOnScreen()) bullets.remove(i);
+			if(bullets.get(i).notOnScreen() && bullets.get(i).getType() != 7) bullets.remove(i);
 		}
 		
 		yFromBottom += (-dy + tileMap.getDY());
@@ -1202,7 +1202,7 @@ public class Player extends MapObject
 			}
 			if(k == KeyEvent.VK_L)
 			{
-				bullets.add(new Projectile(400, -100, 45, 7, tileMap));
+				bullets.add(new Projectile(400, -100, 10, 7, tileMap));
 			}
 		}
 	}

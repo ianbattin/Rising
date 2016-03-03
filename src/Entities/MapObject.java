@@ -222,13 +222,16 @@ public abstract class MapObject
 				{
 					if(dy >= 0)
 					{
-						dy = tileMap.getDY();
-						y = t.top - cheight - 1;
-						jumped  = false;
-						doubleJumped = false;
-						falling = false;
-						gliding = false;
-						fallingAnim = false;
+						if(this instanceof Player || this instanceof Enemy)
+						{
+							dy = tileMap.getDY();
+							y = t.top - cheight - 1;
+							jumped  = false;
+							doubleJumped = false;
+							falling = false;
+							gliding = false;
+							fallingAnim = false;
+						}
 					}
 					collided(t.getType(), t);
 				}

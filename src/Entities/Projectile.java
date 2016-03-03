@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import GameState.GameState;
 import Main.GamePanel;
 import Main.SoundPlayer;
 import TileMap.Tile;
@@ -22,6 +23,9 @@ public class Projectile extends MapObject
 	private int damage;
 	private int type;
 	private int ricochetCount;
+	private long ricochetTimer;
+	private int ricochetDelay;
+	
 	
 	private boolean remove;
 	private boolean playerCollide;
@@ -34,7 +38,7 @@ public class Projectile extends MapObject
 	
 	//sprites loading
 	private ArrayList<BufferedImage[]> sprites;
-	private final int[] numFrames = { 1 };
+	private final int[] numFrames = { 1, 1 };
 	
 	public Projectile(double x, double y, double direction, int type, TileMap tm) 
 	{
@@ -116,26 +120,28 @@ public class Projectile extends MapObject
 			case 7:
 			{
 				ricochetCount = 0;
+				ricochetDelay = 200;
+				ricochetTimer = System.nanoTime();
 				moveSpeed = 10.0;
 				dx = moveSpeed;
 				dy = moveSpeed;
-				angle = Math.asin(dx/dy) - 90;
-				width = 30;
-				height = 30;
+				angle = direction;
+				width = 75;
+				height = 75;
 				damage = 2;
 				playerCollide = true;
 				
 				try
 				{
 					//will have to be fixed to get an image from a large sprites image rather than a single image for each pickup
-					BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/Debris.png"));
+					BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/Debris2.png"));
 					sprites = new ArrayList<BufferedImage[]>();
 					for(int i = 0; i < numFrames.length; i++)
 					{
 						BufferedImage[] bi = new BufferedImage[numFrames[i]];
 						for(int j = 0; j < numFrames[i]; j++)
 						{
-							bi[j] = spritesheet.getSubimage(i * width, j * height, width, height);
+							bi[j] = spritesheet.getSubimage(j * width, i * height, width, height);
 						}
 						sprites.add(bi);
 					}
@@ -199,7 +205,7 @@ public class Projectile extends MapObject
 			}
 			
 			if(Math.abs(dy) < 4) dy = moveSpeed;
-			angle = Math.asin(dx/dy) - 90;
+			angle = Math.toDegrees(Math.atan(dy/dx));
 		}
 			
 		if(type != 1)
@@ -223,9 +229,11 @@ public class Projectile extends MapObject
 			if(this.type == 7)
 			{
 				getAnimation();
+				System.out.println(angle);
 				if(dx >= 0)
-					g.drawImage(new AffineTransformOp(AffineTransform.getRotateInstance((float)angle, width/2, height/2), 
-							AffineTransformOp.TYPE_BILINEAR).filter(animation.getImage(), null), (int)(x + xmap), (int)(y + ymap), width, height, null);
+					g.drawImage(GameState.rotateImage(animation.getImage(), (int)angle), (int)(x + xmap), (int)(y + ymap), width, height, null);
+				else
+					g.drawImage(GameState.rotateImage(animation.getImage(), (int)angle), (int)(x + xmap), (int)(y + ymap), -width, -height, null);
 			}
 			else
 			{
@@ -243,6 +251,8 @@ public class Projectile extends MapObject
 	
 	public void getAnimation()
 	{
+		if(true)
+			animation.setFrames(sprites.get(1));
 		animation.update();
 	}
 	
@@ -279,11 +289,18 @@ public class Projectile extends MapObject
 			}
 			else if(this.type == 7)
 			{
-				if(dy > 0) y -= 10;
-				else y += 10;
-				dy = -dy;
-				ricochetCount++;
-				if(ricochetCount > 5) remove = true;
+				long elapsed= (System.nanoTime() - ricochetTimer) / 1000000;
+				if(ricochetDelay <= elapsed)
+				{
+					dy = -dy;
+					ricochetCount++;
+					ricochetTimer = System.nanoTime();
+				}
+				if(ricochetCount > 5) 
+				{
+					tileMap.getExplosions().add(new Explosion(x, y, 1, tileMap));
+					remove = true;
+				}
 			}
 			else
 				remove = true;
@@ -320,6 +337,11 @@ public class Projectile extends MapObject
 				tileMap.getExplosions().get(tileMap.getExplosions().size()-1).collided(m);
 			}
 		}
+	}
+	
+	public int getType()
+	{
+		return type;
 	}
 	
 	public boolean getRemove()

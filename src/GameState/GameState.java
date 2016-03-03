@@ -10,6 +10,9 @@ import java.applet.AudioClip;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -192,5 +195,17 @@ public abstract class GameState
 	public int getScore()
 	{
 		return score;
+	}
+	
+	public static BufferedImage rotateImage(BufferedImage image, int angle)
+	{
+		AffineTransform tx = new AffineTransform();
+		tx.rotate(Math.toRadians(angle-65), image.getWidth() / 2, image.getHeight() / 2);
+
+		AffineTransformOp op = new AffineTransformOp(tx,
+				AffineTransformOp.TYPE_BILINEAR);
+		image = op.filter(image, null);
+		
+		return image;
 	}
 }
