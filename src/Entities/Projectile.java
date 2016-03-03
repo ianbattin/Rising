@@ -125,7 +125,7 @@ public class Projectile extends MapObject
 				moveSpeed = 10.0;
 				dx = moveSpeed;
 				dy = moveSpeed;
-				angle = direction;
+				angle = Math.toDegrees(Math.atan(dy/dx));
 				width = 75;
 				height = 75;
 				damage = 2;

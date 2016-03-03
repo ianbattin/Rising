@@ -1202,7 +1202,7 @@ public class Player extends MapObject
 			}
 			if(k == KeyEvent.VK_L)
 			{
-				bullets.add(new Projectile(400, -100, 10, 7, tileMap));
+				bullets.add(new Projectile(400, -100, 45, 7, tileMap));
 			}
 		}
 	}
