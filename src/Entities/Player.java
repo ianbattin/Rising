@@ -58,7 +58,7 @@ public class Player extends MapObject
 	private Explosion explosions;
 	private Enemy chosenEnemy;
 	private ArrayList<Integer> charBlurPos;
-	private long coolDownTime;
+	private long coolDownTime, launchTimer;
 	private Font backupFont, bannerFont;
 	private BufferedImage gunImage;
 	private boolean displayMessage;
@@ -85,6 +85,7 @@ public class Player extends MapObject
 	private BufferedImage[] birdPickupSprites;
 	private Animation birdAnimation;
 	private final int[] numFrames = { 1, 6, 3, 3, 3, 6 };
+	private final int[] numShootingFrames = { 4, 4 };
 	private final int jumpDelay = 200;
 
 	private boolean tileMapMoving;
@@ -97,8 +98,10 @@ public class Player extends MapObject
 	private static final int FALLING = 3;
 	private static final int LANDING = 4;
 	private static final int DOUBLEJUMP = 5;
-	private static final int HOVERING = 6;
+	private static final int SHOOTING_WALKING = 6;
+	private static final int SHOOTING_FALLING = 7;
 
+	
 	public Player(TileMap tm, PlayState playState)
 	{	
 		super(tm);
@@ -143,6 +146,16 @@ public class Player extends MapObject
 				}
 				playerSprites.add(bi);
 			}
+			//make the sprites for the player when he shoots the gun
+			for(int i = numFrames.length; i < numShootingFrames.length + numFrames.length; i++)
+			{
+				BufferedImage[] bi = new BufferedImage[numShootingFrames[i - numFrames.length]];
+				for(int j = 0; j < numShootingFrames[i - numFrames.length]; j++)
+				{
+					bi[j] = spritesheet.getSubimage(j * 77, i * 70, 77, 70);
+				}
+				playerSprites.add(bi);
+			}
 			
 			//make the spritesheet for when the player is blinking red
 			BufferedImage playerHurtSpritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/MainCharacterSpriteSheet.png"));
@@ -168,10 +181,21 @@ public class Player extends MapObject
 				{
 					bi[j] = playerHurtSpritesheet.getSubimage(j * width, i * height, width, height);
 				}
-				//sprites.add(bi);
+				playerHurtSprites.add(bi);
+			}
+			//make the sprites for the player when he shoots the gun and takes damage
+			for(int i = numFrames.length; i < numShootingFrames.length + numFrames.length; i++)
+			{
+				BufferedImage[] bi = new BufferedImage[numShootingFrames[i - numFrames.length]];
+				for(int j = 0; j < numShootingFrames[i - numFrames.length]; j++)
+				{
+					bi[j] = playerHurtSpritesheet.getSubimage(j * 77, i * 70, 77, 70);
+				}
 				playerHurtSprites.add(bi);
 			}
 			
+			
+			//make the sprites for the flying bird
 			BufferedImage birdPickupSpritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Tiles/birdSprite.png"));
 			birdPickupSprites = new BufferedImage[2];
 			for(int i = 0; i < 2; i++)
@@ -181,19 +205,11 @@ public class Player extends MapObject
 			
 			//get sprites for heart. This will be improved if we make the two hearts be on the same spritesheet image
 			heartImages = new ArrayList<BufferedImage>();
-			BufferedImage h1 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/fullHeart2.png"));
-			BufferedImage h2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/emptyHeart2.png"));
-
-			BufferedImage h3 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/fullHeart2.png"));
-			BufferedImage h4 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/emptyHeart2.png"));
-			
-			BufferedImage h5 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/armorHeart.png"));
-			
-			heartImages.add(h1);
-			heartImages.add(h2);
-			heartImages.add(h3);
-			heartImages.add(h4);
-			heartImages.add(h5);
+			heartImages.add(ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/fullHeart2.png")));
+			heartImages.add(ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/emptyHeart2.png")));
+			heartImages.add(ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/fullHeart2.png")));
+			heartImages.add(ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/emptyHeart2.png")));
+			heartImages.add(ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/armorHeart.png")));
 			for (int l = 2; l < 4; l++)
 			{
 				for (int x = 0; x < heartImages.get(l).getWidth(); x++)
@@ -252,10 +268,13 @@ public class Player extends MapObject
 		hasArmor = false;
 		jumpHeightFactor = 1;
 		canGlide = slowTime = isUnderEffect = hasGun = birdActive = hasBird = false;
+		launchTimer = 0;
 		birdX = 0;
 		birdY = 0;
 		birdPos = 0;
-		ammoCount = 0;
+		ammoCount = 100;
+		hasGun = true;
+		
 		armorBoostHealth = 0;
 		greenInc = blueInc = redInc = 1;
 		redChg = blueChg = greenChg = false;
@@ -462,9 +481,9 @@ public class Player extends MapObject
 		setMapPosition();
 		drawEffects(g);
 
-		for(Projectile p: bullets)
+		for(int i = 0; i < bullets.size(); i++)
 		{
-			p.draw(g);
+			bullets.get(i).draw(g);
 		}	
 	}
 	
@@ -498,7 +517,19 @@ public class Player extends MapObject
 		{
 			this.dy = -35;
 			this.jump = true;
-			this.explosions = new Explosion(x, y, 3, tileMap);
+			if (System.currentTimeMillis() - launchTimer > 500)
+			{
+				ArrayList<Tile> tiles = tileMap.getTiles();
+				for (int i = 0; i < tiles.size(); i++)
+				{
+					if (tiles.get(i).getType() == 358)
+					{
+						this.explosions = new Explosion(tiles.get(i).getX(), tiles.get(i).getY()-40, 3, tileMap);
+						launchTimer = System.currentTimeMillis();
+						break;
+					}
+				}
+			}
 		}
 	}
 	
@@ -682,78 +713,104 @@ public class Player extends MapObject
 	}
 	
 	public void getAnimation()
-	{
-		if(idle)
-		{
-			if(currentAction != IDLE && (!left || !right))
-			{
-				currentAction = IDLE;
-				animation.setFrames(playerSprites.get(IDLE));
-				animation.setDelay(50);
-				width = 50;
-				height = 70;
-			}
-		}
+	{		
+		if(right) facingRight = true;
+		else if(left) facingRight = false;
 		
-		if(left || right)
+		if (!firing)
 		{
-			if(right) facingRight = true;
-			else facingRight = false;
-			if(currentAction != WALKING && !fallingAnim && currentAction != JUMPING && currentAction != DOUBLEJUMP)
+			if(idle)
 			{
-				animation.setDone(false);
-				currentAction = WALKING;
-				animation.setFrames(playerSprites.get(WALKING));
-				animation.setDelay(200);
-				width = 50;
-				height = 70;
+				if(currentAction != IDLE && (!left || !right))
+				{
+					currentAction = IDLE;
+					animation.setFrames(playerSprites.get(IDLE));
+					animation.setDelay(50);
+					animation.setDone(false);
+					width = 50;
+					height = 70;
+				}
+			}
+			
+			if(left || right)
+			{
+				if(currentAction != WALKING  && !fallingAnim && currentAction != JUMPING && currentAction != DOUBLEJUMP)
+				{
+					currentAction = WALKING;
+					animation.setFrames(playerSprites.get(WALKING));
+					width = 50;
+					height = 70;
+					animation.setDone(false);
+					animation.setDelay(200);
+				}
+			}
+			if(jump)
+			{
+				if(currentAction != JUMPING)
+				{
+					currentAction = JUMPING;
+					animation.setFrames(playerSprites.get(JUMPING));
+					animation.setDelay(200);
+					animation.setDone(true);
+					width = 50;
+					height = 70;
+				}
+			}
+			if(gliding)
+			{
+				if(currentAction != DOUBLEJUMP)
+				{
+					currentAction = DOUBLEJUMP;
+					animation.setFrames(playerSprites.get(DOUBLEJUMP));
+					animation.setDelay(200);
+					animation.setDone(true);
+					width = 50;
+					height = 70;
+				}
+			}
+			if(fallingAnim)
+			{
+				if(currentAction != FALLING)
+				{
+					currentAction = FALLING;
+					animation.setFrames(playerSprites.get(FALLING));
+					width = 50;
+					height = 70;
+					animation.setDelay(200);
+				}
+			}
+			if(doubleJump)
+			{
+				if(currentAction != DOUBLEJUMP)
+				{
+					currentAction = DOUBLEJUMP;
+					animation.setFrames(playerSprites.get(DOUBLEJUMP));
+					animation.setDelay(100);
+					animation.setDone(true);
+					width = 50;
+					height = 70;
+				}
 			}
 		}
-		if(jump)
+		else
 		{
-			if(currentAction != JUMPING)
+			if ((currentAction == IDLE || currentAction == WALKING) && currentAction != SHOOTING_WALKING )
 			{
-				currentAction = JUMPING;
-				animation.setFrames(playerSprites.get(JUMPING));
-				animation.setDelay(200);
+				currentAction = SHOOTING_WALKING;
+				animation.setFrames(playerSprites.get(SHOOTING_WALKING));
+				width = 77;
+				height = 70;
 				animation.setDone(true);
-				width = 50;
-				height = 70;
-			}
-		}
-		if(gliding)
-		{
-			if(currentAction != DOUBLEJUMP)
-			{
-				currentAction = DOUBLEJUMP;
-				animation.setFrames(playerSprites.get(DOUBLEJUMP));
-				animation.setDelay(200);
-				animation.setDone(true);
-				width = 50;
-				height = 70;
-			}
-		}
-		if(fallingAnim)
-		{
-			if(currentAction != FALLING)
-			{
-				currentAction = FALLING;
-				animation.setFrames(playerSprites.get(FALLING));
-				animation.setDelay(200);
-				width = 50;
-				height = 70;
-			}
-		}
-		if(doubleJump)
-		{
-			if(currentAction != DOUBLEJUMP)
-			{
-				currentAction = DOUBLEJUMP;
-				animation.setFrames(playerSprites.get(DOUBLEJUMP));
 				animation.setDelay(100);
-				animation.setDone(true);
-				width = 50;
+			}
+			else if ((currentAction == FALLING || currentAction == JUMPING) && currentAction != SHOOTING_FALLING )
+			{
+				currentAction = SHOOTING_FALLING;
+				animation.setFrames(playerSprites.get(SHOOTING_FALLING));
+				width = 77;
 				height = 70;
+				animation.setDone(true);
+				animation.setDelay(100);
 			}
 		}
 		
@@ -979,7 +1036,7 @@ public class Player extends MapObject
 			}
 			else
 			{
-				g.drawImage(animation.getImage(), (int)(x + xmap) + width, (int)(y + ymap), -width, height, null);
+				g.drawImage(animation.getImage(), (int)(x + xmap) + width - width%50, (int)(y + ymap), -width, height, null);
 			}
 		}
 	
@@ -1018,6 +1075,7 @@ public class Player extends MapObject
 		}
 		else if(hasBird && birdActive)
 		{
+			this.hidePlayerBanner();
 		    double slope = (chosenEnemy.getY()-birdY)/(chosenEnemy.getX()-birdX);
 		    double angle = Math.atan((double)slope);
 		    boolean enemyIsRight = false;
