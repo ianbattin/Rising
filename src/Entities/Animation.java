@@ -60,5 +60,6 @@ public class Animation
 	public int getFrame() {	 return currentFrame;	}
 	public BufferedImage getImage() {	return frames[currentFrame];	}
 	public boolean hasPlayedOnce() {	return playedOnce;	}
+	public boolean setPlayedOnce(boolean b) {	playedOnce = b;	}
 	public void setDone(boolean b) { done = b; }
 }

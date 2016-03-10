@@ -90,6 +90,8 @@ public class Player extends MapObject
 
 	private boolean tileMapMoving;
 	private boolean canMove;
+
+	private boolean fired;
 	
 	//animation actions
 	private static final int IDLE = 0;
@@ -729,7 +731,7 @@ public class Player extends MapObject
 		if(right) facingRight = true;
 		else if(left) facingRight = false;
 		
-		if (!firing)
+		if(!fired)
 		{
 			if(idle)
 			{
@@ -814,6 +816,17 @@ public class Player extends MapObject
 				height = 70;
 				animation.setDone(true);
 				animation.setDelay(100);
+				
+				Timer timer = new Timer();
+				timer.schedule(new TimerTask()
+				{
+					public void run()
+					{	
+						fired = false;
+					}
+					
+				}, 400);
+				
 			}
 			else if ((currentAction == FALLING || currentAction == JUMPING) && currentAction != SHOOTING_FALLING )
 			{
@@ -823,6 +836,16 @@ public class Player extends MapObject
 				height = 70;
 				animation.setDone(true);
 				animation.setDelay(100);
+				
+				Timer timer = new Timer();
+				timer.schedule(new TimerTask()
+				{
+					public void run()
+					{	
+						fired = false;
+					}
+					
+				}, 400);
 			}
 		}
 		
@@ -1340,6 +1363,7 @@ public class Player extends MapObject
 	public void setFiring(boolean b) 
 	{
 		firing = b;
+		fired = true;
 	}
 
 	public void setAngle(double atan) 
@@ -1400,5 +1424,10 @@ public class Player extends MapObject
 	public void setDY(double dy)
 	{
 		this.dy = dy;
+	}
+	
+	public void setFired(boolean b)
+	{
+		fired = b;
 	}
 }
