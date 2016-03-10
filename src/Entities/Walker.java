@@ -129,7 +129,6 @@ public class Walker extends Enemy
 		if (y > GamePanel.HEIGHT + 400)
 		{
 			//remove enemy as it is too low
-			System.out.println("Enemy below threshold");
 			this.remove = true;
 		}
 		
@@ -201,7 +200,6 @@ public class Walker extends Enemy
 		
 		if (player.getX() < this.getX()+ 30 && player.getX() > this.getX()-30 && player.getY() < this.getY()+100 && player.getY() > this.getY()-30)
 		{
-			System.out.println("PLAYER BASHED");
 			player.playerHurt(1);
 		}
 		

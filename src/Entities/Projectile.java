@@ -229,7 +229,6 @@ public class Projectile extends MapObject
 			if(this.type == 7)
 			{
 				getAnimation();
-				System.out.println(angle);
 				if(dx >= 0)
 					g.drawImage(GameState.rotateImage(animation.getImage(), (int)angle), (int)(x + xmap), (int)(y + ymap), width, height, null);
 				else

@@ -180,7 +180,6 @@ public class Rifleman extends Enemy
 		if (y > GamePanel.HEIGHT + 400)
 		{
 			//remove enemy as it is too low
-			System.out.println("Enemy below threshold");
 			this.remove = true;
 		}
 	}

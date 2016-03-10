@@ -29,10 +29,13 @@ public class PlaneBoss extends Enemy {
 	private Rectangle cockpit;
 	private int cockpitX;
 	private int cockpitY;
+	public boolean attacking;
 
 	public PlaneBoss(int x, int y, TileMap tm, Player player, int typeAttack) 
 	{
 		super(x, y, tm, player);
+		
+		attacking = false;
 		
 		bullets = new ArrayList<Projectile>();
 		firing = false;
@@ -126,7 +129,7 @@ public class PlaneBoss extends Enemy {
 		if (health > 0)
 		{
 			getMovement();
-			getAttack();
+			if(!attacking) getAttack();
 		}
 		else
 		{
@@ -233,6 +236,7 @@ public class PlaneBoss extends Enemy {
 	{
 		if(typeAttack == 1)
 		{
+			attacking = true;
 			for(Tile t: tileMap.getTiles())
 			{
 				if(t.onScreen() == true && t.getType() != 0)
@@ -263,6 +267,7 @@ public class PlaneBoss extends Enemy {
 					}
 				}
 			}
+			attacking = false;
 		}
 		else if(typeAttack == 2)
 		{

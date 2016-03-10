@@ -144,6 +144,17 @@ public class Player extends MapObject
 				playerSprites.add(bi);
 			}
 			
+			//add player colors to "background" colors for collision
+			for(int x = 0; x < playerSprites.get(0)[0].getWidth(); x++)
+			{
+				for(int y = 0; y < playerSprites.get(0)[0].getHeight(); y++)
+				{
+					int color = playerSprites.get(0)[0].getRGB(x, y);
+					if(!bgColors.contains(color))
+						bgColors.add(color);
+				}
+			}
+			
 			//make the spritesheet for when the player is blinking red
 			BufferedImage playerHurtSpritesheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/Player/MainCharacterSpriteSheet.png"));
 			for (int x = 0; x < playerHurtSpritesheet.getWidth(); x++)
@@ -273,7 +284,7 @@ public class Player extends MapObject
 		if (health > 0)
 		{
 			if(onScreen()) checkPixelColorCollision(tileMap);
-			else myCheckCollision();
+			else if(canMove) myCheckCollision();
 			getAttack();
 		}
 		else
@@ -600,6 +611,7 @@ public class Player extends MapObject
 					public void run()
 					{	
 						y-=5;
+						falling = false;
 						jumpHeight = yFromBottom + (100*jumpHeightFactor);
 						if(!jumped) SoundPlayer.playClip("jump.wav");
 						jumped = true;
@@ -923,7 +935,6 @@ public class Player extends MapObject
 		}
 		coolDownTime = 10000000000L;
 		isUnderEffect = true;
-		System.out.println("Effect started: " + effect);
 	}
 	
 	//resets the effects
@@ -936,7 +947,6 @@ public class Player extends MapObject
 		charBlurPos = new ArrayList<Integer>();
 		jumpHeightFactor = 1;
 		healthPos = 0;
-		System.out.println("Effect ended");
 	}
 	
 	public void drawEffects(Graphics2D g)
@@ -1111,7 +1121,7 @@ public class Player extends MapObject
 	{
 		if(health > 0)
 		{
-			if(k == GameStateManager.up)
+			if(k == GameStateManager.up && canMove)
 			{
 				if(!jumped)
 				{
@@ -1296,7 +1306,7 @@ public class Player extends MapObject
 	
 	public boolean onScreen()
 	{
-		return (-width <= x && x <= GamePanel.WIDTH+width && 0 <= y+cheight && y+cheight < GamePanel.HEIGHT-1);
+		return (-width <= x && x <= GamePanel.WIDTH+width && 100 < y+cheight && y+cheight < GamePanel.HEIGHT-1);
 	}
 	
 	public void setPlayState(PlayState playState)
@@ -1327,5 +1337,10 @@ public class Player extends MapObject
 	{
 		this.banner = null;
 		this.displayMessage = false;
+	}
+	
+	public void setDY(double dy)
+	{
+		this.dy = dy;
 	}
 }

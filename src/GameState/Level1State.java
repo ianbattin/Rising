@@ -29,6 +29,7 @@ import Entities.PlaneBoss;
 import Main.GamePanel;
 import Main.Main;
 import TileMap.Background;
+import TileMap.Tile;
 import TileMap.TileMap;
 
 
@@ -139,7 +140,7 @@ public class Level1State extends PlayState
 	{
 		if(super.isFadingIn)
 		{
-			super.fadeIn(0, Color.BLACK, 2);
+			super.fadeIn(0, Color.BLACK, 4);
 		}
 		if(start)
 		{
@@ -217,23 +218,20 @@ public class Level1State extends PlayState
 			{
 				transitionDY = 0;
 				//removes all non-boss entities
-				for(int i = 0; i < enemies.size(); i++)
+				for(Enemy e: enemies)
 				{
-					if(!(enemies.get(i) instanceof PlaneBoss))
+					if(!(e instanceof PlaneBoss))
 					{
-						enemies.get(i).playerHurt(50);
+						e.playerHurt(100000);
 					}
 				}
-				if(enemies.size() < 1)
-				{
-					enemies.add(new PlaneBoss(2000, 100, tileMap, player, 1));
-					System.out.println("STOP PLAYER MOVEMENT... SO WE CAN GET A NICE CUTSCREEN EVERY TIME");
-				}
+
+				if(enemies.size() == 0) enemies.add(new PlaneBoss(2000, 200, tileMap, player, 1));
 			}
+			
 			tileMap.setYVector(transitionDY);
-			if(player.getY() > GamePanel.HEIGHT && !enemies.isEmpty() && enemies.get(0).getX() < GamePanel.WIDTH && player.getPoints() > bossHeight)
+			if(player.getY() > GamePanel.HEIGHT)
 			{
-				System.out.println("NOT DEAD");
 				player.setPosition(400, 900);
 				super.isFadingOut = true;
 				super.fadeOut(1000000000.0, Color.WHITE, 20, gsm, GameStateManager.LEVEL1STATE, GameStateManager.BOSS1STATE);
@@ -403,35 +401,15 @@ public class Level1State extends PlayState
 		{
 			start = false;
 		}
-		if(k == KeyEvent.VK_P)
-		{
-			enemies.add(new PlaneBoss(1000, 100, tileMap, player, 1));
-		}
 		if(k == KeyEvent.VK_N)
 		{
 			gsm.setState(GameStateManager.BOSS1STATE);
 			gsm.resetState(GameStateManager.LEVEL1STATE);
-		}
-		if(k == KeyEvent.VK_E)
-		{
-			tileMap.getExplosions().add(new Explosion(mouseX, mouseY, 2, tileMap));
-		}
-		if(k == KeyEvent.VK_B)
-		{
-			mapObjects.add(new Bomb(100, -80, tileMap, 1));
-		}
-		
+		}	
 	}
 
 	public void keyReleased(int k) 
 	{
 		player.keyReleased(k);
-		
-		/*
-		if(k == KeyEvent.VK_B)
-		{
-			addBomb = false;
-		}
-		*/
 	}
 }

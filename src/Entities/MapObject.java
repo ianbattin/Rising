@@ -30,7 +30,7 @@ public abstract class MapObject
 	protected int tileSize;
 	protected double xmap;
 	protected double ymap;
-	protected ArrayList<Integer> bgColors;
+	public ArrayList<Integer> bgColors;
 	
 	//position and vector
 	protected double x;
@@ -111,7 +111,7 @@ public abstract class MapObject
 		tileMap = tm;
 		tiles = tm.tiles;
 		tileSize = tm.getTileSize();
-		bgColors = new Background("/Backgrounds/battlebackground.gif", 1).getPixelColors();
+		if(this instanceof Player) bgColors = new Background("/Backgrounds/battlebackground.gif", 1).getPixelColors();
 	}
 	
 	public abstract void collided(int type, Tile t);
@@ -163,23 +163,24 @@ public abstract class MapObject
 		int yCol = (int)((y+cheight) * GamePanel.scaleWidth);
 		boolean collided = false;
 		color = GamePanel.getImage().getRGB(xCol, yCol + 1);
-		int otherColor = GamePanel.getImage().getRGB(xCol, yCol);;
+		int otherColor = GamePanel.getImage().getRGB(xCol, yCol);
+		
 		if(bgColors.contains(color))
 		{
 			collided = false;
-			if(!jump && !jumped && !doubleJumped)falling = true;
+			if(!jump && !doubleJump && !doubleJumped) falling = true;
 		}
 		for(int i = 0; i < tiles.size(); i++)
 		{
 			Tile t = tiles.get(i);
-			double collisionLeft = t.left-10;
-			double collisionRight = t.right+10;
-			double collisionTop = t.top-10;
-			double collisionBottom = t.bottom+10;
+			double collisionLeft = t.left-5;
+			double collisionRight = t.right+5;
+			double collisionTop = t.top-5;
+			double collisionBottom = t.bottom+5;
 
 			if((collisionLeft <= x + cwidth/2 && x + cwidth/2  <= collisionRight) && (collisionTop <= y + cheight && y + cheight <= collisionBottom) && !drop)
 			{
-				if(dy >= 0 && !bgColors.contains(color))
+				if(dy >= 0 && !bgColors.contains(color) && !jump)
 				{
 					collided = true;
 					dy = tileMap.getDY();
@@ -191,8 +192,19 @@ public abstract class MapObject
 				}
 				if(collided)
 				{
-					if(!bgColors.contains(otherColor) && !jump)
-						y--;
+					if(!bgColors.contains(otherColor))
+					{
+						int openColor = GamePanel.getImage().getRGB(xCol, yCol);
+						int newY = yCol;
+						while(!bgColors.contains(openColor))
+						{
+							newY--;
+							openColor = GamePanel.getImage().getRGB(xCol, newY);
+						}
+						
+						y = newY - cheight + 2;
+						break;
+					}
 				}	
 			}
 			
@@ -216,7 +228,7 @@ public abstract class MapObject
 			double collisionTop = t.top;
 			double collisionBottom = t.bottom;
 
-			if((collisionLeft <= x + cwidth/2 && x + cwidth/2  <= collisionRight) && (collisionTop <= y + cheight && y + cheight <= collisionBottom) && !drop)
+			if((collisionLeft <= x + cwidth/2 && x + cwidth/2  <= collisionRight) && (collisionTop <= y + cheight && y + cheight <= collisionBottom) && !drop && !t.pastBottom())
 			{
 				if(t.getBlocked())
 				{

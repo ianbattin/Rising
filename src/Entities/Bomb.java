@@ -41,7 +41,7 @@ public class Bomb extends MapObject
 		
 		width = 53;
 		height = 53;
-		cwidth = 5;
+		cwidth = 53;
 		cheight = 53;
 		
 		fallSpeed = 0.25;
@@ -195,10 +195,7 @@ public class Bomb extends MapObject
 			public void run()
 			{	
 				if(exploding)
-				{
-					System.out.println("UHHH");
 					tileMap.getExplosions().add(new Explosion(x, y, 2, tileMap));
-				}
 				remove = true;
 				exploding = false;
 			}
