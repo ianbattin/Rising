@@ -111,7 +111,7 @@ public class Level1State extends PlayState
 		player = new Player(tileMap, this);
 		player.setPosition(375, -100);
 		player.setTileMapMoving(true);
-		//player.setCanMove(false);
+		player.setCanMove(false);
 		
 		super.init(); //requires the player to be inited first
 		
