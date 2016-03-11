@@ -82,7 +82,7 @@ public class Tile
 			animated = false;
 			bulletCollision = false;
 		}
-		else if(type >= 447 && type <= 449)
+		else if(type >= 446 && type <= 449)
 		{
 			frames = 1;
 			blocked = false;
@@ -131,6 +131,11 @@ public class Tile
 			setY(100000);
 		}
 		//these are the special blocks, each will have their own special function 
+		else if(type == 446 && y > -10 && y < 0 && -100 <= x && x <= GamePanel.WIDTH+100)
+		{
+			PlayState.spawnObject(PlayState.SPAWN_DEBRIS, (int)x, (int)y);
+			type = 0;
+		}
 		else if(type == 447 && y > -100 && y < -75 && -100 <= x && x <= GamePanel.WIDTH+100)
 		{
 			PlayState.spawnObject(PlayState.SPAWN_WALKER, (int)x, (int)y);

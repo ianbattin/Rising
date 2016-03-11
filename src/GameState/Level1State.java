@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import Entities.Player;
+import Entities.Projectile;
 import Entities.Rifleman;
 import Entities.Walker;
 import Entities.SmallStuka;
@@ -173,17 +174,21 @@ public class Level1State extends PlayState
 		}
 		while(!PlayState.itemsToSpawn.isEmpty())
 		{
-			if (PlayState.itemsToSpawn.get(0)[0] == 0)
+			if (PlayState.itemsToSpawn.get(0)[0] == PlayState.SPAWN_BOMB)
 			{
 				mapObjects.add(new Bomb(PlayState.itemsToSpawn.get(0)[1], -80, tileMap, 1));
 			}	
-			if (PlayState.itemsToSpawn.get(0)[0] == 1)
+			if (PlayState.itemsToSpawn.get(0)[0] == PlayState.SPAWN_PARACHUTER)
 			{
 				enemies.add(new Jetpacker(PlayState.itemsToSpawn.get(0)[1], -100, tileMap, player));
 			}
-			if (PlayState.itemsToSpawn.get(0)[0] == 2)
+			if (PlayState.itemsToSpawn.get(0)[0] == PlayState.SPAWN_WALKER)
 			{
 				enemies.add(new Walker(PlayState.itemsToSpawn.get(0)[1], PlayState.itemsToSpawn.get(0)[2]-45, tileMap, player));
+			}
+			if (PlayState.itemsToSpawn.get(0)[0] == PlayState.SPAWN_DEBRIS)
+			{
+				mapObjects.add(new Projectile((double)PlayState.itemsToSpawn.get(0)[0], (double)PlayState.itemsToSpawn.get(0)[1], Math.random()*3+3, 7, tileMap));
 			}
 			PlayState.itemsToSpawn.remove(0);
 		}

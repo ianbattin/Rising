@@ -38,6 +38,7 @@ public abstract class PlayState extends GameState
 	public final static int SPAWN_BOMB = 0;
 	public final static int SPAWN_PARACHUTER = 1;
 	public final static int SPAWN_WALKER = 2;
+	public final static int SPAWN_DEBRIS = 3;
 	protected static ArrayList<int[]> itemsToSpawn;
 	
 	//Mouse

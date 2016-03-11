@@ -84,8 +84,8 @@ public class Player extends MapObject
 	private ArrayList<BufferedImage[]> playerHurtSprites;
 	private BufferedImage[] birdPickupSprites;
 	private Animation birdAnimation;
-	private final int[] numFrames = { 1, 6, 3, 3, 3, 6 };
-	private final int[] numShootingFrames = { 4, 4 };
+	private final int[] numFrames = { 4, 7, 3, 3, 3, 7 };
+	private final int[] numShootingFrames = { 4, 4, 4, 4 };
 	private final int jumpDelay = 200;
 
 	private boolean tileMapMoving;
@@ -102,6 +102,8 @@ public class Player extends MapObject
 	private static final int DOUBLEJUMP = 5;
 	private static final int SHOOTING_WALKING = 6;
 	private static final int SHOOTING_FALLING = 7;
+	private static final int SHOOTING_WALKING_BKWDS = 8;
+	private static final int SHOOTING_FALLING_BKWDS = 9;
 
 	
 	public Player(TileMap tm, PlayState playState)
@@ -113,7 +115,7 @@ public class Player extends MapObject
 		angle = 0.0;
 		firing = false;
 		fireDelay = 200;
-		fireTimer = System.nanoTime();
+		fireTimer = System.currentTimeMillis();
 		
 		recoverLength = 3000;
 		coolDownTime = 0;
@@ -487,6 +489,7 @@ public class Player extends MapObject
 		
 		if (hasGun)
 		{
+			g.setFont(bannerFont);
 			g.setColor(Color.darkGray);
 			g.drawImage(gunImage, null, GamePanel.WIDTH-10-gunImage.getWidth(), 10);
 			g.drawString(Integer.toString(ammoCount), GamePanel.WIDTH-gunImage.getWidth()-20 , 40);
@@ -563,8 +566,20 @@ public class Player extends MapObject
 	    
 		if(firing && hasGun)
 		{
-			
-			long elapsed= (System.nanoTime() - fireTimer) / 1000000;
+			firing = false;
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask()
+			{
+				public void run()
+				{	
+					bullets.add(new Projectile(x + width/2, y + height/2, angle, 1, tileMap));
+					ammoCount--;
+					if(ammoCount <= 0) hasGun = false;
+				}
+				
+			}, 150);
+			/*
+			long elapsed = (System.nanoTime() - fireTimer) / 1000000;
 			if(fireDelay <= elapsed)
 			{
 				bullets.add(new Projectile(x + width/2, y + height/2, angle, 1, tileMap));
@@ -572,6 +587,7 @@ public class Player extends MapObject
 				if(ammoCount <= 0) hasGun = false;
 				fireTimer = System.nanoTime();
 			}
+			*/
 		}
 	}
 	
@@ -730,16 +746,27 @@ public class Player extends MapObject
 	{		
 		if(right) facingRight = true;
 		else if(left) facingRight = false;
+
+		if (currentAction == SHOOTING_FALLING && idle)
+		{
+			currentAction = SHOOTING_WALKING;
+			animation.changeFrames(playerSprites.get(SHOOTING_WALKING));
+		}
+		else if (currentAction == SHOOTING_WALKING && (jump || fallingAnim))
+		{
+			currentAction = SHOOTING_FALLING;
+			animation.changeFrames(playerSprites.get(SHOOTING_FALLING));
+		}
 		
 		if(!fired)
-		{
+		{		
 			if(idle)
 			{
 				if(currentAction != IDLE && (!left || !right))
 				{
 					currentAction = IDLE;
 					animation.setFrames(playerSprites.get(IDLE));
-					animation.setDelay(50);
+					animation.setDelay(200);
 					animation.setDone(false);
 					width = 50;
 					height = 70;
@@ -755,7 +782,7 @@ public class Player extends MapObject
 					width = 50;
 					height = 70;
 					animation.setDone(false);
-					animation.setDelay(200);
+					animation.setDelay(150);
 				}
 			}
 			if(jump)
@@ -815,7 +842,7 @@ public class Player extends MapObject
 				width = 77;
 				height = 70;
 				animation.setDone(true);
-				animation.setDelay(100);
+				animation.setDelay(150);
 				
 				Timer timer = new Timer();
 				timer.schedule(new TimerTask()
@@ -825,7 +852,7 @@ public class Player extends MapObject
 						fired = false;
 					}
 					
-				}, 400);
+				}, 800);
 				
 			}
 			else if ((currentAction == FALLING || currentAction == JUMPING) && currentAction != SHOOTING_FALLING )
@@ -835,7 +862,7 @@ public class Player extends MapObject
 				width = 77;
 				height = 70;
 				animation.setDone(true);
-				animation.setDelay(100);
+				animation.setDelay(150);
 				
 				Timer timer = new Timer();
 				timer.schedule(new TimerTask()
@@ -845,8 +872,9 @@ public class Player extends MapObject
 						fired = false;
 					}
 					
-				}, 400);
+				}, 800);
 			}
+			
 		}
 		
 		if (isFlashing)	animation.changeFrames(playerHurtSprites.get(currentAction));
@@ -1147,8 +1175,7 @@ public class Player extends MapObject
 			else
 			{
 				g.drawImage(birdAnimation.getImage(), (int)birdX+15, (int)birdY, -15, 15, null);
-			}
-			//g.fillRect((int)birdX, (int)birdY, 10, 10);		
+			}		
 		}
 		
 		if(healing)
@@ -1200,9 +1227,9 @@ public class Player extends MapObject
 	
 	public void keyPressed(int k)
 	{
-		if(health > 0)
+		if(health > 0 && canMove)
 		{
-			if(k == GameStateManager.up && canMove)
+			if(k == GameStateManager.up)
 			{
 				if(!jumped)
 				{
@@ -1214,6 +1241,7 @@ public class Player extends MapObject
 					falling = false;
 					jump = false;
 					doubleJump = true;
+					doubleJumpable = false;
 					idle = false;
 				}
 				else
@@ -1362,8 +1390,16 @@ public class Player extends MapObject
 
 	public void setFiring(boolean b) 
 	{
-		firing = b;
-		fired = true;
+		if (b && System.currentTimeMillis() - this.fireTimer >= 800)
+		{
+			firing = true;
+			fired = true;
+			this.fireTimer = System.currentTimeMillis();
+		}
+		else
+		{
+			firing = false;
+		}
 	}
 
 	public void setAngle(double atan) 

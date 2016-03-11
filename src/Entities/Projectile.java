@@ -59,9 +59,9 @@ public class Projectile extends MapObject
 		{
 			case 1: 
 			{
-				moveSpeed = 15.0;
-				width = 7;
-				height = 7;
+				moveSpeed = 50.0;
+				width = 15;
+				height = 15;
 				damage = 1;
 				playerCollide = true;
 				SoundPlayer.playShootingClip();
@@ -236,8 +236,11 @@ public class Projectile extends MapObject
 			}
 			else
 			{
-				g.setColor(Color.BLACK);
-				g.fillOval((int)x, (int)y, width, height);
+				if (this.type != 1)
+				{
+					g.setColor(Color.BLACK);
+					g.fillOval((int)x, (int)y, width, height);
+				}
 			
 				if(tileMap.getShowCollisonBox())
 				{
@@ -263,6 +266,11 @@ public class Projectile extends MapObject
 			if(t.getType() == 17 && this.type != 7)
 			{
 				t.setType(0);
+				remove = true;
+			}
+			else if(this.type == 1)
+			{
+				tileMap.getExplosions().add(new Explosion(x, y, 3, tileMap));
 				remove = true;
 			}
 			else if(this.type == 3)
@@ -329,7 +337,13 @@ public class Projectile extends MapObject
 				remove = true;
 			}
 			
-			if(this.type == 5)
+			if(this.type == 1)
+			{
+				remove = true;
+				tileMap.getExplosions().add(new Explosion(x, y, 3, tileMap));
+				tileMap.getExplosions().get(tileMap.getExplosions().size()-1).collided(m);
+			}
+			else if(this.type == 5)
 			{
 				remove = true;
 				tileMap.getExplosions().add(new Explosion(x, y, 1, tileMap));
