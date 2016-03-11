@@ -160,7 +160,7 @@ public abstract class MapObject
 	public void checkPixelColorCollision(TileMap tm)
 	{
 		int xCol = (int)((x+width/2) * GamePanel.scaleWidth);
-		int yCol = (int)((y+cheight) * GamePanel.scaleWidth);
+		int yCol = (int)((y+cheight) * GamePanel.scaleHeight);
 		boolean collided = false;
 		color = GamePanel.getImage().getRGB(xCol, yCol + 1);
 		int otherColor = GamePanel.getImage().getRGB(xCol, yCol);
@@ -202,7 +202,7 @@ public abstract class MapObject
 							openColor = GamePanel.getImage().getRGB(xCol, newY);
 						}
 						
-						y = newY - cheight + 2;
+						y = (newY - cheight + 2)*1/GamePanel.scaleHeight + (cheight/GamePanel.scaleHeight - cheight);
 						break;
 					}
 				}	

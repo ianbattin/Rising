@@ -99,7 +99,7 @@ public class Projectile extends MapObject
 			}
 			case 5:
 			{
-				moveSpeed = 25.0;
+				moveSpeed = 40.0;
 				width = 10;
 				height = 10;
 				damage = 0;
