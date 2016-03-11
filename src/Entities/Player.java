@@ -99,11 +99,12 @@ public class Player extends MapObject
 	private static final int JUMPING = 2;
 	private static final int FALLING = 3;
 	private static final int LANDING = 4;
-	private static final int DOUBLEJUMP = 5;
-	private static final int SHOOTING_WALKING = 6;
-	private static final int SHOOTING_FALLING = 7;
-	private static final int SHOOTING_WALKING_BKWDS = 8;
-	private static final int SHOOTING_FALLING_BKWDS = 9;
+	private static final int LOOKING_UP = 5;
+	private static final int DOUBLEJUMP = 6;
+	private static final int SHOOTING_WALKING = 7;
+	private static final int SHOOTING_FALLING = 8;
+	private static final int SHOOTING_WALKING_BKWDS = 9;
+	private static final int SHOOTING_FALLING_BKWDS = 10;
 
 	
 	public Player(TileMap tm, PlayState playState)

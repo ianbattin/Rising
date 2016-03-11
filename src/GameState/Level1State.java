@@ -46,6 +46,7 @@ public class Level1State extends PlayState
 	private boolean transition;
 	private double transitionDY;
 	public boolean hasInited;
+	private long introTimer;
 	
 	public SmallStuka stuka;
 	public boolean stukaSpawned = false;
@@ -97,6 +98,7 @@ public class Level1State extends PlayState
 		bgVectorX = 0;
 		bgVectorY = 0;
 		debrisVector = 0;
+		introTimer = 0;
 		
 		super.isFadingIn = true;
 		super.alphaLevel = 255;
@@ -109,6 +111,7 @@ public class Level1State extends PlayState
 		player = new Player(tileMap, this);
 		player.setPosition(375, -100);
 		player.setTileMapMoving(true);
+		//player.setCanMove(false);
 		
 		super.init(); //requires the player to be inited first
 		
@@ -149,6 +152,8 @@ public class Level1State extends PlayState
 			tileMap.update();
 			pickups.update();
 			player.update();
+			
+			checkScript();
 			for(int i = 0; i < enemies.size(); i++)
 			{
 				enemies.get(i).update();
@@ -271,6 +276,30 @@ public class Level1State extends PlayState
 		super.drawCrossHair(g);
 		super.drawFade(g);
 	}
+	
+	public void checkScript()
+	{	
+		if (introTimer >= 0)
+		{
+			if (introTimer < 7500 && tileMap.getYMove() > -GamePanel.HEIGHT/4)
+			{
+				tileMap.setYVector(0.3);
+				if (introTimer < 2500)	player.setPlayerBannerText("Look up!");
+				else if (introTimer < 5000) player.setPlayerBannerText("There she is...");
+				else player.setPlayerBannerText("I must get there...");
+				
+				introTimer += GamePanel.getElapsedTime()/1000000;
+			} 
+			else if (introTimer >= 7500)
+			{
+				player.setCanMove(true);
+				player.hidePlayerBanner();
+				tileMap.setYVector(SCROLLSPEED);
+				introTimer = -1;
+			}
+		}
+	}
+	
 	
 	public Player getPlayer()
 	{
