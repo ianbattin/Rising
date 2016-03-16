@@ -255,7 +255,7 @@ public class PlaneBoss extends Enemy {
 					else
 						firing = false;
 
-					if(firing)
+					if(firing && !super.notOnScreen())
 					{
 
 						long elapsed= (System.nanoTime() - fireTimer) / 1000000;
@@ -298,7 +298,7 @@ public class PlaneBoss extends Enemy {
 			fireDelay = 100;
 			firing = true;
 
-			if(firing)
+			if(firing && !super.notOnScreen())
 			{
 
 				long elapsed= (System.nanoTime() - fireTimer) / 1000000;

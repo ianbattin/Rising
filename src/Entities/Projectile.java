@@ -7,6 +7,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
@@ -283,8 +285,17 @@ public class Projectile extends MapObject
 			else if(this.type == 4)
 			{
 				remove = true;
-				getTiles().add(new Tile(t.getX(), t.getY() - 25, 17, t.getSize(), tileMap));
+				final Tile tile = new Tile(t.getX(), t.getY() - 25, 17, t.getSize(), tileMap);
+				getTiles().add(tile);
 				getTiles().get(getTiles().size()-1).init();
+				new Timer().schedule(new TimerTask()
+				{
+					public void run()
+					{	
+						tile.setType(0);
+					}
+					
+				}, (int)(Math.random()*3000+1000));
 			}
 			else if(this.type == 5)
 			{

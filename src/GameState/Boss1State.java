@@ -160,7 +160,7 @@ public class Boss1State extends PlayState
 	{
 		g.setColor(Color.white);
 		g.fillRect(197, 97, 406, 36);
-		g.setColor(Color.BLACK);
+		g.setColor(Color.darkGray);
 		g.fillRect(200, 100, 400, 30);
 		g.setColor(Color.RED);
 		g.fillRect(200, 100, enemies.get(0).getHealth()*4, 30);

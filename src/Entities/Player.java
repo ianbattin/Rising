@@ -39,10 +39,6 @@ public class Player extends MapObject
 	private PlayState playState;
 	
 	//Attacks
-	private boolean shootUp;
-	private boolean shootDown;
-	private boolean shootLeft;
-	private boolean shootRight;
 	private ArrayList<Projectile> bullets;
 	private long fireTimer;
 	public int fireDelay;
@@ -78,7 +74,7 @@ public class Player extends MapObject
 	private byte blueInc, redInc, greenInc;
 	private boolean blueChg, redChg, greenChg;
 	private short numOfFramesToAnimHealth, healthAphaVal;
-	private boolean hasFlashed, isBlinking, isFlashing, healing;
+	private boolean hasFlashed, isBlinking, isFlashing, wasFlashing, healing;
 	private ArrayList<BufferedImage> heartImages;
 	
 	//animation
@@ -90,7 +86,6 @@ public class Player extends MapObject
 	private final int[] numShootingFrames = { 4, 4, 4, 4 };
 	private final int jumpDelay = 200;
 	private boolean introFrames;
-	private int overRideFrames;
 
 	private boolean tileMapMoving;
 	private boolean canMove;
@@ -271,7 +266,6 @@ public class Player extends MapObject
 		animation.setFrames(playerSprites.get(FALLING));
 		animation.setDelay(200);
 		introFrames = false;
-		overRideFrames = -1;
 		
 		falling = true;
 		canDoubleJump = false;
@@ -281,7 +275,7 @@ public class Player extends MapObject
 		health = 5;
 		healthAphaVal = 255;
 		numOfFramesToAnimHealth = 0;
-		healing = isFlashing = isBlinking = hasFlashed = false;
+		healing = wasFlashing = isFlashing = isBlinking = hasFlashed = false;
 		
 		//effects 
 		banner = null;
@@ -742,7 +736,6 @@ public class Player extends MapObject
 	
 	public void getAnimation()
 	{		
-
 				
 		if(right) facingRight = true;
 		else if(left) facingRight = false;
@@ -764,12 +757,15 @@ public class Player extends MapObject
 			{
 				if (introFrames)
 				{
-					currentAction = LOOKING_UP;
-					animation.changeFrames(playerSprites.get(LOOKING_UP));
-					animation.setDelay(1000);
-					animation.setDone(true);
-					width = 50;
-					height = 70;
+					if (currentAction != LOOKING_UP)
+					{
+						currentAction = LOOKING_UP;
+						animation.setFrames(playerSprites.get(LOOKING_UP));
+						animation.setDelay(1000);
+						animation.setDone(true);
+						width = 50;
+						height = 70;
+					}
 				} 
 				else if(currentAction != IDLE && (!left || !right))
 				{
@@ -886,8 +882,18 @@ public class Player extends MapObject
 			
 		}
 		
-		if (isFlashing)	animation.changeFrames(playerHurtSprites.get(currentAction));
-		else animation.changeFrames(playerSprites.get(currentAction));
+		if (isFlashing)	
+		{
+			animation.changeFrames(playerHurtSprites.get(currentAction));
+			fired = false;
+			wasFlashing = true;
+		}
+		else if (wasFlashing)
+		{
+			animation.changeFrames(playerSprites.get(currentAction));
+			fired = false;
+			wasFlashing = false;
+		}
 		
 		animation.update();
 	}
