@@ -281,19 +281,20 @@ public class Level1State extends PlayState
 	{	
 		if (introTimer >= 0)
 		{
-			if (introTimer < 7500 && tileMap.getYMove() > -GamePanel.HEIGHT/4)
+			if (introTimer < 5000 && tileMap.getYMove() > -GamePanel.HEIGHT/4)
 			{
+				player.doIntroFrame(true);
 				tileMap.setYVector(0.3);
-				if (introTimer < 2500)	player.setPlayerBannerText("Look up!");
-				else if (introTimer < 5000) player.setPlayerBannerText("There she is...");
-				else player.setPlayerBannerText("I must get there...");
+				if (introTimer < 2500)	player.setPlayerBannerText("\"I've got to get higher.\"");
+				else player.setPlayerBannerText("\"Wreckage.\"");
 				
 				introTimer += GamePanel.getElapsedTime()/1000000;
 			} 
-			else if (introTimer >= 7500)
+			else if (introTimer >= 5000)
 			{
 				player.setCanMove(true);
 				player.hidePlayerBanner();
+				player.doIntroFrame(false);
 				tileMap.setYVector(SCROLLSPEED);
 				introTimer = -1;
 			}

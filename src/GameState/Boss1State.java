@@ -83,7 +83,7 @@ public class Boss1State extends PlayState
 		
 		super.init(); //requires the player to be inited first
 		
-		int[] pickupsToSpawn = {Pickups.ARMORBOOST, Pickups.HEALBOOST, Pickups.SLOWTIMEBOOST, Pickups.BIRDBOOST};
+		int[] pickupsToSpawn = {Pickups.HEALBOOST, Pickups.SLOWTIMEBOOST, Pickups.BIRDBOOST};
 		pickups = new Pickups(player, tileMap, this, pickupsToSpawn, 50000000000L);
 		tileStart = false;
 		try
@@ -94,7 +94,7 @@ public class Boss1State extends PlayState
 		{
 			e.printStackTrace();
 		}
-		
+
 		setBackgroundVector(0, 5.0);
 		setDebrisVectors(1);
 		
@@ -111,7 +111,12 @@ public class Boss1State extends PlayState
 				t.setBlocked(false);
 			}
 		}
-		System.out.println("Left: " + player.getMoveSpeedLeft() + " Right: " + player.getMoveSpeedRight() + " MaxLeft: " + player.getMaxSpeedLeft() + " MaxRight: " + player.getMaxSpeedRight());
+		
+		//reset player from potential overlap
+		player.setCanMove(true);
+		player.hidePlayerBanner();
+		player.doIntroFrame(false);
+		
 	}
 
 	public void update()
@@ -165,7 +170,7 @@ public class Boss1State extends PlayState
 	{
 		if(!setUp)
 		{
-			player.setPosition(400, -300);
+			player.setPosition(400, -350);
 			setUp = true;
 		}
 		
@@ -296,12 +301,7 @@ public class Boss1State extends PlayState
 								step = 2;
 								timer = System.nanoTime();
 							}
-						}
-						
-						//enable the double jumping & display the banner
-						player.setDoubleJump(true);
-						player.setPlayerBannerText("Press "+ KeyEvent.getKeyText(GameStateManager.up)+ " twice to somersault!");
-						
+						}					
 						break;
 					}
 						
@@ -319,11 +319,13 @@ public class Boss1State extends PlayState
 							step = 0;
 							stage = 2;
 							((PlaneBoss) enemies.get(0)).setMoveComplete(false);
+							
+							//enable the double jumping & display the banner
+							player.setDoubleJump(true);
+							player.setPlayerBannerText("Press "+ KeyEvent.getKeyText(GameStateManager.up)+ " twice to somersault!");
+		
 						}
-						
-						//hide the banner
-						player.hidePlayerBanner();
-						break;
+
 					}
 				}
 			}
@@ -347,15 +349,15 @@ public class Boss1State extends PlayState
 							{
 								if(enemies.size() == 1 && (180 < planeX  && planeX < 220))
 								{
-									enemies.add(new Jetpacker(planeX, planeY, tileMap, player));
+									enemies.add(new Jetpacker(planeX, -70, tileMap, player));
 								}
 								else if(enemies.size() == 2 && (380 < planeX && planeX < 420))
 								{
-									enemies.add(new Jetpacker(planeX, planeY, tileMap, player));
+									enemies.add(new Jetpacker(planeX, -70, tileMap, player));
 								}
 								else if(enemies.size() == 3 && (580 < planeX && planeX < 620))
 								{
-									enemies.add(new Jetpacker(planeX, planeY, tileMap, player));
+									enemies.add(new Jetpacker(planeX, -70, tileMap, player));
 								}
 								else if(enemies.size() == 1 && planeX > 800)
 								{
@@ -365,17 +367,19 @@ public class Boss1State extends PlayState
 									else
 										step = 1;
 									((PlaneBoss) enemies.get(0)).setMoveComplete(false);
+									//hide the banner
+									player.hidePlayerBanner();
 								}	
 							}
 							else if(count == 2)
 							{
 								if(enemies.size() == 1 && (180 < planeX  && planeX < 220))
 								{
-									enemies.add(new Rifleman(planeX, planeY, tileMap, player));
+									enemies.add(new Rifleman(planeX, -70, tileMap, player));
 								}
 								else if(enemies.size() == 2 && (580 < planeX && planeX < 620))
 								{
-									enemies.add(new Rifleman(planeX, planeY, tileMap, player));
+									enemies.add(new Rifleman(planeX, -70, tileMap, player));
 								}
 								else if(enemies.size() == 1 && planeX > 800)
 								{

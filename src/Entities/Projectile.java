@@ -18,6 +18,9 @@ import TileMap.TileMap;
 
 public class Projectile extends MapObject
 {
+	
+	public static final int PROJECTILE_1_SIZE = 90;
+	
 	private double direction;
 	private double angle;
 	private int damage;
@@ -59,12 +62,11 @@ public class Projectile extends MapObject
 		{
 			case 1: 
 			{
-				moveSpeed = 50.0;
-				width = 15;
-				height = 15;
+				moveSpeed = 0;
+				width = Projectile.PROJECTILE_1_SIZE;
+				height = Projectile.PROJECTILE_1_SIZE;
 				damage = 1;
 				playerCollide = true;
-				SoundPlayer.playShootingClip();
 				break;
 			}
 			case 2:
@@ -166,6 +168,11 @@ public class Projectile extends MapObject
 	public void update() 
 	{
 		this.myCheckCollision();
+		if(this.type == 1)
+		{
+			tileMap.getExplosions().add(new Explosion(x + width/4, y + width/4, 3, tileMap));
+			this.remove = true;
+		}
 		if(this.type != 7)
 		{
 			dx = Math.cos(direction) * (moveSpeed);
@@ -268,11 +275,6 @@ public class Projectile extends MapObject
 				t.setType(0);
 				remove = true;
 			}
-			else if(this.type == 1)
-			{
-				tileMap.getExplosions().add(new Explosion(x, y, 3, tileMap));
-				remove = true;
-			}
 			else if(this.type == 3)
 			{
 				t.setType(0);
@@ -337,13 +339,7 @@ public class Projectile extends MapObject
 				remove = true;
 			}
 			
-			if(this.type == 1)
-			{
-				remove = true;
-				tileMap.getExplosions().add(new Explosion(x, y, 3, tileMap));
-				tileMap.getExplosions().get(tileMap.getExplosions().size()-1).collided(m);
-			}
-			else if(this.type == 5)
+		    if(this.type == 5)
 			{
 				remove = true;
 				tileMap.getExplosions().add(new Explosion(x, y, 1, tileMap));

@@ -6,6 +6,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -26,6 +27,7 @@ import GameState.Level1State;
 import GameState.PlayState;
 import GameState.GameState;
 import Main.GamePanel;
+import Main.Main;
 import Main.SoundPlayer;
 import TileMap.Tile;
 import TileMap.TileMap;
@@ -84,9 +86,11 @@ public class Player extends MapObject
 	private ArrayList<BufferedImage[]> playerHurtSprites;
 	private BufferedImage[] birdPickupSprites;
 	private Animation birdAnimation;
-	private final int[] numFrames = { 4, 7, 3, 3, 3, 7 };
+	private final int[] numFrames = { 4, 8, 3, 3, 3, 4, 7 };
 	private final int[] numShootingFrames = { 4, 4, 4, 4 };
 	private final int jumpDelay = 200;
+	private boolean introFrames;
+	private int overRideFrames;
 
 	private boolean tileMapMoving;
 	private boolean canMove;
@@ -94,17 +98,17 @@ public class Player extends MapObject
 	private boolean fired;
 	
 	//animation actions
-	private static final int IDLE = 0;
-	private static final int WALKING = 1;
-	private static final int JUMPING = 2;
-	private static final int FALLING = 3;
-	private static final int LANDING = 4;
-	private static final int LOOKING_UP = 5;
-	private static final int DOUBLEJUMP = 6;
-	private static final int SHOOTING_WALKING = 7;
-	private static final int SHOOTING_FALLING = 8;
-	private static final int SHOOTING_WALKING_BKWDS = 9;
-	private static final int SHOOTING_FALLING_BKWDS = 10;
+	public static final int IDLE = 0;
+	public static final int WALKING = 1;
+	public static final int JUMPING = 2;
+	public static final int FALLING = 3;
+	public static final int LANDING = 4;
+	public static final int LOOKING_UP = 5;
+	public static final int DOUBLEJUMP = 6;
+	public static final int SHOOTING_WALKING = 7;
+	public static final int SHOOTING_FALLING = 8;
+	public static final int SHOOTING_WALKING_BKWDS = 9;
+	public static final int SHOOTING_FALLING_BKWDS = 10;
 
 	
 	public Player(TileMap tm, PlayState playState)
@@ -266,6 +270,8 @@ public class Player extends MapObject
 		currentAction = FALLING;
 		animation.setFrames(playerSprites.get(FALLING));
 		animation.setDelay(200);
+		introFrames = false;
+		overRideFrames = -1;
 		
 		falling = true;
 		canDoubleJump = false;
@@ -308,7 +314,7 @@ public class Player extends MapObject
 		if (health > 0)
 		{
 			if(onScreen()) checkPixelColorCollision(tileMap);
-			else if(canMove) myCheckCollision();
+			else myCheckCollision();
 			getAttack();
 		}
 		else
@@ -551,19 +557,10 @@ public class Player extends MapObject
 	}
 	
 	public void getAttack()
-	{
-		
-		if(shootUp) angle = Math.toRadians(270);
-		if(shootDown) angle = Math.toRadians(90);
-		if(shootLeft) angle = Math.toRadians(180);
-		if(shootRight) angle = Math.toRadians(0);
-		if(shootUp && shootRight) angle = Math.toRadians(315);
-		if(shootUp && shootLeft) angle = Math.toRadians(225);
-		if(shootDown && shootLeft) angle = Math.toRadians(135);
-		if(shootDown && shootRight) angle = Math.toRadians(45);
-		
-		if(!shootUp && !shootDown && !shootLeft && !shootRight && !mouseHeld) firing = false;
-		
+	{		
+		if(!mouseHeld) firing = false;
+		final int mouseX = (int) (((MouseInfo.getPointerInfo().getLocation().getX() - Main.window.getLocation().getX()) - 3)/GamePanel.scaleWidth) - Projectile.PROJECTILE_1_SIZE/2;
+		final int mouseY = (int) (((MouseInfo.getPointerInfo().getLocation().getY() - Main.window.getLocation().getY()) - 25)/GamePanel.scaleHeight) - Projectile.PROJECTILE_1_SIZE/2;
 	    
 		if(firing && hasGun)
 		{
@@ -573,7 +570,7 @@ public class Player extends MapObject
 			{
 				public void run()
 				{	
-					bullets.add(new Projectile(x + width/2, y + height/2, angle, 1, tileMap));
+					bullets.add(new Projectile(mouseX, mouseY, 0, 1, tileMap));
 					ammoCount--;
 					if(ammoCount <= 0) hasGun = false;
 				}
@@ -745,6 +742,8 @@ public class Player extends MapObject
 	
 	public void getAnimation()
 	{		
+
+				
 		if(right) facingRight = true;
 		else if(left) facingRight = false;
 
@@ -763,7 +762,16 @@ public class Player extends MapObject
 		{		
 			if(idle)
 			{
-				if(currentAction != IDLE && (!left || !right))
+				if (introFrames)
+				{
+					currentAction = LOOKING_UP;
+					animation.changeFrames(playerSprites.get(LOOKING_UP));
+					animation.setDelay(1000);
+					animation.setDone(true);
+					width = 50;
+					height = 70;
+				} 
+				else if(currentAction != IDLE && (!left || !right))
 				{
 					currentAction = IDLE;
 					animation.setFrames(playerSprites.get(IDLE));
@@ -1291,26 +1299,6 @@ public class Player extends MapObject
 					}
 				}
 			}
-			if(k == GameStateManager.shootUp)
-			{
-				shootUp = true;
-				firing = true;
-			}
-			if(k == GameStateManager.shootDown)
-			{
-				shootDown = true;
-				firing = true;
-			}
-			if(k == GameStateManager.shootLeft)
-			{
-				shootLeft = true;
-				firing = true;
-			}
-			if(k == GameStateManager.shootRight)
-			{
-				shootRight = true;
-				firing = true;
-			}
 			if(k == KeyEvent.VK_T)
 			{
 				if(tileMap.getShowCollisonBox())
@@ -1339,6 +1327,7 @@ public class Player extends MapObject
 			}
 			if(doubleJumped)
 			{
+				doubleJumpable = false;
 				doubleJump = false;
 				jump = false;
 				falling = true;
@@ -1360,22 +1349,6 @@ public class Player extends MapObject
 		if(k == GameStateManager.glide)
 		{
 			gliding = false;
-		}
-		if(k == GameStateManager.shootUp)
-		{
-			shootUp = false;
-		}
-		if(k == GameStateManager.shootDown)
-		{
-			shootDown = false;
-		}
-		if(k == GameStateManager.shootLeft)
-		{
-			shootLeft = false;
-		}
-		if(k == GameStateManager.shootRight)
-		{
-			shootRight = false;
 		}
 	}
 
@@ -1431,6 +1404,16 @@ public class Player extends MapObject
 	public void setPlayState(PlayState playState)
 	{
 		this.playState = playState;
+	}
+	
+	/**
+	 * Determines whether the intro frames are going to be displayed
+	 * 
+	 * @param override - boolean that indicates whether new animation should override other animations
+	 */
+	public void doIntroFrame(boolean b)
+	{
+		introFrames = b;
 	}
 	
 	/**
