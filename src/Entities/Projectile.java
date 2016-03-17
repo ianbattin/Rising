@@ -21,7 +21,7 @@ import TileMap.TileMap;
 public class Projectile extends MapObject
 {
 	
-	public static final int PROJECTILE_1_SIZE = 90;
+	public static final int PROJECTILE_1_SIZE = 180;
 	
 	private double direction;
 	private double angle;
@@ -172,7 +172,7 @@ public class Projectile extends MapObject
 		this.myCheckCollision();
 		if(this.type == 1)
 		{
-			tileMap.getExplosions().add(new Explosion(x + width/4, y + width/4, 3, tileMap));
+			tileMap.getExplosions().add(new Explosion(x + cwidth-25, y + cheight-25, 3, tileMap));
 			this.remove = true;
 		}
 		if(this.type != 7)

@@ -307,7 +307,7 @@ public class Player extends MapObject
 	{	
 		if (health > 0)
 		{
-			if(onScreen()) checkPixelColorCollision(tileMap);
+			if(onScreen() && y < 795) checkPixelColorCollision(tileMap);
 			else myCheckCollision();
 			getAttack();
 		}
@@ -559,8 +559,7 @@ public class Player extends MapObject
 		if(firing && hasGun)
 		{
 			firing = false;
-			Timer timer = new Timer();
-			timer.schedule(new TimerTask()
+			new Timer().schedule(new TimerTask()
 			{
 				public void run()
 				{	
@@ -570,6 +569,14 @@ public class Player extends MapObject
 				}
 				
 			}, 150);
+			new Timer().schedule(new TimerTask()
+			{
+				public void run()
+				{	
+					fired = false;
+				}
+				
+			}, 800);
 			/*
 			long elapsed = (System.nanoTime() - fireTimer) / 1000000;
 			if(fireDelay <= elapsed)
@@ -847,18 +854,7 @@ public class Player extends MapObject
 				width = 77;
 				height = 70;
 				animation.setDone(true);
-				animation.setDelay(150);
-				
-				Timer timer = new Timer();
-				timer.schedule(new TimerTask()
-				{
-					public void run()
-					{	
-						fired = false;
-					}
-					
-				}, 800);
-				
+				animation.setDelay(150);				
 			}
 			else if ((currentAction == FALLING || currentAction == JUMPING) && currentAction != SHOOTING_FALLING )
 			{
@@ -868,16 +864,6 @@ public class Player extends MapObject
 				height = 70;
 				animation.setDone(true);
 				animation.setDelay(150);
-				
-				Timer timer = new Timer();
-				timer.schedule(new TimerTask()
-				{
-					public void run()
-					{	
-						fired = false;
-					}
-					
-				}, 800);
 			}
 			
 		}
