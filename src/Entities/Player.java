@@ -416,7 +416,6 @@ public class Player extends MapObject
 		{
 			explosions.draw(g);
 		}
-		
 		if (isFlashing)
 		{
 			for (int i = 0; i < 5; i++)
@@ -531,7 +530,7 @@ public class Player extends MapObject
 			ammoCount += 5;
 			t.setType(0);
 		}
-		else if(type == 358 || type == 359 || type == 388 || type == 389 || type == 418 || type == 419)
+		/*else if(type == 358 || type == 359 || type == 388 || type == 389 || type == 418 || type == 419)
 		{
 			this.dy = -35;
 			this.jump = true;
@@ -548,7 +547,7 @@ public class Player extends MapObject
 					}
 				}
 			}
-		}
+		}*/
 	}
 	
 	public void getAttack()
@@ -1308,10 +1307,7 @@ public class Player extends MapObject
 				else
 					tileMap.setShowCollisonBox(true);
 			}
-			if(k == KeyEvent.VK_L)
-			{
-				bullets.add(new Projectile(400, -100, 45, 7, tileMap));
-			}
+			
 		}
 	}
 	

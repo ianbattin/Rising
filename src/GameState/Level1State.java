@@ -113,7 +113,7 @@ public class Level1State extends PlayState
 		player.setTileMapMoving(true);
 		player.setCanMove(false);
 		
-		super.init(); //requires the player to be inited first
+		super.init(); //requires the player to be initiated first
 		
 		int[] pickupsToSpawn = {Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST};
 		pickups = new Pickups(player, tileMap, this, pickupsToSpawn, 10000000000L);
@@ -172,6 +172,9 @@ public class Level1State extends PlayState
 					iter.remove();
 				else
 					m.update();
+				
+				if(m.intersects(player))
+					m.collided(player);
 			}
 			super.backGroundParallaxUpdate();
 			super.aimUpdate();
@@ -247,6 +250,8 @@ public class Level1State extends PlayState
 				super.fadeOut(1000000000.0, Color.WHITE, 20, gsm, GameStateManager.LEVEL1STATE, GameStateManager.BOSS1STATE);
 			}
 		}
+		
+		
 	}
 
 	public void draw(Graphics2D g)
@@ -451,6 +456,10 @@ public class Level1State extends PlayState
 			gsm.setState(GameStateManager.BOSS1STATE);
 			gsm.resetState(GameStateManager.LEVEL1STATE);
 		}	
+		if(k == KeyEvent.VK_L)
+		{
+			mapObjects.add(new Projectile(400, 100, 45, 7, tileMap));
+		}
 	}
 
 	public void keyReleased(int k) 

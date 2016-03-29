@@ -132,6 +132,8 @@ public class Projectile extends MapObject
 				angle = Math.toDegrees(Math.atan(dy/dx));
 				width = 75;
 				height = 75;
+				cwidth = 75;
+				cheight = 75;
 				damage = 2;
 				playerCollide = true;
 				
@@ -238,10 +240,11 @@ public class Projectile extends MapObject
 			if(this.type == 7)
 			{
 				getAnimation();
+
 				if(dx >= 0)
-					g.drawImage(GameState.rotateImage(animation.getImage(), (int)angle), (int)(x + xmap), (int)(y + ymap), width, height, null);
+					g.drawImage(GameState.rotateImage(animation.getImage(), (int)angle), (int)(x), (int)(y), width, height, null);
 				else
-					g.drawImage(GameState.rotateImage(animation.getImage(), (int)angle), (int)(x + xmap), (int)(y + ymap), -width, -height, null);
+					g.drawImage(GameState.rotateImage(animation.getImage(), (int)angle), (int)(x + width), (int)(y + height), -width, -height, null);
 			}
 			else
 			{
