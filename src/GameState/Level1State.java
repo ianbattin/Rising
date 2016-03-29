@@ -283,10 +283,20 @@ public class Level1State extends PlayState
 		{
 			if (introTimer < 5000 && tileMap.getYMove() > -GamePanel.HEIGHT/4)
 			{
-				player.doIntroFrame(true);
 				tileMap.setYVector(0.3);
-				if (introTimer < 2500)	player.setPlayerBannerText("\"I've got to get higher.\"");
-				else player.setPlayerBannerText("\"Wreckage.\"");
+				if (introTimer < 2500)	
+				{
+					player.setPlayerBannerText("\"Wreckage.\"");
+				}
+				else if (introTimer < 4200)
+				{
+					player.setPlayerBannerText("\"I've got to get higher.\"");
+					player.doIntroFrame(true, false);
+				}
+				else
+				{
+					player.doIntroFrame(true, true);
+				}
 				
 				introTimer += GamePanel.getElapsedTime()/1000000;
 			} 
@@ -294,7 +304,7 @@ public class Level1State extends PlayState
 			{
 				player.setCanMove(true);
 				player.hidePlayerBanner();
-				player.doIntroFrame(false);
+				player.doIntroFrame(false, false);
 				tileMap.setYVector(SCROLLSPEED);
 				introTimer = -1;
 			}

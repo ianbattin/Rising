@@ -55,6 +55,8 @@ public class Boss1State extends PlayState
 
 	private double debrisVector;
 	private boolean drawBossHealth;
+	
+	private PlaneBoss planeBoss;
 
 	public Boss1State(GameStateManager gsm)
 	{
@@ -98,10 +100,12 @@ public class Boss1State extends PlayState
 		setBackgroundVector(0, 5.0);
 		setDebrisVectors(1);
 		
-		if(enemies.isEmpty())
+		if(!enemies.isEmpty())
 		{
-			enemies.add(new PlaneBoss(-2000, 200, tileMap, player, 0));
+			enemies.clear();
 		}
+		enemies.add(new PlaneBoss(-2000, 200, tileMap, player, 0));
+		planeBoss = (PlaneBoss)enemies.get(0);
 		
 		for(Tile t: tileMap.getTiles())
 		{
@@ -115,7 +119,7 @@ public class Boss1State extends PlayState
 		//reset player from potential overlap
 		player.setCanMove(true);
 		player.hidePlayerBanner();
-		player.doIntroFrame(false);
+		player.doIntroFrame(false, false);
 		
 	}
 
@@ -217,10 +221,11 @@ public class Boss1State extends PlayState
 	
 	private void script()
 	{		
+		
 		if (!enemies.isEmpty() && enemies.get(0) instanceof PlaneBoss)
 		{
-			planeX = ((PlaneBoss) enemies.get(0)).getX();
-			planeY = ((PlaneBoss) enemies.get(0)).getY();
+			planeX = planeBoss.getX();
+			planeY = planeBoss.getY();
 		
 			//Player falling and being saved by plane
 			if(stage == 0)
@@ -267,13 +272,13 @@ public class Boss1State extends PlayState
 					//Plane flies left to right at 1 speed
 					case 0:
 					{
-						if(((PlaneBoss) enemies.get(0)).getMoveComplete() == false)
+						if(planeBoss.getMoveComplete() == false)
 						{
-							((PlaneBoss) enemies.get(0)).setMovement(-2000, 200, 1200, 200, 2, 0);
+							planeBoss.setMovement(-2000, 200, 1200, 200, 2, 0);
 						}
 						else
 						{
-							((PlaneBoss) enemies.get(0)).setMoveComplete(false);
+							planeBoss.setMoveComplete(false);
 							step = 1;
 						}
 						break;
@@ -282,9 +287,9 @@ public class Boss1State extends PlayState
 					//Plane flies right to middle of screen and waits for 4 seconds at half speed
 					case 1:
 					{
-						if(((PlaneBoss) enemies.get(0)).getMoveComplete() == false)
+						if(planeBoss.getMoveComplete() == false)
 						{
-							((PlaneBoss) enemies.get(0)).setMovement(1200, 200, 400, 200, 0.5, 0);
+							planeBoss.setMovement(1200, 200, 400, 200, 0.5, 0);
 						}
 						else
 						{
@@ -296,7 +301,7 @@ public class Boss1State extends PlayState
 							long elapsed = (System.nanoTime() - timer) / 1000000;
 							if(2000 <= elapsed)
 							{
-								((PlaneBoss) enemies.get(0)).setMoveComplete(false);
+								planeBoss.setMoveComplete(false);
 								done = false;
 								step = 2;
 								timer = System.nanoTime();
@@ -308,17 +313,17 @@ public class Boss1State extends PlayState
 					//Plane flies from middle of screen to left at 1 speed
 					case 2:
 					{
-						((PlaneBoss) enemies.get(0)).setHealth(100);
+						planeBoss.setHealth(100);
 						drawBossHealth = true;
-						if(((PlaneBoss) enemies.get(0)).getMoveComplete() == false)
+						if(planeBoss.getMoveComplete() == false)
 						{
-							((PlaneBoss) enemies.get(0)).setMovement(400, 200, -1500, 200, 1, 0);
+							planeBoss.setMovement(400, 200, -1500, 200, 1, 0);
 						}
 						else
 						{
 							step = 0;
 							stage = 2;
-							((PlaneBoss) enemies.get(0)).setMoveComplete(false);
+							planeBoss.setMoveComplete(false);
 							
 							//enable the double jumping & display the banner
 							player.setDoubleJump(true);
@@ -340,9 +345,9 @@ public class Boss1State extends PlayState
 						//Plane flies left to right at 1 speed and drops off 3 paratroopers
 						case 0:
 						{
-							if(((PlaneBoss) enemies.get(0)).getMoveComplete() == false)
+							if(planeBoss.getMoveComplete() == false)
 							{
-								((PlaneBoss) enemies.get(0)).setMovement(-1500, 200, 1500, 200, 1, 0);
+								planeBoss.setMovement(-1500, 200, 1500, 200, 1, 0);
 							}
 							
 							if(count == 0)
@@ -366,7 +371,7 @@ public class Boss1State extends PlayState
 										step = 2;
 									else
 										step = 1;
-									((PlaneBoss) enemies.get(0)).setMoveComplete(false);
+									planeBoss.setMoveComplete(false);
 									//hide the banner
 									player.hidePlayerBanner();
 								}	
@@ -388,7 +393,7 @@ public class Boss1State extends PlayState
 										step = 2;
 									else
 										step = 1;
-									((PlaneBoss) enemies.get(0)).setMoveComplete(false);
+									planeBoss.setMoveComplete(false);
 								}	
 							}
 							break;
@@ -397,9 +402,9 @@ public class Boss1State extends PlayState
 						//Plane flies left and shoots fire bullets
 						case 1:
 						{
-							if(((PlaneBoss) enemies.get(0)).getMoveComplete() == false)
+							if(planeBoss.getMoveComplete() == false)
 							{
-								((PlaneBoss) enemies.get(0)).setMovement(1500, 200, -1500, 200, 1, 3);
+								planeBoss.setMovement(1500, 200, -1500, 200, 1, 3);
 							}
 							else
 							{
@@ -409,7 +414,7 @@ public class Boss1State extends PlayState
 								else
 									step = 0;
 								stage = 2;
-								((PlaneBoss) enemies.get(0)).setMoveComplete(false);
+								planeBoss.setMoveComplete(false);
 							}
 							break;
 						}
@@ -417,9 +422,16 @@ public class Boss1State extends PlayState
 						//Plane flies from right to middle low enough for player to jump on cockpit
 						case 2:
 						{
-							if(((PlaneBoss) enemies.get(0)).getMoveComplete() == false)
+							if(planeBoss.getMoveComplete() == false)
 							{
-								((PlaneBoss) enemies.get(0)).setMovement(1500, 200, 400, 500, 1, 0);
+								if(planeBoss.evading)
+								{
+									planeBoss.evadeMove();
+								} 
+								else
+								{
+									planeBoss.setMovement(1500, 200, 400, 500, 1, 0);
+								}
 							}
 							else
 							{
@@ -436,7 +448,7 @@ public class Boss1State extends PlayState
 									step = 3;
 									stage = 2;
 									timer = System.nanoTime();
-									((PlaneBoss) enemies.get(0)).setMoveComplete(false);
+									planeBoss.setMoveComplete(false);
 								}
 							}
 							break;
@@ -445,15 +457,15 @@ public class Boss1State extends PlayState
 						//Plane flies from middle to left to drop off troops again
 						case 3:
 						{
-							if(((PlaneBoss) enemies.get(0)).getMoveComplete() == false)
+							if(planeBoss.getMoveComplete() == false)
 							{
-								((PlaneBoss) enemies.get(0)).setMovement(400, 500, -1500, 200, 1, 0);
+								planeBoss.setMovement(400, 500, -1500, 200, 1, 0);
 							}
 							else
 							{
 								step = 0;
 								stage = 2;
-								((PlaneBoss) enemies.get(0)).setMoveComplete(false);
+								planeBoss.setMoveComplete(false);
 							}
 							break;
 						}

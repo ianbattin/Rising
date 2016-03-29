@@ -260,7 +260,7 @@ public class Rifleman extends Enemy
 			left = false;
 			idle = true;
 		}
-		if(relY > 250)
+		if(relY > proximity)
 		{
 			if(!falling)
 			{
@@ -268,7 +268,6 @@ public class Rifleman extends Enemy
 				{
 					idle = false;
 					jump = true;
-					doubleJumpable = false;
 					drop = false;
 				}
 			}
@@ -320,7 +319,7 @@ public class Rifleman extends Enemy
 		{
 			if(!jumped)
 			{
-				jumpHeight = yFromBottom + (100);
+				jumpHeight = yFromBottom + ((int)Math.random()*70+30);
 				jumped = true;
 			}
 			if(jumped)
@@ -332,23 +331,6 @@ public class Rifleman extends Enemy
 					falling = true;
 				}
 			}
-		}
-		if(doubleJump)
-		{
-			if(!doubleJumped)
-			{
-				jumpHeight = yFromBottom + (50.0);
-				doubleJumped = true;
-			}
-			if(jumped)
-			{
-				if(yFromBottom < jumpHeight) dy = jumpStart*2; //edited to be "effectable"
-				if(yFromBottom >= jumpHeight) 
-				{
-					jumpHeight = -9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
-				}
-			}
-			falling = true;
 		}
 		
 		if(falling)

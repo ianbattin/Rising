@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -85,7 +86,7 @@ public class Player extends MapObject
 	private final int[] numFrames = { 4, 8, 3, 3, 3, 4, 7 };
 	private final int[] numShootingFrames = { 4, 4, 4, 4 };
 	private final int jumpDelay = 200;
-	private boolean introFrames;
+	private boolean introFrames, showLastIntroFrame;
 
 	private boolean tileMapMoving;
 	private boolean canMove;
@@ -265,7 +266,7 @@ public class Player extends MapObject
 		currentAction = FALLING;
 		animation.setFrames(playerSprites.get(FALLING));
 		animation.setDelay(200);
-		introFrames = false;
+		introFrames = showLastIntroFrame = false;
 		
 		falling = true;
 		canDoubleJump = false;
@@ -307,7 +308,7 @@ public class Player extends MapObject
 	{	
 		if (health > 0)
 		{
-			if(onScreen() && y < 795) checkPixelColorCollision(tileMap);
+			if(onScreen() && y < 795 && x < 770 && x > 30) checkPixelColorCollision(tileMap);
 			else myCheckCollision();
 			getAttack();
 		}
@@ -764,15 +765,22 @@ public class Player extends MapObject
 			{
 				if (introFrames)
 				{
-					if (currentAction != LOOKING_UP)
+					if (currentAction != LOOKING_UP || showLastIntroFrame)
 					{
 						currentAction = LOOKING_UP;
-						animation.setFrames(playerSprites.get(LOOKING_UP));
-						animation.setDelay(1000);
-						animation.setDone(true);
+						if (showLastIntroFrame) 
+						{
+							animation.setFrames(Arrays.copyOfRange(playerSprites.get(LOOKING_UP), 3, 4));
+						}
+						else 
+						{
+							animation.setFrames(Arrays.copyOfRange(playerSprites.get(LOOKING_UP), 0, 3));
+						}
+						animation.setDelay(200);
+						animation.setDone(false);
 						width = 50;
 						height = 70;
-					}
+					} 
 				} 
 				else if(currentAction != IDLE && (!left || !right))
 				{
@@ -1401,11 +1409,13 @@ public class Player extends MapObject
 	/**
 	 * Determines whether the intro frames are going to be displayed
 	 * 
-	 * @param override - boolean that indicates whether new animation should override other animations
+	 * @param b - boolean that indicates whether the intro animations should be played
+	 * @param d - boolean that indicates whether only the last of the intro frames should be played
 	 */
-	public void doIntroFrame(boolean b)
+	public void doIntroFrame(boolean b, boolean d)
 	{
 		introFrames = b;
+		showLastIntroFrame = d;
 	}
 	
 	/**
@@ -1425,6 +1435,16 @@ public class Player extends MapObject
 	{
 		this.banner = text;
 		this.displayMessage = true;
+	}
+	
+	public void resetDoubleJump()
+	{
+		jump = false;
+		falling = true;
+		doubleJumped = false;
+		doubleJumpable = true;
+		doubleJump = false;
+		jumped = true;
 	}
 	
 	public void hidePlayerBanner()

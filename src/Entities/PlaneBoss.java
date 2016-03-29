@@ -30,6 +30,10 @@ public class PlaneBoss extends Enemy {
 	private int cockpitX;
 	private int cockpitY;
 	public boolean attacking;
+	public boolean evading;
+	
+	private int evadeX;
+	private int evadeY;
 
 	public PlaneBoss(int x, int y, TileMap tm, Player player, int typeAttack) 
 	{
@@ -61,6 +65,9 @@ public class PlaneBoss extends Enemy {
 		cheight = 75;
 
 		facingRight = false;
+		
+		evadeX = evadeY = 0;
+		evading = false;
 		
 		try
 		{
@@ -224,8 +231,21 @@ public class PlaneBoss extends Enemy {
 		{
 			playerHurt(10);
 			player.setYVector(-10.0);
+			player.resetDoubleJump();
+			if (getMoveComplete())
+			{
+				evading = true;
+				evadeX = (int)(Math.random()*600 + 100);
+				evadeY = (int)(Math.random()*500 + 100);
+				while (Math.sqrt((x - evadeX)*(x - evadeX) + (y - evadeY)*(y - evadeY)) < 100) //ensure that the plane moves long enough of a distance
+				{
+					evadeX = (int)(Math.random()*600 + 100);
+					evadeY = (int)(Math.random()*500 + 100);
+				}
+				setMoveComplete(false);
+			}
 		}
-		else if(this.intersects(player))
+		else if(this.intersects(player) && !evading)
 		{
 			player.playerHurt(1);
 		}
@@ -259,7 +279,7 @@ public class PlaneBoss extends Enemy {
 					{
 
 						long elapsed= (System.nanoTime() - fireTimer) / 1000000;
-						if(fireDelay <= elapsed*(0.5*super.slowDown))
+						if(fireDelay <= elapsed*(0.5*Enemy.slowDown))
 						{
 							bullets.add(new Projectile(x + width/2, y+height, angle, 5, tileMap));
 							fireTimer = System.nanoTime();
@@ -282,7 +302,7 @@ public class PlaneBoss extends Enemy {
 			{
 
 				long elapsed= (System.nanoTime() - fireTimer) / 1000000;
-				if(fireDelay <= elapsed*(0.5*super.slowDown))
+				if(fireDelay <= elapsed*(0.5*Enemy.slowDown))
 				{
 					bullets.add(new Projectile(x + width/2, y+height, angle, 2, tileMap));
 					fireTimer = System.nanoTime();
@@ -302,7 +322,7 @@ public class PlaneBoss extends Enemy {
 			{
 
 				long elapsed= (System.nanoTime() - fireTimer) / 1000000;
-				if(fireDelay <= elapsed*(0.5*super.slowDown))
+				if(fireDelay <= elapsed*(0.5*Enemy.slowDown))
 				{
 					bullets.add(new Projectile(x+width/2, y+height, angle, 4, tileMap));
 					fireTimer = System.nanoTime();
@@ -318,11 +338,11 @@ public class PlaneBoss extends Enemy {
 		{
 			dx -= moveSpeed;
 			dy = -2.0;
-			if(dx < -(maxSpeedX*super.slowDown)) dx = -(maxSpeedX*super.slowDown);
+			if(dx < -(maxSpeedX*Enemy.slowDown)) dx = -(maxSpeedX*Enemy.slowDown);
 		}
 		
-		x += dx*super.slowDown;
-		y += dy*super.slowDown;
+		x += dx*Enemy.slowDown;
+		y += dy*Enemy.slowDown;
 	}
 	
 	public void setMovement(double startX, double startY, double endX, double endY, double speed, int typeAttack)
@@ -350,7 +370,10 @@ public class PlaneBoss extends Enemy {
 			dy = dx * (differenceY / differenceX);
 		
 		if((dx == 0 && dy == 0) || (dx == -0 && dy == -0) || (dx == 0 && dy == -0) || (dx == -0 && dy == 0))
+		{
 			moveComplete = true;
+			evading = false;
+		}
 	}
 
 	@Override
@@ -399,6 +422,11 @@ public class PlaneBoss extends Enemy {
 		animation.update();	
 	}
 
+	public void evadeMove()
+	{
+		setMovement(this.x, this.y, evadeX, evadeY, 0.5, 0);
+	}
+	
 	@Override
 	public void collided(int type, Tile t) {
 		// TODO Auto-generated method stub
