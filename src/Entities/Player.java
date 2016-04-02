@@ -42,8 +42,8 @@ public class Player extends MapObject
 	//Attacks
 	private ArrayList<Projectile> bullets;
 	private long fireTimer;
-	public int fireDelay;
-	public boolean firing;
+	private int fireDelay;
+	private boolean firing;
 	private boolean mouseHeld;
 	private double angle;
 	private boolean canDoubleJump;

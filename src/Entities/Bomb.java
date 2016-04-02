@@ -182,7 +182,7 @@ public class Bomb extends MapObject
 	@Override
 	public void collided(MapObject m) 
 	{
-		remove = true;
+		//remove = true;
 	}
 	
 	public void explode()

@@ -80,18 +80,15 @@ public class Level1State extends PlayState
 		smallDebrisInfo = new int[debrisInfo.length][4];
 		for(int i = 0; i < debrisInfo.length; i++)
 		{
-			for(int j = 0; j < debrisInfo[i].length; j++)
-			{
-				debrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
-				debrisInfo[i][1] = -2000 + (int)((Math.random()*2000)-1000);
-				debrisInfo[i][2] = (int)(Math.random()*5)+2;
-				debrisInfo[i][3] = (int)(Math.random()*130);
-				
-				smallDebrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
-				smallDebrisInfo[i][1] = -2000 + (int)((Math.random()*2000)-1000);
-				smallDebrisInfo[i][2] = (int)(Math.random()*5)+2;
-				smallDebrisInfo[i][3] = (int)(Math.random()*130);
-			}
+			debrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
+			debrisInfo[i][1] = -2000 + (int)((Math.random()*2000)-1000);
+			debrisInfo[i][2] = (int)(Math.random()*5)+2;
+			debrisInfo[i][3] = (int)(Math.random()*130);
+			
+			smallDebrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
+			smallDebrisInfo[i][1] = -2000 + (int)((Math.random()*2000)-1000);
+			smallDebrisInfo[i][2] = (int)(Math.random()*5)+2;
+			smallDebrisInfo[i][3] = (int)(Math.random()*130);
 		}
 		
 		tileStart = false;
@@ -123,7 +120,7 @@ public class Level1State extends PlayState
 		stuka = new SmallStuka(tileMap);
 		
 		setBackgroundVector(0, -4);
-		setDebrisVectors(1);
+		setDebrisVectors(3);
 		if(!tileStart)
 		{
 			Timer timer = new Timer();
@@ -328,34 +325,33 @@ public class Level1State extends PlayState
 		int highestLoc = debrisInfo[0][1];
 		for(int i = 0; i < debrisInfo.length; i++)
 		{
-			for(int j = 0; j < debrisInfo[i].length; j++)
+			if(debrisInfo[i][1] > 0 && debrisInfo[i][1] < GamePanel.HEIGHT)
 			{
-				if(debrisInfo[i][1] > 0 && debrisInfo[i][1] < GamePanel.HEIGHT)
+				int xLoc = (int)((player.getX()+player.getWidth()/2));
+				int yLoc = (int)((player.getY()+player.getCHeight()+1));
+				if ((xLoc > debrisInfo[i][0] + debrisInfo[i][2]+2 || xLoc < debrisInfo[i][0]-2) || (yLoc > debrisInfo[i][1] + (int)(debrisInfo[i][2]*2.25) + 2 || yLoc < debrisInfo[i][1] - 2))
 				{
 					g.setColor(colors.get(debrisInfo[i][3]));
-					g.fillRect(debrisInfo[i][0], debrisInfo[i][1], debrisInfo[i][2], debrisInfo[i][2]);
-					debrisInfo[i][1] += debrisInfo[i][2]*debrisVector;
+					g.fillRect(debrisInfo[i][0], debrisInfo[i][1], debrisInfo[i][2], (int)(debrisInfo[i][2]*2.25));
 				}
-				else
-				{	
-					debrisInfo[i][1] += 2*debrisVector;
-				}
-				
-				if(debrisInfo[i][1] < highestLoc) highestLoc = debrisInfo[i][1];
+				debrisInfo[i][1] += debrisInfo[i][2]*debrisVector;
 			}
+			else
+			{	
+				debrisInfo[i][1] += 2*debrisVector;
+			}
+			
+			if(debrisInfo[i][1] < highestLoc) highestLoc = debrisInfo[i][1];
 		}
 		if (highestLoc > GamePanel.HEIGHT)
 		{
 			debrisAlternator = !debrisAlternator;
 			for(int i = 0; i < debrisInfo.length; i++)
 			{
-				for(int j = 0; j < debrisInfo[i].length; j++)
-				{
-					debrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
-					debrisInfo[i][1] = -2000 + (int)((Math.random()*2000)-1000);
-					debrisInfo[i][2] = (int)(Math.random()*5)+2;
-					debrisInfo[i][3] = (int)(Math.random()*130);
-				}
+				debrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
+				debrisInfo[i][1] = -2000 + (int)((Math.random()*2000)-1000);
+				debrisInfo[i][2] = (int)(Math.random()*5)+2;
+				debrisInfo[i][3] = (int)(Math.random()*130);
 			}
 		}
 	}
@@ -365,34 +361,33 @@ public class Level1State extends PlayState
 		int highestLoc = smallDebrisInfo[0][1];
 		for(int i = 0; i < smallDebrisInfo.length; i++)
 		{
-			for(int j = 0; j < smallDebrisInfo[i].length; j++)
-			{	
-				if(smallDebrisInfo[i][1] > 0 && smallDebrisInfo[i][1] < GamePanel.HEIGHT)
+			if(smallDebrisInfo[i][1] > 0 && smallDebrisInfo[i][1] < GamePanel.HEIGHT)
+			{
+				int xLoc = (int)((player.getX()+player.getWidth()/2));
+				int yLoc = (int)((player.getY()+player.getCHeight()+1));
+				if ((xLoc > debrisInfo[i][0] + (int)(debrisInfo[i][2]*0.75) + 2 || xLoc < debrisInfo[i][0]-2) || (yLoc > debrisInfo[i][1] + (int)(debrisInfo[i][2]*2.25) + 2 || yLoc < debrisInfo[i][1] - 2))
 				{
 					g.setColor(colors.get(smallDebrisInfo[i][3]));
-					g.fillRect(smallDebrisInfo[i][0], smallDebrisInfo[i][1], (int)(smallDebrisInfo[i][2]*0.75), (int)(smallDebrisInfo[i][2]*0.75));
-					smallDebrisInfo[i][1] += smallDebrisInfo[i][2]*debrisVector;
+					g.fillRect(smallDebrisInfo[i][0], smallDebrisInfo[i][1], (int)(smallDebrisInfo[i][2]*0.75), (int)(smallDebrisInfo[i][2]*2.25));
 				}
-				else
-				{
-					smallDebrisInfo[i][1] += debrisVector;
-				}
-				
-				if(smallDebrisInfo[i][1] < highestLoc) highestLoc = smallDebrisInfo[i][1];
+				smallDebrisInfo[i][1] += smallDebrisInfo[i][2]*debrisVector;
 			}
+			else
+			{
+				smallDebrisInfo[i][1] += debrisVector;
+			}
+			
+			if(smallDebrisInfo[i][1] < highestLoc) highestLoc = smallDebrisInfo[i][1];
 		}
 		if (highestLoc > GamePanel.HEIGHT)
 		{
 			debrisAlternator = !debrisAlternator;
 			for(int i = 0; i < smallDebrisInfo.length; i++)
 			{
-				for(int j = 0; j < smallDebrisInfo[i].length; j++)
-				{
-					smallDebrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
-					smallDebrisInfo[i][1] = -2000 + (int)((Math.random()*2000)-1000);
-					smallDebrisInfo[i][2] = (int)(Math.random()*5)+2;
-					smallDebrisInfo[i][3] = (int)(Math.random()*130);
-				}
+				smallDebrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
+				smallDebrisInfo[i][1] = -2000 + (int)((Math.random()*2000)-1000);
+				smallDebrisInfo[i][2] = (int)(Math.random()*5)+2;
+				smallDebrisInfo[i][3] = (int)(Math.random()*130);
 			}
 		}
 	}
