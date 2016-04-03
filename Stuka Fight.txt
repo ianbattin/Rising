@@ -1,0 +1,19 @@
+Stuka Fight
+
+Phase I
+When the stuka comes in and stops the first time let's have it come in shooting/creating fires. After fires have been created across the top of the Allied plane it stops shooting and the boss health bar appears. Stuka then crosses and exits the left side of the screen. Player can damage the Stuka by jumping onto the cockpit at this time.
+
+Phase II
+Let's have the first set of paratroopers move horizontally across the screen from left to right shooting at the character. maybe have just one halfway up the screen followed by two more slightly offset in timing and height. If they move at slight diagonals it may be more realistic.
+
+Phase III
+The stuka quickly crosses from left to right and returns from the right side to hover. At this time the gun extending from the cockpit activates, occasionally firing expanding bursts of three bullets in one of four pre-determined (and animated) directions depending on player location. If the player jumps on the cockpit the Stuka will shift position up to four times before leaving the screen.
+
+Phase IV
+Two riflemen sweep down onto the Allied plane from the left side of the screen. After 9 seconds the Stuka crosses from left to right shooting and creating small fires. Return to Phase II.
+
+Phase V
+When the Stuka is at half health it moves to the middle of the screen carrying a bomb. The bomb tilts at a downward angle, where it remains for two seconds before tilting straight down and falling onto the Allied plane. The bomb will explode harmlessly if shot four times while in its angled position. If unshot, it hits the Allied plane exploding and creating a large fire (art to be made). Stuka exits the opposite side of the screen. Return to Phase IV.
+
+Phase VI
+When Stuka is brought to zero health the cockpit explodes and it lowers at an angle behind the Allied plane trailing smoke (art to be made).
