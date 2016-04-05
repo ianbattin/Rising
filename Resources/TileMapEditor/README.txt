@@ -1,4 +1,4 @@
-If you aren't using windows, run by opening opening the App.java in eclipse and hitting the play button
+Run by opening the App.java in eclipse and hitting the play button
 
 =========
 CONTROLS:
