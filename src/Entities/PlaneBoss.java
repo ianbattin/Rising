@@ -17,6 +17,9 @@ import TileMap.TileMap;
 
 public class PlaneBoss extends Enemy {
 
+	public static final int COCKPIT = 0;
+	public static final int BOMBDROP = 1;
+	
 	private boolean setMovement;
 	private boolean moveComplete;
 	private int typeAttack;
@@ -24,13 +27,17 @@ public class PlaneBoss extends Enemy {
 	//animation
 	private ArrayList<BufferedImage[]> playerSprites;
 	private ArrayList<BufferedImage[]> playerHurtSprites;
+	private BufferedImage arrow;
 	private final int[] numFrames = { 4 };
 	
 	private Rectangle cockpit;
 	private int cockpitX;
 	private int cockpitY;
-	public boolean attacking;
-	public boolean evading;
+	private int arrowLoc;
+	private int arrowAnimator;
+	private boolean attacking;
+	private boolean evading;
+	private boolean drawArrow;
 	
 	private int evadeX;
 	private int evadeY;
@@ -68,6 +75,7 @@ public class PlaneBoss extends Enemy {
 		
 		evadeX = evadeY = 0;
 		evading = false;
+		drawArrow = false;
 		
 		try
 		{
@@ -111,6 +119,8 @@ public class PlaneBoss extends Enemy {
 				//sprites.add(bi);
 				playerHurtSprites.add(bi);
 			}
+			
+			arrow = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/arrow.png"));
 		}
 		catch(Exception e)
 		{
@@ -207,6 +217,19 @@ public class PlaneBoss extends Enemy {
 			g.drawImage(animation.getImage(), (int)(x + xmap) + width, (int)(y + ymap), -width, height, null);
 		}
 		
+		if(drawArrow)
+		{
+			if(arrowLoc == PlaneBoss.COCKPIT)
+			{
+				arrowAnimator++;
+				g.drawImage(arrow, (int)(cockpitX + cockpit.getWidth()/2 - arrow.getWidth()/2), (int)(this.y - (arrow.getHeight() + 25) + (Math.sin(arrowAnimator/8.0)*25)), (int)(arrow.getWidth()), (int)(arrow.getHeight()), null);
+			}
+			else
+			{
+				arrowAnimator++;
+				g.drawImage(arrow, (int)(x + this.width/2), (int)(this.y + this.height + (arrow.getHeight() + 25) - (Math.sin(arrowAnimator/8.0)*25)), (int)(arrow.getWidth()), -(int)(arrow.getHeight()), null);
+			}
+		}
 		for(Projectile p: bullets)
 		{
 			p.draw(g);
@@ -235,15 +258,17 @@ public class PlaneBoss extends Enemy {
 			if (getMoveComplete())
 			{
 				evading = true;
-				evadeX = (int)(Math.random()*600 + 100);
-				evadeY = (int)(Math.random()*500 + 100);
-				while (Math.sqrt((x - evadeX)*(x - evadeX) + (y - evadeY)*(y - evadeY)) < 100) //ensure that the plane moves long enough of a distance
+				int dist;
+				do 
 				{
-					evadeX = (int)(Math.random()*600 + 100);
+					evadeX = (int)(Math.random()*500 + 100);
 					evadeY = (int)(Math.random()*500 + 100);
-				}
+					dist = (int)Math.hypot(evadeX - x, evadeY - y);
+				} 
+				while (dist < 100 && dist > 400); //ensure that the plane moves long enough of a distance
 				setMoveComplete(false);
 			}
+			if (arrowLoc == PlaneBoss.COCKPIT)	drawArrow = false;
 		}
 		else if(this.intersects(player) && !evading)
 		{
@@ -424,7 +449,7 @@ public class PlaneBoss extends Enemy {
 
 	public void evadeMove()
 	{
-		setMovement(this.x, this.y, evadeX, evadeY, 0.5, 0);
+		setMovement(this.x, this.y, evadeX, evadeY, 0.25, 0);
 	}
 	
 	@Override
@@ -448,6 +473,15 @@ public class PlaneBoss extends Enemy {
 	public void setMoveComplete(boolean b) 
 	{
 		moveComplete = b;
+	}
+	
+	public boolean isEvading() {return evading;}
+	public boolean isAttacking() {return attacking;}
+	
+	public void setDrawArrow(boolean willDraw, int location)
+	{
+		this.drawArrow = willDraw;
+		this.arrowLoc = location;
 	}
 
 }

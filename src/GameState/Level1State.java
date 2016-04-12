@@ -323,35 +323,35 @@ public class Level1State extends PlayState
 	public void debris(Graphics2D g)
 	{
 		int highestLoc = debrisInfo[0][1];
-		for(int i = 0; i < debrisInfo.length; i++)
+		for(int[] array : debrisInfo)
 		{
-			if(debrisInfo[i][1] > 0 && debrisInfo[i][1] < GamePanel.HEIGHT)
+			if(array[1] > 0 && array[1] < GamePanel.HEIGHT)
 			{
 				int xLoc = (int)((player.getX()+player.getWidth()/2));
 				int yLoc = (int)((player.getY()+player.getCHeight()+1));
-				if ((xLoc > debrisInfo[i][0] + debrisInfo[i][2]+2 || xLoc < debrisInfo[i][0]-2) || (yLoc > debrisInfo[i][1] + (int)(debrisInfo[i][2]*2.25) + 2 || yLoc < debrisInfo[i][1] - 2))
+				if ((xLoc > array[0] + array[2]+2 || xLoc < array[0]-2) || (yLoc > array[1] + (int)(array[2]*2.25) + 2 || yLoc < array[1] - 2))
 				{
-					g.setColor(colors.get(debrisInfo[i][3]));
-					g.fillRect(debrisInfo[i][0], debrisInfo[i][1], debrisInfo[i][2], (int)(debrisInfo[i][2]*2.25));
+					g.setColor(colors.get(array[3]));
+					g.fillRect(array[0], array[1], array[2], (int)(array[2]*2.25));
 				}
-				debrisInfo[i][1] += debrisInfo[i][2]*debrisVector;
+				array[1] += array[2]*debrisVector;
 			}
 			else
 			{	
-				debrisInfo[i][1] += 2*debrisVector;
+				array[1] += 2*debrisVector;
 			}
 			
-			if(debrisInfo[i][1] < highestLoc) highestLoc = debrisInfo[i][1];
+			if(array[1] < highestLoc) highestLoc = array[1];
 		}
 		if (highestLoc > GamePanel.HEIGHT)
 		{
 			debrisAlternator = !debrisAlternator;
-			for(int i = 0; i < debrisInfo.length; i++)
+			for (int[] array : debrisInfo)
 			{
-				debrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
-				debrisInfo[i][1] = -2000 + (int)((Math.random()*2000)-1000);
-				debrisInfo[i][2] = (int)(Math.random()*5)+2;
-				debrisInfo[i][3] = (int)(Math.random()*130);
+				array[0] = (int)(Math.random()*GamePanel.WIDTH);
+				array[1] = -2000 + (int)((Math.random()*2000)-1000);
+				array[2] = (int)(Math.random()*5)+2;
+				array[3] = (int)(Math.random()*130);
 			}
 		}
 	}
@@ -359,35 +359,36 @@ public class Level1State extends PlayState
 	public void smallDebris(Graphics2D g)
 	{
 		int highestLoc = smallDebrisInfo[0][1];
-		for(int i = 0; i < smallDebrisInfo.length; i++)
+		for(int array[] : smallDebrisInfo)
 		{
-			if(smallDebrisInfo[i][1] > 0 && smallDebrisInfo[i][1] < GamePanel.HEIGHT)
+			if(array[1] > 0 && array[1] < GamePanel.HEIGHT)
 			{
 				int xLoc = (int)((player.getX()+player.getWidth()/2));
 				int yLoc = (int)((player.getY()+player.getCHeight()+1));
-				if ((xLoc > debrisInfo[i][0] + (int)(debrisInfo[i][2]*0.75) + 2 || xLoc < debrisInfo[i][0]-2) || (yLoc > debrisInfo[i][1] + (int)(debrisInfo[i][2]*2.25) + 2 || yLoc < debrisInfo[i][1] - 2))
+				if ((xLoc > array[0] + (int)(array[2]*0.75) + 2 || xLoc < array[0]-2) || (yLoc > array[1] + (int)(array[2]*2.25) + 2 || yLoc < array[1] - 2))
 				{
-					g.setColor(colors.get(smallDebrisInfo[i][3]));
-					g.fillRect(smallDebrisInfo[i][0], smallDebrisInfo[i][1], (int)(smallDebrisInfo[i][2]*0.75), (int)(smallDebrisInfo[i][2]*2.25));
+					g.setColor(colors.get(array[3]));
+					g.fillRect(array[0], array[1], (int)(array[2]*0.75), (int)(array[2]*2.25));
 				}
-				smallDebrisInfo[i][1] += smallDebrisInfo[i][2]*debrisVector;
+				array[1] += array[2]*debrisVector;
 			}
 			else
 			{
-				smallDebrisInfo[i][1] += debrisVector;
+				array[1] += debrisVector;
 			}
 			
-			if(smallDebrisInfo[i][1] < highestLoc) highestLoc = smallDebrisInfo[i][1];
+			if(array[1] < highestLoc) highestLoc = array[1];
 		}
+
 		if (highestLoc > GamePanel.HEIGHT)
 		{
 			debrisAlternator = !debrisAlternator;
-			for(int i = 0; i < smallDebrisInfo.length; i++)
+			for(int[] array : smallDebrisInfo)
 			{
-				smallDebrisInfo[i][0] = (int)(Math.random()*GamePanel.WIDTH);
-				smallDebrisInfo[i][1] = -2000 + (int)((Math.random()*2000)-1000);
-				smallDebrisInfo[i][2] = (int)(Math.random()*5)+2;
-				smallDebrisInfo[i][3] = (int)(Math.random()*130);
+				array[0] = (int)(Math.random()*GamePanel.WIDTH);
+				array[1] = -2000 + (int)((Math.random()*2000)-1000);
+				array[2] = (int)(Math.random()*5)+2;
+				array[3] = (int)(Math.random()*130);
 			}
 		}
 	}

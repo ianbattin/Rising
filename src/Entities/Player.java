@@ -653,8 +653,7 @@ public class Player extends MapObject
 		{
 			if(!jumped)
 			{
-				Timer timer = new Timer();
-				timer.schedule(new TimerTask()
+				new Timer().schedule(new TimerTask()
 				{
 					public void run()
 					{	

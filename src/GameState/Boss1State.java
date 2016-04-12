@@ -167,7 +167,7 @@ public class Boss1State extends PlayState
 		g.setColor(Color.darkGray);
 		g.fillRect(200, 100, 400, 30);
 		g.setColor(Color.RED);
-		g.fillRect(200, 100, enemies.get(0).getHealth()*4, 30);
+		g.fillRect(200, 100, planeBoss.getHealth()*4, 30);
 	}
 
 	private void basicChecks() 
@@ -222,7 +222,7 @@ public class Boss1State extends PlayState
 	private void script()
 	{		
 		
-		if (!enemies.isEmpty() && enemies.get(0) instanceof PlaneBoss)
+		if (!enemies.isEmpty() && enemies.get(0) instanceof PlaneBoss && planeBoss != null)
 		{
 			planeX = planeBoss.getX();
 			planeY = planeBoss.getY();
@@ -249,8 +249,8 @@ public class Boss1State extends PlayState
 							else
 							{
 								tileMap.setYVector(0);
-								enemies.get(0).setX(-2000);
-								enemies.get(0).setY(200);
+								planeBoss.setX(-2000);
+								planeBoss.setY(200);
 								step = 1;
 							}
 						}
@@ -272,6 +272,9 @@ public class Boss1State extends PlayState
 					//Plane flies left to right at 1 speed
 					case 0:
 					{
+						planeBoss.setHealth(100);
+						drawBossHealth = true;
+						
 						if(planeBoss.getMoveComplete() == false)
 						{
 							planeBoss.setMovement(-2000, 200, 1200, 200, 2, 0);
@@ -313,8 +316,6 @@ public class Boss1State extends PlayState
 					//Plane flies from middle of screen to left at 1 speed
 					case 2:
 					{
-						planeBoss.setHealth(100);
-						drawBossHealth = true;
 						if(planeBoss.getMoveComplete() == false)
 						{
 							planeBoss.setMovement(400, 200, -1500, 200, 1, 0);
@@ -335,10 +336,10 @@ public class Boss1State extends PlayState
 				}
 			}
 			
-			//Attacking stage at 80-100 health;
+			//Attacking stage at 30 - 100 health;
 			else if(stage == 2)
 			{
-				if(enemies.get(0).getHealth() > 0)
+				if(planeBoss.getHealth() > 30)
 				{
 					switch(step)
 					{
@@ -424,12 +425,13 @@ public class Boss1State extends PlayState
 						{
 							if(planeBoss.getMoveComplete() == false)
 							{
-								if(planeBoss.evading)
+								if(planeBoss.isEvading())
 								{
 									planeBoss.evadeMove();
 								} 
 								else
 								{
+									planeBoss.setDrawArrow(true, PlaneBoss.COCKPIT);
 									planeBoss.setMovement(1500, 200, 400, 500, 1, 0);
 								}
 							}
@@ -441,7 +443,7 @@ public class Boss1State extends PlayState
 									done = true;
 								}
 								long elapsed = (System.nanoTime() - timer) / 1000000;
-								if(4000 <= elapsed)
+								if(5000 <= elapsed)
 								{
 									count = 0;
 									done = false;
@@ -471,7 +473,11 @@ public class Boss1State extends PlayState
 						}
 					}
 				}
-				else
+				else if (planeBoss.getHealth() > 0) //attacking stage when health reaches 1/3
+				{
+					
+				}
+				else //plane boss dies; no more health
 				{
 					drawBossHealth = false;
 					for (Enemy e: enemies)

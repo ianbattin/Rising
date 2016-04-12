@@ -165,7 +165,7 @@ public class Projectile extends MapObject
 			}
 		}
 		
-		cwidth = width/2;
+		cwidth = width;
 		cheight = height/2;
 	}
 
@@ -174,7 +174,7 @@ public class Projectile extends MapObject
 		this.myCheckCollision();
 		if(this.type == 1)
 		{
-			tileMap.getExplosions().add(new Explosion(x + cwidth-25, y + cheight-25, 3, tileMap));
+			tileMap.getExplosions().add(new Explosion(x + width/2-25, y + height/2-25, 3, tileMap));
 			this.remove = true;
 		}
 		if(this.type != 7)
@@ -265,8 +265,7 @@ public class Projectile extends MapObject
 	
 	public void getAnimation()
 	{
-		if(true)
-			animation.setFrames(sprites.get(1));
+		animation.setFrames(sprites.get(1));
 		animation.update();
 	}
 	
@@ -278,7 +277,7 @@ public class Projectile extends MapObject
 			if(t.getType() == 17 && this.type != 7)
 			{
 				t.setType(0);
-				remove = true;
+				if (this.type != 1)	{remove = true;}
 			}
 			else if(this.type == 3)
 			{
@@ -298,7 +297,7 @@ public class Projectile extends MapObject
 						tile.setType(0);
 					}
 					
-				}, (int)(Math.random()*3000+1000));
+				}, (int)(Math.random()*5000+3000));
 			}
 			else if(this.type == 5)
 			{
@@ -325,8 +324,10 @@ public class Projectile extends MapObject
 					remove = true;
 				}
 			}
-			else
+			else if (this.type != 1)
+			{
 				remove = true;
+			}
 		}
 	}
 
@@ -346,13 +347,7 @@ public class Projectile extends MapObject
 				((Enemy) m).playerHurt(damage);
 				remove = true;
 			}
-			
-			if(m instanceof PlaneBoss)
-			{
-				((PlaneBoss) m).playerHurt(damage);
-				remove = true;
-			}
-			
+
 		    if(this.type == 5)
 			{
 				remove = true;
