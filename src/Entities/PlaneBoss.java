@@ -27,10 +27,12 @@ public class PlaneBoss extends Enemy {
 	//animation
 	private ArrayList<BufferedImage[]> playerSprites;
 	private ArrayList<BufferedImage[]> playerHurtSprites;
-	private BufferedImage arrow;
+	private BufferedImage arrowImage;
+	private BufferedImage bombImage;
 	private final int[] numFrames = { 4 };
 	
 	private Rectangle cockpit;
+	private Rectangle bombArea;
 	private int cockpitX;
 	private int cockpitY;
 	private int arrowLoc;
@@ -38,6 +40,9 @@ public class PlaneBoss extends Enemy {
 	private boolean attacking;
 	private boolean evading;
 	private boolean drawArrow;
+	private boolean bombAttack;
+	private long bombTimer;
+	private ArrayList<MapObject> mapObjects;
 	
 	private int evadeX;
 	private int evadeY;
@@ -52,6 +57,7 @@ public class PlaneBoss extends Enemy {
 		attacking = false;
 		
 		bullets = new ArrayList<Projectile>();
+		mapObjects = new ArrayList<MapObject>();
 		firing = false;
 		fireDelay = 20;
 		this.typeAttack = typeAttack;
@@ -124,7 +130,8 @@ public class PlaneBoss extends Enemy {
 				playerHurtSprites.add(bi);
 			}
 			
-			arrow = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/arrow.png"));
+			arrowImage = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/arrow.png"));
+			bombImage = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/bomb.png")).getSubimage(0, 0, 53, 53);
 		}
 		catch(Exception e)
 		{
@@ -140,6 +147,8 @@ public class PlaneBoss extends Enemy {
 		cockpitY = y + 10;
 		cockpit = new Rectangle(cockpitX, cockpitY, 80, 25);
 		
+		bombArea = new Rectangle((int)(this.x+cwidth/2+15), (int)(this.y+cheight-15), 53, 53);
+		
 		//health
 		health = 100;
 	}
@@ -151,6 +160,7 @@ public class PlaneBoss extends Enemy {
 		{
 			getMovement();
 			getAttack();
+			if(!attacking || bombAttack) getAttack();
 		}
 		else
 		{
@@ -187,16 +197,30 @@ public class PlaneBoss extends Enemy {
 		
 		checkPlayerCollision();
 		
+		for(int i = 0; i < mapObjects.size(); i++)
+		{
+			if(mapObjects.get(i).getRemove())
+			{
+				mapObjects.remove(i);
+				i--;
+			}
+			else
+			{
+				mapObjects.get(i).update();
+			}
+		}
 		for(int i = 0; i < bullets.size(); i++)
 		{	
 			if(bullets.get(i).getRemove())
 			{
 				bullets.remove(i);
 				i--;
-				break;
 			}
-			bullets.get(i).update();
-			if(bullets.get(i).getY() > GamePanel.HEIGHT) bullets.remove(i);
+			else
+			{
+				bullets.get(i).update();
+				if(bullets.get(i).getY() > GamePanel.HEIGHT) bullets.remove(i);
+			}
 		}
 	}
 
@@ -215,28 +239,53 @@ public class PlaneBoss extends Enemy {
 		if(facingRight)
 		{
 			g.drawImage(animation.getImage(), (int)(x + xmap), (int)(y + ymap), width, height, null);
+			if(drawArrow)
+			{
+				if(arrowLoc == PlaneBoss.COCKPIT)
+				{
+					arrowAnimator++;
+					g.drawImage(arrowImage, (int)(cockpitX + cockpit.getWidth()/2 - arrowImage.getWidth()/2), (int)(this.y - (arrowImage.getHeight() + 25) + (Math.sin(arrowAnimator/8.0)*25)), (int)(arrowImage.getWidth()), (int)(arrowImage.getHeight()), null);
+				}
+				else
+				{
+					arrowAnimator++;
+					g.drawImage(arrowImage, (int)(this.x + this.cwidth/2 + 23), (int)(this.y + this.height + (arrowImage.getHeight() + 10) - (Math.sin(arrowAnimator/8.0)*25)), (int)(arrowImage.getWidth()), -(int)(arrowImage.getHeight()), null);
+				}
+			}
+			if (bombAttack)
+			{
+				g.drawImage(bombImage, (int)(this.x+cwidth/2+15) + 53, (int)(this.y+cheight-15), -53, 53, null);
+			}
 		}
 		else
 		{
 			g.drawImage(animation.getImage(), (int)(x + xmap) + width, (int)(y + ymap), -width, height, null);
+			if(drawArrow)
+			{
+				if(arrowLoc == PlaneBoss.COCKPIT)
+				{
+					arrowAnimator++;
+					g.drawImage(arrowImage, (int)(cockpitX + cockpit.getWidth()/2 - arrowImage.getWidth()/2), (int)(this.y - (arrowImage.getHeight() + 25) + (Math.sin(arrowAnimator/8.0)*25)), (int)(arrowImage.getWidth()), (int)(arrowImage.getHeight()), null);
+				}
+				else
+				{
+					arrowAnimator++;
+					g.drawImage(arrowImage, (int)(this.x + this.cwidth/2 + 23), (int)(this.y + this.height + (arrowImage.getHeight() + 10) - (Math.sin(arrowAnimator/8.0)*25)), (int)(arrowImage.getWidth()), -(int)(arrowImage.getHeight()), null);
+				}
+			}
+			if (bombAttack)
+			{
+				g.drawImage(bombImage, (int)(this.x+cwidth/2+15), (int)(this.y+cheight-15), 53, 53, null);
+			}
 		}
 		
-		if(drawArrow)
-		{
-			if(arrowLoc == PlaneBoss.COCKPIT)
-			{
-				arrowAnimator++;
-				g.drawImage(arrow, (int)(cockpitX + cockpit.getWidth()/2 - arrow.getWidth()/2), (int)(this.y - (arrow.getHeight() + 25) + (Math.sin(arrowAnimator/8.0)*25)), (int)(arrow.getWidth()), (int)(arrow.getHeight()), null);
-			}
-			else
-			{
-				arrowAnimator++;
-				g.drawImage(arrow, (int)(x + this.width/2), (int)(this.y + this.height + (arrow.getHeight() + 25) - (Math.sin(arrowAnimator/8.0)*25)), (int)(arrow.getWidth()), -(int)(arrow.getHeight()), null);
-			}
-		}
 		for(Projectile p: bullets)
 		{
 			p.draw(g);
+		}
+		for(MapObject m : mapObjects)
+		{
+			m.draw(g);
 		}
 	}
 
@@ -246,13 +295,27 @@ public class PlaneBoss extends Enemy {
 		{
 			cockpitX = (int) (x + 90);
 			cockpitY = (int) (y + 10);
+			
+			if (bombAttack)
+			{
+				bombArea.x = (int)(this.x+cwidth/2+15);
+				bombArea.y = (int)(this.y+cheight-15);
+			}
 		}
 		else
 		{
 			cockpitX = (int) (x + 140);
 			cockpitY = (int) (y + 10);
+			
+			if (bombAttack)
+			{
+				bombArea.x = (int)(this.x+cwidth/2+15);
+				bombArea.y = (int)(this.y+cheight-15);
+			}
 		}
 		cockpit.setLocation(cockpitX, cockpitY);
+		
+		
 		
 		if(cockpit.intersects(player.getRectangle()) && player.getDY() > 0)
 		{
@@ -283,6 +346,16 @@ public class PlaneBoss extends Enemy {
 	@Override
 	public void getAttack() 
 	{
+		if(bombAttack)
+		{
+			long elapsed = System.currentTimeMillis() - bombTimer;
+			if (elapsed > 9000)
+			{
+				mapObjects.add(new Bomb((this.x+cwidth/2+15), (this.y+cheight-15), this.tileMap, 1));
+				bombAttack = false;
+				drawArrow = false;
+			}
+		}
 		//Lots of exploding bullets
 		if(typeAttack == 1)
 		{
@@ -534,6 +607,35 @@ public class PlaneBoss extends Enemy {
 		setMovement(evadeX, evadeY, 0.25, 0);
 	}
 	
+	public void getBulletCollision()
+	{
+		for(int i = 0; i < bullets.size(); i++)
+		{
+			if(bullets.get(i).intersects(player))
+			{
+				bullets.get(i).collided(player);
+			}
+			if(bullets.get(i).notOnScreen() && bullets.get(i).getLifeTime() > 300) bullets.remove(i);
+		}
+		
+		for(int i = 0; i < player.getBullets().size(); i++)
+		{
+			if(player.getBullets().get(i).intersects(this))
+			{
+				player.getBullets().get(i).collided(this);
+			}
+			if(player.getBullets().get(i).getRectangle().intersects(bombArea) && bombAttack)
+			{
+				System.out.println("SPECIAL");
+				bombAttack = false;
+				drawArrow = false;
+				mapObjects.add(new Explosion((this.x+cwidth/2+15), (this.y+cheight-15), 4, tileMap));
+				recovering = false;
+				playerHurt(30);
+			}
+		}
+	}
+	
 	@Override
 	public void collided(int type, Tile t) {
 		// TODO Auto-generated method stub
@@ -559,11 +661,18 @@ public class PlaneBoss extends Enemy {
 	
 	public boolean isEvading() {return evading;}
 	public boolean isAttacking() {return attacking;}
+	public boolean isBombAttacking() {return bombAttack;}
 	
 	public void setDrawArrow(boolean willDraw, int location)
 	{
 		this.drawArrow = willDraw;
 		this.arrowLoc = location;
+	}
+	
+	public void startBombAttack()
+	{
+		this.bombAttack = true;
+		bombTimer = System.currentTimeMillis();
 	}
 
 }

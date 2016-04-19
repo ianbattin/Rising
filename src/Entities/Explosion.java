@@ -20,7 +20,6 @@ import TileMap.TileMap;
 
 public class Explosion extends MapObject
 {
-	private TileMap tm;
 	private double direction;
 	private int damage;
 	private int type;
@@ -86,6 +85,16 @@ public class Explosion extends MapObject
 				cwidth = width*2;
 				cheight = height*2;
 				willDestroyBlocks = false;
+				init();
+				break;
+			}
+			case 4: //used in the boss fight to destroy a minimal amount of tiles and spawn several fires
+			{
+				width = 50;
+				height = 50;
+				cwidth = width*2;
+				cheight = height*1;
+				willDestroyBlocks= true;
 				init();
 				break;
 			}
@@ -155,7 +164,27 @@ public class Explosion extends MapObject
 				{
 					if(this.intersects(tile))
 					{
-						tile.setType(0);
+						if (type != 4)
+						{
+							tile.setType(0);
+						}
+						else
+						{
+							boolean flag = false;
+							for(Tile tileBelow : tileMap.getTiles())
+							{
+								if((int)tileBelow.getX() == (int)tile.getX() && (int)tileBelow.getY() - super.tileMap.getTileSize() == (int)tile.getY() && !this.intersects(tileBelow))
+								{
+									tile.setType(17, 3, true);
+									flag = true;
+									break;
+								}
+							}
+							if (!flag)
+							{
+								tile.setType(0);
+							}	
+						}
 					}
 				}
 			}
@@ -180,7 +209,7 @@ public class Explosion extends MapObject
 					g.draw(this.getRectangle());
 				}
 			}
-			else if(type == 2)
+			else if(type == 2 || type == 4)
 			{
 				for(int i = 0; i < explosionArea.length; i++)
 				{

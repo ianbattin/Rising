@@ -180,8 +180,23 @@ public class Tile
 		return (y > GamePanel.HEIGHT + 200);
 	}
 		
+	public void setType(int type, int frames, boolean animate)
+	{
+		this.type = type;
+		this.animated = animate;
+		this.images = new BufferedImage[frames];
+		for(int i = 0; i < frames; i++)
+		{
+			images[i] = TileMap.getSprite(type + i);
+		}
+		animation.setFrames(images);
+		animation.setDelay(100);
+	}
+	public void setType(int type) 
+	{
+		this.type = type;	
+	}
 	public int getType() {	return type;	}
-	public void setType(int i) { type = i; };
 	public double getX(){	return x;	}
 	public double getY(){	return y;	}
 	public int getSize() { return size; }

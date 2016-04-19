@@ -279,13 +279,48 @@ public class Boss1State extends PlayState
 					if(planeBoss.getMoveComplete() == false)
 					{
 						planeBoss.setMovement(2400, 200, 2, 0);
+						planeBoss.setHealth(100);
+						drawBossHealth = true;
+						
+						if(planeBoss.getMoveComplete() == false)
+						{
+							planeBoss.setMovement(1200, 200, 2, 0);
+						}
+						else
+						{
+							planeBoss.setMoveComplete(false);
+							step = 1;
+							planeBoss.startBombAttack();
+							planeBoss.setDrawArrow(true, PlaneBoss.BOMBDROP);
+						}
+						break;
 					}
 					else
 					{
 						planeBoss.setMoveComplete(false);
 						step = 1;
+						if(planeBoss.getMoveComplete() == false)
+						{
+							planeBoss.setMovement(400, 200, 0.5, 0);
+						}
+						else
+						{
+							if(!done)
+							{
+								timer = System.nanoTime();
+								done = true;
+							}
+							long elapsed = (System.nanoTime() - timer) / 1000000;
+							if(12000 <= elapsed || !planeBoss.isBombAttacking())
+							{
+								planeBoss.setMoveComplete(false);
+								done = false;
+								step = 2;
+								timer = System.nanoTime();
+							}
+						}					
+						break;
 					}
-					break;
 				}
 
 				//Plane flies right to middle of screen and waits for 4 seconds at half speed

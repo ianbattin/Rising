@@ -189,13 +189,12 @@ public class Bomb extends MapObject
 	{
 		exploding = true;
 		
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask()
+		new Timer().schedule(new TimerTask()
 		{
 			public void run()
 			{	
 				if(exploding)
-					tileMap.getExplosions().add(new Explosion(x, y, 2, tileMap));
+					tileMap.getExplosions().add(new Explosion(x, y, 4, tileMap));
 				remove = true;
 				exploding = false;
 			}
