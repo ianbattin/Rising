@@ -62,6 +62,7 @@ public class Projectile extends MapObject
 
 		switch (this.type)
 		{
+			//Players
 			case 1: 
 			{
 				moveSpeed = 0;
@@ -71,9 +72,10 @@ public class Projectile extends MapObject
 				playerCollide = true;
 				break;
 			}
+			//Slow moving
 			case 2:
 			{
-				moveSpeed = 7.0;
+				moveSpeed = 4.0;
 				width = 14;
 				height = 14;
 				damage = 1;
@@ -81,6 +83,7 @@ public class Projectile extends MapObject
 				SoundPlayer.playShootingClip();
 				break;
 			}
+			//Normal enemies
 			case 3:
 			{
 				moveSpeed = 25.0;
@@ -91,6 +94,7 @@ public class Projectile extends MapObject
 				SoundPlayer.playShootingClip();
 				break;
 			}
+			//Fire
 			case 4:
 			{
 				moveSpeed = 16.0;
@@ -101,6 +105,7 @@ public class Projectile extends MapObject
 				SoundPlayer.playShootingClip();
 				break;
 			}
+			//Small explosion
 			case 5:
 			{
 				moveSpeed = 40.0;
@@ -111,6 +116,7 @@ public class Projectile extends MapObject
 				SoundPlayer.playShootingClip();
 				break;
 			}
+			//Large explosion
 			case 6:
 			{
 				moveSpeed = 10.0;
@@ -121,6 +127,7 @@ public class Projectile extends MapObject
 				SoundPlayer.playShootingClip();
 				break;
 			}
+			//Ricochete
 			case 7:
 			{
 				ricochetCount = 0;

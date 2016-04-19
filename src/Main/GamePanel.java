@@ -3,6 +3,7 @@ package Main;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -169,6 +170,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	//takes the drawing code and actually displays it
 	public void gameDrawToScreen()
 	{
+		//Post process effects
+		
 		Graphics g2 = this.getGraphics();
 		g2.drawImage(image, 0 , 0, WIDTHSCALED, HEIGHTSCALED, null);
 		if(displayFPS) g2.drawString("" + (int)getAverageFPS(), 2, 10);

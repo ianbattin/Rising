@@ -41,6 +41,9 @@ public class PlaneBoss extends Enemy {
 	
 	private int evadeX;
 	private int evadeY;
+	private double bobLeftX;
+	private double bobRightX;
+	private double bobSpeed;
 
 	public PlaneBoss(int x, int y, TileMap tm, Player player, int typeAttack) 
 	{
@@ -57,7 +60,7 @@ public class PlaneBoss extends Enemy {
 		
 		recoverLength = 40;
 		
-		moveSpeed = 10.0;
+		moveSpeed = 5.0;
 		maxSpeedY = 3.0;
 		maxSpeedX = 7.0;
 		maxSpeed = 10.0;
@@ -65,6 +68,7 @@ public class PlaneBoss extends Enemy {
 		fallSpeed = 0.25;
 		maxFallSpeed = 7.0;
 		jumpStart = -3.0;
+		bobSpeed = 0.5;
 		
 		width = 307;
 		height = 114;
@@ -146,7 +150,7 @@ public class PlaneBoss extends Enemy {
 		if (health > 0)
 		{
 			getMovement();
-			if(!attacking) getAttack();
+			getAttack();
 		}
 		else
 		{
@@ -279,6 +283,7 @@ public class PlaneBoss extends Enemy {
 	@Override
 	public void getAttack() 
 	{
+		//Lots of exploding bullets
 		if(typeAttack == 1)
 		{
 			attacking = true;
@@ -314,6 +319,7 @@ public class PlaneBoss extends Enemy {
 			}
 			attacking = false;
 		}
+		//Normal attack
 		else if(typeAttack == 2)
 		{
 			relX = (int) (this.x - (int)player.getX());
@@ -334,11 +340,20 @@ public class PlaneBoss extends Enemy {
 				}
 			}
 		}
+		//Fire
 		else if(typeAttack == 3)
 		{
-			relX = (int) (this.x - (int)player.getX());
-			relY = (int) (this.y - (int)player.getY());
-			angle = 2.5;
+			if(facingRight)
+			{
+				relX = -100;
+				relY = -100;
+			}
+			else
+			{
+				relX = 100;
+				relY = -100;
+			}
+			angle = Math.atan2(-relY, -relX);
 
 			fireDelay = 100;
 			firing = true;
@@ -354,6 +369,49 @@ public class PlaneBoss extends Enemy {
 				}
 			}
 		}
+		//Three bullets
+		else if(typeAttack == 4)
+		{
+			if(player.getX() <= 200)
+			{
+				relX = 100;
+				relY = -200;
+			}
+			else if(player.getX() >= 600)
+			{
+				relX = -100;
+				relY = -200;
+			}
+			else
+			{
+				relX = 0;
+				relY = -200;
+			}
+
+			angle = Math.atan2(-relY, -relX);
+			firing = true;
+			fireDelay = 50;
+
+			if(firing)
+			{
+				long elapsed= (System.nanoTime() - fireTimer) / 1000000;
+				if(fireDelay <= elapsed*(0.5*Enemy.slowDown))
+				{
+					System.out.println("FIRING");
+					bullets.add(new Projectile(x + width/2, y+height, angle, 2, tileMap));
+					bullets.add(new Projectile(x + width/2, y+height, angle-0.25, 2, tileMap));
+					bullets.add(new Projectile(x + width/2, y+height, angle+0.25, 2, tileMap));
+					fireTimer = System.nanoTime();
+				}
+			}
+		}
+	}
+	
+	public void setAttack(int typeAttack)
+	{
+		if(typeAttack == 0) attacking = false;
+		else attacking = true;
+		this.typeAttack = typeAttack;
 	}
 
 	@Override
@@ -368,13 +426,19 @@ public class PlaneBoss extends Enemy {
 		
 		x += dx*Enemy.slowDown;
 		y += dy*Enemy.slowDown;
+		
+		if(moveComplete)
+			bobLeftRight();
 	}
 	
-	public void setMovement(double startX, double startY, double endX, double endY, double speed, int typeAttack)
+	public void setMovement(double endX, double endY, double speed, int typeAttack)
 	{
 		this.typeAttack = typeAttack;
 		moveComplete = false;
 		setMovement = true;
+		
+		double startX = x;
+		double startY = y;
 		
 		double differenceX = endX - startX;
 		double differenceY = endY - startY;
@@ -397,8 +461,26 @@ public class PlaneBoss extends Enemy {
 		if((dx == 0 && dy == 0) || (dx == -0 && dy == -0) || (dx == 0 && dy == -0) || (dx == -0 && dy == 0))
 		{
 			moveComplete = true;
+			bobLeftX = x - 10;
+			bobRightX = x + 10;
 			evading = false;
 		}
+	}
+	
+	public void bobLeftRight()
+	{
+		if(x > bobRightX)
+		{
+			x -= 2;
+			bobSpeed = -bobSpeed;
+		}
+		else if(x < bobLeftX)
+		{
+			x += 2;
+			bobSpeed = -bobSpeed;
+		}
+		else
+			x += bobSpeed;
 	}
 
 	@Override
@@ -449,7 +531,7 @@ public class PlaneBoss extends Enemy {
 
 	public void evadeMove()
 	{
-		setMovement(this.x, this.y, evadeX, evadeY, 0.25, 0);
+		setMovement(evadeX, evadeY, 0.25, 0);
 	}
 	
 	@Override
