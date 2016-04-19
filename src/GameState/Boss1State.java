@@ -283,6 +283,8 @@ public class Boss1State extends PlayState
 						{
 							planeBoss.setMoveComplete(false);
 							step = 1;
+							planeBoss.startBombAttack();
+							planeBoss.setDrawArrow(true, PlaneBoss.BOMBDROP);
 						}
 						break;
 					}
@@ -302,7 +304,7 @@ public class Boss1State extends PlayState
 								done = true;
 							}
 							long elapsed = (System.nanoTime() - timer) / 1000000;
-							if(2000 <= elapsed)
+							if(12000 <= elapsed || !planeBoss.isBombAttacking())
 							{
 								planeBoss.setMoveComplete(false);
 								done = false;
