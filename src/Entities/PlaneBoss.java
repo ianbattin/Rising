@@ -48,7 +48,10 @@ public class PlaneBoss extends Enemy {
 	private int evadeY;
 	private double bobLeftX;
 	private double bobRightX;
-	private double bobSpeed;
+	private double bobUpY;
+	private double bobDownY;
+	private double bobSpeedX;
+	private double bobSpeedY;
 
 	public PlaneBoss(int x, int y, TileMap tm, Player player, int typeAttack) 
 	{
@@ -74,7 +77,8 @@ public class PlaneBoss extends Enemy {
 		fallSpeed = 0.25;
 		maxFallSpeed = 7.0;
 		jumpStart = -3.0;
-		bobSpeed = 0.5;
+		bobSpeedX = -0.25;
+		bobSpeedY = 0.5;
 		
 		width = 307;
 		height = 114;
@@ -448,22 +452,22 @@ public class PlaneBoss extends Enemy {
 			if(player.getX() <= 200)
 			{
 				relX = 100;
-				relY = -200;
+				relY = 200;
 			}
 			else if(player.getX() >= 600)
 			{
 				relX = -100;
-				relY = -200;
+				relY = 200;
 			}
 			else
 			{
 				relX = 0;
-				relY = -200;
+				relY = 200;
 			}
 
 			angle = Math.atan2(-relY, -relX);
 			firing = true;
-			fireDelay = 50;
+			fireDelay = 1000;
 
 			if(firing)
 			{
@@ -471,9 +475,9 @@ public class PlaneBoss extends Enemy {
 				if(fireDelay <= elapsed*(0.5*Enemy.slowDown))
 				{
 					System.out.println("FIRING");
-					bullets.add(new Projectile(x + width/2, y+height, angle, 2, tileMap));
-					bullets.add(new Projectile(x + width/2, y+height, angle-0.25, 2, tileMap));
-					bullets.add(new Projectile(x + width/2, y+height, angle+0.25, 2, tileMap));
+					bullets.add(new Projectile(x + width/2, y+20, angle, 2, tileMap));
+					bullets.add(new Projectile(x + width/2, y+20, angle-0.35, 2, tileMap));
+					bullets.add(new Projectile(x + width/2, y+20, angle+0.35, 2, tileMap));
 					fireTimer = System.nanoTime();
 				}
 			}
@@ -501,7 +505,10 @@ public class PlaneBoss extends Enemy {
 		y += dy*Enemy.slowDown;
 		
 		if(moveComplete)
+		{
+			bobUpDown();
 			bobLeftRight();
+		}
 	}
 	
 	public void setMovement(double endX, double endY, double speed, int typeAttack)
@@ -534,10 +541,28 @@ public class PlaneBoss extends Enemy {
 		if((dx == 0 && dy == 0) || (dx == -0 && dy == -0) || (dx == 0 && dy == -0) || (dx == -0 && dy == 0))
 		{
 			moveComplete = true;
+			bobUpY = y - 10;
+			bobDownY = y + 10;
 			bobLeftX = x - 10;
 			bobRightX = x + 10;
 			evading = false;
 		}
+	}
+	
+	public void bobUpDown()
+	{
+		if(y < bobUpY)
+		{
+			y += 2;
+			bobSpeedY = -bobSpeedY;
+		}
+		else if(y > bobDownY)
+		{
+			y -= 2;
+			bobSpeedY = -bobSpeedY;
+		}
+		else
+			y += bobSpeedY;
 	}
 	
 	public void bobLeftRight()
@@ -545,15 +570,15 @@ public class PlaneBoss extends Enemy {
 		if(x > bobRightX)
 		{
 			x -= 2;
-			bobSpeed = -bobSpeed;
+			bobSpeedX = -bobSpeedX;
 		}
 		else if(x < bobLeftX)
 		{
 			x += 2;
-			bobSpeed = -bobSpeed;
+			bobSpeedX = -bobSpeedX;
 		}
 		else
-			x += bobSpeed;
+			x += bobSpeedX;
 	}
 
 	@Override

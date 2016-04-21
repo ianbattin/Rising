@@ -368,7 +368,7 @@ public class Boss1State extends PlayState
 						player.setPlayerBannerText("Press "+ KeyEvent.getKeyText(GameStateManager.up)+ " twice to somersault!");
 
 					}
-
+					break;
 				}
 				}
 			}
@@ -399,6 +399,7 @@ public class Boss1State extends PlayState
 					else if(enemies.size() == 1 && planeX < -800)
 					{
 						planeBoss.setMoveComplete(false);
+						player.hidePlayerBanner();
 						step = 1;
 						count = 0;
 					}	
@@ -424,7 +425,7 @@ public class Boss1State extends PlayState
 
 					case 1:
 						if(planeBoss.getMoveComplete() == false)
-							planeBoss.setMovement(400-planeBoss.getCWidth()/2, 200, 1, 0);
+							planeBoss.setMovement(400-planeBoss.getCWidth()/2, 400, 1, 0);
 						else
 						{
 							count = 2;
@@ -461,7 +462,7 @@ public class Boss1State extends PlayState
 								} 
 								else
 								{
-									planeBoss.setMovement(400-planeBoss.getCWidth()/2, 200, 1, 4);
+									planeBoss.setMovement(400-planeBoss.getCWidth()/2, 400, 1, 4);
 									planeBoss.setDrawArrow(true, PlaneBoss.COCKPIT);
 								}
 							}
