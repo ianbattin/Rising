@@ -547,6 +547,7 @@ public class PlaneBoss extends Enemy {
 			bobRightX = x + 10;
 			evading = false;
 		}
+		System.out.println(moveComplete + "\n" + differenceX);
 	}
 	
 	public void bobUpDown()
@@ -651,7 +652,6 @@ public class PlaneBoss extends Enemy {
 			}
 			if(player.getBullets().get(i).getRectangle().intersects(bombArea) && bombAttack)
 			{
-				System.out.println("SPECIAL");
 				bombAttack = false;
 				drawArrow = false;
 				mapObjects.add(new Explosion((this.x+cwidth/2+15), (this.y+cheight-15), 4, tileMap));
