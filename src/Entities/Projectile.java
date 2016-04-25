@@ -304,7 +304,7 @@ public class Projectile extends MapObject
 						tile.setType(0);
 					}
 					
-				}, (int)(Math.random()*5000+3000));
+				}, (int)(Math.random()*7000+15000));
 			}
 			else if(this.type == 5)
 			{

@@ -20,6 +20,11 @@ public class PlaneBoss extends Enemy {
 	public static final int COCKPIT = 0;
 	public static final int BOMBDROP = 1;
 	
+	private final int BROKEN_LEVEL0 = 0;
+	private final int BROKEN_LEVEL1 = 1;	
+	private final int BROKEN_LEVEL2 = 2;
+	private final int BROKEN_LEVEL3 = 3;
+	
 	private boolean setMovement;
 	private boolean moveComplete;
 	private int typeAttack;
@@ -29,7 +34,8 @@ public class PlaneBoss extends Enemy {
 	private ArrayList<BufferedImage[]> playerHurtSprites;
 	private BufferedImage arrowImage;
 	private BufferedImage bombImage;
-	private final int[] numFrames = { 4 };
+	private BufferedImage bombImageFlash;
+	private final int[] numFrames = { 4, 4, 4, 4 };
 	
 	private Rectangle cockpit;
 	private Rectangle bombArea;
@@ -37,11 +43,14 @@ public class PlaneBoss extends Enemy {
 	private int cockpitY;
 	private int arrowLoc;
 	private int arrowAnimator;
+	private int brokenLevel;
+	private int bombHealth;
 	private boolean attacking;
 	private boolean evading;
 	private boolean drawArrow;
 	private boolean bombAttack;
 	private long bombTimer;
+	private long bombFlashTimer;
 	private ArrayList<MapObject> mapObjects;
 	
 	private int evadeX;
@@ -136,6 +145,23 @@ public class PlaneBoss extends Enemy {
 			
 			arrowImage = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/arrow.png"));
 			bombImage = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/bomb.png")).getSubimage(0, 0, 53, 53);
+			
+			bombImageFlash = ImageIO.read(getClass().getResourceAsStream("/Sprites/Enemy/bomb.png")).getSubimage(0, 0, 53, 53);
+			for (int i = 0; i < bombImageFlash.getWidth(); i++)
+			{
+				for (int j = 0; j < bombImageFlash.getHeight(); j++)
+				{
+					int rgb = bombImageFlash.getRGB(i, j);
+					int a = (rgb >> 24) & 0xFF;
+					int r = (rgb >> 16) & 0xFF;
+					int g = (rgb >> 8) & 0xFF;
+					int b = rgb & 0xFF;
+					if (r+150 > 255) r = 255;
+					else r += 150;
+					bombImageFlash.setRGB(i, j, (a*16777216)+(r*65536)+(g*256)+b);
+				}
+			}
+			
 		}
 		catch(Exception e)
 		{
@@ -146,12 +172,14 @@ public class PlaneBoss extends Enemy {
 		currentAction = 0;
 		animation.setFrames(playerSprites.get(0));
 		animation.setDelay(2);
+		brokenLevel = BROKEN_LEVEL0;
 		
 		cockpitX = x + 90;
 		cockpitY = y + 10;
 		cockpit = new Rectangle(cockpitX, cockpitY, 80, 25);
 		
 		bombArea = new Rectangle((int)(this.x+cwidth/2+15), (int)(this.y+cheight-15), 53, 53);
+		bombHealth = 3;
 		
 		//health
 		health = 100;
@@ -258,7 +286,10 @@ public class PlaneBoss extends Enemy {
 			}
 			if (bombAttack)
 			{
-				g.drawImage(bombImage, (int)(this.x+cwidth/2+15) + 53, (int)(this.y+cheight-15), -53, 53, null);
+				if (System.currentTimeMillis() < bombFlashTimer)
+					g.drawImage(bombImageFlash, (int)(this.x+cwidth/2+15) + 53, (int)(this.y+cheight-15), -53, 53, null);
+				else
+					g.drawImage(bombImage, (int)(this.x+cwidth/2+15) + 53, (int)(this.y+cheight-15), -53, 53, null);
 			}
 		}
 		else
@@ -279,7 +310,10 @@ public class PlaneBoss extends Enemy {
 			}
 			if (bombAttack)
 			{
-				g.drawImage(bombImage, (int)(this.x+cwidth/2+15), (int)(this.y+cheight-15), 53, 53, null);
+				if (System.currentTimeMillis() < bombFlashTimer)
+					g.drawImage(bombImageFlash, (int)(this.x+cwidth/2+15), (int)(this.y+cheight-15), 53, 53, null);
+				else
+					g.drawImage(bombImage, (int)(this.x+cwidth/2+15), (int)(this.y+cheight-15), 53, 53, null);
 			}
 		}
 		
@@ -321,7 +355,7 @@ public class PlaneBoss extends Enemy {
 		
 		
 		
-		if(cockpit.intersects(player.getRectangle()) && player.getDY() > 0)
+		if(cockpit.intersects(player.getRectangle()) && player.getDY() > 0 && player.getHealth() > 0)
 		{
 			playerHurt(10);
 			player.setYVector(-10.0);
@@ -340,6 +374,7 @@ public class PlaneBoss extends Enemy {
 				setMoveComplete(false);
 			}
 			if (arrowLoc == PlaneBoss.COCKPIT)	drawArrow = false;
+			if (brokenLevel == BROKEN_LEVEL0) brokenLevel = BROKEN_LEVEL1;
 		}
 		else if(this.intersects(player) && !evading)
 		{
@@ -600,6 +635,15 @@ public class PlaneBoss extends Enemy {
 			timesToLoop = 5;
 			recovering = true;
 			recoverTimer = System.nanoTime();
+
+			if(health < 0 && brokenLevel != BROKEN_LEVEL3)
+			{
+				brokenLevel = BROKEN_LEVEL3;
+			} 
+			else if(health < 50 && brokenLevel != BROKEN_LEVEL2)
+			{
+				brokenLevel = BROKEN_LEVEL2;
+			}
 		}
 	}
 	
@@ -616,14 +660,14 @@ public class PlaneBoss extends Enemy {
 	
 		if (recovering)
 		{
-			animation.changeFrames(playerHurtSprites.get(currentAction));
+			animation.changeFrames(playerHurtSprites.get(brokenLevel));
 			long elapsed = (System.nanoTime() - recoverTimer) / 10000;
 			if(recoverLength <= elapsed)
 			{
 				recovering = false;
 			}
 		}
-		else animation.changeFrames(playerSprites.get(currentAction));
+		else animation.changeFrames(playerSprites.get(brokenLevel));
 		
 		animation.update();	
 	}
@@ -652,11 +696,19 @@ public class PlaneBoss extends Enemy {
 			}
 			if(player.getBullets().get(i).getRectangle().intersects(bombArea) && bombAttack)
 			{
-				bombAttack = false;
-				drawArrow = false;
-				mapObjects.add(new Explosion((this.x+cwidth/2+15), (this.y+cheight-15), 4, tileMap));
-				recovering = false;
-				playerHurt(30);
+				bombHealth--;
+				if (bombHealth == 0)
+				{
+					bombAttack = false;
+					drawArrow = false;
+					mapObjects.add(new Explosion((this.x+cwidth/2+15), (this.y+cheight-15), 4, tileMap));
+					recovering = false;
+					playerHurt(30);
+				}
+				else
+				{
+					bombFlashTimer = System.currentTimeMillis() + 350;
+				}
 			}
 		}
 	}

@@ -16,6 +16,9 @@ public class Jetpacker extends Enemy
 	//animation
 	private final int[] numFrames = {1};
 	
+	private double windSpeedX;
+	private double windSpeedY;
+	
 	//animation actions
 	private static final int IDLE = 0;
 	private static final int WALKING = 1;
@@ -49,6 +52,9 @@ public class Jetpacker extends Enemy
 		height = 70;
 		cwidth = 50;
 		cheight = 70;
+		
+		windSpeedX = 0;
+		windSpeedY = 0;
 
 		facingRight = true;
 		
@@ -258,6 +264,9 @@ public class Jetpacker extends Enemy
 			this.facingRight = false;
 		}
 		
+		dx += windSpeedX;
+		dy += windSpeedY;
+		
 		x += dx*Enemy.slowDown;
 		y += dy*Enemy.slowDown;
 	}
@@ -326,6 +335,12 @@ public class Jetpacker extends Enemy
 	public void collided(MapObject m) 
 	{
 
+	}
+	
+	public void setWind(double x, double y)
+	{
+		this.windSpeedX = x;
+		this.windSpeedY = y;
 	}
 	
 	public void onDeath()
