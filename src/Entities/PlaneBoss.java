@@ -3,6 +3,8 @@ package Entities;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -51,6 +53,7 @@ public class PlaneBoss extends Enemy {
 	private boolean bombAttack;
 	private long bombTimer;
 	private long bombFlashTimer;
+	private int deathAnimation;
 	private ArrayList<MapObject> mapObjects;
 	
 	private int evadeX;
@@ -88,6 +91,7 @@ public class PlaneBoss extends Enemy {
 		jumpStart = -3.0;
 		bobSpeedX = -0.25;
 		bobSpeedY = 0.5;
+		deathAnimation = 0;
 		
 		width = 307;
 		height = 114;
@@ -196,7 +200,14 @@ public class PlaneBoss extends Enemy {
 		}
 		else
 		{
-			dy = 10.0;
+			if(y < GamePanel.HEIGHT + height) deathAnimation++;
+
+			if((int)(Math.random()*300) - deathAnimation <= 0)
+			{
+				mapObjects.add(new Explosion(x + Math.random()*width, y + Math.random()*height, 3, tileMap));
+			}
+			
+			dy = Math.pow(1.01, deathAnimation)-1;
 			y += dy;
 		}
 
@@ -270,7 +281,19 @@ public class PlaneBoss extends Enemy {
 		
 		if(facingRight)
 		{
-			g.drawImage(animation.getImage(), (int)(x + xmap), (int)(y + ymap), width, height, null);
+			if (health <= 0)
+			{
+				AffineTransform prev = g.getTransform();
+				AffineTransform transform = new AffineTransform();
+				transform.rotate((Math.pow(1.001, deathAnimation)-1), x + width/2, y + height/2);
+				g.transform( transform );
+				g.drawImage(animation.getImage(), (int)(x + xmap), (int)(y + ymap), width, height, null);
+				g.setTransform(prev);				
+			}
+			else
+			{
+				g.drawImage(animation.getImage(), (int)(x + xmap), (int)(y + ymap), width, height, null);
+			}
 			if(drawArrow)
 			{
 				if(arrowLoc == PlaneBoss.COCKPIT)
@@ -294,7 +317,19 @@ public class PlaneBoss extends Enemy {
 		}
 		else
 		{
-			g.drawImage(animation.getImage(), (int)(x + xmap) + width, (int)(y + ymap), -width, height, null);
+			if (health <= 0)
+			{
+				AffineTransform prev = g.getTransform();
+				AffineTransform transform = new AffineTransform();
+				transform.rotate(-(Math.pow(1.001, deathAnimation)-1), x + width/2, y + height/2);
+				g.transform( transform );
+				g.drawImage(animation.getImage(), (int)(x + xmap) + width, (int)(y + ymap), -width, height, null);
+				g.setTransform(prev);		
+			}
+			else
+			{
+				g.drawImage(animation.getImage(), (int)(x + xmap) + width, (int)(y + ymap), -width, height, null);
+			}
 			if(drawArrow)
 			{
 				if(arrowLoc == PlaneBoss.COCKPIT)

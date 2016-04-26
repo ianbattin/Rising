@@ -17,7 +17,7 @@ public class TransitionState extends GameState {
 
 	//these are the arrays that we can use to modify the time for each of the intro frames (each integer value = 1 second). 
 	//The arrays must be the length of the total frames
-	private final int[] secondsToAdd_IntroFrames = {4, 7, 9, 7, 7, 7, 7, 7};
+	private final int[] secondsToAdd_IntroFrames = { 4, 4, 4, 4, 4 };
 	private final int[] secondsToAdd_OutroFrames = {7};
 	private int[] timeModifierToUse;
 	
@@ -35,7 +35,7 @@ public class TransitionState extends GameState {
 		{
 			case "Intro":
 				timeModifierToUse = secondsToAdd_IntroFrames;
-				totalFrames = 8;
+				totalFrames = 5;
 				break;
 			case "Outro":
 				timeModifierToUse = secondsToAdd_OutroFrames;

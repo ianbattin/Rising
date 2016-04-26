@@ -376,21 +376,23 @@ public class Boss1State extends PlayState
 				case 0:
 					if(enemies.size() == 1 && count == 0)
 					{
-						Jetpacker e = new Jetpacker(-100, -70, tileMap, player);
+						Jetpacker e = new Jetpacker(-200, -60 + (Math.random()*120) - 60, tileMap, player);
 						e.setWind(0.1, 0.0);
 						enemies.add(e);
 						count++;
 					}
 					else if(enemies.size() == 2 && count == 1)
 					{
-						Jetpacker e = new Jetpacker(100, -70, tileMap, player);
+						Jetpacker e = new Jetpacker(-280, -60 + (Math.random()*120) - 60, tileMap, player);
 						e.setWind(0.1, 0.0);
+						enemies.add(e);
 						count++;
 					}
 					else if(enemies.size() == 3 && count == 2)
 					{
-						Jetpacker e = new Jetpacker(300, -70, tileMap, player);
+						Jetpacker e = new Jetpacker(-320, -60 + (Math.random()*120) - 60, tileMap, player);
 						e.setWind(0.1, 0.0);
+						enemies.add(e);
 						count++;
 					}
 					else if(enemies.size() == 1 && planeX < -800)
