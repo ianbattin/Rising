@@ -544,7 +544,6 @@ public class PlaneBoss extends Enemy {
 				long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 				if(fireDelay <= elapsed*(0.5*Enemy.slowDown))
 				{
-					System.out.println("FIRING");
 					bullets.add(new Projectile(x + width/2, y+20, angle, 2, tileMap));
 					bullets.add(new Projectile(x + width/2, y+20, angle-0.35, 2, tileMap));
 					bullets.add(new Projectile(x + width/2, y+20, angle+0.35, 2, tileMap));
@@ -617,7 +616,6 @@ public class PlaneBoss extends Enemy {
 			bobRightX = x + 10;
 			evading = false;
 		}
-		System.out.println(moveComplete + "\n" + differenceX);
 	}
 	
 	public void bobUpDown()

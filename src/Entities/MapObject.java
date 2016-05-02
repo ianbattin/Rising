@@ -120,6 +120,11 @@ public abstract class MapObject
 	public abstract void update();
 	public abstract void draw(Graphics2D g);
 	
+	public void updateTileMap(TileMap tm)
+	{
+		tileMap = tm;
+	}
+	
 	public boolean intersects(MapObject other)
 	{
 		Rectangle r1 = getRectangle();
@@ -203,7 +208,7 @@ public abstract class MapObject
 							openColor = GamePanel.getImage().getRGB(xCol, newY);
 						}
 						
-						y = (newY - cheight + 2)*1/GamePanel.scaleHeight + (cheight/GamePanel.scaleHeight - cheight);
+						y = (newY - cheight)*1/GamePanel.scaleHeight + (cheight/GamePanel.scaleHeight - cheight);
 						break;
 					}
 				}	

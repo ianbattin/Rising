@@ -81,6 +81,7 @@ public class Boss1State extends PlayState
 		tileMap.setY(tileMap.getY() + 175);
 		player.setTileMapMoving(false);
 		player.setTileMap(tileMap);
+		player.updateTileMap(tileMap);
 		player.setPlayState(this);
 
 		super.init(); //requires the player to be inited first
@@ -222,12 +223,13 @@ public class Boss1State extends PlayState
 
 	private void script()
 	{		
-
 		if (!enemies.isEmpty() && enemies.get(0) instanceof PlaneBoss && planeBoss != null)
 		{
 			planeX = planeBoss.getX();
 			planeY = planeBoss.getY();
 
+			System.out.println("Stage: " + stage + "      Step: " + step + "      PlaneXY: " + planeBoss.getX() + "   " + planeBoss.getY());
+			
 			//Player falling and being saved by plane
 			if(stage == 0)
 			{
@@ -261,7 +263,7 @@ public class Boss1State extends PlayState
 					break;
 				}
 			}
-			//Plane gets spawned, doesnt attack yet, but flies past to the right, then comes back from the right and flies past left (shooting but not hurting)
+			//Plane gets spawned, flies right while shooting fires
 			else if(stage == 1)
 			{
 				switch(step)
@@ -357,7 +359,6 @@ public class Boss1State extends PlayState
 						stage = 2;
 						planeBoss.setMoveComplete(false);
 
-						System.out.println("QORKINGBAEB");
 						//enable the double jumping & display the banner
 						player.setDoubleJump(true);
 						player.setPlayerBannerText("Press "+ KeyEvent.getKeyText(GameStateManager.up)+ " twice to somersault!");
@@ -365,11 +366,9 @@ public class Boss1State extends PlayState
 					break;
 				}
 			}
-
 			//Attacking stage at 50 - 100 health;
 			else if(stage == 2)
 			{
-				System.out.println("LOL");
 				switch(step)
 				{
 				//Plane flies left to right at 1 speed and drops off 3 paratroopers
@@ -395,12 +394,17 @@ public class Boss1State extends PlayState
 						enemies.add(e);
 						count++;
 					}
-					else if(enemies.size() == 1 && planeX < -800)
+					
+					if(planeX < -800)
 					{
 						planeBoss.setMoveComplete(false);
+					}	
+					
+					if(enemies.size() == 1)
+					{
 						step = 1;
 						count = 0;
-					}	
+					}
 					break;
 
 					//Plane flies left and shoots fire bullets
@@ -434,20 +438,12 @@ public class Boss1State extends PlayState
 						long elapsed = (System.nanoTime() - timer) / 1000000;
 						if(10000 <= elapsed)
 						{
-							if(planeBoss.getX() > -1250)
-								planeBoss.setMovement(-1500, 200, 2, 0);
-							else
-							{
-								planeBoss.setAttack(0);
-								timer = System.nanoTime();
-								System.out.println("Not attacking");
-								step = 2;
-								count = 0;
-							}
+							count = 3;
+							planeBoss.setMoveComplete(false);
+							timer = System.nanoTime();
 						}
 						else
 						{
-							System.out.println("WORKING");
 							planeBoss.setAttack(4);
 
 							if(planeBoss.getMoveComplete() == false)
@@ -462,6 +458,17 @@ public class Boss1State extends PlayState
 									planeBoss.setDrawArrow(true, PlaneBoss.COCKPIT);
 								}
 							}
+						}
+						break;
+						
+					case 3:
+						if(planeBoss.getMoveComplete() == false)
+							planeBoss.setMovement(-1500, 200, 2, 0);
+						else
+						{
+							planeBoss.setAttack(0);
+							step = 2;
+							count = 0;
 						}
 						break;
 					}
@@ -489,12 +496,10 @@ public class Boss1State extends PlayState
 							stage = 3;
 							//planeBoss.setX(-1000);
 						}
-						System.out.println("HERERERERERRERERERERERER");
 						break;
 					}
-					else if(enemies.size() == 1 && planeX < -800)
+					else if(enemies.size() == 1)
 					{
-						planeBoss.setMoveComplete(false);
 						player.hidePlayerBanner();
 						step = 1;
 						count = 0;
@@ -560,7 +565,6 @@ public class Boss1State extends PlayState
 					else
 					{
 						//go to next step
-						System.out.println("DONE WITH BOMB RUN: READY TO GO BACK TO NORMAL FIGHT");
 						stage = 2;
 						step = 0;
 						count = 0;
