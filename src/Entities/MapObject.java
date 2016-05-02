@@ -81,6 +81,7 @@ public abstract class MapObject
 	protected boolean right;
 	protected boolean jump;
 	protected boolean jumped;
+	protected boolean jumping;
 	protected boolean doubleJump;
 	protected boolean doubleJumped;
 	protected boolean doubleJumpable; //Prevents you from double-jumping in the same key press you initially jumped with (Player must tap jump twice basically)

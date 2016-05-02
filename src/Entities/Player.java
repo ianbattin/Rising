@@ -86,6 +86,7 @@ public class Player extends MapObject
 	private final int[] numFrames = { 4, 8, 3, 3, 3, 4, 7 };
 	private final int[] numShootingFrames = { 4, 4, 4, 4 };
 	private final int jumpDelay = 200;
+	private long jumpTimer;
 	private boolean introFrames, showLastIntroFrame;
 
 	private boolean tileMapMoving;
@@ -129,7 +130,7 @@ public class Player extends MapObject
 		stopSpeed = 0.4;
 		fallSpeed = 0.25;
 		maxFallSpeed = 7.0;
-		jumpStart = -5.0;
+		jumpStart = -7.0;
 		
 		width = 50;
 		height = 70;
@@ -295,7 +296,6 @@ public class Player extends MapObject
 		armorBoostHealth = 0;
 		greenInc = blueInc = redInc = 1;
 		redChg = blueChg = greenChg = false;
-		jumpHeightFactor = 1;
 		healthPos = 0;
 		heightScore = 0;
 		bonusScores = new ArrayList<int[]>();
@@ -651,17 +651,19 @@ public class Player extends MapObject
 		//JUMPING AND FALLING
 		if(jump)
 		{
-			if(!jumped)
+			if(!jumping && !jumped)
 			{
+				jumping = true;
 				new Timer().schedule(new TimerTask()
 				{
 					public void run()
 					{	
-						y-=5;
+						y-=20;
 						falling = false;
 						jumpHeight = yFromBottom + (100*jumpHeightFactor);
 						if(!jumped) SoundPlayer.playClip("jump.wav");
 						jumped = true;
+						jumping = false;
 					}
 					
 				}, jumpDelay);
