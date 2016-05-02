@@ -689,7 +689,7 @@ public class Player extends MapObject
 			}
 			if(doubleJumped)
 			{
-				if(yFromBottom < jumpHeight) dy = jumpStart*2*jumpHeightFactor;
+				if(yFromBottom < jumpHeight) dy = jumpStart*jumpHeightFactor;
 				if(yFromBottom >= jumpHeight) 
 				{
 					jumpHeight = -9000; //arbitrary number, just has to be way below the player so they are always above jumpHeight at this point
