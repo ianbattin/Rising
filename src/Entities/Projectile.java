@@ -76,8 +76,8 @@ public class Projectile extends MapObject
 			case 2:
 			{
 				moveSpeed = 4.0;
-				width = 14;
-				height = 14;
+				width = 6;
+				height = 6;
 				damage = 1;
 				playerCollide = true;
 				SoundPlayer.playShootingClip();
@@ -87,8 +87,8 @@ public class Projectile extends MapObject
 			case 3:
 			{
 				moveSpeed = 25.0;
-				width = 10;
-				height = 10;
+				width = 6;
+				height = 6;
 				damage = 0;
 				playerCollide = false;
 				SoundPlayer.playShootingClip();
@@ -98,8 +98,8 @@ public class Projectile extends MapObject
 			case 4:
 			{
 				moveSpeed = 16.0;
-				width = 5;
-				height = 5;
+				width = 6;
+				height = 6;
 				damage = 0;
 				playerCollide = false;
 				SoundPlayer.playShootingClip();
