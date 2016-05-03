@@ -34,8 +34,9 @@ public class Explosion extends MapObject
 	private static double slowTime;
 	
 	//Animation
-	private ArrayList<BufferedImage[]> sprites;
+	private ArrayList<BufferedImage[]> sprites, bombExplosionSprites;
 	private final int[] numFrames = { 4 };
+	private final int[] bombExplosionNumFrames = { 3 };
 	
 	//private AffineTransform transform;
 	private AffineTransformOp op;
@@ -113,6 +114,18 @@ public class Explosion extends MapObject
 				}
 				sprites.add(bi);
 			}
+			
+			BufferedImage bombExplosionSpriteSheet = ImageIO.read(getClass().getResourceAsStream("/Sprites/FX/bombexplosion.png"));
+			bombExplosionSprites = new ArrayList<BufferedImage[]>();
+			for(int i = 0; i < bombExplosionNumFrames.length; i++)
+			{
+				BufferedImage[] bi = new BufferedImage[bombExplosionNumFrames[i]];
+				for(int j = 0; j < bombExplosionNumFrames[i]; j++)
+				{
+					bi[j] = bombExplosionSpriteSheet.getSubimage(j * 95, i * 90, 95, 90);
+				}
+				bombExplosionSprites.add(bi);
+			}
 		}
 		catch(Exception e)
 		{
@@ -124,8 +137,17 @@ public class Explosion extends MapObject
 		yFromBottom =  GamePanel.HEIGHTSCALED - y;
 		
 		currentAction = 0;
-		animation.setFrames(sprites.get(0));
-		animation.setDelay(50);
+		if (type == 1 || type == 3)
+		{
+			animation.setFrames(sprites.get(0));
+			animation.setDelay(50);
+		} 
+		else if(type == 2 || type == 4)
+		{
+			animation.setFrames(bombExplosionSprites.get(0));
+			animation.setDelay(75);
+		}
+		animation.setDone(true);
 		
 		//transform = new AffineTransform();
 		rotation = Math.random()*360;
@@ -211,6 +233,8 @@ public class Explosion extends MapObject
 			}
 			else if(type == 2 || type == 4)
 			{
+				g.drawImage(animation.getImage(), (int)x, (int)y - 10, animation.getImage().getWidth(), animation.getImage().getHeight(), null);
+				/*
 				for(int i = 0; i < explosionArea.length; i++)
 				{
 					for(int j = 0; j < explosionArea[i].length; j++)
@@ -222,7 +246,7 @@ public class Explosion extends MapObject
 							op = new AffineTransformOp(AffineTransform.getRotateInstance(rotation, width/2, height/2), AffineTransformOp.TYPE_BILINEAR);
 						}
 					}
-				}
+				}*/
 
 				if(tileMap.getShowCollisonBox())
 				{
@@ -234,6 +258,15 @@ public class Explosion extends MapObject
 	}
 	private void getAnimation() 
 	{
+		if(animation.hasPlayedOnce())
+		{
+			remove = true;
+		}
+		else
+		{
+			animation.update();
+		}
+		/*
 		if(animation.getFrame() == 3)
 		{
 			animation.update();
@@ -241,7 +274,7 @@ public class Explosion extends MapObject
 		}
 		else
 			animation.update();
-			
+			*/
 	}
 	
 	public int getType()

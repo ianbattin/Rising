@@ -221,8 +221,7 @@ public abstract class PlayState extends GameState
 	
 	public static void spawnObject(int type, int xLoc, int yLoc)
 	{
-		int[] item = {type, xLoc, yLoc};
-		itemsToSpawn.add(item);
+		itemsToSpawn.add(new int[] {type, xLoc, yLoc});
 	}
 
 	

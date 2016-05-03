@@ -127,8 +127,8 @@ public class Jetpacker extends Enemy
 		gunAnimation.setFrames(gunSprites);
 		gunAnimation.setDelay(200);
 		
-		super.gunPosX = 10;
-		super.gunPosY = 18;
+		super.gunPosX = 15;
+		super.gunPosY = 20;
 		
 		falling = true;
 		

@@ -187,18 +187,50 @@ public abstract class Enemy extends MapObject
 	 * Draws the gun on top of the enemy and orients it to aim towards the player
 	 * Requires that the gunAnimation, gunPosX and gunPosY have been initialized
 	 * 
-	 * @param g The Graphics2D object
+	 * @param g A Graphics2D object
 	 */
 	protected void drawGun(Graphics2D g)
 	{		
-		//if(angle > lastAngle + 0.2 || angle < lastAngle - 0.2)
-			//lastAngle = angle;
+		if(angle > lastAngle + 0.2 || angle < lastAngle - 0.2)
+			lastAngle = angle;
 			
-		if(facingRight)
-			g.drawImage(new AffineTransformOp(AffineTransform.getRotateInstance((float)0, 12.5, 7.5), 
-					AffineTransformOp.TYPE_BILINEAR).filter(gunAnimation.getImage(), null), (int)(x + xmap) + gunPosX, (int)(y + ymap) + gunPosY, 50, 30, null);
+		double angle = Math.toDegrees(lastAngle)+180;
+		System.out.println(angle);
+		
+		//lastAngle = -Math.PI/4;//Math.max(lastAngle, Math.PI/4);
+		AffineTransform prev = g.getTransform();
+		AffineTransform transform = new AffineTransform();
+		
+		if (facingRight)
+		{
+			if(angle < 135)
+			{
+				angle = 135;
+			}
+			else if (angle > 225)
+			{
+				angle = 225;
+			}
+			//lastAngle = Math.max(-Math.PI/4, Math.min(lastAngle, Math.PI/4));
+			transform.rotate(Math.toRadians(angle-180), x + 10 + gunPosX, y + 15 + gunPosY);
+			g.transform( transform );
+			g.drawImage(gunAnimation.getImage(), (int)(x + xmap) + gunPosX, (int)(y + ymap) + gunPosY, 50, 30, null);
+		}
 		else
-			g.drawImage(new AffineTransformOp(AffineTransform.getRotateInstance((float)Math.PI, 12.5, 7.5), 
-					AffineTransformOp.TYPE_BILINEAR).filter(gunAnimation.getImage(), null), (int)(x + xmap) - gunPosX, (int)(y + ymap) + gunPosY + 30, 50, -30, null);
+		{
+			if(angle > 45 && angle < 180)
+			{
+				angle = 45;
+			}
+			else if (angle < 315 && angle > 180)
+			{
+				angle = 315;
+			}
+
+			transform.rotate(Math.toRadians(angle-180), x + 10 + gunPosX, y + 15 + gunPosY);
+			g.transform( transform );
+			g.drawImage(gunAnimation.getImage(), (int)(x + xmap) + gunPosX, (int)(y + ymap) + gunPosY + 30, 50, -30, null);
+		}
+		g.setTransform(prev);
 	}
 }

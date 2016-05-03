@@ -21,6 +21,7 @@ public class Bomb extends MapObject
 	private boolean collided = false;
 	
 	private boolean exploding = false;
+	private boolean explodeAnim = false;
 	private boolean flashing = false;
 	private long explodeTimer, flashTimer;
 	
@@ -28,7 +29,7 @@ public class Bomb extends MapObject
 	private ArrayList<BufferedImage[]> sprites;
 	private ArrayList<BufferedImage[]> flashingSprites;
 	private final int[] numFrames = { 4 };
-	
+
 	public Bomb(double x, double y, TileMap tileMap, int type)
 	{
 		super(tileMap);
@@ -91,7 +92,6 @@ public class Bomb extends MapObject
 				}
 				flashingSprites.add(bi);
 			}
-
 		}
 		catch(Exception e)
 		{
@@ -125,7 +125,9 @@ public class Bomb extends MapObject
 	public void draw(Graphics2D g) 
 	{
 		if(!remove)
+		{
 			g.drawImage(animation.getImage(), (int)x, (int)y, width, height, null);
+		}
 	}
 	
 	public void getMovement()
@@ -160,9 +162,10 @@ public class Bomb extends MapObject
 		{
 			animation.changeFrames(sprites.get(currentAction));
 		}
-		
+				
 		if(animation.getFrame() == 3 && !exploding) animation.setFrame(2);
 		animation.update();
+
 	}
 	
 	@Override
@@ -193,10 +196,12 @@ public class Bomb extends MapObject
 		{
 			public void run()
 			{	
-				if(exploding)
+				if(type == 0)
+					tileMap.getExplosions().add(new Explosion(x, y, 2, tileMap));
+				else if(type == 1)
 					tileMap.getExplosions().add(new Explosion(x, y, 4, tileMap));
-				remove = true;
 				exploding = false;
+				remove = true;
 			}
 			
 		}, explodeTimer);

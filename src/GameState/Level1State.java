@@ -181,7 +181,7 @@ public class Level1State extends PlayState
 		{
 			if (PlayState.itemsToSpawn.get(0)[0] == PlayState.SPAWN_BOMB)
 			{
-				mapObjects.add(new Bomb(PlayState.itemsToSpawn.get(0)[1], -80, tileMap, 1));
+				mapObjects.add(new Bomb(PlayState.itemsToSpawn.get(0)[1], -80, tileMap, 0));
 			}	
 			if (PlayState.itemsToSpawn.get(0)[0] == PlayState.SPAWN_PARACHUTER)
 			{

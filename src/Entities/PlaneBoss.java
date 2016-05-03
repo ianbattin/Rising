@@ -200,6 +200,8 @@ public class PlaneBoss extends Enemy {
 		}
 		else
 		{
+			brokenLevel = BROKEN_LEVEL3;
+			
 			if(y < GamePanel.HEIGHT + height) deathAnimation++;
 
 			if((int)(Math.random()*300) - deathAnimation <= 0)
@@ -209,6 +211,8 @@ public class PlaneBoss extends Enemy {
 			
 			dy = Math.pow(1.01, deathAnimation)-1;
 			y += dy;
+			if (y > 1000)
+				remove = true;
 		}
 
 		x += tileMap.getDX();
