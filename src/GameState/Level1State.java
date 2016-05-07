@@ -288,7 +288,7 @@ public class Level1State extends PlayState
 				tileMap.setYVector(0.3);
 				if (introTimer < 2500)	
 				{
-					player.setPlayerBannerText("\"Wreckage.\"");
+					player.setPlayerBannerText("\"Christine!\"");
 				}
 				else if (introTimer < 4200)
 				{
