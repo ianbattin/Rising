@@ -375,21 +375,21 @@ public class Boss1State extends PlayState
 				case 0:
 					if(enemies.size() == 1 && count == 0)
 					{
-						Jetpacker e = new Jetpacker(-200, -60 + (Math.random()*120) - 60, tileMap, player);
+						Jetpacker e = new Jetpacker(-200-(int)(Math.random()*100), -150 + (Math.random()*400) - 60, tileMap, player);
 						e.setWind(0.1, 0.0);
 						enemies.add(e);
 						count++;
 					}
 					else if(enemies.size() == 2 && count == 1)
 					{
-						Jetpacker e = new Jetpacker(-280, -60 + (Math.random()*120) - 60, tileMap, player);
+						Jetpacker e = new Jetpacker(-300-(int)(Math.random()*100), -150 + (Math.random()*400) - 60, tileMap, player);
 						e.setWind(0.1, 0.0);
 						enemies.add(e);
 						count++;
 					}
 					else if(enemies.size() == 3 && count == 2)
 					{
-						Jetpacker e = new Jetpacker(-320, -60 + (Math.random()*120) - 60, tileMap, player);
+						Jetpacker e = new Jetpacker(-400-(int)(Math.random()*100), -150 + (Math.random()*400) - 60, tileMap, player);
 						e.setWind(0.1, 0.0);
 						enemies.add(e);
 						count++;
@@ -463,7 +463,10 @@ public class Boss1State extends PlayState
 						
 					case 3:
 						if(planeBoss.getMoveComplete() == false)
+						{
 							planeBoss.setMovement(-1500, 200, 2, 0);
+							planeBoss.setDrawArrow(false, PlaneBoss.COCKPIT);
+						}
 						else
 						{
 							planeBoss.setAttack(0);
@@ -529,7 +532,7 @@ public class Boss1State extends PlayState
 				}
 				case 1:
 					if(planeBoss.getMoveComplete() == false)
-						planeBoss.setMovement(400-planeBoss.getCWidth()/2, 500, 1, 0);
+						planeBoss.setMovement(400-planeBoss.getCWidth()/2, 200, 1, 0);
 					else
 					{
 						//planeBoss.setMoveComplete(false);
@@ -577,7 +580,7 @@ public class Boss1State extends PlayState
 				drawBossHealth = false;
 				for (Enemy e: enemies)
 				{
-					if (!(e instanceof PlaneBoss)) e.playerHurt(500);
+					if (!(e instanceof PlaneBoss)) e.playerHurt(500, true);
 				}
 			}
 		}

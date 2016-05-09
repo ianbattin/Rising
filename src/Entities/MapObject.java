@@ -377,17 +377,15 @@ public abstract class MapObject
 		ymap = tileMap.getY();
 	}
 	
-	public void playerHurt(int amount)
+	public void playerHurt(int amount, boolean overRideWait)
 	{
-		if(recovering)
+		long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
+		if(recoverLength <= elapsed)
 		{
-			long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
-			if(recoverLength <= elapsed)
-			{
-				recovering = false;
-			}
+			recovering = false;
 		}
-		else
+		
+		if(!(recovering && !overRideWait))
 		{
 			health -= amount;
 			recovering = true;

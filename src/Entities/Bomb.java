@@ -49,7 +49,8 @@ public class Bomb extends MapObject
 		maxFallSpeed = 7.0;
 		
 		remove = false;
-		explodeTimer = 1000;
+		if(type == 1) explodeTimer = 250;
+		else explodeTimer = 1000;
 		flashTimer = 100000000;
 		
 		try
@@ -102,6 +103,8 @@ public class Bomb extends MapObject
 		animation.setFrames(sprites.get(0));
 		animation.setDelay(400);
 		animation.setDone(true);
+		
+		SoundPlayer.playClip("fallingbomb.wav");
 	}
 
 	@Override
@@ -115,6 +118,7 @@ public class Bomb extends MapObject
 		{
 			x += dx;
 			y += dy;
+			
 		}
 		
 		x += tileMap.getDX();

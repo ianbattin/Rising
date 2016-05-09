@@ -39,6 +39,9 @@ public class PlaneBoss extends Enemy {
 	private BufferedImage bombImage;
 	private BufferedImage bombImageFlash;
 	private final int[] numFrames = { 4, 4, 4, 4 };
+	private int flashTimes;
+	private boolean bombFlashing;
+	private boolean hasStartedMusic;
 	
 	private Rectangle cockpit;
 	private Rectangle bombArea;
@@ -105,6 +108,9 @@ public class PlaneBoss extends Enemy {
 		evadeX = evadeY = 0;
 		evading = false;
 		drawArrow = false;
+		flashTimes = 0;
+		bombFlashing = false;
+		hasStartedMusic = false;
 		
 		try
 		{
@@ -202,11 +208,18 @@ public class PlaneBoss extends Enemy {
 		}
 		else
 		{
+			
+			if(!hasStartedMusic)
+			{
+				SoundPlayer.playClip("burning.wav");
+				hasStartedMusic = true;
+			}
+			
 			brokenLevel = BROKEN_LEVEL3;
 			
 			if(y < GamePanel.HEIGHT + height) deathAnimation++;
 
-			if((int)(Math.random()*300) - deathAnimation <= 0)
+			if((int)(Math.random()*300) - Math.min(deathAnimation, 75) <= 0)
 			{
 				mapObjects.add(new Explosion(x + Math.random()*width, y + Math.random()*height, 3, tileMap));
 			}
@@ -314,11 +327,29 @@ public class PlaneBoss extends Enemy {
 				}
 			}
 			if (bombAttack)
-			{
+			{			
 				if (System.currentTimeMillis() < bombFlashTimer)
-					g.drawImage(bombImageFlash, (int)(this.x+cwidth/2+15) + 53, (int)(this.y+cheight-15), -53, 53, null);
+				{
+					if(bombFlashing)
+					{
+						flashTimes++;
+						System.out.println(flashTimes);
+						if(flashTimes == 5)
+						{
+							bombFlashing = !bombFlashing;
+							flashTimes = 0;
+						}
+						g.drawImage(bombImageFlash, (int)(this.x+cwidth/2+15) + 53, (int)(this.y+cheight-15), -53, 53, null);
+					}
+					else
+					{
+						g.drawImage(bombImage, (int)(this.x+cwidth/2+15) + 53, (int)(this.y+cheight-15), -53, 53, null);
+					}
+				}
 				else
-					g.drawImage(bombImage, (int)(this.x+cwidth/2+15) + 53, (int)(this.y+cheight-15), -53, 53, null);
+				{
+					g.drawImage(bombImage, (int)(this.x+cwidth/2+15), (int)(this.y+cheight-15), 53, 53, null);
+				}
 			}
 		}
 		else
@@ -352,9 +383,27 @@ public class PlaneBoss extends Enemy {
 			if (bombAttack)
 			{
 				if (System.currentTimeMillis() < bombFlashTimer)
-					g.drawImage(bombImageFlash, (int)(this.x+cwidth/2+15), (int)(this.y+cheight-15), 53, 53, null);
+				{
+					if(bombFlashing)
+					{						
+						g.drawImage(bombImageFlash, (int)(this.x+cwidth/2+15), (int)(this.y+cheight-15), 53, 53, null);
+					}
+					else
+					{
+						g.drawImage(bombImage, (int)(this.x+cwidth/2+15), (int)(this.y+cheight-15), 53, 53, null);
+					}
+					flashTimes++;
+					System.out.println(flashTimes);
+					if(flashTimes == 5)
+					{
+						bombFlashing = !bombFlashing;
+						flashTimes = 0;
+					}
+				}
 				else
+				{
 					g.drawImage(bombImage, (int)(this.x+cwidth/2+15), (int)(this.y+cheight-15), 53, 53, null);
+				}
 			}
 		}
 		
@@ -398,7 +447,7 @@ public class PlaneBoss extends Enemy {
 		
 		if(cockpit.intersects(player.getRectangle()) && player.getDY() > 0 && player.getHealth() > 0)
 		{
-			playerHurt(10);
+			playerHurt(10, true);
 			player.setYVector(-10.0);
 			player.resetDoubleJump();
 			if (getMoveComplete())
@@ -656,17 +705,16 @@ public class PlaneBoss extends Enemy {
 	}
 
 	@Override
-	public void playerHurt(int amount)
+	public void playerHurt(int amount, boolean overRideWait)
 	{
-		if(recovering || health <= 0)
+		
+		long elapsed = (System.nanoTime() - recoverTimer) / 10000;
+		if(recoverLength <= elapsed)
 		{
-			long elapsed = (System.nanoTime() - recoverTimer) / 10000;
-			if(recoverLength <= elapsed)
-			{
-				recovering = false;
-			}
+			recovering = false;
 		}
-		else
+		
+		if(!(recovering && !overRideWait || health <= 0))
 		{
 			health -= amount;
 			numOfFramesToAnimHealth = 10;
@@ -674,7 +722,7 @@ public class PlaneBoss extends Enemy {
 			recovering = true;
 			recoverTimer = System.nanoTime();
 
-			if(health < 0 && brokenLevel != BROKEN_LEVEL3)
+			if(health <= 0 && brokenLevel != BROKEN_LEVEL3)
 			{
 				brokenLevel = BROKEN_LEVEL3;
 			} 
@@ -698,22 +746,36 @@ public class PlaneBoss extends Enemy {
 	
 		if (recovering)
 		{
+			System.out.println("**** RECOVERING ****");
 			animation.changeFrames(planeHurtSprites.get(brokenLevel));
 			long elapsed = (System.nanoTime() - recoverTimer) / 10000;
 			if(recoverLength <= elapsed)
 			{
 				recovering = false;
 			}
+			
+			if(firing && typeAttack == 4)
+			{
+				if(count <= 1)
+					animation.changeFrames(planeHurtSprites.get(2));
+				else
+					animation.changeFrames(planeHurtSprites.get(1));
+			}
 		}
-		else animation.changeFrames(planeSprites.get(brokenLevel));
-		
-		if(firing && typeAttack == 4)
+		else 
 		{
-			if(count <= 1)
-				animation.changeFrames(planeSprites.get(2));
-			else
-				animation.changeFrames(planeSprites.get(1));
+			animation.changeFrames(planeSprites.get(brokenLevel));
+			
+			if(firing && typeAttack == 4)
+			{
+				if(count <= 1)
+					animation.changeFrames(planeSprites.get(2));
+				else
+					animation.changeFrames(planeSprites.get(1));
+			}
 		}
+		
+		
 		
 		animation.update();	
 	}
@@ -743,17 +805,18 @@ public class PlaneBoss extends Enemy {
 			if(player.getBullets().get(i).getRectangle().intersects(bombArea) && bombAttack)
 			{
 				bombHealth--;
+				flashTimes = 0;
 				if (bombHealth == 0)
 				{
 					bombAttack = false;
 					drawArrow = false;
 					mapObjects.add(new Explosion((this.x+cwidth/2+15), (this.y+cheight-15), 4, tileMap));
 					recovering = false;
-					playerHurt(30);
+					playerHurt(30, true);
 				}
 				else
 				{
-					bombFlashTimer = System.currentTimeMillis() + 350;
+					bombFlashTimer = System.currentTimeMillis() + 500;
 				}
 			}
 		}

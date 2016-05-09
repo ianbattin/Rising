@@ -70,6 +70,7 @@ public class Projectile extends MapObject
 				height = Projectile.PROJECTILE_1_SIZE;
 				damage = 1;
 				playerCollide = true;
+				SoundPlayer.playClip("propgun.wav");
 				break;
 			}
 			//Slow moving
@@ -351,7 +352,7 @@ public class Projectile extends MapObject
 
 			if(m instanceof Enemy)
 			{
-				((Enemy) m).playerHurt(damage);
+				((Enemy) m).playerHurt(damage, false);
 				remove = true;
 			}
 

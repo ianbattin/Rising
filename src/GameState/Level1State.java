@@ -232,7 +232,7 @@ public class Level1State extends PlayState
 				{
 					if(!(e instanceof PlaneBoss))
 					{
-						e.playerHurt(100000);
+						e.playerHurt(100000, true);
 					}
 				}
 

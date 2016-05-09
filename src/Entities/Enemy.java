@@ -136,17 +136,21 @@ public abstract class Enemy extends MapObject
 		health += amount;
 	}
 	
-	public void playerHurt(int amount)
+	/**
+	 * Deals specified damage to entitiy
+	 * @param amount How much to hurt the entity
+	 * @param overRideWait Whether the damage should take effect regardless of recovering/immunity
+	 */
+	public void playerHurt(int amount, boolean overRideWait)
 	{
-		if(recovering || health <= 0)
+		
+		long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
+		if(recoverLength <= elapsed)
 		{
-			long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
-			if(recoverLength <= elapsed)
-			{
-				recovering = false;
-			}
+			recovering = false;
 		}
-		else
+		
+		if(!(recovering && !overRideWait || health <= 0))
 		{
 			health -= amount;
 			numOfFramesToAnimHealth = 10;
