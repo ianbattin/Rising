@@ -290,8 +290,8 @@ public class Player extends MapObject
 		birdX = 0;
 		birdY = 0;
 		birdPos = 0;
-		ammoCount = 100;
-		hasGun = true;
+		ammoCount = 0;
+		hasGun = false;
 		
 		armorBoostHealth = 0;
 		greenInc = blueInc = redInc = 1;
@@ -526,8 +526,19 @@ public class Player extends MapObject
 		}
 		else if(type == 479)
 		{
-			hasGun = true;
-			ammoCount += 5;
+			if(!hasGun) 
+			{
+				this.setPlayerBannerText("Move crosshair with mouse and click to fire Prop Gun!");
+				new Timer().schedule(new TimerTask()
+				{
+					public void run()
+					{	
+						hidePlayerBanner();
+					}
+				}, 6000);
+				hasGun = true;
+			}
+			ammoCount += 25;
 			t.setType(0);
 		}
 		/*else if(type == 358 || type == 359 || type == 388 || type == 389 || type == 418 || type == 419)
@@ -565,7 +576,7 @@ public class Player extends MapObject
 				{	
 					bullets.add(new Projectile(mouseX, mouseY, 0, 1, tileMap));
 					ammoCount--;
-					if(ammoCount <= 0) hasGun = false;
+					//if(ammoCount <= 0) hasGun = false;
 				}
 				
 			}, 150);
@@ -1361,7 +1372,7 @@ public class Player extends MapObject
 
 	public void setFiring(boolean b) 
 	{
-		if (b && System.currentTimeMillis() - this.fireTimer >= 800)
+		if (b && System.currentTimeMillis() - this.fireTimer >= 800 && this.ammoCount > 0)
 		{
 			firing = true;
 			fired = true;

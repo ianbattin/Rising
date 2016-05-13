@@ -31,6 +31,7 @@ public class Tile
 	
 	private Animation animation;
 	private int frames;
+	private int startingFrame;
 	private boolean animated = false;
 	
 	private boolean bulletCollision;
@@ -62,18 +63,21 @@ public class Tile
 		this.size = size;
 		animation = new Animation();
 		isVisible = true;
+		startingFrame = 0;
 
 		if(type < 17)
 		{
 			frames = 1;
 			bulletCollision = true;
 		}
-		else if(type == 17) 
+		else if(type == 17 || type == 18 || type == 19) 
 		{
 			frames = 3;
 			blocked = false;
 			animated = true;
 			bulletCollision = true;
+			startingFrame = type - 17;
+			this.type = 17;
 		}
 		else if(type == 20)
 		{
@@ -107,6 +111,7 @@ public class Tile
 		}
 		animation.setFrames(images);
 		animation.setDelay(100);
+		animation.setFrame(startingFrame);
 	}
 	
 	public void update(double dx, double dy)

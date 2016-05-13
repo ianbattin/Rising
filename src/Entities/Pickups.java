@@ -39,11 +39,11 @@ public class Pickups extends MapObject
 	
 	private int effectType;
 	private int[] pickupsToSpawn;
-	private long coolDownTime;
+	private long coolDownTime, coolDown;
 	private boolean willDrawPickup, isUnderEffect;
 	private double xLoc, yLoc, startingPositionOffset, tmDyPositionOffset, xShift;
 	
-	public Pickups(Player player, TileMap tileMap, PlayState playState, int[] avaliablePickups, long initialDelay)
+	public Pickups(Player player, TileMap tileMap, PlayState playState, int[] avaliablePickups, long initialDelay, long frequency)
 	{
 		super (tileMap);
 		
@@ -51,7 +51,8 @@ public class Pickups extends MapObject
 		this.player = player;
 		this.tm = tileMap;
 		pickupsToSpawn = avaliablePickups;
-		coolDownTime = initialDelay;
+		coolDown = initialDelay;
+		coolDownTime = frequency;
 		
 		tileMapWidth = tileMap.getTileMapWidth()/2;
 		
@@ -128,21 +129,21 @@ public class Pickups extends MapObject
 	//check to see if should spawn a pickup
 	public void checkPickups()
 	{
-		if (coolDownTime > 0)
+		if (coolDown > 0)
 		{
-			coolDownTime -= GamePanel.getElapsedTime();
+			coolDown -= GamePanel.getElapsedTime();
 		} 
 		else if (isUnderEffect)
 		{
 			resetEffects();
-			coolDownTime = 10000000000L;
+			coolDown = 10000000000L;
 			init();
 		}
 		else 
 		{
 			if ((int)(Math.random()*0) == 0)//edit probability of spawning here. Currently 100% chance of spawning
 			{
-				coolDownTime = 50000000000L;
+				coolDown = coolDownTime;
 				willDrawPickup = true;
 				//set the pickup type.
 				effectType = pickupsToSpawn[(int)(Math.random()*pickupsToSpawn.length)];
@@ -153,7 +154,7 @@ public class Pickups extends MapObject
 			}
 			else
 			{
-				coolDownTime = 10000000000L;
+				coolDown = 10000000000L;
 			}
 		}
 	}
@@ -229,7 +230,7 @@ public class Pickups extends MapObject
 			effectStart();
 			willDrawPickup = false;
 			isUnderEffect = true;
-			coolDownTime = 10000000000L;
+			coolDown = 10000000000L;
 		}
 	}
 	
@@ -246,6 +247,6 @@ public class Pickups extends MapObject
 	
 	public long getCoolDown()
 	{
-		return coolDownTime;
+		return coolDown;
 	}
 }

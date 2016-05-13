@@ -199,9 +199,6 @@ public abstract class Enemy extends MapObject
 			lastAngle = angle;
 			
 		double angle = Math.toDegrees(lastAngle)+180;
-		System.out.println(angle);
-		
-		//lastAngle = -Math.PI/4;//Math.max(lastAngle, Math.PI/4);
 		AffineTransform prev = g.getTransform();
 		AffineTransform transform = new AffineTransform();
 		
@@ -215,7 +212,6 @@ public abstract class Enemy extends MapObject
 			{
 				angle = 225;
 			}
-			//lastAngle = Math.max(-Math.PI/4, Math.min(lastAngle, Math.PI/4));
 			transform.rotate(Math.toRadians(angle-180), x + 10 + gunPosX, y + 15 + gunPosY);
 			g.transform( transform );
 			g.drawImage(gunAnimation.getImage(), (int)(x + xmap) + gunPosX, (int)(y + ymap) + gunPosY, 50, 30, null);
@@ -230,7 +226,6 @@ public abstract class Enemy extends MapObject
 			{
 				angle = 315;
 			}
-
 			transform.rotate(Math.toRadians(angle-180), x + 10 + gunPosX, y + 15 + gunPosY);
 			g.transform( transform );
 			g.drawImage(gunAnimation.getImage(), (int)(x + xmap) + gunPosX, (int)(y + ymap) + gunPosY + 30, 50, -30, null);

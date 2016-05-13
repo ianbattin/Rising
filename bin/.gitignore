@@ -1,13 +1,12 @@
 /Backgrounds/
-/Backup/
-/Entities/
-/GameState/
 /Intro/
-/Main/
 /Maps/
 /Outro/
 /Sound/
 /Sprites/
+/Entities/
+/GameState/
+/Main/
 /Text/
 /TileMap/
 /TileMapEditor/

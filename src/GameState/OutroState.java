@@ -12,6 +12,8 @@ public class OutroState extends TransitionState
 {
 	private float timer;
 	
+	private int outroFrames;
+	
 	public OutroState(GameStateManager gsm, String path)
 	{
 		super(gsm, path);
@@ -22,16 +24,24 @@ public class OutroState extends TransitionState
 		super.isFadingIn = true;
 		super.alphaLevel = 255;
 		
+		outroFrames+=1;
+		if(outroFrames > 4)
+			outroFrames = 1;
+		System.out.println(outroFrames);
+		super.setTotalFrames(outroFrames);
+		
 		timer = 0;
 	}
 
 	public void update() 
 	{
+		super.update();
+		/*
 		if(super.isFadingIn)
 		{
 			super.fadeIn(500000000.0, Color.BLACK, 5);
 		}
-		else if (timer > 2000000000)
+		else if (timer > 2000000000 * (outroFrames+1))
 		{
 			super.isFadingOut = true;
 			super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.OUTROSTATE, GameStateManager.MENUSTATE);
@@ -40,6 +50,7 @@ public class OutroState extends TransitionState
 		{
 			timer += GamePanel.getElapsedTime();
 		}
+		*/
 	}
 
 	public void draw(Graphics2D g) 

@@ -15,8 +15,8 @@ public class CreditState extends GameState
 	private Background bgUpperHalf, bgLowerHalf;
 	private Color titleColor;
 	private Font titleFont, optionsFont, subTextFont;
-	private String[] creditsNames = {"Ian Battin - Lead Progammer", "Maxence Weyrich - Programmer", 
-			"Taage Storey - Game Design and Lead Artist", "Sarah MacDougall - Level Design", "Rhea Bae - Art and Design"};
+	private String[] creditsNames = {"GAME DESIGN & ART:", "Taage Storey", "", "PROGRAMMING:", 
+			"Ian Battin", "Maxence Weyrich", "", "Special Thanks to Rhea Bae, Rain MacDougall and Catherine Deeter", "", "InVox does not own copyright for \"Modero.\""};
 	
 	public CreditState(GameStateManager gsm)
 	{

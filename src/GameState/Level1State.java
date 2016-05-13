@@ -112,8 +112,7 @@ public class Level1State extends PlayState
 		
 		super.init(); //requires the player to be initiated first
 		
-		int[] pickupsToSpawn = {Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST};
-		pickups = new Pickups(player, tileMap, this, pickupsToSpawn, 10000000000L);
+		pickups = new Pickups(player, tileMap, this, new int[]{Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST}, 10000000000L, 10000000000L);
 		tileStart = false;
 		score = 0;
 		

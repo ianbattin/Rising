@@ -12,13 +12,15 @@ public class TransitionState extends GameState {
 
 	private String path;
 	
+	//private static int numberOfFrames;
+	
 	private long timer, coolDownTimer;
 	private int currFrame, totalFrames;
 
 	//these are the arrays that we can use to modify the time for each of the intro frames (each integer value = 1 second). 
 	//The arrays must be the length of the total frames
-	private final int[] secondsToAdd_IntroFrames = { 4, 4, 4, 4, 4 };
-	private final int[] secondsToAdd_OutroFrames = {7};
+	private final int[] secondsToAdd_IntroFrames = { 4, 14, 3, 4, 4, 4, 4 };
+	private final int[] secondsToAdd_OutroFrames = { 4, 4, 4, 4 };
 	private int[] timeModifierToUse;
 	
 	public TransitionState(GameStateManager gsm, String path)
@@ -35,7 +37,7 @@ public class TransitionState extends GameState {
 		{
 			case "Intro":
 				timeModifierToUse = secondsToAdd_IntroFrames;
-				totalFrames = 5;
+				totalFrames = 7;
 				break;
 			case "Outro":
 				timeModifierToUse = secondsToAdd_OutroFrames;
@@ -77,16 +79,17 @@ public class TransitionState extends GameState {
 					super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.TRANSITION_INTROSTATE, GameStateManager.LEVEL1STATE);
 					break;
 				case "Outro":
-					super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.TRANSITION_OUTROSTATE, GameStateManager.BOSS1STATE);
+					super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.TRANSITION_OUTROSTATE, GameStateManager.MENUSTATE);
+					currFrame = 1;
 					break;
 			}
-			
 		}
 		else
 		{
 			if(timer > (timeModifierToUse[currFrame-1]*1000000000.0))
 			{
 				timer = 0;
+				System.out.println(currFrame + "  Total:   " + totalFrames);
 				if (currFrame < totalFrames)
 				{
 					currFrame++;
@@ -134,7 +137,13 @@ public class TransitionState extends GameState {
 			gsm.resetState(GameStateManager.TRANSITION_INTROSTATE);
 		}
 	}
-
+	
+	public void setTotalFrames(int num)
+	{
+		this.totalFrames = num;
+		System.out.println("New total: " + this.totalFrames);
+	}
+	
 	public void keyReleased(int k) 
 	{
 	}

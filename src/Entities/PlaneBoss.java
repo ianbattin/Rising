@@ -457,10 +457,10 @@ public class PlaneBoss extends Enemy {
 				do 
 				{
 					evadeX = (int)(Math.random()*500 + 100);
-					evadeY = (int)(Math.random()*500 + 100);
+					evadeY = (int)(Math.random()*400 + 200);
 					dist = (int)Math.hypot(evadeX - x, evadeY - y);
 				} 
-				while (dist < 100 && dist > 400); //ensure that the plane moves long enough of a distance
+				while (dist < 150 || dist > 300); //ensure that the plane moves long enough of a distance
 				setMoveComplete(false);
 			}
 			if (arrowLoc == PlaneBoss.COCKPIT)	drawArrow = false;
@@ -645,22 +645,17 @@ public class PlaneBoss extends Enemy {
 		
 		double differenceX = endX - startX;
 		double differenceY = endY - startY;
-		
-		if(differenceX < 0)
-			moveSpeed = -maxSpeed;
-		else
-			moveSpeed = maxSpeed;
-			
+					
 		if((endX - 10 < x && x < endX + 10))
 			dx = 0;
 		else
-			dx = moveSpeed / (1/speed);
+			dx = differenceX/Math.sqrt(differenceX*differenceX+differenceY*differenceY) * maxSpeed *speed;
 		
 		if((endY - 10 < y && y < endY + 10))
 			dy = 0;
 		else
-			dy = dx * (differenceY / differenceX);
-		
+			dy = differenceY/Math.sqrt(differenceX*differenceX+differenceY*differenceY) * maxSpeed * speed;
+				
 		if((dx == 0 && dy == 0) || (dx == -0 && dy == -0) || (dx == 0 && dy == -0) || (dx == -0 && dy == 0))
 		{
 			moveComplete = true;
@@ -746,7 +741,6 @@ public class PlaneBoss extends Enemy {
 	
 		if (recovering)
 		{
-			System.out.println("**** RECOVERING ****");
 			animation.changeFrames(planeHurtSprites.get(brokenLevel));
 			long elapsed = (System.nanoTime() - recoverTimer) / 10000;
 			if(recoverLength <= elapsed)
@@ -782,7 +776,7 @@ public class PlaneBoss extends Enemy {
 
 	public void evadeMove()
 	{
-		setMovement(evadeX, evadeY, 0.25, 0);
+		setMovement(evadeX, evadeY, 0.5, 0);
 	}
 	
 	public void getBulletCollision()

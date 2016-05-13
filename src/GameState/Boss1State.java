@@ -78,7 +78,7 @@ public class Boss1State extends PlayState
 	{
 		tileMap = new TileMap("Resources/Maps/boss1.txt", 0, gsm);
 		tileMap.setVector(0, 0);
-		tileMap.setY(tileMap.getY() + 175);
+		tileMap.setY(tileMap.getY() + 225);
 		player.setTileMapMoving(false);
 		player.setTileMap(tileMap);
 		player.updateTileMap(tileMap);
@@ -86,8 +86,7 @@ public class Boss1State extends PlayState
 
 		super.init(); //requires the player to be inited first
 
-		int[] pickupsToSpawn = {Pickups.HEALBOOST, Pickups.SLOWTIMEBOOST, Pickups.BIRDBOOST};
-		pickups = new Pickups(player, tileMap, this, pickupsToSpawn, 50000000000L);
+		pickups = new Pickups(player, tileMap, this, new int[]{Pickups.HEALBOOST, Pickups.ARMORBOOST, Pickups.BIRDBOOST}, 30000000000L, 5000000000L);
 		tileStart = false;
 		try
 		{
@@ -110,7 +109,7 @@ public class Boss1State extends PlayState
 
 		for(Tile t: tileMap.getTiles())
 		{
-			if(t.getY() <= 850)
+			if(t.getY() <= 900)
 			{
 				t.setBulletCollision(false);
 				t.setBlocked(false);
@@ -228,7 +227,7 @@ public class Boss1State extends PlayState
 			planeX = planeBoss.getX();
 			planeY = planeBoss.getY();
 
-			System.out.println("Stage: " + stage + "      Step: " + step + "      PlaneXY: " + planeBoss.getX() + "   " + planeBoss.getY());
+			System.out.println("Stage: " + stage + "      Step: " + step +  "      Count: "+ count +"      PlaneXY: " + planeBoss.getX() + "   " + planeBoss.getY());
 			
 			//Player falling and being saved by plane
 			if(stage == 0)
@@ -404,6 +403,7 @@ public class Boss1State extends PlayState
 					{
 						step = 1;
 						count = 0;
+						player.hidePlayerBanner();
 					}
 					break;
 
