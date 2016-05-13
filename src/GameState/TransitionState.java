@@ -20,7 +20,7 @@ public class TransitionState extends GameState {
 	//these are the arrays that we can use to modify the time for each of the intro frames (each integer value = 1 second). 
 	//The arrays must be the length of the total frames
 	private final int[] secondsToAdd_IntroFrames = { 4, 14, 3, 4, 4, 4, 4 };
-	private final int[] secondsToAdd_OutroFrames = { 4, 4, 4, 4 };
+	private final int[] secondsToAdd_OutroFrames = { 3, 3, 3, 3 };
 	private int[] timeModifierToUse;
 	
 	public TransitionState(GameStateManager gsm, String path)
@@ -89,7 +89,6 @@ public class TransitionState extends GameState {
 			if(timer > (timeModifierToUse[currFrame-1]*1000000000.0))
 			{
 				timer = 0;
-				System.out.println(currFrame + "  Total:   " + totalFrames);
 				if (currFrame < totalFrames)
 				{
 					currFrame++;
@@ -141,7 +140,6 @@ public class TransitionState extends GameState {
 	public void setTotalFrames(int num)
 	{
 		this.totalFrames = num;
-		System.out.println("New total: " + this.totalFrames);
 	}
 	
 	public void keyReleased(int k) 

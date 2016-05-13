@@ -27,8 +27,9 @@ public class OutroState extends TransitionState
 		outroFrames+=1;
 		if(outroFrames > 4)
 			outroFrames = 1;
-		System.out.println(outroFrames);
 		super.setTotalFrames(outroFrames);
+		
+		bg.setNewImage("/Outro/frame1.gif");
 		
 		timer = 0;
 	}
