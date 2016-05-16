@@ -35,9 +35,9 @@ public class Walker extends Enemy
 		moveSpeed = 0.3;
 		moveSpeedLeft = 0.3;
 		moveSpeedRight = 0.3;
-		maxSpeed = 3.0;
-		maxSpeedLeft = 5.0;
-		maxSpeedRight = 5.0;
+		maxSpeed = 2.0;
+		maxSpeedLeft = 2.5;
+		maxSpeedRight = 2.5;
 		stopSpeed = 0.4;
 		fallSpeed = 0.25;
 		maxFallSpeed = 7.0;

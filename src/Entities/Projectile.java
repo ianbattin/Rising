@@ -120,7 +120,7 @@ public class Projectile extends MapObject
 			//Large explosion
 			case 6:
 			{
-				moveSpeed = 10.0;
+				moveSpeed = 8.0;
 				width = 30;
 				height = 30;
 				damage = 0;
@@ -134,7 +134,7 @@ public class Projectile extends MapObject
 				ricochetCount = 0;
 				ricochetDelay = 200;
 				ricochetTimer = System.nanoTime();
-				moveSpeed = 10.0;
+				moveSpeed = 8.5;
 				dx = moveSpeed;
 				dy = moveSpeed;
 				angle = Math.toDegrees(Math.atan(dy/dx));
