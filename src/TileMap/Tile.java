@@ -136,24 +136,26 @@ public class Tile
 			setY(100000);
 		}
 		//these are the special blocks, each will have their own special function 
-		else if(type == 446 && y > -10 && y < 0 && -100 <= x && x <= GamePanel.WIDTH+100)
+		else if(type == 446 && y > -10 && y < 0 && -100 < x && x < GamePanel.WIDTH+100)
 		{
 			PlayState.spawnObject(PlayState.SPAWN_DEBRIS, (int)x, (int)y);
 			type = 0;
 		}
-		else if(type == 447 && y > -100 && y < -75 && -100 <= x && x <= GamePanel.WIDTH+100)
+		else if(type == 447 && y > -100 && y < 0 && -100 < x && x < GamePanel.WIDTH+100)
 		{
 			PlayState.spawnObject(PlayState.SPAWN_WALKER, (int)x, (int)y);
 			type = 0;
 		}
-		else if(type == 448 && y > -100 && y < -75 && -100 <= x && x <= GamePanel.WIDTH+100)
+		else if(type == 448 && y > -100 && y < 0 && -100 < x && x < GamePanel.WIDTH+100)
 		{
 			PlayState.spawnObject(PlayState.SPAWN_PARACHUTER, (int)x, 0);
 			type = 0;
 		}
-		else if(type == 449 && y > -100 && y < -75 && -100 <= x && x <= GamePanel.WIDTH+100)
+		else if(type == 449 && y > -100 && y < 0 && -100 < x && x < GamePanel.WIDTH+100)
 		{
 			PlayState.spawnObject(PlayState.SPAWN_BOMB, (int)x, 0);
+			System.out.println("x: " + (int)x);
+			//System.out.println("y: " + (int)y);
 			type = 0;
 		}
 	}
@@ -164,7 +166,7 @@ public class Tile
 		{
 			g.drawImage(animation.getImage(), (int)x, (int)y, size+1, size, null);
 		}
-		
+
 		if(tm.getShowCollisonBox())
 		{
 			g.setColor(Color.RED);

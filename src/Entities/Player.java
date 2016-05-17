@@ -308,7 +308,7 @@ public class Player extends MapObject
 	{	
 		if (health > 0)
 		{
-			if(onScreen() && y < 795 && x < 770 && x > 30) checkPixelColorCollision(tileMap);
+			if(onScreen()) checkPixelColorCollision(tileMap);
 			else myCheckCollision();
 			getAttack();
 		}
@@ -538,7 +538,7 @@ public class Player extends MapObject
 				}, 6000);
 				hasGun = true;
 			}
-			ammoCount += 25;
+			ammoCount += 6;
 			t.setType(0);
 		}
 		/*else if(type == 358 || type == 359 || type == 388 || type == 389 || type == 418 || type == 419)

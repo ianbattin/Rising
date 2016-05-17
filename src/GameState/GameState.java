@@ -147,6 +147,7 @@ public abstract class GameState
 	public void music(String fileName) 
     {   
 		soundPlayer.startBackgroundMusic(fileName, true);
+		SoundPlayer.setVolume(0);
 		/*
 		SoundPlayer sound = new SoundPlayer();
 		

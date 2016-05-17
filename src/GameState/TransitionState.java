@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 
 import Main.GamePanel;
+import Main.SoundPlayer;
 import TileMap.Background;
 
 
@@ -12,15 +13,9 @@ public class TransitionState extends GameState {
 
 	private String path;
 	
-	//private static int numberOfFrames;
-	
 	private long timer, coolDownTimer;
 	private int currFrame, totalFrames;
-
-	//these are the arrays that we can use to modify the time for each of the intro frames (each integer value = 1 second). 
-	//The arrays must be the length of the total frames
-	private final int[] secondsToAdd_IntroFrames = { 4, 14, 3, 4, 4, 4, 4 };
-	private final int[] secondsToAdd_OutroFrames = { 3, 3, 3, 3 };
+	
 	private int[] timeModifierToUse;
 	
 	public TransitionState(GameStateManager gsm, String path)
@@ -36,11 +31,11 @@ public class TransitionState extends GameState {
 		switch(path)
 		{
 			case "Intro":
-				timeModifierToUse = secondsToAdd_IntroFrames;
+				timeModifierToUse = new int[] { 4, 14, 3, 4, 4, 4, 4 };
 				totalFrames = 7;
 				break;
 			case "Outro":
-				timeModifierToUse = secondsToAdd_OutroFrames;
+				timeModifierToUse = new int[] { 3, 3, 3, 3 };
 				totalFrames = 1;
 				break;
 		}
@@ -62,6 +57,13 @@ public class TransitionState extends GameState {
 	//nothing to init
 	public void init() 
 	{	
+		switch(path)
+		{
+			case "Intro":
+			//start the game music
+			music("Modero.wav");
+			break;
+		}
 	}
 
 	//update bgrnd
@@ -136,12 +138,7 @@ public class TransitionState extends GameState {
 			gsm.resetState(GameStateManager.TRANSITION_INTROSTATE);
 		}
 	}
-	
-	public void setTotalFrames(int num)
-	{
-		this.totalFrames = num;
-	}
-	
+		
 	public void keyReleased(int k) 
 	{
 	}
