@@ -130,7 +130,7 @@ public class Player extends MapObject
 		stopSpeed = 0.4;
 		fallSpeed = 0.25;
 		maxFallSpeed = 7.0;
-		jumpStart = -7.0;
+		jumpStart = -8.0;
 		
 		width = 50;
 		height = 70;
@@ -308,7 +308,7 @@ public class Player extends MapObject
 	{	
 		if (health > 0)
 		{
-			if(onScreen() && y < 795 && x < 770 && x > 30) checkPixelColorCollision(tileMap);
+			if(onScreen() && y + cheight < GamePanel.HEIGHT - 5 && x < GamePanel.WIDTH - 10 && x > 10) checkPixelColorCollision(tileMap);
 			else myCheckCollision();
 			getAttack();
 		}
@@ -672,6 +672,7 @@ public class Player extends MapObject
 						y-=5;
 						falling = false;
 						jumpHeight = yFromBottom + (100*jumpHeightFactor);
+						System.out.println(jumpHeight);
 						if(!jumped) SoundPlayer.playClip("jump.wav");
 						jumped = true;
 						jumping = false;

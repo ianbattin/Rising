@@ -372,21 +372,21 @@ public class Boss1State extends PlayState
 				{
 				//Plane flies left to right at 1 speed and drops off 3 paratroopers
 				case 0:
-					if(enemies.size() == 1 && count == 0)
+					if(count == 0)
 					{
 						Jetpacker e = new Jetpacker(-200-(int)(Math.random()*100), -150 + (Math.random()*400) - 60, tileMap, player);
 						e.setWind(0.1, 0.0);
 						enemies.add(e);
 						count++;
 					}
-					else if(enemies.size() == 2 && count == 1)
+					else if(count == 1)
 					{
 						Jetpacker e = new Jetpacker(-300-(int)(Math.random()*100), -150 + (Math.random()*400) - 60, tileMap, player);
 						e.setWind(0.1, 0.0);
 						enemies.add(e);
 						count++;
 					}
-					else if(enemies.size() == 3 && count == 2)
+					else if(count == 2)
 					{
 						Jetpacker e = new Jetpacker(-400-(int)(Math.random()*100), -150 + (Math.random()*400) - 60, tileMap, player);
 						e.setWind(0.1, 0.0);
@@ -394,16 +394,14 @@ public class Boss1State extends PlayState
 						count++;
 					}
 					
-					if(planeX < -800)
+					long elapsed = (System.nanoTime() - timer) / 1000000;
+					if(9000 <= elapsed)
 					{
 						planeBoss.setMoveComplete(false);
-					}	
-					
-					if(enemies.size() == 1)
-					{
 						step = 1;
 						count = 0;
 						player.hidePlayerBanner();
+						timer = System.nanoTime();
 					}
 					break;
 
@@ -425,7 +423,7 @@ public class Boss1State extends PlayState
 
 					case 1:
 						if(planeBoss.getMoveComplete() == false)
-							planeBoss.setMovement(400-planeBoss.getCWidth()/2, 500, 1, 0);
+							planeBoss.setMovement(400-planeBoss.getCWidth()/2, 400, 1, 0);
 						else
 						{
 							count = 2;
@@ -435,7 +433,7 @@ public class Boss1State extends PlayState
 						break;
 
 					case 2:
-						long elapsed = (System.nanoTime() - timer) / 1000000;
+						elapsed = (System.nanoTime() - timer) / 1000000;
 						if(10000 <= elapsed)
 						{
 							count = 3;
@@ -454,7 +452,7 @@ public class Boss1State extends PlayState
 								} 
 								else
 								{
-									planeBoss.setMovement(400-planeBoss.getCWidth()/2, 500, 1, 4);
+									planeBoss.setMovement(400-planeBoss.getCWidth()/2, 400, 1, 4);
 									planeBoss.setDrawArrow(true, PlaneBoss.COCKPIT);
 								}
 							}
@@ -489,7 +487,15 @@ public class Boss1State extends PlayState
 						enemies.add(new Rifleman(600, -70, tileMap, player));
 						count++;
 					}
-					else if(enemies.size() == 1 && planeX < 0)
+					else if(enemies.size() == 1)
+					{
+						player.hidePlayerBanner();
+						step = 1;
+						count = 0;
+					}	
+					
+					elapsed = (System.nanoTime() - timer) / 1000000;
+					if(9000 <= elapsed)
 					{
 						planeBoss.setMoveComplete(false);
 						step = 0;
@@ -499,14 +505,8 @@ public class Boss1State extends PlayState
 							stage = 3;
 							//planeBoss.setX(-1000);
 						}
-						break;
+						timer = System.nanoTime();
 					}
-					else if(enemies.size() == 1)
-					{
-						player.hidePlayerBanner();
-						step = 1;
-						count = 0;
-					}	
 					break;
 				}
 			}

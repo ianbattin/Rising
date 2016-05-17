@@ -68,6 +68,7 @@ public class PlaneBoss extends Enemy {
 	private double bobDownY;
 	private double bobSpeedX;
 	private double bobSpeedY;
+	private boolean relXSet;
 
 	public PlaneBoss(int x, int y, TileMap tm, Player player, int typeAttack) 
 	{
@@ -195,6 +196,7 @@ public class PlaneBoss extends Enemy {
 		
 		//health
 		health = 100;
+		relXSet = false;
 	}
 
 	@Override
@@ -574,6 +576,38 @@ public class PlaneBoss extends Enemy {
 		//Three bullets
 		else if(typeAttack == 4)
 		{
+			if(player.getY() > y)
+			{
+				
+				if(!relXSet) relX = 200;
+				relY = -200;
+
+				angle = Math.atan2(-relY, -relX);
+				firing = true;
+				fireDelay = 200;
+
+				if(firing)
+				{
+					long elapsed= (System.nanoTime() - fireTimer) / 1000000;
+					if(fireDelay <= elapsed*(0.5*Enemy.slowDown))
+					{
+						count++;
+						
+						bullets.add(new Projectile(x+width/2, y+height, angle, 4, tileMap));
+						fireTimer = System.nanoTime();
+						
+						relXSet = true;
+						if(count <= 8)
+							relX -= 50;
+						else if(count != 16)
+							relX += 50;
+						else
+							count = 0;
+					}
+				}
+			}
+			else
+			{
 			if(count <= 1)
 			{
 				relX = 100;
@@ -603,6 +637,7 @@ public class PlaneBoss extends Enemy {
 					bullets.add(new Projectile(x + width/2+3, y+20, angle+0.35, 2, tileMap));
 					fireTimer = System.nanoTime();
 				}
+			}
 			}
 		}
 	}

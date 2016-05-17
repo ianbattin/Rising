@@ -160,7 +160,6 @@ public abstract class MapObject
 		topRight = tr == Tile.AIR;
 		bottomLeft = bl == Tile.AIR;
 		bottomRight = br == Tile.AIR;
-		
 	}
 	
 	public void checkPixelColorCollision(TileMap tm)
@@ -208,7 +207,7 @@ public abstract class MapObject
 							openColor = GamePanel.getImage().getRGB(xCol, newY);
 						}
 						
-						y = (newY - cheight)*1/GamePanel.scaleHeight + (cheight/GamePanel.scaleHeight - cheight);
+						y = (newY - cheight)*1/GamePanel.scaleHeight + (cheight/GamePanel.scaleHeight - cheight) + 1;
 						break;
 					}
 				}	
