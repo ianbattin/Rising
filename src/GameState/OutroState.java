@@ -10,9 +10,7 @@ import TileMap.Background;
 
 public class OutroState extends TransitionState
 {
-	private float timer;
-	
-	private int outroFrames;
+	private int outroFrame = 0;
 	
 	public OutroState(GameStateManager gsm, String path)
 	{
@@ -24,34 +22,14 @@ public class OutroState extends TransitionState
 		super.isFadingIn = true;
 		super.alphaLevel = 255;
 		
-		outroFrames+=1;
-		if(outroFrames > 4)
-			outroFrames = 1;
-		super.setTotalFrames(outroFrames);
-		
-		bg.setNewImage("/Outro/frame1.gif");
-		
-		timer = 0;
+		outroFrame = (outroFrame%4)+1;
+		bg.setNewImage("/Outro/frame" + outroFrame + ".gif");
 	}
 
 	public void update() 
 	{
 		super.update();
-		/*
-		if(super.isFadingIn)
-		{
-			super.fadeIn(500000000.0, Color.BLACK, 5);
-		}
-		else if (timer > 2000000000 * (outroFrames+1))
-		{
-			super.isFadingOut = true;
-			super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.OUTROSTATE, GameStateManager.MENUSTATE);
-		}
-		else
-		{
-			timer += GamePanel.getElapsedTime();
-		}
-		*/
+
 	}
 
 	public void draw(Graphics2D g) 

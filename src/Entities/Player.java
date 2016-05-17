@@ -308,7 +308,7 @@ public class Player extends MapObject
 	{	
 		if (health > 0)
 		{
-			if(onScreen() && y + cheight < GamePanel.HEIGHT - 5 && x < GamePanel.WIDTH - 10 && x > 10) checkPixelColorCollision(tileMap);
+			if(onScreen()) checkPixelColorCollision(tileMap);
 			else myCheckCollision();
 			getAttack();
 		}
@@ -538,7 +538,7 @@ public class Player extends MapObject
 				}, 6000);
 				hasGun = true;
 			}
-			ammoCount += 25;
+			ammoCount += 6;
 			t.setType(0);
 		}
 		/*else if(type == 358 || type == 359 || type == 388 || type == 389 || type == 418 || type == 419)
@@ -1407,7 +1407,7 @@ public class Player extends MapObject
 	
 	public boolean onScreen()
 	{
-		return (-width <= x && x <= GamePanel.WIDTH+width && 100 < y+cheight && y+cheight < GamePanel.HEIGHT-1);
+		return (0 < x+cwidth && x+cwidth < GamePanel.WIDTH && 100 < y+cheight && y+cheight < GamePanel.HEIGHT-1);
 	}
 	
 	public void setPlayState(PlayState playState)

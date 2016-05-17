@@ -11,8 +11,10 @@ public class SoundPlayer implements LineListener, Runnable
 	//How many bytes are being put in the playback buffer (for the background music)
 	private final static int BUFFER_SIZE = 2048;
 	//Indicates whether another instance of SoundPlayer is playing the background sound. If set to false, it will cease playback in other instances
-	private static boolean IS_PLAYING;
+	private static boolean IS_PLAYING, IS_FADING_OUT;
 	private static SourceDataLine AUDIO_LINE;
+	
+	private static FloatControl volumeControl;
 	
 	//preload the most used sounds
 	private static AudioClip shootingClip;
@@ -103,6 +105,8 @@ public class SoundPlayer implements LineListener, Runnable
 		{
 			stopBackgroundMusic();
 		}
+		IS_FADING_OUT = false;
+		
 		backgroundPlaybackThread = new Thread(this);
 		backgroundPlaybackThread.start();
 	}
@@ -113,9 +117,9 @@ public class SoundPlayer implements LineListener, Runnable
 	public void stopBackgroundMusic()
 	{
 		IS_PLAYING = false;
+		IS_FADING_OUT = false;
 		SoundPlayer.AUDIO_LINE.drain();
 		SoundPlayer.AUDIO_LINE.close();
-		
 	}
 	
 	/**
@@ -136,12 +140,16 @@ public class SoundPlayer implements LineListener, Runnable
 				SoundPlayer.AUDIO_LINE.open(audioFormat);
 				SoundPlayer.AUDIO_LINE.start();
 				
+				volumeControl = (FloatControl)SoundPlayer.AUDIO_LINE.getControl(FloatControl.Type.MASTER_GAIN);
 				byte[] bytesBuffer = new byte[BUFFER_SIZE];
 				int bytesRead = -1;
 				
 				while((bytesRead = audioStream.read(bytesBuffer)) != -1 && IS_PLAYING)
 				{
 					SoundPlayer.AUDIO_LINE.write(bytesBuffer, 0, bytesRead);
+					
+					//System.out.println(volumeControl.getMaximum());
+					//System.out.println(volumeControl.getMinimum());
 				}
 				
 				if(!this.willLoopBackgroundMusic)
@@ -170,5 +178,45 @@ public class SoundPlayer implements LineListener, Runnable
 	public void update(LineEvent event) 
 	{
 		System.out.println(event.toString());
+	}
+		
+	public static void setVolume(float value)
+	{
+		if(volumeControl != null)
+		{
+			volumeControl.setValue(value);
+			IS_FADING_OUT = false;
+		}
+	}
+	
+	/**
+	 * Animate the volume of the music over time.
+	 * 
+	 * @param end final value of the sound after the animation.
+	 * @param millis the time over which the animation takes place.
+	 */
+	public static void animVolume(final float end)
+	{
+		if(volumeControl != null)
+		{
+			IS_FADING_OUT = true;
+			new Thread(new Runnable() {
+			    public void run() {
+			        while(volumeControl.getValue() > end && IS_FADING_OUT)
+			        {
+			        	volumeControl.setValue(volumeControl.getValue() - 0.1f);
+			        	try
+			        	{
+			        		Thread.sleep(25);
+			        	}
+			        	catch(Exception e)
+			        	{
+			        		e.printStackTrace();
+			        	}
+			        }
+			    }
+			}).start();
+			//volumeControl.shift(0, end, millis);
+		}
 	}
 }

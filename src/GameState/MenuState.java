@@ -59,7 +59,7 @@ public class MenuState extends GameState
 
 	public void init() 
 	{
-		music("Determination.wav");
+		music("La Foule.wav");
 	}
 
 	//Only thing being updated is the background for movement
@@ -127,6 +127,7 @@ public class MenuState extends GameState
 	    if(currentChoice == 0)
 		{
 			super.isFadingOut = true;
+			SoundPlayer.animVolume(-40.0F);
 		}
 		if(currentChoice == 1)
 		{

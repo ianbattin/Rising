@@ -37,7 +37,7 @@ public class Bomb extends MapObject
 		this.y = y;
 		this.type = type;
 		
-		dx = Math.random();
+		dx = 0;
 		dy = 0;
 		
 		width = 53;
@@ -118,7 +118,6 @@ public class Bomb extends MapObject
 		{
 			x += dx;
 			y += dy;
-			
 		}
 		
 		x += tileMap.getDX();
@@ -167,9 +166,8 @@ public class Bomb extends MapObject
 			animation.changeFrames(sprites.get(currentAction));
 		}
 				
-		if(animation.getFrame() == 3 && !exploding) animation.setFrame(2);
 		animation.update();
-
+		if(animation.getFrame() == 3 && !exploding) animation.setFrame(2);
 	}
 	
 	@Override
