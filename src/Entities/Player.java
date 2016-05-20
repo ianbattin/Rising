@@ -528,7 +528,7 @@ public class Player extends MapObject
 		{
 			if(!hasGun) 
 			{
-				this.setPlayerBannerText("Move crosshair with mouse and click to fire Prop Gun!");
+				this.setPlayerBannerText("Move crosshair with mouse and click to fire!");
 				new Timer().schedule(new TimerTask()
 				{
 					public void run()
