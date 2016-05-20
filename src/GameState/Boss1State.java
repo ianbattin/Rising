@@ -1,29 +1,15 @@
 package GameState;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.MouseInfo;
-import java.awt.Polygon;
-import java.awt.Stroke;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.lang.Object.*;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.ArrayList;
 
-import Entities.Player;
-import Entities.Projectile;
-import Entities.Rifleman;
+import Entities.Walker;
 import Entities.Enemy;
 import Entities.Jetpacker;
 import Entities.Pickups;
 import Entities.PlaneBoss;
 import Main.GamePanel;
-import Main.Main;
 import TileMap.Background;
 import TileMap.Tile;
 import TileMap.TileMap;
@@ -31,15 +17,6 @@ import TileMap.TileMap;
 
 public class Boss1State extends PlayState
 {
-	//Mouse
-	private int mouseX;
-	private int mouseY;
-	private int relX;
-	private int relY;
-	private boolean mouseUpdate;
-	private MouseEvent mouse;
-
-	private boolean isStillAlive;
 	private float deathTimer;
 	public static boolean tileStart;
 
@@ -51,9 +28,6 @@ public class Boss1State extends PlayState
 	private int step;
 	private int count;
 
-	private double planeX, planeY;
-
-	private double debrisVector;
 	private boolean drawBossHealth;
 
 	private PlaneBoss planeBoss;
@@ -86,7 +60,7 @@ public class Boss1State extends PlayState
 
 		super.init(); //requires the player to be inited first
 
-		pickups = new Pickups(player, tileMap, this, new int[]{Pickups.HEALBOOST, Pickups.ARMORBOOST, Pickups.BIRDBOOST}, 30000000000L, 5000000000L);
+		pickups = new Pickups(player, tileMap, new int[]{Pickups.HEALBOOST, Pickups.ARMORBOOST, Pickups.BIRDBOOST}, 30000000000L, 5000000000L);
 		tileStart = false;
 		try
 		{
@@ -224,9 +198,6 @@ public class Boss1State extends PlayState
 	{		
 		if (!enemies.isEmpty() && enemies.get(0) instanceof PlaneBoss && planeBoss != null)
 		{
-			planeX = planeBoss.getX();
-			planeY = planeBoss.getY();
-
 			System.out.println("Stage: " + stage + "      Step: " + step +  "      Count: "+ count +"      PlaneXY: " + planeBoss.getX() + "   " + planeBoss.getY());
 			
 			//Player falling and being saved by plane
@@ -479,12 +450,12 @@ public class Boss1State extends PlayState
 				case 2:
 					if(enemies.size() == 1 && count == 0)
 					{
-						enemies.add(new Rifleman(200, -70, tileMap, player));
+						enemies.add(new Walker(200, -70, tileMap, player));
 						count++;
 					}
 					else if(enemies.size() == 2 && count == 1)
 					{
-						enemies.add(new Rifleman(600, -70, tileMap, player));
+						enemies.add(new Walker(600, -70, tileMap, player));
 						count++;
 					}
 					else if(enemies.size() == 1)

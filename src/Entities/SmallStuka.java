@@ -2,7 +2,7 @@ package Entities;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
+
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -15,10 +15,6 @@ import TileMap.TileMap;
 
 public class SmallStuka extends MapObject
 {
-	private boolean setMovement;
-	private boolean moveComplete;
-	private int typeAttack;
-	
 	//animation
 	private ArrayList<BufferedImage[]> stukaSprites;
 	private final int[] numFrames = { 1 };
@@ -31,8 +27,6 @@ public class SmallStuka extends MapObject
 		y = 400;
 		dx = 0;
 		dy = 0;
-		
-		setMovement = false;
 
 		moveSpeed = 1.0;
 		maxSpeedY = 3.0;

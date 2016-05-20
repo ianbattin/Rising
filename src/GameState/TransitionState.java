@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 
 import Main.GamePanel;
-import Main.SoundPlayer;
 import TileMap.Background;
 
 
@@ -31,7 +30,7 @@ public class TransitionState extends GameState {
 		switch(path)
 		{
 			case "Intro":
-				timeModifierToUse = new int[] { 4, 14, 3, 4, 4, 4, 4 };
+				timeModifierToUse = new int[] { 4, 10, 5, 4, 4, 4, 4 };
 				totalFrames = 7;
 				break;
 			case "Outro":
@@ -79,10 +78,6 @@ public class TransitionState extends GameState {
 			{
 				case "Intro":
 					super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.TRANSITION_INTROSTATE, GameStateManager.LEVEL1STATE);
-					break;
-				case "Outro":
-					super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.TRANSITION_OUTROSTATE, GameStateManager.MENUSTATE);
-					currFrame = 1;
 					break;
 			}
 		}

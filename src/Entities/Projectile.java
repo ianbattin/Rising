@@ -2,9 +2,6 @@ package Entities;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -185,7 +182,7 @@ public class Projectile extends MapObject
 			tileMap.getExplosions().add(new Explosion(x + width/2-25, y + height/2-25, 3, tileMap));
 			this.remove = true;
 		}
-		if(this.type != 7)
+        if(this.type != 7)
 		{
 			dx = Math.cos(direction) * (moveSpeed);
 			dy = Math.sin(direction) * (moveSpeed);

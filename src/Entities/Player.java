@@ -1,21 +1,12 @@
 package Entities;
 
-import java.applet.Applet;
-import java.applet.AudioClip;
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
-import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
 import java.awt.image.RescaleOp;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
@@ -26,7 +17,6 @@ import javax.imageio.ImageIO;
 import GameState.GameStateManager;
 import GameState.Level1State;
 import GameState.PlayState;
-import GameState.GameState;
 import Main.GamePanel;
 import Main.Main;
 import Main.SoundPlayer;
@@ -42,7 +32,6 @@ public class Player extends MapObject
 	//Attacks
 	private ArrayList<Projectile> bullets;
 	private long fireTimer;
-	private int fireDelay;
 	private boolean firing;
 	private boolean mouseHeld;
 	private double angle;
@@ -57,7 +46,7 @@ public class Player extends MapObject
 	private Explosion explosions;
 	private Enemy chosenEnemy;
 	private ArrayList<Integer> charBlurPos;
-	private long coolDownTime, launchTimer;
+	private long coolDownTime;
 	private Font backupFont, bannerFont;
 	private BufferedImage gunImage;
 	private boolean displayMessage;
@@ -86,7 +75,6 @@ public class Player extends MapObject
 	private final int[] numFrames = { 4, 8, 3, 3, 3, 4, 7 };
 	private final int[] numShootingFrames = { 4, 4, 4, 4 };
 	private final int jumpDelay = 200;
-	private long jumpTimer;
 	private boolean introFrames, showLastIntroFrame;
 
 	private boolean tileMapMoving;
@@ -116,7 +104,6 @@ public class Player extends MapObject
 		bullets = new ArrayList<Projectile>();
 		angle = 0.0;
 		firing = false;
-		fireDelay = 200;
 		fireTimer = System.currentTimeMillis();
 		
 		recoverLength = 3000;
@@ -286,7 +273,6 @@ public class Player extends MapObject
 		hasArmor = false;
 		jumpHeightFactor = 1;
 		canGlide = slowTime = isUnderEffect = hasGun = birdActive = hasBird = false;
-		launchTimer = 0;
 		birdX = 0;
 		birdY = 0;
 		birdPos = 0;
@@ -523,6 +509,12 @@ public class Player extends MapObject
 
 			dy = -20.0;
 			t.setAnimated(true);
+		}
+		else if(type == 478)
+		{
+			healing = true;
+			playerHeal(1);
+			t.setType(0);
 		}
 		else if(type == 479)
 		{

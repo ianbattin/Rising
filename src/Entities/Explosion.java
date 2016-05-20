@@ -1,14 +1,10 @@
 package Entities;
 
-import java.applet.Applet;
-import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -20,19 +16,11 @@ import TileMap.TileMap;
 
 public class Explosion extends MapObject
 {
-	private double direction;
-	private int damage;
 	private int type;
 	
 	private boolean remove;
-	private boolean playerCollide;
 	private boolean willDestroyBlocks;
-	
-	private long lifeTime;
-	
-	//timeslow variable
-	private static double slowTime;
-	
+
 	//Animation
 	private ArrayList<BufferedImage[]> sprites, bombExplosionSprites;
 	private final int[] numFrames = { 4 };
@@ -52,8 +40,6 @@ public class Explosion extends MapObject
 		this.y = y;
 		this.type = type;
 		
-		slowTime = 1;
-		lifeTime = 0;
 		remove = false;
 		
 		switch(type)

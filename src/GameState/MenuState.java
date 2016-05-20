@@ -1,28 +1,13 @@
 package GameState;
 
-import java.applet.Applet;
-import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-
-import Entities.MapObject;
-import Entities.Explosion;
-import Entities.PlaneBoss;
-import Entities.Projectile;
 import Main.GamePanel;
 import Main.SoundPlayer;
 import TileMap.Background;
-import TileMap.TileMap;
 
 public class MenuState extends GameState 
 {

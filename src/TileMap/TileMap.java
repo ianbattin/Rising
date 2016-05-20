@@ -1,6 +1,5 @@
 package TileMap;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -33,7 +32,6 @@ public class TileMap
 	
 	private int width; //total width in tiles
 	private int height; //total height in tiles
-	private int extraWidth;
 	private int totalWidth;
 	private int[][] map; //our 2d array of tiles
 	
@@ -52,7 +50,6 @@ public class TileMap
 		y = 0;
 		dx = 0;
 		dy = 0;
-		this.extraWidth = extraWidth;
 		xMove = 0;
 		yMove = 0;
 		moving = false;

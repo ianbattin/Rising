@@ -4,12 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
 
 import Entities.Animation;
-import GameState.Level1State;
 import GameState.PlayState;
 import Main.GamePanel;
 
@@ -17,8 +13,6 @@ public class Tile
 {
 	private double x;
 	private double y;
-	private double dx;
-	private double dy;
 	
 	public double left;
 	public double right;
@@ -47,9 +41,6 @@ public class Tile
 	{
 		this.x = x;
 		this.y = y;
-		
-		dx = 0;
-		dy = 0;
 		
 		//these are for collision
 		left = x;
@@ -154,8 +145,6 @@ public class Tile
 		else if(type == 449 && y > -100 && y < 0 && -100 < x && x < GamePanel.WIDTH+100)
 		{
 			PlayState.spawnObject(PlayState.SPAWN_BOMB, (int)x, 0);
-			System.out.println("x: " + (int)x);
-			//System.out.println("y: " + (int)y);
 			type = 0;
 		}
 	}

@@ -1,15 +1,10 @@
 package Entities;
 
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-
-import GameState.Level1State;
 import Main.GamePanel;
 import TileMap.Tile;
 import TileMap.TileMap;

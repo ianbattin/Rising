@@ -4,11 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
@@ -27,7 +24,6 @@ public class PlaneBoss extends Enemy {
 	private final int BROKEN_LEVEL2 = 2;
 	private final int BROKEN_LEVEL3 = 3;
 	
-	private boolean setMovement;
 	private boolean moveComplete;
 	private int typeAttack;
 	private int count;
@@ -82,8 +78,6 @@ public class PlaneBoss extends Enemy {
 		fireDelay = 20;
 		this.typeAttack = typeAttack;
 		count = 0;
-		
-		setMovement = false;
 		
 		recoverLength = 40;
 		
@@ -495,12 +489,9 @@ public class PlaneBoss extends Enemy {
 			{
 				if(t.onScreen() == true && t.getType() != 0)
 				{
-					relX = (int) (x + width/2 - (int)t.getX());
-					relY = (int) (y + height - (int)t.getY());
+					relX = (int) (x + width/2 - t.getX());
+					relY = (int) (y + height - t.getY());
 					angle = Math.atan2(-relY, -relX);
-					if(angle > 3.75) angle = 3.75;
-					if(angle < 1.25) angle = 1.25;
-					angle +=  Math.random()*Math.PI/58 - Math.PI/58;
 
 					if(relX < 1000)
 					{
@@ -511,14 +502,18 @@ public class PlaneBoss extends Enemy {
 
 					if(firing && !super.notOnScreen())
 					{
-
 						long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 						if(fireDelay <= elapsed*(0.5*Enemy.slowDown))
-						{
+						{					
+							if(t.getBulletCollision() == false || t.getY() > GamePanel.HEIGHT) t.setType(0);
 							bullets.add(new Projectile(x + width/2, y+height, angle, 5, tileMap));
 							fireTimer = System.nanoTime();
 						}
 					}
+				}
+				else if(t.onScreen() == false)
+				{
+					t.setType(0);
 				}
 			}
 			attacking = false;
@@ -652,13 +647,14 @@ public class PlaneBoss extends Enemy {
 	@Override
 	public void getMovement() 
 	{
+		/*
 		if(tileMap.getSpriteSheet().equals("/Sprites/Tiles/FullTileSet.png") && !setMovement)
 		{
 			dx -= moveSpeed;
 			dy = -2.0;
 			if(dx < -(maxSpeedX*Enemy.slowDown)) dx = -(maxSpeedX*Enemy.slowDown);
 		}
-		
+		*/
 		x += dx*Enemy.slowDown;
 		y += dy*Enemy.slowDown;
 		
@@ -673,7 +669,6 @@ public class PlaneBoss extends Enemy {
 	{
 		this.typeAttack = typeAttack;
 		moveComplete = false;
-		setMovement = true;
 		
 		double startX = x;
 		double startY = y;

@@ -1,15 +1,8 @@
 package GameState;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.MouseInfo;
-import java.awt.Stroke;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.lang.Object.*;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.ArrayList;
@@ -17,20 +10,16 @@ import java.util.Iterator;
 
 import Entities.Player;
 import Entities.Projectile;
-import Entities.Rifleman;
 import Entities.Walker;
 import Entities.SmallStuka;
 import Entities.Bomb;
 import Entities.Enemy;
-import Entities.Explosion;
 import Entities.Jetpacker;
 import Entities.MapObject;
 import Entities.Pickups;
 import Entities.PlaneBoss;
 import Main.GamePanel;
-import Main.Main;
 import TileMap.Background;
-import TileMap.Tile;
 import TileMap.TileMap;
 
 
@@ -39,8 +28,6 @@ public class Level1State extends PlayState
 	private int[][] debrisInfo;
 	private int[][] smallDebrisInfo;
 	private ArrayList<Color> colors;
-	private ArrayList<int[]> bonusScores;
-	private boolean isStillAlive;
 	private float timer;
 	public static boolean tileStart, debrisAlternator;
 	private boolean transition;
@@ -112,7 +99,7 @@ public class Level1State extends PlayState
 		
 		super.init(); //requires the player to be initiated first
 		
-		pickups = new Pickups(player, tileMap, this, new int[]{Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST}, 10000000000L, 10000000000L);
+		pickups = new Pickups(player, tileMap, new int[]{Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST}, 10000000000L, 10000000000L);
 		tileStart = false;
 		score = 0;
 		
@@ -227,15 +214,25 @@ public class Level1State extends PlayState
 			{
 				transitionDY = 0;
 				//removes all non-boss entities
-				for(Enemy e: enemies)
+				for(int i = 0; i < enemies.size(); i++)
 				{
-					if(!(e instanceof PlaneBoss))
+					if(!(enemies.get(i) instanceof PlaneBoss))
 					{
-						e.playerHurt(100000, true);
+						enemies.remove(i);
+						i--;
 					}
 				}
-
-				if(enemies.size() == 0) enemies.add(new PlaneBoss(2000, 200, tileMap, player, 1));
+				if(enemies.size() == 0) 
+				{
+					PlaneBoss p = new PlaneBoss(2000, 200, tileMap, player, 1);
+					p.setX(1000);
+					p.setY(100);
+					enemies.add(p);
+				}
+				else if(enemies.size() == 1 && enemies.get(0) instanceof PlaneBoss && ((PlaneBoss)enemies.get(0)).getMoveComplete() == false)
+				{
+					((PlaneBoss)enemies.get(0)).setMovement(300, 100, 0.4, 1);
+				}
 			}
 			
 			tileMap.setYVector(transitionDY);

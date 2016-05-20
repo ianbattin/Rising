@@ -9,6 +9,7 @@ import java.awt.image.*;
 import java.awt.event.*;
 
 
+@SuppressWarnings("serial")
 public class MyPanel extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 	
 	public static final int WIDTH = 1601;

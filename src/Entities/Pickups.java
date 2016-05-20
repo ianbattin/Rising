@@ -4,20 +4,14 @@ import Main.GamePanel;
 import Main.SoundPlayer;
 import TileMap.Tile;
 import TileMap.TileMap;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import GameState.GameState;
-import GameState.Level1State;
-import GameState.PlayState;
-
 public class Pickups extends MapObject 
 {		
-	private PlayState playState;
 	private Player player;
 	private TileMap tm;
 	
@@ -43,11 +37,10 @@ public class Pickups extends MapObject
 	private boolean willDrawPickup, isUnderEffect;
 	private double xLoc, yLoc, startingPositionOffset, tmDyPositionOffset, xShift;
 	
-	public Pickups(Player player, TileMap tileMap, PlayState playState, int[] avaliablePickups, long initialDelay, long frequency)
+	public Pickups(Player player, TileMap tileMap, int[] avaliablePickups, long initialDelay, long frequency)
 	{
 		super (tileMap);
 		
-		this.playState = playState;
 		this.player = player;
 		this.tm = tileMap;
 		pickupsToSpawn = avaliablePickups;

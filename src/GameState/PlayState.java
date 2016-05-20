@@ -9,16 +9,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-import Entities.Bomb;
 import Entities.Enemy;
-import Entities.Jetpacker;
 import Entities.MapObject;
 import Entities.Pickups;
 import Entities.Player;
 import Entities.Projectile;
 import Main.GamePanel;
 import Main.Main;
-import TileMap.Background;
 import TileMap.TileMap;
 
 public abstract class PlayState extends GameState

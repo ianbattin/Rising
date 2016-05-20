@@ -1,8 +1,6 @@
 package Entities;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -21,7 +19,6 @@ public class Bomb extends MapObject
 	private boolean collided = false;
 	
 	private boolean exploding = false;
-	private boolean explodeAnim = false;
 	private boolean flashing = false;
 	private long explodeTimer, flashTimer;
 	
