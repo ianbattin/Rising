@@ -27,6 +27,7 @@ public class TileMap
 	private boolean moving;
 	
 	private String path;
+	private String levelName;
 	
 	private boolean showCollisonBox = false;
 	
@@ -43,7 +44,7 @@ public class TileMap
 	
 	private ArrayList<Explosion> explosions;
 	
-	public TileMap(String s, int extraWidth, GameStateManager gsm)
+	public TileMap(String s, String levelName, int extraWidth, GameStateManager gsm)
 	{
 		this.gsm = gsm;
 		x = 0;
@@ -53,6 +54,7 @@ public class TileMap
 		xMove = 0;
 		yMove = 0;
 		moving = false;
+		this.levelName = levelName;
 		
 		try
 		{
@@ -269,6 +271,7 @@ public class TileMap
 	public double getYMove() {	return yMove;	}
 	public double getDX() { return dx; }
 	public double getDY() { return dy; }
+	public String getLevelName() { return this.levelName; }
 
 	public int getTotalWidth() 
 	{

@@ -50,7 +50,7 @@ public class Boss1State extends PlayState
 
 	public void init() 
 	{
-		tileMap = new TileMap("Resources/Maps/boss1.txt", 0, gsm);
+		tileMap = new TileMap("Resources/Maps/boss1.txt", "Boss 1", 0, gsm);
 		tileMap.setVector(0, 0);
 		tileMap.setY(tileMap.getY() + 225);
 		player.setTileMapMoving(false);
@@ -60,7 +60,7 @@ public class Boss1State extends PlayState
 
 		super.init(); //requires the player to be inited first
 
-		pickups = new Pickups(player, tileMap, new int[]{Pickups.HEALBOOST, Pickups.ARMORBOOST, Pickups.BIRDBOOST}, 30000000000L, 5000000000L);
+		pickups = new Pickups(player, tileMap, new int[]{Pickups.HEALBOOST, Pickups.ARMORBOOST, Pickups.BIRDBOOST}, 20000000000L, 2500000000L);
 		tileStart = false;
 		try
 		{
@@ -345,22 +345,27 @@ public class Boss1State extends PlayState
 				case 0:
 					if(count == 0)
 					{
-						Jetpacker e = new Jetpacker(-200-(int)(Math.random()*100), -150 + (Math.random()*400) - 60, tileMap, player);
-						e.setWind(0.1, 0.0);
+						Jetpacker e = new Jetpacker(-200-(int)(Math.random()*100), -100 + (Math.random()*400) - 60, tileMap, player);
+						e.setWind(0.1, -0.095);
 						enemies.add(e);
 						count++;
 					}
 					else if(count == 1)
 					{
-						Jetpacker e = new Jetpacker(-300-(int)(Math.random()*100), -150 + (Math.random()*400) - 60, tileMap, player);
-						e.setWind(0.1, 0.0);
+						Jetpacker e = new Jetpacker(-400-(int)(Math.random()*100), -100 + (Math.random()*400) - 60, tileMap, player);
+						e.setWind(0.1, -0.095);
 						enemies.add(e);
 						count++;
 					}
 					else if(count == 2)
 					{
-						Jetpacker e = new Jetpacker(-400-(int)(Math.random()*100), -150 + (Math.random()*400) - 60, tileMap, player);
-						e.setWind(0.1, 0.0);
+						Jetpacker e = new Jetpacker(-1000-(int)(Math.random()*100), -500 + (Math.random()*400) - 60, tileMap, player);
+						e.setWind(0.1, -0.095);
+						enemies.add(e);
+						count++;
+						
+						e = new Jetpacker(-1200-(int)(Math.random()*100), -600 + (Math.random()*400) - 60, tileMap, player);
+						e.setWind(0.1, -0.095);
 						enemies.add(e);
 						count++;
 					}

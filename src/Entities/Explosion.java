@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import GameState.PlayState;
 import Main.GamePanel;
 import Main.SoundPlayer;
 import TileMap.Tile;
@@ -48,8 +49,8 @@ public class Explosion extends MapObject
 			{
 				width = 50;
 				height = 50;
-				cwidth = width*2;
-				cheight = height*2;
+				cwidth = width*3;
+				cheight = height*3;
 				willDestroyBlocks  = true;
 				init();
 				break;
@@ -195,6 +196,10 @@ public class Explosion extends MapObject
 						}
 					}
 				}
+			}
+			if(this.intersects(PlayState.getPlayer()) && this.type != 3)
+			{
+				PlayState.getPlayer().playerHurt(1);
 			}
 		}
 		else

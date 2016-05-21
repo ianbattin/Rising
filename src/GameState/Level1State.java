@@ -90,7 +90,7 @@ public class Level1State extends PlayState
 
 	public void init() 
 	{	
-		tileMap = new TileMap("Resources/Maps/level1final.txt", 2, gsm);
+		tileMap = new TileMap("Resources/Maps/level1final.txt", "Level 1", 2, gsm);
 		tileMap.setY(-300);
 		player = new Player(tileMap, this);
 		player.setPosition(375, -100);
@@ -99,7 +99,7 @@ public class Level1State extends PlayState
 		
 		super.init(); //requires the player to be initiated first
 		
-		pickups = new Pickups(player, tileMap, new int[]{Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST}, 10000000000L, 10000000000L);
+		pickups = new Pickups(player, tileMap, new int[]{Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST}, 7500000000L, 2500000000L);
 		tileStart = false;
 		score = 0;
 		
@@ -117,7 +117,6 @@ public class Level1State extends PlayState
 					tileStart = true;
 					tileMap.setYVector(SCROLLSPEED);		
 				}
-				
 			}, 10);
 		}
 		start = true;
@@ -309,12 +308,6 @@ public class Level1State extends PlayState
 		}
 	}
 	
-	
-	public Player getPlayer()
-	{
-		return player;
-	}
-
 	//update and draw the debris
 	public void debris(Graphics2D g)
 	{

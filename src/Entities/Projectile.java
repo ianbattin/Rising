@@ -106,11 +106,11 @@ public class Projectile extends MapObject
 			//Small explosion
 			case 5:
 			{
-				moveSpeed = 40.0;
+				moveSpeed = 20.0;
 				width = 10;
 				height = 10;
 				damage = 0;
-				playerCollide = true;
+				playerCollide = false;
 				SoundPlayer.playShootingClip();
 				break;
 			}

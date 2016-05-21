@@ -474,7 +474,7 @@ public class PlaneBoss extends Enemy {
 		if(bombAttack)
 		{
 			long elapsed = System.currentTimeMillis() - bombTimer;
-			if (elapsed > 9000)
+			if (elapsed > 8000)
 			{
 				mapObjects.add(new Bomb((this.x+cwidth/2+15), (this.y+cheight-15), this.tileMap, 1));
 				bombAttack = false;
@@ -503,7 +503,7 @@ public class PlaneBoss extends Enemy {
 					if(firing && !super.notOnScreen())
 					{
 						long elapsed= (System.nanoTime() - fireTimer) / 1000000;
-						if(fireDelay <= elapsed*(0.5*Enemy.slowDown))
+						if(fireDelay*5 <= elapsed*(0.5*Enemy.slowDown))
 						{					
 							if(t.getBulletCollision() == false || t.getY() > GamePanel.HEIGHT) t.setType(0);
 							bullets.add(new Projectile(x + width/2, y+height, angle, 5, tileMap));

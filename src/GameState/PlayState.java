@@ -198,7 +198,7 @@ public abstract class PlayState extends GameState
 		}
 	}
 	
-	public Player getPlayer()
+	public static Player getPlayer()
 	{
 		return player;
 	}

@@ -31,7 +31,7 @@ public class SplashState extends GameState
 	
 	public void init() 
 	{
-		SoundPlayer.playClip("bombexplosion.wav");
+		SoundPlayer.playClip("InvoxLogo.wav");
 	}
 
 
@@ -41,7 +41,8 @@ public class SplashState extends GameState
 		if(elapsedTime > 200000000.0) 
 		{
 			gsm.gameStateManagerLoad();
-			gsm.setState(GameStateManager.MENUSTATE);
+			if(elapsedTime > 1500000000.0)
+				gsm.setState(GameStateManager.MENUSTATE);
 		}
 	}
 
