@@ -60,7 +60,7 @@ public class TransitionState extends GameState {
 		{
 			case "Intro":
 			//start the game music
-			music("Modero.wav");
+			music("Prelude.wav");
 			break;
 		}
 	}
