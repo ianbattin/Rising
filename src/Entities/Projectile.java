@@ -73,7 +73,7 @@ public class Projectile extends MapObject
 			//Slow moving
 			case 2:
 			{
-				moveSpeed = 4.0;
+				moveSpeed = 7.0;
 				width = 6;
 				height = 6;
 				damage = 1;
@@ -106,9 +106,9 @@ public class Projectile extends MapObject
 			//Small explosion
 			case 5:
 			{
-				moveSpeed = 20.0;
-				width = 10;
-				height = 10;
+				moveSpeed = 19.0;
+				width = 5;
+				height = 5;
 				damage = 0;
 				playerCollide = false;
 				SoundPlayer.playShootingClip();
@@ -179,7 +179,7 @@ public class Projectile extends MapObject
 		this.myCheckCollision();
 		if(this.type == 1)
 		{
-			tileMap.getExplosions().add(new Explosion(x + width/2-25, y + height/2-25, 3, tileMap));
+			tileMap.getExplosions().add(new Explosion(x + width/2-25, y + height/2-25, 3, 0,  tileMap));
 			this.remove = true;
 		}
         if(this.type != 7)
@@ -307,12 +307,12 @@ public class Projectile extends MapObject
 			else if(this.type == 5)
 			{
 				remove = true;
-				tileMap.getExplosions().add(new Explosion(x, y, 1, tileMap));
+				tileMap.getExplosions().add(new Explosion(x, y, 1, 1, tileMap));
 			}
 			else if(this.type == 6)
 			{
 				remove = true;
-				tileMap.getExplosions().add(new Explosion(x, y, 2, tileMap));
+				tileMap.getExplosions().add(new Explosion(x, y, 2, 1, tileMap));
 			}
 			else if(this.type == 7)
 			{
@@ -325,7 +325,7 @@ public class Projectile extends MapObject
 				}
 				if(ricochetCount > 5) 
 				{
-					tileMap.getExplosions().add(new Explosion(x, y, 1, tileMap));
+					tileMap.getExplosions().add(new Explosion(x, y, 1, 1, tileMap));
 					remove = true;
 				}
 			}
@@ -356,7 +356,7 @@ public class Projectile extends MapObject
 		    if(this.type == 5)
 			{
 				remove = true;
-				tileMap.getExplosions().add(new Explosion(x, y, 1, tileMap));
+				tileMap.getExplosions().add(new Explosion(x, y, 1, 1, tileMap));
 				tileMap.getExplosions().get(tileMap.getExplosions().size()-1).collided(m);
 			}
 		}

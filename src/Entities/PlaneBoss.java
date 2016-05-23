@@ -217,7 +217,7 @@ public class PlaneBoss extends Enemy {
 
 			if((int)(Math.random()*300) - Math.min(deathAnimation, 75) <= 0)
 			{
-				mapObjects.add(new Explosion(x + Math.random()*width, y + Math.random()*height, 3, tileMap));
+				mapObjects.add(new Explosion(x + Math.random()*width, y + Math.random()*height, 3, 0,  tileMap));
 			}
 			
 			dy = Math.pow(1.01, deathAnimation)-1;
@@ -834,7 +834,7 @@ public class PlaneBoss extends Enemy {
 				{
 					bombAttack = false;
 					drawArrow = false;
-					mapObjects.add(new Explosion((this.x+cwidth/2+15), (this.y+cheight-15), 4, tileMap));
+					mapObjects.add(new Explosion((this.x+cwidth/2+15), (this.y+cheight-15), 4, 0, tileMap));
 					recovering = false;
 					playerHurt(30, true);
 				}

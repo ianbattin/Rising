@@ -41,7 +41,7 @@ public class SplashState extends GameState
 		if(elapsedTime > 200000000.0) 
 		{
 			gsm.gameStateManagerLoad();
-			if(elapsedTime > 1500000000.0)
+			if(elapsedTime > 0000000000.0)// time in seconds to wait after loaded
 				gsm.setState(GameStateManager.MENUSTATE);
 		}
 	}

@@ -196,9 +196,9 @@ public class Bomb extends MapObject
 			public void run()
 			{	
 				if(type == 0)
-					tileMap.getExplosions().add(new Explosion(x, y, 2, tileMap));
+					tileMap.getExplosions().add(new Explosion(x, y, 2, 1, tileMap));
 				else if(type == 1)
-					tileMap.getExplosions().add(new Explosion(x, y, 4, tileMap));
+					tileMap.getExplosions().add(new Explosion(x, y, 4, 1, tileMap));
 				exploding = false;
 				remove = true;
 			}
