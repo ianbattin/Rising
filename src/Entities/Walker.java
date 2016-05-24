@@ -18,6 +18,10 @@ public class Walker extends Enemy
 	
 	private Tile currentTile;
 	
+	private double windSpeedX;
+	private double windSpeedY;
+	private boolean resetWindOnLand;
+	
 	//animation actions
 	private static final int IDLE = 0;
 	private static final int WALKING = 1;
@@ -41,6 +45,9 @@ public class Walker extends Enemy
 		stopSpeed = 0.4;
 		fallSpeed = 0.25;
 		maxFallSpeed = 7.0;
+		windSpeedX = 0;
+		windSpeedY = 0;
+		resetWindOnLand = false;
 		
 		width = 50;
 		height = 70;
@@ -297,8 +304,8 @@ public class Walker extends Enemy
 			fallingAnim = false;
 		}
 		
-		x += dx*Enemy.slowDown;
-		y += dy*Enemy.slowDown;
+		x += dx*Enemy.slowDown + windSpeedX;
+		y += dy*Enemy.slowDown + windSpeedY;
 	}
 	
 	public void getAnimation()
@@ -390,9 +397,22 @@ public class Walker extends Enemy
 		return false;
 	}
 	
+	public void setWind(double xWind, double yWind, boolean resetOnLand)
+	{
+		this.windSpeedX = xWind;
+		this.windSpeedY = yWind;
+		this.resetWindOnLand = resetOnLand;
+	}
+	
 	public void collided(int type, Tile t) 
 	{
 		currentTile = t;
+		if(resetWindOnLand)
+		{
+			this.windSpeedX = 0;
+			this.windSpeedY = 0;
+			this.resetWindOnLand = false;
+		}
 	}
 
 	public void collided(MapObject m) 

@@ -427,6 +427,8 @@ public abstract class MapObject
 	public void setMoveSpeedRight(double speed) { moveSpeedRight = speed; }
 	public void setMaxSpeedLeft(double speed) { maxSpeedLeft = speed; }
 	public void setMaxSpeedRight(double speed) { maxSpeedRight = speed; }
+	public void setMaxSpeedX(double speed) { maxSpeedX = speed; }
+	public void setMaxSpeedY(double speed) { maxSpeedY = speed; }
 	
 	
 	public boolean getRemove()

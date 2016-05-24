@@ -356,27 +356,31 @@ public class Boss1State extends PlayState
 				case 1:
 					if(count == 0)
 					{
-						Jetpacker e = new Jetpacker(-200-(int)(Math.random()*100), -100 + (Math.random()*400) - 60, tileMap, player);
-						e.setWind(0.1, -0.095);
+						Jetpacker e = new Jetpacker(-200-(int)(Math.random()*100), -50 + (Math.random()*400), tileMap, player);
+						e.setMaxSpeedX(0);
+						e.setWind(5, -1.2);
 						enemies.add(e);
 						count++;
 					}
 					else if(count == 1)
 					{
-						Jetpacker e = new Jetpacker(-400-(int)(Math.random()*100), -100 + (Math.random()*400) - 60, tileMap, player);
-						e.setWind(0.1, -0.095);
+						Jetpacker e = new Jetpacker(-400-(int)(Math.random()*100), -50 + (Math.random()*400), tileMap, player);
+						e.setMaxSpeedX(0);
+						e.setWind(5, -1.2);
 						enemies.add(e);
 						count++;
 					}
 					else if(count == 2)
 					{
-						Jetpacker e = new Jetpacker(-1000-(int)(Math.random()*100), -500 + (Math.random()*400) - 60, tileMap, player);
-						e.setWind(0.1, -0.095);
+						Jetpacker e = new Jetpacker(-1000-(int)(Math.random()*100), -100 + (Math.random()*400), tileMap, player);
+						e.setMaxSpeedX(0);
+						e.setWind(5, -1.2);
 						enemies.add(e);
 						count++;
 						
-						e = new Jetpacker(-1200-(int)(Math.random()*100), -600 + (Math.random()*400) - 60, tileMap, player);
-						e.setWind(0.1, -0.095);
+						e = new Jetpacker(-1200-(int)(Math.random()*100), -100 + (Math.random()*400), tileMap, player);
+						e.setMaxSpeedX(0);
+						e.setWind(5, -1.2);
 						enemies.add(e);
 						count++;
 					}
@@ -454,12 +458,16 @@ public class Boss1State extends PlayState
 				case 3:
 					if(enemies.size() == 1 && count == 0)
 					{
-						enemies.add(new Walker(200, -70, tileMap, player));
+						Walker en = new Walker(-400, 100, tileMap, player);
+						en.setWind(6, 0, true);
+						enemies.add(en);
 						count++;
 					}
 					else if(enemies.size() == 2 && count == 1)
 					{
-						enemies.add(new Walker(600, -70, tileMap, player));
+						Walker en = new Walker(-100, 0, tileMap, player);
+						en.setWind(6, 0, true);
+						enemies.add(en);
 						count++;
 					}
 					else if(enemies.size() == 1)

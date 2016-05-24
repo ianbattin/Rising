@@ -515,6 +515,7 @@ public class Player extends MapObject
 			healing = true;
 			playerHeal(1);
 			t.setType(0);
+			SoundPlayer.playClip("pickup.wav");
 		}
 		else if(type == 479)
 		{
@@ -1177,7 +1178,7 @@ public class Player extends MapObject
 			if(birdY+10 >= chosenEnemy.getY() && birdY-10 <= chosenEnemy.getY() && birdX+10 >= chosenEnemy.getX() && birdX-10 <= chosenEnemy.getX()) 
 			{
 				chosenEnemy.playerHurt(50, true);
-				this.explosions = new Explosion(birdX, birdY, 3, tileMap);
+				this.explosions = new Explosion(birdX, birdY, 3, 0, tileMap);
 				hasBird = false;
 				birdActive = false;
 			}
@@ -1209,6 +1210,7 @@ public class Player extends MapObject
 			{
 				healthAphaVal = 255;
 				healing = false;
+				resetEffects();
 			}
 		}
 		

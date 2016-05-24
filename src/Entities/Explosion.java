@@ -21,6 +21,7 @@ public class Explosion extends MapObject
 	
 	private boolean remove;
 	private boolean willDestroyBlocks;
+	private int playerDamage;
 
 	//Animation
 	private ArrayList<BufferedImage[]> sprites, bombExplosionSprites;
@@ -33,13 +34,14 @@ public class Explosion extends MapObject
 	
 	private int[][] explosionArea = new int[10][10];
 	
-	public Explosion(double x, double y, int type, TileMap tm) 
+	public Explosion(double x, double y, int type, int damage, TileMap tm) 
 	{
 		super(tm);
 		
 		this.x = x;
 		this.y = y;
 		this.type = type;
+		this.playerDamage = damage;
 		
 		remove = false;
 		
@@ -199,7 +201,7 @@ public class Explosion extends MapObject
 			}
 			if(this.intersects(PlayState.getPlayer()) && this.type != 3)
 			{
-				PlayState.getPlayer().playerHurt(1);
+				PlayState.getPlayer().playerHurt(this.playerDamage);
 			}
 		}
 		else

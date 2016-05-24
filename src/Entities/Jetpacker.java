@@ -221,7 +221,7 @@ public class Jetpacker extends Enemy
 		this.setAngle(Math.atan2(-relY, -relX));
 		this.setAngle(angle + Math.random()*Math.PI/12 - Math.PI/12);
 		
-		if(!lineOfSight())
+		if(!lineOfSight() && !this.notOnScreen())
 		{
 			firing = true;
 		}
@@ -263,12 +263,9 @@ public class Jetpacker extends Enemy
 		{
 			this.facingRight = false;
 		}
-		
-		dx += windSpeedX;
-		dy += windSpeedY;
-		
-		x += dx*Enemy.slowDown;
-		y += dy*Enemy.slowDown;
+				
+		x += dx*Enemy.slowDown + windSpeedX;
+		y += dy*Enemy.slowDown + windSpeedY;
 	}
 	
 	public void getAnimation()
