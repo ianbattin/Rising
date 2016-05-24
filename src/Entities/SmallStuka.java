@@ -17,7 +17,7 @@ public class SmallStuka extends MapObject
 {
 	//animation
 	private ArrayList<BufferedImage[]> stukaSprites;
-	private final int[] numFrames = { 1 };
+	private final int[] numFrames = { 2 };
 	
 	public SmallStuka(TileMap tm) 
 	{
@@ -32,9 +32,9 @@ public class SmallStuka extends MapObject
 		maxSpeedY = 3.0;
 		maxSpeedX = 6.0;
 		
-		width = 50;
+		width = 60;
 		height = 20;
-		cwidth = 50;
+		cwidth = 60;
 		cheight = 20;
 
 		facingRight = false;
@@ -50,6 +50,9 @@ public class SmallStuka extends MapObject
 				{
 					bi[j] = spritesheet.getSubimage(j * width, i * height, width, height);
 				}
+				BufferedImage temp = bi[0];
+				bi[0] = bi[1];
+				bi[1] = temp;
 				stukaSprites.add(bi);
 			}
 			
@@ -78,7 +81,7 @@ public class SmallStuka extends MapObject
 		animation = new Animation();
 		currentAction = 0;
 		animation.setFrames(stukaSprites.get(0));
-		animation.setDelay(200);
+		animation.setDelay(1500);
 	}
 
 	//Do anything before starting to show the stuka on the screen
@@ -132,14 +135,9 @@ public class SmallStuka extends MapObject
 
 	public void getMovement() 
 	{
-		if(x > GamePanel.WIDTH + 200) facingRight = true;
-		else if(x < -200) facingRight = false;
+		facingRight = false;
 		
-		if(!facingRight)
-			dx = maxSpeedX;
-		//else
-			//dx = -maxSpeedX;
-		
+		dx = maxSpeedX;
 		dy = -1.5;
 		
 		x += dx;
@@ -148,7 +146,6 @@ public class SmallStuka extends MapObject
 	
 	public void getAnimation() 
 	{
-		animation.changeFrames(stukaSprites.get(currentAction));
 		animation.update();	
 	}
 }

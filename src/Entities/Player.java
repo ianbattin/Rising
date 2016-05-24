@@ -866,7 +866,8 @@ public class Player extends MapObject
 				width = 77;
 				height = 70;
 				animation.setDone(true);
-				animation.setDelay(150);				
+				animation.setDelay(150);
+				System.out.println("SHOOTING WALKING");
 			}
 			else if ((currentAction == FALLING || currentAction == JUMPING) && currentAction != SHOOTING_FALLING )
 			{

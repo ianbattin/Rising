@@ -343,6 +343,17 @@ public class Boss1State extends PlayState
 				{
 				//Plane flies left to right at 1 speed and drops off 3 paratroopers
 				case 0:
+					if(planeBoss.getMoveComplete() == false)
+					{
+						planeBoss.setMovement(1500, 200, 2, 0);
+					}
+					else
+					{
+						step = 1;
+						planeBoss.setMoveComplete(false);
+					}
+					break;
+				case 1:
 					if(count == 0)
 					{
 						Jetpacker e = new Jetpacker(-200-(int)(Math.random()*100), -100 + (Math.random()*400) - 60, tileMap, player);
@@ -371,10 +382,10 @@ public class Boss1State extends PlayState
 					}
 					
 					long elapsed = (System.nanoTime() - timer) / 1000000;
-					if(9000 <= elapsed)
+					if(13000 <= elapsed)
 					{
 						planeBoss.setMoveComplete(false);
-						step = 1;
+						step = 2;
 						count = 0;
 						player.hidePlayerBanner();
 						timer = System.nanoTime();
@@ -382,22 +393,10 @@ public class Boss1State extends PlayState
 					break;
 
 					//Plane flies left and shoots fire bullets
-				case 1:
+				case 2:
 					switch(count) 
 					{
 					case 0:
-						if(planeBoss.getMoveComplete() == false)
-						{
-							planeBoss.setMovement(1500, 200, 2, 0);
-						}
-						else
-						{
-							count = 1;
-							planeBoss.setMoveComplete(false);
-						}
-						break;
-
-					case 1:
 						if(planeBoss.getMoveComplete() == false)
 							planeBoss.setMovement(400-planeBoss.getCWidth()/2, 400, 1, 0);
 						else
@@ -444,7 +443,7 @@ public class Boss1State extends PlayState
 						else
 						{
 							planeBoss.setAttack(0);
-							step = 2;
+							step = 3;
 							count = 0;
 						}
 						break;
@@ -452,7 +451,7 @@ public class Boss1State extends PlayState
 					break;
 
 					//Plane flies from right to middle low enough for player to jump on cockpit
-				case 2:
+				case 3:
 					if(enemies.size() == 1 && count == 0)
 					{
 						enemies.add(new Walker(200, -70, tileMap, player));
@@ -471,7 +470,7 @@ public class Boss1State extends PlayState
 					}	
 					
 					elapsed = (System.nanoTime() - timer) / 1000000;
-					if(9000 <= elapsed)
+					if(8000 <= elapsed)
 					{
 						planeBoss.setMoveComplete(false);
 						step = 0;

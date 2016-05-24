@@ -568,18 +568,63 @@ public class PlaneBoss extends Enemy {
 				}
 			}
 		}
-		//Three bullets
+		//Three bullets or shooting below
 		else if(typeAttack == 4)
 		{
+			//Below
 			if(player.getY() > y)
 			{
 				
-				if(!relXSet) relX = 200;
-				relY = -200;
+				if(!relXSet) 
+				{
+					relX = 100;
+					fireDelay = 200;
+				}
+				relY = -100;
 
 				angle = Math.atan2(-relY, -relX);
 				firing = true;
-				fireDelay = 200;
+
+				if(firing)
+				{
+					long elapsed= (System.nanoTime() - fireTimer) / 1000000;
+					if(fireDelay <= elapsed*(0.5*Enemy.slowDown))
+					{
+						fireDelay = 200;
+						count++;
+						
+						bullets.add(new Projectile(x+width/2, y+height, angle, 4, tileMap));
+						fireTimer = System.nanoTime();
+						
+						relXSet = true;
+						if(count <= 2)
+							relX -= 100;
+						else if(count <= 4)
+							relX += 100;
+						else
+						{
+							count = 0;
+							fireDelay = 2000;
+						}
+					}
+				}
+			}
+			else
+			{
+				if(count <= 1)
+				{
+					relX = 100;
+					relY = 200;
+				}
+				else
+				{
+					relX = -100;
+					relY = 200;
+				}
+
+				angle = Math.atan2(-relY, -relX);
+				firing = true;
+				fireDelay = 1000;
 
 				if(firing)
 				{
@@ -587,52 +632,15 @@ public class PlaneBoss extends Enemy {
 					if(fireDelay <= elapsed*(0.5*Enemy.slowDown))
 					{
 						count++;
-						
-						bullets.add(new Projectile(x+width/2, y+height, angle, 4, tileMap));
-						fireTimer = System.nanoTime();
-						
-						relXSet = true;
-						if(count <= 8)
-							relX -= 50;
-						else if(count != 16)
-							relX += 50;
-						else
+						if(count == 4)
 							count = 0;
+
+						bullets.add(new Projectile(x + width/2+3, y+20, angle, 2, tileMap));
+						bullets.add(new Projectile(x + width/2+3, y+20, angle-0.35, 2, tileMap));
+						bullets.add(new Projectile(x + width/2+3, y+20, angle+0.35, 2, tileMap));
+						fireTimer = System.nanoTime();
 					}
 				}
-			}
-			else
-			{
-			if(count <= 1)
-			{
-				relX = 100;
-				relY = 200;
-			}
-			else
-			{
-				relX = -100;
-				relY = 200;
-			}
-
-			angle = Math.atan2(-relY, -relX);
-			firing = true;
-			fireDelay = 1000;
-
-			if(firing)
-			{
-				long elapsed= (System.nanoTime() - fireTimer) / 1000000;
-				if(fireDelay <= elapsed*(0.5*Enemy.slowDown))
-				{
-					count++;
-					if(count == 4)
-						count = 0;
-					
-					bullets.add(new Projectile(x + width/2+3, y+20, angle, 2, tileMap));
-					bullets.add(new Projectile(x + width/2+3, y+20, angle-0.35, 2, tileMap));
-					bullets.add(new Projectile(x + width/2+3, y+20, angle+0.35, 2, tileMap));
-					fireTimer = System.nanoTime();
-				}
-			}
 			}
 		}
 	}

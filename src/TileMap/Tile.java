@@ -70,6 +70,42 @@ public class Tile
 			startingFrame = type - 17;
 			this.type = 17;
 		}
+		else if(type == 32 || type == 33)
+		{
+			frames = 2;
+			animated = true;
+			blocked = true;
+			bulletCollision = true;
+			startingFrame = type - 32;
+			this.type = 32;
+		}
+		else if(type == 62 || type == 63)
+		{
+			frames = 2;
+			animated = true;
+			blocked = true;
+			bulletCollision = true;
+			startingFrame = type - 62;
+			this.type = 62;
+		}
+		else if(type == 92 || type == 93)
+		{
+			frames = 2;
+			animated = true;
+			blocked = true;
+			bulletCollision = true;
+			startingFrame = type - 92;
+			this.type = 92;
+		}
+		else if(type == 122 || type == 123)
+		{
+			frames = 2;
+			animated = true;
+			blocked = true;
+			bulletCollision = true;
+			startingFrame = type - 122;
+			this.type = 122;
+		}
 		else if(type == 20)
 		{
 			frames = 4;

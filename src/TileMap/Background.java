@@ -1,5 +1,6 @@
 package TileMap;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class Background
 						pixelColors.add(color);
 				}
 			}
+			addCustomColors();
 			
 			moveScale = ms;
 		}
@@ -46,6 +48,15 @@ public class Background
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public void addCustomColors()
+	{
+		pixelColors.add(new Color(66, 76, 81).getRGB());
+		pixelColors.add(new Color(26, 40, 50).getRGB());
+		pixelColors.add(new Color(50, 64, 75).getRGB());
+		pixelColors.add(new Color(67, 82, 93).getRGB());
+		pixelColors.add(new Color(58, 83, 99).getRGB());
 	}
 	
 	public void setPosition(double x, double y)
