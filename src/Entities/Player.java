@@ -686,7 +686,7 @@ public class Player extends MapObject
 			{
 				y-=5;
 				falling = false;
-				jumpHeight = yFromBottom + (200*jumpHeightFactor);
+				jumpHeight = yFromBottom + (100*jumpHeightFactor);
 				//System.out.println(jumpHeight);
 				if(!jumped) SoundPlayer.playClip("jump.wav");
 				jumped = true;
@@ -1266,6 +1266,7 @@ public class Player extends MapObject
 		{
 			if(k == GameStateManager.up)
 			{
+				fallSpeed = 0.25;
 				if(!jumped)
 				{
 					idle = false;
@@ -1342,6 +1343,7 @@ public class Player extends MapObject
 	{
 		if(k == GameStateManager.up)
 		{
+			fallSpeed = 0.50;
 			if(jumped)
 			{
 				jump = false;
