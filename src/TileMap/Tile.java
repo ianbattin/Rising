@@ -53,6 +53,7 @@ public class Tile
 		this.type = type;
 		this.size = size;
 		animation = new Animation();
+		animation.setDelay(100);
 		isVisible = true;
 		startingFrame = 0;
 
@@ -78,6 +79,7 @@ public class Tile
 			bulletCollision = true;
 			startingFrame = type - 32;
 			this.type = 32;
+			animation.setDelay(50);
 		}
 		else if(type == 62 || type == 63)
 		{
@@ -87,6 +89,7 @@ public class Tile
 			bulletCollision = true;
 			startingFrame = type - 62;
 			this.type = 62;
+			animation.setDelay(50);
 		}
 		else if(type == 92 || type == 93)
 		{
@@ -96,6 +99,7 @@ public class Tile
 			bulletCollision = true;
 			startingFrame = type - 92;
 			this.type = 92;
+			animation.setDelay(50);
 		}
 		else if(type == 122 || type == 123)
 		{
@@ -105,6 +109,7 @@ public class Tile
 			bulletCollision = true;
 			startingFrame = type - 122;
 			this.type = 122;
+			animation.setDelay(50);
 		}
 		else if(type == 20)
 		{
@@ -137,7 +142,6 @@ public class Tile
 			images[i] = TileMap.getSprite(type + i);
 		}
 		animation.setFrames(images);
-		animation.setDelay(100);
 		animation.setFrame(startingFrame);
 	}
 	
@@ -222,7 +226,6 @@ public class Tile
 			images[i] = TileMap.getSprite(type + i);
 		}
 		animation.setFrames(images);
-		animation.setDelay(100);
 	}
 	public void setType(int type) 
 	{
