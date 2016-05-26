@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 
 import Main.GamePanel;
+import Main.SoundPlayer;
 import TileMap.Background;
 
 
@@ -30,8 +31,12 @@ public class TransitionState extends GameState {
 		switch(path)
 		{
 			case "Intro":
-				timeModifierToUse = new int[] { 4, 10, 5, 4, 4, 4, 4 };
-				totalFrames = 7;
+				timeModifierToUse = new int[] { 4, 10, 5, 4, 4, 4, 4, 4, 4 };
+				totalFrames = 9;
+				break;
+			case "Interlude":
+				timeModifierToUse = new int[] { 4, 4, 4, 4 };
+				totalFrames = 4;
 				break;
 			case "Outro":
 				timeModifierToUse = new int[] { 3, 3, 3, 3 };
@@ -59,9 +64,9 @@ public class TransitionState extends GameState {
 		switch(path)
 		{
 			case "Intro":
-			//start the game music
-			music("Prelude.wav");
-			break;
+				//start the game music
+				music("Prelude.wav");
+				break;
 		}
 	}
 
@@ -70,14 +75,30 @@ public class TransitionState extends GameState {
 	{		
 		if(super.isFadingIn)
 		{
-			super.fadeIn(500000000.0, Color.BLACK, 5);
+			//super.fadeIn(500000000.0, Color.BLACK, 5);
+			
+			switch(path)
+			{
+				case "Intro":
+					super.fadeIn(500000000.0, Color.BLACK, 5);
+					break;
+				case "Interlude":
+					super.fadeIn(500000000.0, Color.WHITE, 5);
+					break;
+				case "Outro":
+					super.fadeIn(500000000.0, Color.BLACK, 5);
+					break;
+			}
 		}
 		else if (super.isFadingOut)
 		{
 			switch(path)
 			{
 				case "Intro":
-					super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.TRANSITION_INTROSTATE, GameStateManager.LEVEL1STATE);
+					super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.INTROSTATE, GameStateManager.LEVEL1STATE);
+					break;
+				case "Interlude":
+					super.fadeOut(1000000000.0, Color.WHITE, 5, gsm, GameStateManager.TRANSITION_INTERLUDESTATE1, GameStateManager.BOSS1STATE);
 					break;
 			}
 		}
@@ -90,6 +111,8 @@ public class TransitionState extends GameState {
 				{
 					currFrame++;
 					bg.setNewImage("/" + path + "/frame" + currFrame + ".gif");
+					if(currFrame == totalFrames)
+						SoundPlayer.animVolume(-40.0F);
 				}
 				else
 				{
@@ -109,28 +132,57 @@ public class TransitionState extends GameState {
 	
 	public void keyPressed(int k) 
 	{
-		if(k == GameStateManager.select)
-		{ 
-			if(System.currentTimeMillis() - coolDownTimer < 250)
-			{
-				gsm.setState(GameStateManager.LEVEL1STATE);
-				gsm.resetState(GameStateManager.TRANSITION_INTROSTATE);
-			}
-			if(currFrame < totalFrames)
-			{
-				timer += timeModifierToUse[currFrame-1]*1000000000.0;
-			}
-			else
-			{
-				gsm.setState(GameStateManager.LEVEL1STATE);
-				gsm.resetState(GameStateManager.TRANSITION_INTROSTATE);
-			}
-			coolDownTimer = System.currentTimeMillis();
-		} 
-		else if (k == GameStateManager.reset)
+		if(this.path.equals("Intro"))
 		{
-			gsm.setState(GameStateManager.MENUSTATE);
-			gsm.resetState(GameStateManager.TRANSITION_INTROSTATE);
+			if(k == GameStateManager.select)
+			{ 
+				if(System.currentTimeMillis() - coolDownTimer < 250)
+				{
+					gsm.setState(GameStateManager.LEVEL1STATE);
+					gsm.resetState(GameStateManager.INTROSTATE);
+				}
+				if(currFrame < totalFrames)
+				{
+					timer += timeModifierToUse[currFrame-1]*1000000000.0;
+				}
+				else
+				{
+					gsm.setState(GameStateManager.LEVEL1STATE);
+					gsm.resetState(GameStateManager.INTROSTATE);
+				}
+				coolDownTimer = System.currentTimeMillis();
+			} 
+			if (k == GameStateManager.reset)
+			{
+				gsm.setState(GameStateManager.MENUSTATE);
+				gsm.resetState(GameStateManager.INTROSTATE);
+			}
+		}
+		else if(this.path.equals("Interlude"))
+		{
+			if(k == GameStateManager.select)
+			{ 
+				if(System.currentTimeMillis() - coolDownTimer < 250)
+				{
+					gsm.setState(GameStateManager.BOSS1STATE);
+					gsm.resetState(GameStateManager.TRANSITION_INTERLUDESTATE1);
+				}
+				if(currFrame < totalFrames)
+				{
+					timer += timeModifierToUse[currFrame-1]*1000000000.0;
+				}
+				else
+				{
+					gsm.setState(GameStateManager.BOSS1STATE);
+					gsm.resetState(GameStateManager.TRANSITION_INTERLUDESTATE1);
+				}
+				coolDownTimer = System.currentTimeMillis();
+			} 
+			if (k == GameStateManager.reset)
+			{
+				gsm.setState(GameStateManager.MENUSTATE);
+				gsm.resetState(GameStateManager.TRANSITION_INTERLUDESTATE1);
+			}
 		}
 	}
 		

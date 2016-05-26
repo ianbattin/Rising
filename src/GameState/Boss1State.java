@@ -60,7 +60,7 @@ public class Boss1State extends PlayState
 
 		super.init(); //requires the player to be inited first
 
-		pickups = new Pickups(player, tileMap, new int[]{Pickups.HEALBOOST, Pickups.ARMORBOOST, Pickups.BIRDBOOST}, 20000000000L, 2500000000L);
+		pickups = new Pickups(player, tileMap, new int[]{Pickups.HEALBOOST, Pickups.AMMOBOOST, Pickups.BIRDBOOST}, 20000000000L, 2500000000L);
 		tileStart = false;
 		try
 		{
@@ -230,6 +230,7 @@ public class Boss1State extends PlayState
 				case 1:
 					step = 0;
 					stage = 1;
+					pickups.spawnPickup(Pickups.AMMOBOOST);
 					break;
 				}
 			}

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import Main.GamePanel;
 import Main.SoundPlayer;
 import TileMap.Tile;
 import TileMap.TileMap;

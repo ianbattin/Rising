@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
@@ -14,19 +16,19 @@ import TileMap.TileMap;
 public class Walker extends Enemy
 {
 	//animation
-	private final int[] numFrames = {1, 3};
+	private final int[] numFrames = {1, 4, 4};
 	
 	private Tile currentTile;
 	
 	private double windSpeedX;
 	private double windSpeedY;
 	private boolean resetWindOnLand;
+	private boolean punch;
 	
 	//animation actions
 	private static final int IDLE = 0;
 	private static final int WALKING = 1;
-	private static final int JUMPING = 2;
-	private static final int FALLING = 3;
+	private static final int PUNCHING = 2;
 	
 
 	public Walker(double x, double y, TileMap tm, Player player) 
@@ -55,6 +57,7 @@ public class Walker extends Enemy
 		cheight = 70;
 
 		facingRight = true;
+		punch = false;
 		
 		try
 		{			
@@ -113,7 +116,7 @@ public class Walker extends Enemy
 		falling = true;
 		
 		//health
-		health = 1;
+		health = 2;
 	}
 	
 	public void update() 
@@ -205,9 +208,20 @@ public class Walker extends Enemy
 		this.setAngle(Math.atan2(-relY, -relX));
 		this.setAngle(angle + Math.random()*Math.PI/12 - Math.PI/12);
 		
-		if (player.getX() < this.getX()+ 30 && player.getX() > this.getX()-30 && player.getY() < this.getY()+100 && player.getY() > this.getY()-30)
+		//if (player.getX() < this.getX()+ 30 && player.getX() > this.getX()-30 && player.getY() < this.getY()+100 && player.getY() > this.getY()-30)
+		if(player.getRectangle().intersects(this.getRectangle()))
 		{
-			player.playerHurt(1);
+			if(currentAction != PUNCHING)
+			{
+				punch = true;
+				new Timer().schedule(new TimerTask()
+				{
+					public void run()
+					{
+						punch = false;
+					}
+				}, 1000);
+			}			 
 		}
 		
 	}
@@ -310,7 +324,7 @@ public class Walker extends Enemy
 	
 	public void getAnimation()
 	{
-		if(idle)
+		if(idle && !punch)
 		{
 			if(currentAction != IDLE)
 			{
@@ -325,7 +339,7 @@ public class Walker extends Enemy
 		{
 			if(right){ facingRight = true;	}
 			else{ facingRight = false;	}
-			if(currentAction != WALKING && currentAction != FALLING && currentAction != JUMPING && !idle)
+			if(currentAction != WALKING && currentAction != PUNCHING && !idle)
 			{
 				currentAction = WALKING;
 				animation.setFrames(entitySprites.get(WALKING));
@@ -334,35 +348,29 @@ public class Walker extends Enemy
 				height = 70;
 			}
 		}
-		/*
-		if(jump)
+		if(punch)
 		{
-			if(currentAction != JUMPING && !fallingAnim)
+			if(currentAction != PUNCHING)
 			{
-				currentAction = JUMPING;
-				animation.setFrames(entitySprites.get(JUMPING));
+				currentAction = PUNCHING;
+				animation.setFrames(entitySprites.get(PUNCHING));
 				animation.setDelay(200);
 				animation.setDone(true);
 				width = 50;
 				height = 70;
 			}
-		}
-		if(fallingAnim)
-		{
-			if(currentAction != FALLING)
+			else
 			{
-				currentAction = FALLING;
-				animation.setFrames(entitySprites.get(FALLING));
-				animation.setDelay(200);
-				width = 50;
-				height = 70;
+				if(animation.getFrame() == 3 && player.getRectangle().intersects(this.getRectangle()))
+					player.playerHurt(1);
 			}
 		}
-		*/
+		
 		if (isFlashing) animation.changeFrames(entityHurtSprites.get(currentAction));
 		else animation.changeFrames(entitySprites.get(currentAction));
 		
-		animation.update();		
+		animation.update();	
+		
 	}
 	
 	private boolean canGoRight()

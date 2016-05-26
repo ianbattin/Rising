@@ -131,7 +131,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 				totalTime = 0;
 			}
 			
-			if(!Main.window.isFocused() && gsm.getCurrentState() > GameStateManager.TRANSITION_INTROSTATE && gsm.getCurrentState() < GameStateManager.OUTROSTATE)
+			if(!Main.window.isFocused() && gsm.getCurrentState() > GameStateManager.INTROSTATE && gsm.getCurrentState() < GameStateManager.OUTROSTATE)
 			{
 				gsm.keyPressed(KeyEvent.VK_ESCAPE);
 				gsm.keyReleased(KeyEvent.VK_ESCAPE);

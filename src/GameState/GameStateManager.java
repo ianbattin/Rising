@@ -14,9 +14,9 @@ public class GameStateManager
 	public static final int MENUSTATE = 1; //Menu
 	public static final int CONTROLSTATE = 2; //Lists controls
 	public static final int CREDITSTATE = 3; //Show credits
-	public static final int TRANSITION_INTROSTATE = 4; //Planes crash/background story
+	public static final int INTROSTATE = 4; //Planes crash/background story
 	public static final int LEVEL1STATE = 5; //Actually playing
-	public static final int TRANSITION_OUTROSTATE = 6;
+	public static final int TRANSITION_INTERLUDESTATE1 = 6;
 	public static final int BOSS1STATE = 7;
 	//public static final int LEVEL2STATE = 8;
 	//public static final int BOSS2STATE = 9;
@@ -55,7 +55,7 @@ public class GameStateManager
 		gameStates.add(new CreditState(this));
 		gameStates.add(new TransitionState(this, "Intro"));
 		gameStates.add(new Level1State(this));
-		gameStates.add(new TransitionState(this, "Outro"));
+		gameStates.add(new TransitionState(this, "Interlude"));
 		gameStates.add(new Boss1State(this));
 		gameStates.add(new OutroState(this, "Outro"));
 	}
@@ -101,8 +101,8 @@ public class GameStateManager
 		else if(stateAtPos instanceof MenuState) gameStates.set(state, new MenuState(this));
 		else if(stateAtPos instanceof ControlsState) gameStates.set(state, new ControlsState(this));
 		else if(stateAtPos instanceof CreditState) gameStates.set(state, new CreditState(this));
-		else if(stateAtPos instanceof TransitionState && state == GameStateManager.TRANSITION_INTROSTATE) gameStates.set(state, new TransitionState(this, "Intro"));
-		else if(stateAtPos instanceof TransitionState && state == GameStateManager.TRANSITION_OUTROSTATE) gameStates.set(state, new TransitionState(this, "Outro"));
+		else if(stateAtPos instanceof TransitionState && state == GameStateManager.INTROSTATE) gameStates.set(state, new TransitionState(this, "Intro"));
+		else if(stateAtPos instanceof TransitionState && state == GameStateManager.TRANSITION_INTERLUDESTATE1) gameStates.set(state, new TransitionState(this, "Interlude"));
 		else if(stateAtPos instanceof Level1State) gameStates.set(state, new Level1State(this));
 		else if(stateAtPos instanceof Boss1State) gameStates.set(state, new Boss1State(this));
 		else if(stateAtPos instanceof OutroState) gameStates.set(state, new OutroState(this, "Outro"));

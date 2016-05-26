@@ -66,7 +66,7 @@ public class MenuState extends GameState
 		
 		if (super.isFadingOut)
 		{
-			super.fadeOut(4000000000.0, Color.BLACK, 3, gsm, GameStateManager.MENUSTATE, GameStateManager.TRANSITION_INTROSTATE);
+			super.fadeOut(4000000000.0, Color.BLACK, 3, gsm, GameStateManager.MENUSTATE, GameStateManager.INTROSTATE);
 			//top part of image fading
 			if (secondaryFadingAlphaLevel < 255)
 			{
@@ -137,7 +137,7 @@ public class MenuState extends GameState
 		} 
 		else if (k == GameStateManager.select)
 		{
-			gsm.setState(GameStateManager.TRANSITION_INTROSTATE);
+			gsm.setState(GameStateManager.INTROSTATE);
 			gsm.resetState(GameStateManager.MENUSTATE);
 		}
 		

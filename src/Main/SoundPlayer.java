@@ -193,7 +193,6 @@ public class SoundPlayer implements LineListener, Runnable
 	 * Animate the volume of the music over time.
 	 * 
 	 * @param end final value of the sound after the animation.
-	 * @param millis the time over which the animation takes place.
 	 */
 	public static void animVolume(final float end)
 	{

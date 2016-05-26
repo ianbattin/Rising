@@ -105,6 +105,8 @@ public class Level1State extends PlayState
 		
 		stuka = new SmallStuka(tileMap);
 		
+		music("Modero.wav");
+		
 		setBackgroundVector(0, -4);
 		setDebrisVectors(3);
 		if(!tileStart)
@@ -239,7 +241,7 @@ public class Level1State extends PlayState
 			{
 				player.setPosition(400, 900);
 				super.isFadingOut = true;
-				super.fadeOut(1000000000.0, Color.WHITE, 20, gsm, GameStateManager.LEVEL1STATE, GameStateManager.BOSS1STATE);
+				super.fadeOut(1000000000.0, Color.WHITE, 20, gsm, GameStateManager.LEVEL1STATE, GameStateManager.TRANSITION_INTERLUDESTATE1);
 			}
 		}
 		
@@ -270,7 +272,8 @@ public class Level1State extends PlayState
 		g.drawString("Score: " + player.getPoints(), centerStringX("Score: " + player.getPoints(), 0, GamePanel.WIDTH, g), 30);
 		
 		super.drawBonusScores(g);
-		super.drawCrossHair(g);
+		if(player.hasGun())
+			super.drawCrossHair(g);
 		super.drawFade(g);
 	}
 	
