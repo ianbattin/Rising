@@ -19,6 +19,7 @@ import Entities.MapObject;
 import Entities.Pickups;
 import Entities.PlaneBoss;
 import Main.GamePanel;
+import Main.SoundPlayer;
 import TileMap.Background;
 import TileMap.TileMap;
 
@@ -96,6 +97,8 @@ public class Level1State extends PlayState
 		player.setPosition(375, -100);
 		player.setTileMapMoving(true);
 		player.setCanMove(false);
+		
+		((OutroState)gsm.getState(GameStateManager.OUTROSTATE)).setLevel(GameStateManager.LEVEL1STATE);
 		
 		super.init(); //requires the player to be initiated first
 		
@@ -240,6 +243,7 @@ public class Level1State extends PlayState
 			if(player.getY() > GamePanel.HEIGHT)
 			{
 				player.setPosition(400, 900);
+				if(!super.isFadingOut) SoundPlayer.animVolume(-40.0F);
 				super.isFadingOut = true;
 				super.fadeOut(1000000000.0, Color.WHITE, 20, gsm, GameStateManager.LEVEL1STATE, GameStateManager.TRANSITION_INTERLUDESTATE1);
 			}

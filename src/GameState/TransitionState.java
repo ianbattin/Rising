@@ -67,6 +67,9 @@ public class TransitionState extends GameState {
 				//start the game music
 				music("Prelude.wav");
 				break;
+			case "Interlude":
+				music("Prelude2.wav");
+				break;
 		}
 	}
 
@@ -110,13 +113,12 @@ public class TransitionState extends GameState {
 				if (currFrame < totalFrames)
 				{
 					currFrame++;
-					bg.setNewImage("/" + path + "/frame" + currFrame + ".gif");
-					if(currFrame == totalFrames)
-						SoundPlayer.animVolume(-40.0F);
+					bg.setNewImage("/" + path + "/frame" + currFrame + ".gif");						
 				}
 				else
 				{
 					super.isFadingOut = true;
+					SoundPlayer.animVolume(-40.0F);
 				}
 			}
 			timer += GamePanel.getElapsedTime();

@@ -12,6 +12,7 @@ public class OutroState extends TransitionState
 	private final String[] retryText = {"Continue?", "", "Yes", "No"};
 	private static int outroFrame = 0;
 	private int thisAlphaLevel = 0;
+	private static int lastLevel;
 	private byte selection = 0;
 	private boolean willFadeOut = false;
 	
@@ -43,7 +44,7 @@ public class OutroState extends TransitionState
 		if(super.isFadingOut && willFadeOut)
 		{
 			if(selection == 0)
-				super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.OUTROSTATE, GameStateManager.LEVEL1STATE);
+				super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.OUTROSTATE, OutroState.lastLevel);
 			else
 				super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.OUTROSTATE, GameStateManager.MENUSTATE);
 		}
@@ -97,6 +98,11 @@ public class OutroState extends TransitionState
 		
 	}
 
+	public void setLevel(int lastLevel)
+	{
+		OutroState.lastLevel = lastLevel;
+	}
+	
 	public void keyReleased(int k) 
 	{
 		// TODO Auto-generated method stub

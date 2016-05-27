@@ -82,9 +82,9 @@ public class GameStateManager
 		return currentState;
 	}
 	
-	public GameState getState()
+	public GameState getState(int state)
 	{
-		return gameStates.get(4);
+		return gameStates.get(state);
 	}
 	
 	public void setCurrentState(int state)

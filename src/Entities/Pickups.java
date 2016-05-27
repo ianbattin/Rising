@@ -16,7 +16,7 @@ public class Pickups extends MapObject
 	private TileMap tm;
 	
 	private final float tileMapWidth;
-	
+
 	//sprites loading
 	private ArrayList<BufferedImage[]> sprites;
 	private final int[] numFrames = {
@@ -35,7 +35,9 @@ public class Pickups extends MapObject
 	private int[] pickupsToSpawn;
 	private long coolDownTime, coolDown;
 	private boolean willDrawPickup, isUnderEffect;
-	private double startingPositionOffset, tmDyPositionOffset, xShift;
+	private double startingPositionOffset, tmDyPositionOffset, xShift, initialXShift;
+	private float windX;
+	
 	
 	public Pickups(Player player, TileMap tileMap, int[] avaliablePickups, long initialDelay, long frequency)
 	{
@@ -55,6 +57,10 @@ public class Pickups extends MapObject
 		
 		cwidth = 60;
 		cheight = 80;
+		
+		windX = 0;
+		initialXShift = 0;
+		
 		try
 		{
 			//will have to be fixed to get an image from a large sprites image rather than a single image for each pickup
@@ -87,7 +93,7 @@ public class Pickups extends MapObject
 		y = -100;
 		x = 0;
 		tmDyPositionOffset = 0;
-		xShift = 0;
+		xShift = initialXShift;
 	}
 
 	//updates by checking to see if it should spawn a pickup.
@@ -116,8 +122,8 @@ public class Pickups extends MapObject
 				init();
 			}
 			x = tileMapWidth + (Math.sin((y-startingPositionOffset-tmDyPositionOffset)/100))*200;
-			xShift += tm.getDX();
-			
+			xShift += tm.getDX() + windX;
+
 			checkCollision();
 		}
 	}
@@ -160,6 +166,7 @@ public class Pickups extends MapObject
 	{			
 		if (willDrawPickup)
 		{
+			System.out.println("Pickup: " + (x+xShift));
 			g.drawImage(animation.getImage(), (int)(x+xShift), (int)y, (int)(width), (int)(height), null);
 		}
 	}
@@ -244,6 +251,16 @@ public class Pickups extends MapObject
 	public long getCoolDown()
 	{
 		return coolDown;
+	}
+	
+	public void setWind(float windX, double xShift)
+	{
+		this.windX = windX; 
+		this.initialXShift = xShift;
+		if(!willDrawPickup)
+		{
+			this.xShift = xShift;
+		}
 	}
 	
 	/**

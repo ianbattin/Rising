@@ -219,6 +219,7 @@ public class Walker extends Enemy
 					public void run()
 					{
 						punch = false;
+						System.out.println("HERE");
 					}
 				}, 1000);
 			}			 
@@ -339,7 +340,7 @@ public class Walker extends Enemy
 		{
 			if(right){ facingRight = true;	}
 			else{ facingRight = false;	}
-			if(currentAction != WALKING && currentAction != PUNCHING && !idle)
+			if(currentAction != WALKING  && !player.getRectangle().intersects(this.getRectangle()) && !idle)
 			{
 				currentAction = WALKING;
 				animation.setFrames(entitySprites.get(WALKING));
