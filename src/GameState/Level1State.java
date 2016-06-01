@@ -19,6 +19,7 @@ import Entities.MapObject;
 import Entities.Pickups;
 import Entities.PlaneBoss;
 import Main.GamePanel;
+import Main.SoundPlayer;
 import TileMap.Background;
 import TileMap.TileMap;
 
@@ -97,6 +98,8 @@ public class Level1State extends PlayState
 		player.setTileMapMoving(true);
 		player.setCanMove(false);
 		
+		((OutroState)gsm.getState(GameStateManager.OUTROSTATE)).setLevel(GameStateManager.LEVEL1STATE);
+		
 		super.init(); //requires the player to be initiated first
 		
 		pickups = new Pickups(player, tileMap, new int[]{Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST}, 7500000000L, 2500000000L);
@@ -104,6 +107,8 @@ public class Level1State extends PlayState
 		score = 0;
 		
 		stuka = new SmallStuka(tileMap);
+		
+		music("Modero.wav");
 		
 		setBackgroundVector(0, -4);
 		setDebrisVectors(3);
@@ -238,8 +243,9 @@ public class Level1State extends PlayState
 			if(player.getY() > GamePanel.HEIGHT)
 			{
 				player.setPosition(400, 900);
+				if(!super.isFadingOut) SoundPlayer.animVolume(-40.0F);
 				super.isFadingOut = true;
-				super.fadeOut(1000000000.0, Color.WHITE, 20, gsm, GameStateManager.LEVEL1STATE, GameStateManager.BOSS1STATE);
+				super.fadeOut(1000000000.0, Color.WHITE, 20, gsm, GameStateManager.LEVEL1STATE, GameStateManager.TRANSITION_INTERLUDESTATE1);
 			}
 		}
 		
@@ -270,7 +276,8 @@ public class Level1State extends PlayState
 		g.drawString("Score: " + player.getPoints(), centerStringX("Score: " + player.getPoints(), 0, GamePanel.WIDTH, g), 30);
 		
 		super.drawBonusScores(g);
-		super.drawCrossHair(g);
+		if(player.hasGun())
+			super.drawCrossHair(g);
 		super.drawFade(g);
 	}
 	

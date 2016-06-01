@@ -74,7 +74,7 @@ public class Player extends MapObject
 	private Animation birdAnimation;
 	private final int[] numFrames = { 4, 8, 3, 3, 3, 4, 7 };
 	private final int[] numShootingFrames = { 4, 4, 4, 4 };
-	private final int jumpDelay = 200;
+	//private final int jumpDelay = 200;
 	private boolean introFrames, showLastIntroFrame;
 
 	private boolean tileMapMoving;
@@ -478,6 +478,11 @@ public class Player extends MapObject
 		{
 			g.setFont(bannerFont);
 			g.setColor(Color.darkGray);
+			if(hasGun && ammoCount <= 0)
+			{
+				g.setFont(new Font("Munro", Font.BOLD, 30));
+				g.setColor(new Color(230, 120, 120));
+			}
 			g.drawImage(gunImage, null, GamePanel.WIDTH-10-gunImage.getWidth(), 10);
 			g.drawString(Integer.toString(ammoCount), GamePanel.WIDTH-gunImage.getWidth()-20 , 40);
 		}
@@ -1037,37 +1042,35 @@ public class Player extends MapObject
 	{
 		switch (effect)
 		{
-			case 0: 
+			case Pickups.GLIDEBOOST: 
 			{
 				canGlide = true;
 				jumpHeightFactor = 1.5;
 				break;
 			}
-			case 1:
+			case Pickups.HEALBOOST:
 			{
 				playerHeal(1);
 				break;
 			}
-			case 2:
+			case Pickups.AMMOBOOST:
 			{
-				dy = -60;
-				jump = true;
+				this.ammoCount += 15;
+				this.hasGun = true;
 				break;
 			}
-			case 3:
+			case Pickups.BIRDBOOST:
 			{
-				//bird
 				hasBird = true;
 				break;
 			}
-			case 4:
+			case Pickups.ARMORBOOST:
 			{
-				//armor
 				hasArmor = true;
 				armorBoostHealth = 5;
 				break;
 			}
-			case 5:
+			case Pickups.SLOWTIMEBOOST:
 			{
 				slowTime = true;
 				playState.slowTimeStart();
@@ -1487,4 +1490,6 @@ public class Player extends MapObject
 	{
 		fired = b;
 	}
+	
+	public boolean hasGun(){ return hasGun; }
 }

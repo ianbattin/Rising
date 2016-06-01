@@ -16,7 +16,7 @@ public class Pickups extends MapObject
 	private TileMap tm;
 	
 	private final float tileMapWidth;
-	
+
 	//sprites loading
 	private ArrayList<BufferedImage[]> sprites;
 	private final int[] numFrames = {
@@ -26,7 +26,7 @@ public class Pickups extends MapObject
 	//effect types
 	public static final int GLIDEBOOST = 0;
 	public static final int HEALBOOST = 1;
-	public static final int LAUNCHERBOOST = 2;
+	public static final int AMMOBOOST = 2;
 	public static final int BIRDBOOST = 3;
 	public static final int ARMORBOOST = 4;
 	public static final int SLOWTIMEBOOST = 5;
@@ -35,7 +35,9 @@ public class Pickups extends MapObject
 	private int[] pickupsToSpawn;
 	private long coolDownTime, coolDown;
 	private boolean willDrawPickup, isUnderEffect;
-	private double xLoc, yLoc, startingPositionOffset, tmDyPositionOffset, xShift;
+	private double startingPositionOffset, tmDyPositionOffset, xShift, initialXShift;
+	private float windX;
+	
 	
 	public Pickups(Player player, TileMap tileMap, int[] avaliablePickups, long initialDelay, long frequency)
 	{
@@ -52,6 +54,13 @@ public class Pickups extends MapObject
 		//set the dimensions of the pickup images
 		width = 60;
 		height = 80;
+		
+		cwidth = 60;
+		cheight = 80;
+		
+		windX = 0;
+		initialXShift = 0;
+		
 		try
 		{
 			//will have to be fixed to get an image from a large sprites image rather than a single image for each pickup
@@ -81,10 +90,10 @@ public class Pickups extends MapObject
 		//reset values
 		willDrawPickup = false;
 		isUnderEffect = false;	
-		yLoc = -100;
-		xLoc = 0;
+		y = -100;
+		x = 0;
 		tmDyPositionOffset = 0;
-		xShift = 0;
+		xShift = initialXShift;
 	}
 
 	//updates by checking to see if it should spawn a pickup.
@@ -97,12 +106,12 @@ public class Pickups extends MapObject
 		else if(willDrawPickup)
 		{				
 			animation.update();
-			if (yLoc < GamePanel.HEIGHT + 50)
+			if (y < GamePanel.HEIGHT + 50)
 			{
-				yLoc += 0.5 + ((tm.getDY() - 2)*0.25);
+				y += 0.5 + ((tm.getDY() - 2)*0.25);
 				if (tm.getDY() == 0)
 				{
-					yLoc += 0.5;
+					y += 0.5;
 				}
 				if (tm.getDY() > 2){
 					tmDyPositionOffset += ((tm.getDY() - 2)*0.25);
@@ -112,9 +121,9 @@ public class Pickups extends MapObject
 			{
 				init();
 			}
-			xLoc = tileMapWidth + (Math.sin((yLoc-startingPositionOffset-tmDyPositionOffset)/100))*200;
-			xShift += tm.getDX();
-			
+			x = tileMapWidth + (Math.sin((y-startingPositionOffset-tmDyPositionOffset)/100))*200;
+			xShift += tm.getDX() + windX;
+
 			checkCollision();
 		}
 	}
@@ -157,7 +166,8 @@ public class Pickups extends MapObject
 	{			
 		if (willDrawPickup)
 		{
-			g.drawImage(animation.getImage(), (int)(xLoc+xShift), (int)yLoc, (int)(width), (int)(height), null);
+			System.out.println("Pickup: " + (x+xShift));
+			g.drawImage(animation.getImage(), (int)(x+xShift), (int)y, (int)(width), (int)(height), null);
 		}
 	}
 	
@@ -180,7 +190,7 @@ public class Pickups extends MapObject
 			}
 			case 2:
 			{
-				animation.setFrames(sprites.get(LAUNCHERBOOST)); //switch to launcherboost
+				animation.setFrames(sprites.get(AMMOBOOST)); //switch to ammoboost
 				animation.setDelay(200);
 				break;
 			}
@@ -218,7 +228,7 @@ public class Pickups extends MapObject
 	//checks if the player collided with the pickup
 	public void checkCollision()
 	{
-		if ((player.getX()-(player.getWidth()/2)) < (xLoc+xShift+width) && (xLoc+xShift) < (player.getX()+(player.getWidth()/2)) && (player.getY()-player.getHeight()/2) < (yLoc+height) && (yLoc) < (player.getY()+player.getHeight()/2))
+		if ((player.getX()-(player.getWidth()/2)) < (x+xShift+width) && (x+xShift) < (player.getX()+(player.getWidth()/2)) && (player.getY()-player.getHeight()/2) < (y+height) && (y) < (player.getY()+player.getHeight()/2))
 		{
 			effectStart();
 			willDrawPickup = false;
@@ -241,5 +251,34 @@ public class Pickups extends MapObject
 	public long getCoolDown()
 	{
 		return coolDown;
+	}
+	
+	public void setWind(float windX, double xShift)
+	{
+		this.windX = windX; 
+		this.initialXShift = xShift;
+		if(!willDrawPickup)
+		{
+			this.xShift = xShift;
+		}
+	}
+	
+	/**
+	 * Spawns indicated pickup. Will only spawn, if there currently isn't a pickup.
+	 * @param type Integer representing the pickup type to spawn.
+	 */
+	public void spawnPickup(int type)
+	{
+		if(!willDrawPickup)
+		{
+			coolDown = coolDownTime;
+			willDrawPickup = true;
+			//set the pickup type.
+			effectType = type;
+			//get the animation of the pickup
+			getAnimation();
+			//sets starting points for the spawning of the pickups
+			startingPositionOffset = -(Math.random()*GamePanel.HEIGHTSCALED/2);
+		}
 	}
 }

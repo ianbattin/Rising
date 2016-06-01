@@ -322,6 +322,10 @@ public class Projectile extends MapObject
 					dy = -dy;
 					ricochetCount++;
 					ricochetTimer = System.nanoTime();
+					if(Math.random() > 0.5)
+						SoundPlayer.playClip("debrisbounce1.wav");
+					else
+						SoundPlayer.playClip("debrisbounce2.wav");
 				}
 				if(ricochetCount > 5) 
 				{

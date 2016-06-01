@@ -9,6 +9,7 @@ import Entities.Enemy;
 import Entities.Jetpacker;
 import Entities.Pickups;
 import Entities.PlaneBoss;
+import Entities.Player;
 import Main.GamePanel;
 import TileMap.Background;
 import TileMap.Tile;
@@ -53,14 +54,19 @@ public class Boss1State extends PlayState
 		tileMap = new TileMap("Resources/Maps/boss1.txt", "Boss 1", 0, gsm);
 		tileMap.setVector(0, 0);
 		tileMap.setY(tileMap.getY() + 225);
+		
 		player.setTileMapMoving(false);
 		player.setTileMap(tileMap);
 		player.updateTileMap(tileMap);
 		player.setPlayState(this);
+		if(player.getHealth() <= 0) { player = new Player(tileMap, this); }
+		
+		((OutroState)gsm.getState(GameStateManager.OUTROSTATE)).setLevel(GameStateManager.BOSS1STATE);
 
 		super.init(); //requires the player to be inited first
 
-		pickups = new Pickups(player, tileMap, new int[]{Pickups.HEALBOOST, Pickups.ARMORBOOST, Pickups.BIRDBOOST}, 20000000000L, 2500000000L);
+		pickups = new Pickups(player, tileMap, new int[]{Pickups.HEALBOOST, Pickups.AMMOBOOST, Pickups.BIRDBOOST}, 20000000000L, 2500000000L);
+		pickups.setWind(0.5f, -500);
 		tileStart = false;
 		try
 		{
@@ -70,6 +76,8 @@ public class Boss1State extends PlayState
 		{
 			e.printStackTrace();
 		}
+		
+		music("Modero.wav");
 
 		setBackgroundVector(0, 5.0);
 		setDebrisVectors(1);
@@ -94,7 +102,6 @@ public class Boss1State extends PlayState
 		player.setCanMove(true);
 		player.hidePlayerBanner();
 		player.doIntroFrame(false, false);
-
 	}
 
 	public void update()
@@ -230,6 +237,7 @@ public class Boss1State extends PlayState
 				case 1:
 					step = 0;
 					stage = 1;
+					pickups.spawnPickup(Pickups.AMMOBOOST);
 					break;
 				}
 			}

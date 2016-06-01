@@ -164,8 +164,8 @@ public abstract class PlayState extends GameState
 		
 		g.setColor(Color.BLACK);
 		g.setStroke(new BasicStroke(2));
-		g.drawLine(mouseX - 5, mouseY, mouseX + 5, mouseY);
-		g.drawLine(mouseX, mouseY - 5, mouseX, mouseY + 5);
+		g.drawLine(mouseX - 6, mouseY, mouseX + 6, mouseY);
+		g.drawLine(mouseX, mouseY - 6, mouseX, mouseY + 6);
 	}
 	
 	public void drawBonusScores(Graphics2D g)
