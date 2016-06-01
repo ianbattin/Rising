@@ -653,7 +653,7 @@ public class Player extends MapObject
 		}
 
 		//JUMPING AND FALLING
-		if(jump)
+		if(jump && !falling)
 		{
 			/*if(!jumping && !jumped)
 			{
