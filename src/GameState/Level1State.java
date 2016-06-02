@@ -187,7 +187,7 @@ public class Level1State extends PlayState
 			}
 			PlayState.itemsToSpawn.remove(0);
 		}
-		if(player.getPoints() > 6000 && !stukaSpawned )
+		if(player.getPoints() > 5000 && !stukaSpawned )
 		{
 			stuka.init();
 			mapObjects.add(stuka);

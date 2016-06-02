@@ -73,7 +73,7 @@ public class Player extends MapObject
 	private BufferedImage[] birdPickupSprites;
 	private Animation birdAnimation;
 	private final int[] numFrames = { 4, 8, 3, 3, 3, 4, 7 };
-	private final int[] numShootingFrames = { 4, 4, 4, 4 };
+	private final int[] numShootingFrames = { 4, 4, 4, 4, 0, 4};
 	//private final int jumpDelay = 200;
 	private boolean introFrames, showLastIntroFrame;
 
@@ -90,8 +90,9 @@ public class Player extends MapObject
 	public static final int LANDING = 4;
 	public static final int LOOKING_UP = 5;
 	public static final int DOUBLEJUMP = 6;
-	public static final int SHOOTING_WALKING = 7;
+	public static final int SHOOTING = 7;
 	public static final int SHOOTING_FALLING = 8;
+	public static final int SHOOTING_WALKING = 12;
 	public static final int SHOOTING_WALKING_BKWDS = 9;
 	public static final int SHOOTING_FALLING_BKWDS = 10;
 
@@ -777,17 +778,6 @@ public class Player extends MapObject
 		if(right) facingRight = true;
 		else if(left) facingRight = false;
 
-		if (currentAction == SHOOTING_FALLING && idle)
-		{
-			currentAction = SHOOTING_WALKING;
-			animation.changeFrames(playerSprites.get(SHOOTING_WALKING));
-		}
-		else if (currentAction == SHOOTING_WALKING && (jump || fallingAnim))
-		{
-			currentAction = SHOOTING_FALLING;
-			animation.changeFrames(playerSprites.get(SHOOTING_FALLING));
-		}
-		
 		if(!fired)
 		{		
 			if(idle)
@@ -884,7 +874,17 @@ public class Player extends MapObject
 		}
 		else
 		{
-			if ((currentAction == IDLE || currentAction == WALKING) && currentAction != SHOOTING_WALKING )
+			if ((currentAction == IDLE) && currentAction != SHOOTING)
+			{
+				currentAction = SHOOTING;
+				animation.setFrames(playerSprites.get(SHOOTING));
+				width = 77;
+				height = 70;
+				animation.setDone(true);
+				animation.setDelay(150);
+				System.out.println("SHOOTING");
+			}
+			else if ((currentAction == WALKING) && currentAction != SHOOTING_WALKING )
 			{
 				currentAction = SHOOTING_WALKING;
 				animation.setFrames(playerSprites.get(SHOOTING_WALKING));

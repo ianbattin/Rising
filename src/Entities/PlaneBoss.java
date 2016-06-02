@@ -41,8 +41,11 @@ public class PlaneBoss extends Enemy {
 	
 	private Rectangle cockpit;
 	private Rectangle bombArea;
+	private Rectangle propeller;
 	private int cockpitX;
 	private int cockpitY;
+	private int propellerX;
+	private int propellerY;
 	private int arrowLoc;
 	private int arrowAnimator;
 	private int brokenLevel;
@@ -184,6 +187,10 @@ public class PlaneBoss extends Enemy {
 		cockpitX = x + 90;
 		cockpitY = y + 10;
 		cockpit = new Rectangle(cockpitX, cockpitY, 80, 25);
+		
+		propellerX = x;
+		propellerY = y + 30;
+		propeller = new Rectangle(propellerX, propellerY, 20, 60);
 		
 		bombArea = new Rectangle((int)(this.x+cwidth/2+15), (int)(this.y+cheight-15), 53, 53);
 		bombHealth = 3;
@@ -420,6 +427,9 @@ public class PlaneBoss extends Enemy {
 			cockpitX = (int) (x + 90);
 			cockpitY = (int) (y + 10);
 			
+			propellerX = (int)x;
+			propellerY = (int)y + 20;
+			
 			if (bombAttack)
 			{
 				bombArea.x = (int)(this.x+cwidth/2+15);
@@ -431,6 +441,9 @@ public class PlaneBoss extends Enemy {
 			cockpitX = (int) (x + 140);
 			cockpitY = (int) (y + 10);
 			
+			propellerX = (int) (x + 290);
+			propellerY = (int) (y + 20);
+			
 			if (bombAttack)
 			{
 				bombArea.x = (int)(this.x+cwidth/2+15);
@@ -438,11 +451,13 @@ public class PlaneBoss extends Enemy {
 			}
 		}
 		cockpit.setLocation(cockpitX, cockpitY);
-		
-		
+		propeller.setLocation(propellerX, propellerY);
 		
 		if(cockpit.intersects(player.getRectangle()) && player.getDY() > 0 && player.getHealth() > 0)
 		{
+			if((int)(Math.random() * 2) == 1) SoundPlayer.playClip("cockpit1.wav");
+			else SoundPlayer.playClip("cockpit2.wav");
+			
 			playerHurt(10, true);
 			player.setYVector(-10.0);
 			player.resetDoubleJump();
@@ -466,6 +481,14 @@ public class PlaneBoss extends Enemy {
 		{
 			player.playerHurt(1);
 		}
+	}
+	
+	public boolean intersects(MapObject other)
+	{
+		if(propeller.intersects(other.getRectangle()))
+			return true;
+		else
+			return false;
 	}
 	
 	@Override

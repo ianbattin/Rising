@@ -3,14 +3,19 @@ package GameState;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import Entities.Walker;
 import Entities.Enemy;
+import Entities.Explosion;
 import Entities.Jetpacker;
+import Entities.MapObject;
 import Entities.Pickups;
 import Entities.PlaneBoss;
 import Entities.Player;
 import Main.GamePanel;
+import Main.SoundPlayer;
 import TileMap.Background;
 import TileMap.Tile;
 import TileMap.TileMap;
@@ -32,6 +37,8 @@ public class Boss1State extends PlayState
 	private boolean drawBossHealth;
 
 	private PlaneBoss planeBoss;
+	private ArrayList<MapObject> mapObjects;
+	private boolean ending;
 
 	public Boss1State(GameStateManager gsm)
 	{
@@ -54,7 +61,7 @@ public class Boss1State extends PlayState
 		tileMap = new TileMap("Resources/Maps/boss1.txt", "Boss 1", 0, gsm);
 		tileMap.setVector(0, 0);
 		tileMap.setY(tileMap.getY() + 225);
-		
+		mapObjects = new ArrayList<MapObject>();
 		player.setTileMapMoving(false);
 		player.setTileMap(tileMap);
 		player.updateTileMap(tileMap);
@@ -115,6 +122,18 @@ public class Boss1State extends PlayState
 			basicChecks();
 			script();
 		}
+		Iterator<MapObject> iter = mapObjects.iterator();
+		while (iter.hasNext()) 
+		{
+			MapObject m = iter.next();
+			if(m.getRemove())
+				iter.remove();
+			else
+				m.update();
+			
+			if(m.intersects(player))
+				m.collided(player);
+		}
 	}
 
 	public void draw(Graphics2D g)
@@ -125,6 +144,8 @@ public class Boss1State extends PlayState
 		pickups.draw(g);
 		for(Enemy e: enemies)
 			e.draw(g);
+		for(MapObject m: mapObjects)
+			m.draw(g);
 
 		if(drawBossHealth) drawBossHealth(g);
 
@@ -207,6 +228,7 @@ public class Boss1State extends PlayState
 		{
 			System.out.println("Stage: " + stage + "      Step: " + step +  "      Count: "+ count +"      PlaneXY: " + planeBoss.getX() + "   " + planeBoss.getY());
 			
+			if(stage >= 1) SoundPlayer.playClip("B-17engine.wav");
 			//Player falling and being saved by plane
 			if(stage == 0)
 			{
@@ -224,6 +246,7 @@ public class Boss1State extends PlayState
 							}
 							setBackgroundXVector(10.0);
 							tileMap.setYVector(-1.0);
+							SoundPlayer.playClip("B-17engine.wav");
 						}
 						else
 						{
@@ -573,6 +596,23 @@ public class Boss1State extends PlayState
 				{
 					if (!(e instanceof PlaneBoss)) e.playerHurt(500, true);
 				}
+			}
+		}
+		else
+		{
+			count = 0;
+			ending = true;
+		}
+
+		if(ending)
+		{
+			switch(count)
+			{
+			case 0:
+				mapObjects.add(new Explosion(40, GamePanel.HEIGHT - 150, 4, 0, tileMap));
+				count = 1;
+				break;
+			case 1:
 			}
 		}
 	}
