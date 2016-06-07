@@ -11,7 +11,7 @@ import TileMap.Background;
 
 public class TransitionState extends GameState {
 
-	private String path;
+	public String path;
 	
 	private long timer, coolDownTimer;
 	private int currFrame, totalFrames;
@@ -41,6 +41,10 @@ public class TransitionState extends GameState {
 			case "Outro":
 				timeModifierToUse = new int[] { 3, 3, 3, 3 };
 				totalFrames = 1;
+				break;
+			case "WinOutro":
+				timeModifierToUse = new int[] { 3, 3};
+				totalFrames = 2;
 				break;
 		}
 		
@@ -89,6 +93,9 @@ public class TransitionState extends GameState {
 					super.fadeIn(500000000.0, Color.WHITE, 5);
 					break;
 				case "Outro":
+					super.fadeIn(500000000.0, Color.BLACK, 5);
+					break;
+				case "WinOutro":
 					super.fadeIn(500000000.0, Color.BLACK, 5);
 					break;
 			}

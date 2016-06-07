@@ -94,6 +94,7 @@ public abstract class MapObject
 	protected double jumpHeight;
 	protected double stopJump;
 	protected double jumpStart;
+	protected int type;
 	
 	public MapObject(TileMap tm)
 	{
@@ -440,5 +441,9 @@ public abstract class MapObject
 	{
 		return x + xmap + width < 0 || x + xmap - width > GamePanel.WIDTH || 
 				y + ymap + height < 0 || y + ymap - height > GamePanel.HEIGHT;
+	}
+
+	public int getType() {
+		return type;
 	}
 }

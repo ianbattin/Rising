@@ -1,6 +1,7 @@
 package TileMap;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -281,5 +282,22 @@ public class TileMap
 	public GameStateManager getGSM()
 	{
 		return gsm;
+	}
+	
+	public void setTiles(int[][] changedTiles)
+	{
+		for(int i = 0; i < changedTiles.length; i++)
+		{
+			for(Tile tile: this.getTiles())
+			{
+				if(new Rectangle(changedTiles[i][0] * tileSize - tileSize, changedTiles[i][1] * tileSize - tileSize, 24, 24).intersects(tile.getRectangle()))
+				{
+					tile.setType(changedTiles[i][2]);
+					tile.init();
+				}
+			}
+			//tiles.add(new Tile(changedTiles[i][0] * tileSize + x, changedTiles[i][1] * tileSize + y, changedTiles[i][2], tileSize, this));
+			//tiles.get(tiles.size()-1).init();
+		}
 	}
 }

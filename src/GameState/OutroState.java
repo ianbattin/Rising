@@ -30,7 +30,7 @@ public class OutroState extends TransitionState
 		super.alphaLevel = 255;
 		
 		outroFrame = (outroFrame%4)+1;
-		bg.setNewImage("/Outro/frame" + outroFrame + ".gif");
+		bg.setNewImage("/" + path + "/frame" + outroFrame + ".gif");
 	}
 
 	public void update() 

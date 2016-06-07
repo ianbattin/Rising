@@ -9,6 +9,7 @@ import java.util.Iterator;
 import Entities.Walker;
 import Entities.Enemy;
 import Entities.Explosion;
+import Entities.Item;
 import Entities.Jetpacker;
 import Entities.MapObject;
 import Entities.Pickups;
@@ -132,7 +133,10 @@ public class Boss1State extends PlayState
 				m.update();
 			
 			if(m.intersects(player))
+			{
 				m.collided(player);
+				player.collided(m);
+			}
 		}
 	}
 
@@ -228,7 +232,6 @@ public class Boss1State extends PlayState
 		{
 			System.out.println("Stage: " + stage + "      Step: " + step +  "      Count: "+ count +"      PlaneXY: " + planeBoss.getX() + "   " + planeBoss.getY());
 			
-			if(stage >= 1) SoundPlayer.playClip("B-17engine.wav");
 			//Player falling and being saved by plane
 			if(stage == 0)
 			{
@@ -241,12 +244,12 @@ public class Boss1State extends PlayState
 						{
 							if(bg.getYPosition() != 0)
 							{
+								SoundPlayer.playClip("B-17engine.wav");
 								if(bg.getYPosition() <= 400) setBackgroundVector(10.0, -1);
 								else setBackgroundVector(10.0, 1);
 							}
 							setBackgroundXVector(10.0);
 							tileMap.setYVector(-1.0);
-							SoundPlayer.playClip("B-17engine.wav");
 						}
 						else
 						{
@@ -373,18 +376,18 @@ public class Boss1State extends PlayState
 				switch(step)
 				{
 				//Plane flies left to right at 1 speed and drops off 3 paratroopers
-				case 0:
+				case 1:
 					if(planeBoss.getMoveComplete() == false)
 					{
 						planeBoss.setMovement(1500, 200, 2, 0);
 					}
 					else
 					{
-						step = 1;
+						step = 2;
 						planeBoss.setMoveComplete(false);
 					}
 					break;
-				case 1:
+				case 0:
 					if(count == 0)
 					{
 						Jetpacker e = new Jetpacker(-200-(int)(Math.random()*100), -50 + (Math.random()*400), tileMap, player);
@@ -420,7 +423,7 @@ public class Boss1State extends PlayState
 					if(13000 <= elapsed)
 					{
 						planeBoss.setMoveComplete(false);
-						step = 2;
+						step = 1;
 						count = 0;
 						player.hidePlayerBanner();
 						timer = System.nanoTime();
@@ -600,20 +603,53 @@ public class Boss1State extends PlayState
 		}
 		else
 		{
-			count = 0;
-			ending = true;
+			long elapsed = System.currentTimeMillis() - timer;
+			if(10000 <= elapsed)
+			{
+				ending = true;
+				count = 0;
+				timer = System.currentTimeMillis();
+			}
 		}
-
+		
 		if(ending)
 		{
 			switch(count)
 			{
 			case 0:
-				mapObjects.add(new Explosion(40, GamePanel.HEIGHT - 150, 4, 0, tileMap));
+				player.setSlowTime(true);
 				count = 1;
 				break;
 			case 1:
+				mapObjects.add(new Explosion(170, GamePanel.HEIGHT - 120, 3, 0, tileMap));
+				tileMap.setTiles(new int[][]{
+					{6, 27, 654},
+					{7, 27, 655},
+					{8, 27, 656},
+					{6, 28, 684},
+					{7, 28, 685},
+					{8, 28, 686}
+				});
+				count = 2;
+				break;
+			case 2:
+				mapObjects.add(new Item(180, GamePanel.HEIGHT - 200, 2.0, -30.0, true, "/Sprites/Tiles/backpackSprite.png", new int[]{2}, 0, tileMap));
+				count = 3;
+				break;
+			case 3:
+				long elapsed = System.currentTimeMillis() - timer;
+				if(250+Math.random()*250 <= elapsed)
+				{
+					mapObjects.add(new Explosion(120 + Math.random()*80, GamePanel.HEIGHT - 100, 3, 0, tileMap));
+					timer = System.currentTimeMillis();
+				}
 			}
+		}
+		
+		if(player.ending)
+		{
+			super.isFadingOut = true;
+			super.fadeOut(500000000, Color.WHITE, 5, gsm, GameStateManager.BOSS1STATE, GameStateManager.WINSTATE);
 		}
 	}
 

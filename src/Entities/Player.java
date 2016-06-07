@@ -26,6 +26,8 @@ import TileMap.TileMap;
 
 public class Player extends MapObject
 {	
+	public boolean ending = false;
+	
 	//TileMap
 	private PlayState playState;
 	
@@ -72,8 +74,8 @@ public class Player extends MapObject
 	private ArrayList<BufferedImage[]> playerHurtSprites;
 	private BufferedImage[] birdPickupSprites;
 	private Animation birdAnimation;
-	private final int[] numFrames = { 4, 8, 3, 3, 3, 4, 7 };
-	private final int[] numShootingFrames = { 4, 4, 4, 4, 0, 4};
+	private final int[] numFrames = { 4, 8, 3, 3, 3, 4, 7, 4 };
+	private final int[] numShootingFrames = { 4, 4, 4, 4, 4 };
 	//private final int jumpDelay = 200;
 	private boolean introFrames, showLastIntroFrame;
 
@@ -90,8 +92,9 @@ public class Player extends MapObject
 	public static final int LANDING = 4;
 	public static final int LOOKING_UP = 5;
 	public static final int DOUBLEJUMP = 6;
-	public static final int SHOOTING = 7;
-	public static final int SHOOTING_FALLING = 8;
+	public static final int RUNNING = 7;
+	public static final int SHOOTING = 8;
+	public static final int SHOOTING_FALLING = 9;
 	public static final int SHOOTING_WALKING = 12;
 	public static final int SHOOTING_WALKING_BKWDS = 9;
 	public static final int SHOOTING_FALLING_BKWDS = 10;
@@ -295,7 +298,7 @@ public class Player extends MapObject
 	{	
 		if (health > 0)
 		{
-			if(onScreen() && (y+height < GamePanel.HEIGHT - 10)) checkPixelColorCollision(tileMap);
+			if(onScreen() && (y+height < GamePanel.HEIGHT - 10) && !ending) checkPixelColorCollision(tileMap);
 			else myCheckCollision();
 			getAttack();
 		}
@@ -1263,6 +1266,12 @@ public class Player extends MapObject
 		}
 	}
 	
+	public void setSlowTime(boolean b)
+	{
+		slowTime = b;
+		playState.slowTimeStart();
+	}
+	
 	public void keyPressed(int k)
 	{
 		if(health > 0 && canMove)
@@ -1382,7 +1391,14 @@ public class Player extends MapObject
 
 	public void collided(MapObject m) 
 	{
-
+		if(m instanceof Item)
+		{
+			if(m.getType() == 0)
+			{
+				ending = true;
+				System.out.println("WORKED");
+			}
+		}
 	}
 	
 	public boolean getRecovering()

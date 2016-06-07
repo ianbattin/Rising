@@ -23,6 +23,7 @@ public class GameStateManager
 	//public static final int LEVEL3STATE = 10;
 	//public static final int BOSS3STATE = 11;
 	public static final int OUTROSTATE = 8; //Outro state - must be greater than the last state (boss3state)
+	public static final int WINSTATE = 9;
 	
 	
 	//these are the controls. Need to be set up here so that they are accessible gamewide.
@@ -58,6 +59,7 @@ public class GameStateManager
 		gameStates.add(new TransitionState(this, "Interlude"));
 		gameStates.add(new Boss1State(this));
 		gameStates.add(new OutroState(this, "Outro"));
+		gameStates.add(new OutroState(this, "WinOutro"));
 	}
 	
 	public void setState(int state)
