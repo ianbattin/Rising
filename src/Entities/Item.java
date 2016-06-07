@@ -15,6 +15,8 @@ public class Item extends MapObject
 	private boolean physics;
 
 	private ArrayList<BufferedImage[]> entitySprites;
+
+	private boolean collided;
 	
 	public Item(double x, double y, double dx, double dy, boolean physics, String spritePath, int[] numFrames, int type, TileMap tm) 
 	{
@@ -91,7 +93,8 @@ public class Item extends MapObject
 	{
 		if(physics)
 		{
-			if(dy < maxFallSpeed) dy += fallSpeed;
+			if(collided) dy = 0.0;
+			else if(dy < maxFallSpeed) dy += fallSpeed;
 			else dy = maxFallSpeed;
 		}
 		
@@ -108,6 +111,7 @@ public class Item extends MapObject
 	public void collided(int type, Tile t) {
 		dx = 0;
 		dy = 0;
+		collided = true;
 	}
 
 	@Override

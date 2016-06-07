@@ -617,6 +617,7 @@ public class Boss1State extends PlayState
 			switch(count)
 			{
 			case 0:
+				player.setPlayerBannerText("Grab the Parachute!");
 				player.setSlowTime(true);
 				count = 1;
 				break;
