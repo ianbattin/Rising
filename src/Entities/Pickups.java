@@ -166,7 +166,6 @@ public class Pickups extends MapObject
 	{			
 		if (willDrawPickup)
 		{
-			System.out.println("Pickup: " + (x+xShift));
 			g.drawImage(animation.getImage(), (int)(x+xShift), (int)y, (int)(width), (int)(height), null);
 		}
 	}

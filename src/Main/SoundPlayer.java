@@ -2,6 +2,7 @@ package Main;
 
 import javafx.scene.media.*;
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.sound.sampled.*;
 
@@ -18,6 +19,7 @@ public class SoundPlayer implements LineListener, Runnable
 	
 	//preload the most used sounds
 	private static AudioClip shootingClip;
+	private static ArrayList<AudioClip> clips;
 	
 	//thread that handles the background playback
 	private Thread backgroundPlaybackThread;
@@ -25,6 +27,7 @@ public class SoundPlayer implements LineListener, Runnable
 	//background playback information
 	private String backgroundFileName;
 	private boolean willLoopBackgroundMusic;
+
 
 	/**
 	 * Initiates the SoundPlayer Object. 
@@ -82,6 +85,53 @@ public class SoundPlayer implements LineListener, Runnable
 			AudioClip clip = new AudioClip("file:Resources/Sound/" + fileName);
 			clip.setVolume(volume);
 			clip.play();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+
+	/**
+	 * Creates a clip that will loop for the number of times indicated. 0 creates an infinite loop.
+	 * Note that if the clip will be played once, or 
+	 * 
+	 * @param fileName String representation of the file name (located in the Resources/Sound folder)
+	 * @param times int representation of number of times to loop clip
+	 * @param identifier int representation of identifier to use. Must start with 0, and can only increment one at a time
+	 */
+	public static void playClipWithLoops(String fileName, int times, int identifier)
+	{
+		try 
+		{
+			if(clips == null)
+			{
+				clips = new ArrayList<AudioClip>();
+			}
+			
+			AudioClip clip = new AudioClip("file:Resources/Sound/" + fileName);
+			clip.setCycleCount((times == 0) ? AudioClip.INDEFINITE : times);
+			clip.play();
+			clips.add(identifier, clip);
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+	
+	/**
+	 * Stops the clip with the specified identifier. 
+	 * The identifier can be reused after stopping playback, and will not affect the others.
+	 * 
+	 * @param identifier int representation of the clip to stop looping
+	 */
+	public static void stopLoopingClip(int identifier)
+	{
+		try
+		{
+			clips.get(identifier).stop();
+			clips.set(identifier, null);
 		}
 		catch (Exception e)
 		{
@@ -147,9 +197,6 @@ public class SoundPlayer implements LineListener, Runnable
 				while((bytesRead = audioStream.read(bytesBuffer)) != -1 && IS_PLAYING)
 				{
 					SoundPlayer.AUDIO_LINE.write(bytesBuffer, 0, bytesRead);
-					
-					//System.out.println(volumeControl.getMaximum());
-					//System.out.println(volumeControl.getMinimum());
 				}
 				
 				if(!this.willLoopBackgroundMusic)

@@ -179,7 +179,7 @@ public class Projectile extends MapObject
 		this.myCheckCollision();
 		if(this.type == 1)
 		{
-			tileMap.getExplosions().add(new Explosion(x + width/2-25, y + height/2-25, 3, 0,  tileMap));
+			tileMap.getExplosions().add(new Explosion(x + width/2-25, y + height/2-25, Explosion.NORMAL_EXPLOSION_PROPGUN, 0,  tileMap));
 			this.remove = true;
 		}
         if(this.type != 7)

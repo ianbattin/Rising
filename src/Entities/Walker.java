@@ -10,6 +10,7 @@ import java.util.TimerTask;
 import javax.imageio.ImageIO;
 
 import Main.GamePanel;
+import Main.SoundPlayer;
 import TileMap.Tile;
 import TileMap.TileMap;
 
@@ -208,7 +209,6 @@ public class Walker extends Enemy
 		this.setAngle(Math.atan2(-relY, -relX));
 		this.setAngle(angle + Math.random()*Math.PI/12 - Math.PI/12);
 		
-		//if (player.getX() < this.getX()+ 30 && player.getX() > this.getX()-30 && player.getY() < this.getY()+100 && player.getY() > this.getY()-30)
 		if(player.getRectangle().intersects(this.getRectangle()))
 		{
 			if(currentAction != PUNCHING)
@@ -219,7 +219,6 @@ public class Walker extends Enemy
 					public void run()
 					{
 						punch = false;
-						System.out.println("HERE");
 					}
 				}, 1000);
 			}			 
@@ -362,8 +361,11 @@ public class Walker extends Enemy
 			}
 			else
 			{
-				if(animation.getFrame() == 3 && player.getRectangle().intersects(this.getRectangle()))
+				if(animation.getFrame() == 2 && player.getRectangle().intersects(this.getRectangle()))
+				{
+					SoundPlayer.playClip("walkerpunch.wav");
 					player.playerHurt(1);
+				}
 			}
 		}
 		

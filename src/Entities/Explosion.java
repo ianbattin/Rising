@@ -17,6 +17,13 @@ import TileMap.TileMap;
 
 public class Explosion extends MapObject
 {
+	public static final int NORMAL_EXPLOSION = 1;
+	public static final int BOMB_EXPLOSION = 2;
+	public static final int NORMAL_EXPLOSION_NO_TILE_DAMAGE = 3;
+	public static final int BOMB_EXPLOSION_BOSS_FIGHT = 4;
+	public static final int NORMAL_EXPLOSION_BIRD = 5;
+	public static final int NORMAL_EXPLOSION_PROPGUN = 6;
+	
 	private int type;
 	
 	private boolean remove;
@@ -47,27 +54,29 @@ public class Explosion extends MapObject
 		
 		switch(type)
 		{
-			case 1:
+			case Explosion.NORMAL_EXPLOSION:
 			{
 				width = 50;
 				height = 50;
 				cwidth = width*3;
 				cheight = height*3;
 				willDestroyBlocks  = true;
+				SoundPlayer.playClip("bombexplosion.wav");
 				init();
 				break;
 			}
-			case 2:
+			case Explosion.BOMB_EXPLOSION:
 			{
 				width = 50;
 				height = 50;
 				cwidth = height*4;
 				cheight = height*4;
 				willDestroyBlocks = true;
+				SoundPlayer.playClip("bombexplosion.wav");
 				init();
 				break;
 			}
-			case 3:
+			case Explosion.NORMAL_EXPLOSION_NO_TILE_DAMAGE:
 			{
 				//same as case 1, except it wont destroy tiles
 				width = 50;
@@ -75,16 +84,40 @@ public class Explosion extends MapObject
 				cwidth = width*2;
 				cheight = height*2;
 				willDestroyBlocks = false;
+				SoundPlayer.playClip("bombexplosion.wav");
 				init();
 				break;
 			}
-			case 4: //used in the boss fight to destroy a minimal amount of tiles and spawn several fires
+			case Explosion.BOMB_EXPLOSION_BOSS_FIGHT: //used in the boss fight to destroy a minimal amount of tiles and spawn several fires
 			{
 				width = 50;
 				height = 50;
 				cwidth = width*2;
 				cheight = height*1;
 				willDestroyBlocks= true;
+				SoundPlayer.playClip("bombexplosion.wav");
+				init();
+				break;
+			}
+			case Explosion.NORMAL_EXPLOSION_BIRD:
+			{
+				width = 50;
+				height = 50;
+				cwidth = width*3;
+				cheight = height*3;
+				willDestroyBlocks  = true;
+				SoundPlayer.playClip("chirp.wav");
+				init();
+				break;
+			}
+			case Explosion.NORMAL_EXPLOSION_PROPGUN:
+			{
+				width = 50;
+				height = 50;
+				cwidth = width*3;
+				cheight = height*3;
+				willDestroyBlocks  = true;
+				SoundPlayer.playClip("gunblast.wav");
 				init();
 				break;
 			}
@@ -126,12 +159,12 @@ public class Explosion extends MapObject
 		yFromBottom =  GamePanel.HEIGHTSCALED - y;
 		
 		currentAction = 0;
-		if (type == 1 || type == 3)
+		if (type == Explosion.NORMAL_EXPLOSION || type == Explosion.NORMAL_EXPLOSION_NO_TILE_DAMAGE || type == Explosion.NORMAL_EXPLOSION_BIRD || type == Explosion.NORMAL_EXPLOSION_PROPGUN)
 		{
 			animation.setFrames(sprites.get(0));
 			animation.setDelay(50);
 		} 
-		else if(type == 2 || type == 4)
+		else if(type == Explosion.BOMB_EXPLOSION || type == Explosion.BOMB_EXPLOSION_BOSS_FIGHT)
 		{
 			animation.setFrames(bombExplosionSprites.get(0));
 			animation.setDelay(75);
@@ -152,8 +185,6 @@ public class Explosion extends MapObject
 				explosionArea[i][j] = (int)(Math.random()*2);
 			}
 		}
-		
-		SoundPlayer.playClip("bombexplosion.wav");
 	}
 	
 	@Override
@@ -175,7 +206,7 @@ public class Explosion extends MapObject
 				{
 					if(this.intersects(tile))
 					{
-						if (type != 4)
+						if (type != Explosion.BOMB_EXPLOSION_BOSS_FIGHT)
 						{
 							tile.setType(0);
 						}
@@ -199,7 +230,7 @@ public class Explosion extends MapObject
 					}
 				}
 			}
-			if(this.intersects(PlayState.getPlayer()) && this.type != 3)
+			if(this.intersects(PlayState.getPlayer()) && !(this.type == Explosion.NORMAL_EXPLOSION_NO_TILE_DAMAGE || this.type == Explosion.NORMAL_EXPLOSION_BIRD || this.type == Explosion.NORMAL_EXPLOSION_PROPGUN))
 			{
 				PlayState.getPlayer().playerHurt(this.playerDamage);
 			}
@@ -213,7 +244,7 @@ public class Explosion extends MapObject
 	{
 		if(!remove)
 		{
-			if(type == 1 || type == 3)
+			if(type == Explosion.NORMAL_EXPLOSION || type == Explosion.NORMAL_EXPLOSION_NO_TILE_DAMAGE || type == Explosion.NORMAL_EXPLOSION_BIRD || type == Explosion.NORMAL_EXPLOSION_PROPGUN)
 			{
 				// Drawing the rotated image at the required drawing locations
 				g.drawImage(op.filter(animation.getImage(), null), (int)(x + xmap), (int)(y + ymap), null);
@@ -224,7 +255,7 @@ public class Explosion extends MapObject
 					g.draw(this.getRectangle());
 				}
 			}
-			else if(type == 2 || type == 4)
+			else if(type == Explosion.BOMB_EXPLOSION || type == Explosion.BOMB_EXPLOSION_BOSS_FIGHT)
 			{
 				g.drawImage(animation.getImage(), (int)x, (int)y - 10, animation.getImage().getWidth(), animation.getImage().getHeight(), null);
 				/*

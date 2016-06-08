@@ -1159,7 +1159,7 @@ public class Player extends MapObject
 			{
 				for(Enemy e: enemies)
 				{
-					if(e.getHealth() > 0 && !(e instanceof PlaneBoss))
+					if(e.getHealth() > 0 && !(e instanceof PlaneBoss) && !e.notOnScreen())
 					{
 						willDisplay = true;
 					}
@@ -1203,7 +1203,7 @@ public class Player extends MapObject
 			if(birdY+10 >= chosenEnemy.getY() && birdY-10 <= chosenEnemy.getY() && birdX+10 >= chosenEnemy.getX() && birdX-10 <= chosenEnemy.getX()) 
 			{
 				chosenEnemy.playerHurt(50, true);
-				this.explosions = new Explosion(birdX, birdY, 3, 0, tileMap);
+				this.explosions = new Explosion(birdX, birdY, Explosion.NORMAL_EXPLOSION_BIRD, 0, tileMap);
 				hasBird = false;
 				birdActive = false;
 			}
@@ -1326,14 +1326,25 @@ public class Player extends MapObject
 					ArrayList<Enemy> possibleEnemies = new ArrayList<Enemy>();
 					for(Enemy e: enemies)
 					{
-						if(e.getHealth() > 0 && !(e instanceof PlaneBoss))
+						if(e.getHealth() > 0 && !(e instanceof PlaneBoss) && !e.notOnScreen())
 						{
 							possibleEnemies.add(e);
 						}
 					}
 					if(!possibleEnemies.isEmpty())
 					{
-						this.chosenEnemy = possibleEnemies.get((int)(Math.random()*possibleEnemies.size()));
+						double dist = Double.MAX_VALUE;
+						Enemy chosen = null;
+						for(Enemy e : possibleEnemies)
+						{
+							double temp = Math.hypot(e.getX() - this.getX(), e.getY() - this.getY()); 
+							if(temp < dist)
+							{
+								dist = temp;
+								chosen = e;
+							}
+						}
+						this.chosenEnemy = chosen;
 						birdActive = true;
 					}
 				}
