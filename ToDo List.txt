@@ -1,6 +1,0 @@
-TODO:
-
--Apply the controls to the player! (Currently changing controls does not affect the actual game controls)
--CLEANUP rest of the code from Ian's code (Animation, Player, MapObject)
--Apply the center string method to the Controls arrays in a way that looks good
--Allow the user to edit the SCALEWIDTH and SCALEHEIGHT
