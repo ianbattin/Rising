@@ -83,6 +83,10 @@ public class Player extends MapObject
 	private boolean canMove;
 
 	private boolean fired;
+
+	private boolean midAir;
+
+	private long timer;
 	
 	//animation actions
 	public static final int IDLE = 0;
@@ -261,6 +265,7 @@ public class Player extends MapObject
 		introFrames = showLastIntroFrame = false;
 		
 		falling = true;
+		midAir = true;
 		canDoubleJump = false;
 		canMove = true;
 		
@@ -309,6 +314,7 @@ public class Player extends MapObject
 		}
 		getMovement();
 		getAnimation();
+		
 		
 		if(hasBird)
 		{
@@ -501,6 +507,7 @@ public class Player extends MapObject
 	
 	public void collided(int type, Tile t)
 	{
+		midAir = false;
 		if(type == 17) 
 		{
 			playerHurt(1);
@@ -662,7 +669,7 @@ public class Player extends MapObject
 		}
 
 		//JUMPING AND FALLING
-		if(jump && !falling)
+		if(jump && !midAir)
 		{
 			/*if(!jumping && !jumped)
 			{
@@ -733,6 +740,12 @@ public class Player extends MapObject
 		
 		if(falling)
 		{
+			long elapsed = (System.nanoTime() - timer) / 1000000;
+			if(100 <= elapsed)
+			{
+				midAir = true;
+				timer = System.nanoTime();
+			}
 			jump = false;
 			doubleJump = false;
 			if(dy > 0.0 && gliding)
@@ -745,7 +758,10 @@ public class Player extends MapObject
 			if(!fallingAnim && dy > 3) fallingAnim = true;
 		}
 		else
+		{
 			fallingAnim = false;
+			midAir = false;
+		}
 		
 		moveTileMapX();
 		if(tileMapMoving)
