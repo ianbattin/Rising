@@ -31,11 +31,11 @@ public class TransitionState extends GameState {
 		switch(path)
 		{
 			case "Intro":
-				timeModifierToUse = new int[] { 5, 7, 5, 6, 6, 5, 4, 5, 6 };
+				timeModifierToUse = new int[] { 5, 7, 5, 5, 7, 5, 4, 5, 6 };
 				totalFrames = 9;
 				break;
 			case "Interlude":
-				timeModifierToUse = new int[] { 1, 5, 4, 5, 5 };
+				timeModifierToUse = new int[] { 1, 5, 4, 5, 7 };
 				totalFrames = 5;
 				break;
 			case "Outro":
@@ -43,7 +43,7 @@ public class TransitionState extends GameState {
 				totalFrames = 1;
 				break;
 			case "WinOutro":
-				timeModifierToUse = new int[] { 2, 8};
+				timeModifierToUse = new int[] { 1, 8};
 				totalFrames = 2;
 				break;
 		}
