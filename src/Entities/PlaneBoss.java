@@ -227,6 +227,8 @@ public class PlaneBoss extends Enemy {
 				mapObjects.add(new Explosion(x + Math.random()*width, y + Math.random()*height, 3, 0,  tileMap));
 			}
 			
+			drawArrow = false;
+			
 			dy = Math.pow(1.01, deathAnimation)-1;
 			y += dy;
 			if (y > 1000)

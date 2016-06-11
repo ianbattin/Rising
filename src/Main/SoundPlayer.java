@@ -128,14 +128,10 @@ public class SoundPlayer implements LineListener, Runnable
 	 */
 	public static void stopLoopingClip(int identifier)
 	{
-		try
+		if(clips.get(identifier) != null)
 		{
 			clips.get(identifier).stop();
 			clips.set(identifier, null);
-		}
-		catch (Exception e)
-		{
-			System.out.println(e.toString());
 		}
 	}
 	

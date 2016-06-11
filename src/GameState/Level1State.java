@@ -325,7 +325,7 @@ public class Level1State extends PlayState
 			{
 				int xLoc = (int)((player.getX()+player.getWidth()/2));
 				int yLoc = (int)((player.getY()+player.getCHeight()+1));
-				if ((xLoc > array[0] + array[2]+2 || xLoc < array[0]-2) || (yLoc > array[1] + (int)(array[2]*2.25) + 2 || yLoc < array[1] - 2))
+				if ((xLoc > array[0] + array[2]+10 || xLoc < array[0]-10) || (yLoc > array[1] + (int)(array[2]*2.25) + 10 || yLoc < array[1] - 10))
 				{
 					g.setColor(colors.get(array[3]));
 					g.fillRect(array[0], array[1], array[2], (int)(array[2]*2.25));
@@ -361,7 +361,7 @@ public class Level1State extends PlayState
 			{
 				int xLoc = (int)((player.getX()+player.getWidth()/2));
 				int yLoc = (int)((player.getY()+player.getCHeight()+1));
-				if ((xLoc > array[0] + (int)(array[2]*0.75) + 2 || xLoc < array[0]-2) || (yLoc > array[1] + (int)(array[2]*2.25) + 2 || yLoc < array[1] - 2))
+				if ((xLoc > array[0] + (int)(array[2]*0.75) + 10 || xLoc < array[0]-10) || (yLoc > array[1] + (int)(array[2]*2.25) + 10 || yLoc < array[1] - 10))
 				{
 					g.setColor(colors.get(array[3]));
 					g.fillRect(array[0], array[1], (int)(array[2]*0.75), (int)(array[2]*2.25));

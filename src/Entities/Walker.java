@@ -361,10 +361,11 @@ public class Walker extends Enemy
 			}
 			else
 			{
-				if(animation.getFrame() == 2 && player.getRectangle().intersects(this.getRectangle()))
+				if(animation.getFrame() == 2)
 				{
 					SoundPlayer.playClip("walkerpunch.wav");
-					player.playerHurt(1);
+					if(player.getRectangle().intersects(this.getRectangle()))
+						player.playerHurt(1);
 				}
 			}
 		}

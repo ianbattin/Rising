@@ -182,9 +182,15 @@ public class Boss1State extends PlayState
 		{
 			player.setPosition(400, -350);
 			player.setTileMap(tileMap);
+			SoundPlayer.playClipWithLoops("B-17engine.wav", 0, 0);
 			setUp = true;
 		}
 
+		if(super.isFadingOut)
+		{
+			SoundPlayer.stopLoopingClip(0);
+		}
+		
 		bg.update();
 		tileMap.update();
 		pickups.update();
@@ -244,7 +250,6 @@ public class Boss1State extends PlayState
 						{
 							if(bg.getYPosition() != 0)
 							{
-								SoundPlayer.playClip("B-17engine.wav");
 								if(bg.getYPosition() <= 400) setBackgroundVector(10.0, -1);
 								else setBackgroundVector(10.0, 1);
 							}
@@ -346,6 +351,11 @@ public class Boss1State extends PlayState
 							done = false;
 							step = 2;
 							timer = System.nanoTime();
+							
+							//enable the double jumping & display the banner
+							player.setDoubleJump(true);
+							player.setPlayerBannerText("Press "+ KeyEvent.getKeyText(GameStateManager.up)+ " twice to somersault!");
+
 						}
 					}					
 					break;
@@ -362,10 +372,6 @@ public class Boss1State extends PlayState
 						step = 0;
 						stage = 2;
 						planeBoss.setMoveComplete(false);
-
-						//enable the double jumping & display the banner
-						player.setDoubleJump(true);
-						player.setPlayerBannerText("Press "+ KeyEvent.getKeyText(GameStateManager.up)+ " twice to somersault!");
 					}
 					break;
 				}
@@ -672,6 +678,7 @@ public class Boss1State extends PlayState
 
 		if(k == GameStateManager.reset)
 		{
+			SoundPlayer.stopLoopingClip(0);
 			gsm.setState(GameStateManager.MENUSTATE);
 			gsm.resetState(GameStateManager.BOSS1STATE);
 		}

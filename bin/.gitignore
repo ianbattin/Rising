@@ -1,8 +1,14 @@
+/Backgrounds/
 /Entities/
 /GameState/
+/Interlude/
+/Intro/
 /Main/
+/Maps/
+/Outro/
 /Sound/
 /Sprites/
 /Text/
 /TileMap/
 /TileMapEditor/
+/WinOutro/
