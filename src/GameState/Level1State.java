@@ -294,7 +294,7 @@ public class Level1State extends PlayState
 				}
 				else if (introTimer < 4200)
 				{
-					player.setPlayerBannerText("\"I've got to get higher.\"");
+					player.setPlayerBannerText("Use A and D to move, W to jump.");
 					player.doIntroFrame(true, false);
 				}
 				else
