@@ -40,6 +40,7 @@ public class Boss1State extends PlayState
 	private PlaneBoss planeBoss;
 	private ArrayList<MapObject> mapObjects;
 	private boolean ending;
+	private boolean endTrigger;
 
 	public Boss1State(GameStateManager gsm)
 	{
@@ -183,6 +184,7 @@ public class Boss1State extends PlayState
 			player.setPosition(400, -350);
 			player.setTileMap(tileMap);
 			SoundPlayer.playClipWithLoops("B-17engine.wav", 0, 0);
+			endTrigger = false;
 			setUp = true;
 		}
 
@@ -234,7 +236,7 @@ public class Boss1State extends PlayState
 
 	private void script()
 	{		
-		if (!enemies.isEmpty() && enemies.get(0) instanceof PlaneBoss && planeBoss != null)
+		if(!enemies.isEmpty() && enemies.get(0) instanceof PlaneBoss && planeBoss != null && !ending)
 		{
 			System.out.println("Stage: " + stage + "      Step: " + step +  "      Count: "+ count +"      PlaneXY: " + planeBoss.getX() + "   " + planeBoss.getY());
 			
@@ -313,16 +315,16 @@ public class Boss1State extends PlayState
 						{
 							if(!done)
 							{
-								timer = System.nanoTime();
+								timer = System.currentTimeMillis();
 								done = true;
 							}
-							long elapsed = (System.nanoTime() - timer) / 1000000;
+							long elapsed = (System.currentTimeMillis() - timer);
 							if(12000 <= elapsed || !planeBoss.isBombAttacking())
 							{
 								planeBoss.setMoveComplete(false);
 								done = false;
 								step = 2;
-								timer = System.nanoTime();
+								timer = System.currentTimeMillis();
 							}
 						}					
 						break;
@@ -341,16 +343,16 @@ public class Boss1State extends PlayState
 						planeBoss.setAttack(0);
 						if(!done)
 						{
-							timer = System.nanoTime();
+							timer = System.currentTimeMillis();
 							done = true;
 						}
-						long elapsed = (System.nanoTime() - timer) / 1000000;
+						long elapsed = (System.currentTimeMillis() - timer);
 						if(3000 <= elapsed)
 						{
 							planeBoss.setMoveComplete(false);
 							done = false;
 							step = 2;
-							timer = System.nanoTime();
+							timer = System.currentTimeMillis();
 							
 							//enable the double jumping & display the banner
 							player.setDoubleJump(true);
@@ -417,22 +419,16 @@ public class Boss1State extends PlayState
 						e.setWind(5, -1.2);
 						enemies.add(e);
 						count++;
-						
-						e = new Jetpacker(-1200-(int)(Math.random()*100), -100 + (Math.random()*400), tileMap, player);
-						e.setMaxSpeedX(0);
-						e.setWind(5, -1.2);
-						enemies.add(e);
-						count++;
 					}
 					
-					long elapsed = (System.nanoTime() - timer) / 1000000;
-					if(13000 <= elapsed)
+					long elapsed = (System.currentTimeMillis() - timer);
+					if(10000 <= elapsed)
 					{
 						planeBoss.setMoveComplete(false);
 						step = 1;
 						count = 0;
 						player.hidePlayerBanner();
-						timer = System.nanoTime();
+						timer = System.currentTimeMillis();
 					}
 					break;
 
@@ -447,17 +443,17 @@ public class Boss1State extends PlayState
 						{
 							count = 2;
 							planeBoss.setMoveComplete(false);
-							timer = System.nanoTime();
+							timer = System.currentTimeMillis();
 						}
 						break;
 
 					case 2:
-						elapsed = (System.nanoTime() - timer) / 1000000;
+						elapsed = (System.currentTimeMillis() - timer);
 						if(10000 <= elapsed)
 						{
 							count = 3;
 							planeBoss.setMoveComplete(false);
-							timer = System.nanoTime();
+							timer = System.currentTimeMillis();
 						}
 						else
 						{
@@ -513,12 +509,23 @@ public class Boss1State extends PlayState
 					else if(enemies.size() == 1)
 					{
 						player.hidePlayerBanner();
-						step = 1;
+						step = 4;
 						count = 0;
 					}	
 					
-					elapsed = (System.nanoTime() - timer) / 1000000;
+					elapsed = (System.currentTimeMillis() - timer);
 					if(8000 <= elapsed)
+					{
+						planeBoss.setMoveComplete(false);
+						step = 4;
+						count = 0;
+						timer = System.currentTimeMillis();
+					}
+					break;
+				case 4:
+					if(planeBoss.getMoveComplete() == false)
+						planeBoss.setMovement(1200, 200, 2, 0);
+					else
 					{
 						planeBoss.setMoveComplete(false);
 						step = 0;
@@ -528,7 +535,7 @@ public class Boss1State extends PlayState
 							stage = 3;
 							//planeBoss.setX(-1000);
 						}
-						timer = System.nanoTime();
+						timer = System.currentTimeMillis();
 					}
 					break;
 				}
@@ -538,11 +545,8 @@ public class Boss1State extends PlayState
 				switch(step)
 				{
 				case 0:
-				{
 					if(planeBoss.getMoveComplete() == false)
-					{
-						planeBoss.setMovement(1200, 200, 1, 0);
-					}
+						planeBoss.setMovement(1200, 200, 2, 0);
 					else
 					{
 						planeBoss.setMoveComplete(false);
@@ -552,7 +556,6 @@ public class Boss1State extends PlayState
 						planeBoss.setDrawArrow(true, PlaneBoss.BOMBDROP);
 					}
 					break;
-				}
 				case 1:
 					if(planeBoss.getMoveComplete() == false)
 						planeBoss.setMovement(400-planeBoss.getCWidth()/2, 200, 1, 0);
@@ -609,25 +612,47 @@ public class Boss1State extends PlayState
 		}
 		else
 		{
-			long elapsed = System.currentTimeMillis() - timer;
-			if(10000 <= elapsed)
+			for(Enemy e: enemies)
+			{
+				e.playerHurt(1000, false);
+			}
+			long elapsed2 = System.currentTimeMillis() - timer;
+			System.out.println(elapsed2 + " " + timer);
+			if(5000 <= elapsed2)
 			{
 				ending = true;
 				count = 0;
+				step = 0;
+				stage = 0;
 				timer = System.currentTimeMillis();
 			}
 		}
 		
 		if(ending)
 		{
-			switch(count)
+			System.out.println("Enging working");
+			switch(step)
 			{
 			case 0:
-				player.setPlayerBannerText("Grab the Parachute!");
-				player.setSlowTime(true);
-				count = 1;
+				long elapsed = System.currentTimeMillis() - timer;
+				if(3000 <= elapsed)
+				{
+					count++;
+					timer = System.currentTimeMillis();
+				}
+				if(count == 0)
+					player.setPlayerBannerText("Whew, that was close!");
+				else if(count == 1)
+					player.setPlayerBannerText("Now I just have to get off this plane!");
+				else
+					step = 1;
 				break;
 			case 1:
+				player.setPlayerBannerText("There's a Parachute!");
+				player.setSlowTime(true);
+				step = 2;
+				break;
+			case 2:
 				mapObjects.add(new Explosion(170, GamePanel.HEIGHT - 120, 3, 0, tileMap));
 				tileMap.setTiles(new int[][]{
 					{6, 27, 654},
@@ -637,19 +662,20 @@ public class Boss1State extends PlayState
 					{7, 28, 685},
 					{8, 28, 686}
 				});
-				count = 2;
-				break;
-			case 2:
-				mapObjects.add(new Item(180, GamePanel.HEIGHT - 200, 2.0, -30.0, true, "/Sprites/Tiles/backpackSprite.png", new int[]{2}, 0, tileMap));
-				count = 3;
+				step = 3;
 				break;
 			case 3:
-				long elapsed = System.currentTimeMillis() - timer;
+				mapObjects.add(new Item(180, GamePanel.HEIGHT - 200, 2.0, -30.0, true, "/Sprites/Tiles/backpackSprite.png", new int[]{2}, 0, tileMap));
+				step = 4;
+				break;
+			case 4:
+				elapsed = System.currentTimeMillis() - timer;
 				if(250+Math.random()*250 <= elapsed)
 				{
 					mapObjects.add(new Explosion(120 + Math.random()*80, GamePanel.HEIGHT - 100, 3, 0, tileMap));
 					timer = System.currentTimeMillis();
 				}
+				break;
 			}
 		}
 		
