@@ -3,6 +3,7 @@ package GameState;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import Main.GamePanel;
@@ -18,6 +19,8 @@ public class MenuState extends GameState
 	private int currentChoice = 0;
 	
 	private Font optionsFont;
+	private Font backupFont;
+	private Font bannerFont;
 	private int secondaryFadingAlphaLevel;
 	
 	public MenuState(GameStateManager gsm)
@@ -30,6 +33,8 @@ public class MenuState extends GameState
 		
 		secondaryFadingAlphaLevel = 0;
 		optionsFont = new Font("Munro", Font.PLAIN, 24);
+		bannerFont = new Font("Munro", Font.ITALIC, 24);
+		backupFont = new Font("Times", Font.ITALIC, 24);
 		
 		//This is going to try to set the background from a certain file path
 		//the bg takes a long time to init; and since it doesnt change we dont need to re-init it every time 
@@ -94,6 +99,40 @@ public class MenuState extends GameState
 			g.setFont(optionsFont);
 			g.drawString(options[i], GamePanel.WIDTH/4 + 30 + i*(120)-(int)(g.getFontMetrics().getStringBounds(options[i], g).getWidth())/2, GamePanel.HEIGHT/2 + 80); //uses the i variable from the for loop to correctly position options on top of eachother
 		}
+		
+		g.setColor(Color.WHITE);
+		
+		String banner = "Use "+ KeyEvent.getKeyText(GameStateManager.up) + ", " + KeyEvent.getKeyText(GameStateManager.left) + ", " + KeyEvent.getKeyText(GameStateManager.down) + " and " + KeyEvent.getKeyText(GameStateManager.right) + " to change selection.";
+		String bannerLine2 = "Use " + KeyEvent.getKeyText(GameStateManager.select) + " to select current option.";
+
+		g.setFont(bannerFont);
+		int offSet = 0;
+		double pos = g.getFontMetrics().getStringBounds(banner, g).getWidth()/2;
+		for(int j = 0; j < banner.length(); j++)
+		{
+			if(!bannerFont.canDisplay(banner.charAt(j)))
+				g.setFont(backupFont);
+			else
+				g.setFont(bannerFont);
+
+			g.drawChars(banner.toCharArray(), j, 1, (int)(GamePanel.WIDTH/2 - pos + offSet), (int)(GamePanel.HEIGHT - 100));
+			offSet += g.getFontMetrics().charWidth(banner.charAt(j));
+		}
+		
+		g.setFont(bannerFont);
+		offSet = 0;
+		pos = g.getFontMetrics().getStringBounds(bannerLine2, g).getWidth()/2;
+		for(int j = 0; j < bannerLine2.length(); j++)
+		{
+			if(!bannerFont.canDisplay(bannerLine2.charAt(j)))
+				g.setFont(backupFont);
+			else
+				g.setFont(bannerFont);
+
+			g.drawChars(bannerLine2.toCharArray(), j, 1, (int)(GamePanel.WIDTH/2 - pos + offSet), (int)(GamePanel.HEIGHT - 60));
+			offSet += g.getFontMetrics().charWidth(bannerLine2.charAt(j));
+		}
+				
 		super.drawFade(g);
 		
 		if(super.isFadingOut)

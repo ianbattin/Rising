@@ -78,6 +78,7 @@ public class Player extends MapObject
 	private final int[] numShootingFrames = { 4, 4, 4, 4, 4 };
 	//private final int jumpDelay = 200;
 	private boolean introFrames, showLastIntroFrame;
+	private Color bannerColor;
 
 	private boolean tileMapMoving;
 	private boolean canMove;
@@ -133,6 +134,7 @@ public class Player extends MapObject
 		cheight = 70;
 
 		facingRight = true;
+		bannerColor = Color.WHITE;
 		
 		try
 		{
@@ -1267,7 +1269,7 @@ public class Player extends MapObject
 		
 		if(displayMessage && banner != null)
 		{
-			g.setColor(Color.WHITE);
+			g.setColor(bannerColor);
 			int offSet = 0;
 			for(int j = 0; j < banner.length(); j++)
 			{
@@ -1508,6 +1510,11 @@ public class Player extends MapObject
 		this.displayMessage = true;
 	}
 	
+	public void setBannerColor(Color newColor)
+	{
+		this.bannerColor = newColor;
+	}
+	
 	public void resetDoubleJump()
 	{
 		jump = false;
@@ -1535,4 +1542,6 @@ public class Player extends MapObject
 	}
 	
 	public boolean hasGun(){ return hasGun; }
+	
+
 }

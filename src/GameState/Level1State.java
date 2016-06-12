@@ -290,11 +290,14 @@ public class Level1State extends PlayState
 				tileMap.setYVector(0.3);
 				if (introTimer < 2500)	
 				{
+					player.setBannerColor(Color.BLACK);
 					player.setPlayerBannerText("\"Christine!\"");
+					
 				}
 				else if (introTimer < 4200)
 				{
-					player.setPlayerBannerText("Use A and D to move, W to jump.");
+					player.setBannerColor(Color.WHITE);
+					player.setPlayerBannerText("Use "+ KeyEvent.getKeyText(GameStateManager.left) + " and " + KeyEvent.getKeyText(GameStateManager.right) + " to move, " + KeyEvent.getKeyText(GameStateManager.up) + " to jump.");
 					player.doIntroFrame(true, false);
 				}
 				else
