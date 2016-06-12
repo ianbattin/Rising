@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import Entities.Walker;
 import Entities.Enemy;
@@ -183,7 +185,14 @@ public class Boss1State extends PlayState
 		{
 			player.setPosition(400, -350);
 			player.setTileMap(tileMap);
-			SoundPlayer.playClipWithLoops("B-17engine.wav", 0, 0);
+			SoundPlayer.playClip("B-17engine.wav");
+			new Timer().schedule(new TimerTask()
+			{
+				public void run()
+				{
+					SoundPlayer.playClipWithLoops("B-17engine2.wav", 0, 0);		
+				}
+			}, 4000);
 			//endTrigger = false;
 			setUp = true;
 		}
@@ -280,7 +289,7 @@ public class Boss1State extends PlayState
 				//Plane flies left to right at 1 speed
 				case 0:
 				{
-					planeBoss.setHealth(100);
+					planeBoss.setHealth(1);
 					drawBossHealth = true;
 
 					if(planeBoss.getMoveComplete() == false)
@@ -576,7 +585,7 @@ public class Boss1State extends PlayState
 							else
 							{
 								planeBoss.setMovement(400-planeBoss.getCWidth()/2, 500, 1, 4);
-								planeBoss.setDrawArrow(true, PlaneBoss.COCKPIT);
+								//planeBoss.setDrawArrow(true, PlaneBoss.COCKPIT);
 							}
 							planeBoss.setMoveComplete(false);
 							done = false;
@@ -638,13 +647,20 @@ public class Boss1State extends PlayState
 					timer = System.currentTimeMillis();
 				}
 				if(count == 0)
-					player.setPlayerBannerText("Whew, that was close!");
+				{
+					player.setBannerColor(Color.BLACK);
+					player.setPlayerBannerText("\"Whew, that was close!\"");
+				}
 				else if(count == 1)
-					player.setPlayerBannerText("Now I just have to get off this plane!");
+				{
+					player.setBannerColor(Color.BLACK);
+					player.setPlayerBannerText("\"Now I just have to get off this plane!\"");
+				}
 				else
 					step = 1;
 				break;
 			case 1:
+				player.setBannerColor(Color.WHITE);
 				player.setPlayerBannerText("There's a Parachute! - Grab It!");
 				player.setSlowTime(true);
 				step = 2;

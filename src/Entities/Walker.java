@@ -24,7 +24,7 @@ public class Walker extends Enemy
 	private double windSpeedX;
 	private double windSpeedY;
 	private boolean resetWindOnLand;
-	private boolean punch;
+	private boolean punch, hasPunched;
 	
 	//animation actions
 	private static final int IDLE = 0;
@@ -59,6 +59,7 @@ public class Walker extends Enemy
 
 		facingRight = true;
 		punch = false;
+		hasPunched = false;
 		
 		try
 		{			
@@ -214,6 +215,7 @@ public class Walker extends Enemy
 			if(currentAction != PUNCHING)
 			{
 				punch = true;
+				hasPunched = false;
 				new Timer().schedule(new TimerTask()
 				{
 					public void run()
@@ -361,8 +363,9 @@ public class Walker extends Enemy
 			}
 			else
 			{
-				if(animation.getFrame() == 2)
+				if(animation.getFrame() == 2 && !hasPunched)
 				{
+					hasPunched = true;
 					SoundPlayer.playClip("walkerpunch.wav");
 					if(player.getRectangle().intersects(this.getRectangle()))
 						player.playerHurt(1);

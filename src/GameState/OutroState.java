@@ -28,9 +28,9 @@ public class OutroState extends TransitionState
 	{
 		super.isFadingIn = true;
 		super.alphaLevel = 255;
-		
+	
 		outroFrame = (outroFrame%4)+1;
-		bg.setNewImage("/" + path + "/frame" + outroFrame + ".gif");
+		bg.setNewImage("/" + path + "/frame" + outroFrame + ".gif");			
 	}
 
 	public void update() 

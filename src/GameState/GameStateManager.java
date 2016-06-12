@@ -59,7 +59,7 @@ public class GameStateManager
 		gameStates.add(new TransitionState(this, "Interlude"));
 		gameStates.add(new Boss1State(this));
 		gameStates.add(new OutroState(this, "Outro"));
-		gameStates.add(new OutroState(this, "WinOutro"));
+		gameStates.add(new TransitionState(this, "WinOutro"));
 	}
 	
 	public void setState(int state)
@@ -105,6 +105,7 @@ public class GameStateManager
 		else if(stateAtPos instanceof CreditState) gameStates.set(state, new CreditState(this));
 		else if(stateAtPos instanceof TransitionState && state == GameStateManager.INTROSTATE) gameStates.set(state, new TransitionState(this, "Intro"));
 		else if(stateAtPos instanceof TransitionState && state == GameStateManager.TRANSITION_INTERLUDESTATE1) gameStates.set(state, new TransitionState(this, "Interlude"));
+		else if(stateAtPos instanceof TransitionState && state == GameStateManager.WINSTATE) gameStates.set(state, new TransitionState(this, "WinOutro"));
 		else if(stateAtPos instanceof Level1State) gameStates.set(state, new Level1State(this));
 		else if(stateAtPos instanceof Boss1State) gameStates.set(state, new Boss1State(this));
 		else if(stateAtPos instanceof OutroState) gameStates.set(state, new OutroState(this, "Outro"));

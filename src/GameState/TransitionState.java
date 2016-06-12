@@ -43,7 +43,7 @@ public class TransitionState extends GameState {
 				totalFrames = 1;
 				break;
 			case "WinOutro":
-				timeModifierToUse = new int[] { 1, 8};
+				timeModifierToUse = new int[] { 1, 8 };
 				totalFrames = 2;
 				break;
 		}
@@ -74,6 +74,9 @@ public class TransitionState extends GameState {
 			case "Interlude":
 				music("Prelude2.wav");
 				break;
+			case "WinOutro":
+				SoundPlayer.animVolume(-40.0F);
+				break;
 		}
 	}
 
@@ -83,7 +86,6 @@ public class TransitionState extends GameState {
 		if(super.isFadingIn)
 		{
 			//super.fadeIn(500000000.0, Color.BLACK, 5);
-			
 			switch(path)
 			{
 				case "Intro":
@@ -109,6 +111,9 @@ public class TransitionState extends GameState {
 					break;
 				case "Interlude":
 					super.fadeOut(1000000000.0, Color.WHITE, 5, gsm, GameStateManager.TRANSITION_INTERLUDESTATE1, GameStateManager.BOSS1STATE);
+					break;
+				case "WinOutro":
+					super.fadeOut(1000000000.0, Color.BLACK, 5, gsm, GameStateManager.WINSTATE, GameStateManager.MENUSTATE);
 					break;
 			}
 		}
@@ -191,6 +196,32 @@ public class TransitionState extends GameState {
 			{
 				gsm.setState(GameStateManager.MENUSTATE);
 				gsm.resetState(GameStateManager.TRANSITION_INTERLUDESTATE1);
+			}
+		}
+		else if(this.path.equals("WinOutro"))
+		{
+			if(k == GameStateManager.select)
+			{ 
+				if(System.currentTimeMillis() - coolDownTimer < 250)
+				{
+					gsm.setState(GameStateManager.MENUSTATE);
+					gsm.resetState(GameStateManager.WINSTATE);
+				}
+				if(currFrame < totalFrames)
+				{
+					timer += timeModifierToUse[currFrame-1]*1000000000.0;
+				}
+				else
+				{
+					gsm.setState(GameStateManager.MENUSTATE);
+					gsm.resetState(GameStateManager.WINSTATE);
+				}
+				coolDownTimer = System.currentTimeMillis();
+			} 
+			if (k == GameStateManager.reset)
+			{
+				gsm.setState(GameStateManager.MENUSTATE);
+				gsm.resetState(GameStateManager.WINSTATE);
 			}
 		}
 	}
