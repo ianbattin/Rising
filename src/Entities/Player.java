@@ -76,7 +76,7 @@ public class Player extends MapObject
 	private Animation birdAnimation;
 	private final int[] numFrames = { 4, 8, 3, 3, 3, 4, 7, 4 };
 	private final int[] numShootingFrames = { 4, 4, 4, 4, 4 };
-	private final int jumpDelay = 100;
+	//private final int jumpDelay = 200;
 	private boolean introFrames, showLastIntroFrame;
 	private Color bannerColor;
 
@@ -700,23 +700,15 @@ public class Player extends MapObject
 					falling = true;
 				}
 			}*/
-			if(!jumped && !jumping)
+			if(!jumped)
 			{
-				jumping = true;
-				new Timer().schedule(new TimerTask()
-				{
-					public void run()
-					{	
-						y-=5;
-						falling = false;
-						jumpHeight = yFromBottom + (100*jumpHeightFactor);
-						//System.out.println(jumpHeight);
-						if(!jumped) SoundPlayer.playClip("jump.wav");
-						jumped = true;
-						jumping = false;
-					}
-					
-				}, jumpDelay);
+				y-=5;
+				falling = false;
+				jumpHeight = yFromBottom + (100*jumpHeightFactor);
+				//System.out.println(jumpHeight);
+				if(!jumped) SoundPlayer.playClip("jump.wav");
+				jumped = true;
+				//jumping = false;
 			}
 			if(jumped)
 			{
