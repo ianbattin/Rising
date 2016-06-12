@@ -236,7 +236,7 @@ public class Level1State extends PlayState
 				}
 				else if(enemies.size() == 1 && enemies.get(0) instanceof PlaneBoss && ((PlaneBoss)enemies.get(0)).getMoveComplete() == false)
 				{
-					((PlaneBoss)enemies.get(0)).setMovement(300, 100, 0.4, 1);
+					((PlaneBoss)enemies.get(0)).setMovement(300, 100, 0.4, 0);
 				}
 			}
 			

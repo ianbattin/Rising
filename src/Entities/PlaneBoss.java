@@ -506,6 +506,43 @@ public class PlaneBoss extends Enemy {
 				drawArrow = false;
 			}
 		}
+		//Lots of exploding bullets - no damage
+		if(typeAttack == 0)
+		{
+			attacking = true;
+			for(Tile t: tileMap.getTiles())
+			{
+				if(t.onScreen() == true && t.getType() != 0)
+				{
+					relX = (int) (x + width/2 - t.getX());
+					relY = (int) (y + height - t.getY());
+					angle = Math.atan2(-relY, -relX);
+
+					if(relX < 1000)
+					{
+						firing = true;
+					}
+					else
+						firing = false;
+
+					if(firing && !super.notOnScreen())
+					{
+						long elapsed= (System.nanoTime() - fireTimer) / 1000000;
+						if(fireDelay*5 <= elapsed*(0.5*Enemy.slowDown))
+						{					
+							if(t.getBulletCollision() == false || t.getY() > GamePanel.HEIGHT) t.setType(0);
+							bullets.add(new Projectile(x + width/2, y+height, angle, 8, tileMap));
+							fireTimer = System.nanoTime();
+						}
+					}
+				}
+				else if(t.onScreen() == false)
+				{
+					t.setType(0);
+				}
+			}
+			attacking = false;
+		}
 		//Lots of exploding bullets
 		if(typeAttack == 1)
 		{

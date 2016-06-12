@@ -903,7 +903,6 @@ public class Player extends MapObject
 				height = 70;
 				animation.setDone(true);
 				animation.setDelay(150);
-				System.out.println("SHOOTING");
 			}
 			else if ((currentAction == WALKING) && currentAction != SHOOTING_WALKING )
 			{
@@ -913,7 +912,6 @@ public class Player extends MapObject
 				height = 70;
 				animation.setDone(true);
 				animation.setDelay(150);
-				System.out.println("SHOOTING WALKING");
 			}
 			else if ((currentAction == FALLING || currentAction == JUMPING) && currentAction != SHOOTING_FALLING )
 			{
@@ -1427,7 +1425,6 @@ public class Player extends MapObject
 			if(m.getType() == 0)
 			{
 				ending = true;
-				System.out.println("WORKED");
 			}
 		}
 	}

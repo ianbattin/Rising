@@ -103,7 +103,18 @@ public class Projectile extends MapObject
 				SoundPlayer.playShootingClip();
 				break;
 			}
-			//Small explosion
+			//Small explosion - No Damage
+			case 8:
+			{
+				moveSpeed = 19.0;
+				width = 5;
+				height = 5;
+				damage = 0;
+				playerCollide = false;
+				SoundPlayer.playShootingClip();
+				break;
+			}
+			//Small explosion - Damage
 			case 5:
 			{
 				moveSpeed = 19.0;
@@ -308,6 +319,11 @@ public class Projectile extends MapObject
 			{
 				remove = true;
 				tileMap.getExplosions().add(new Explosion(x, y, 1, 1, tileMap));
+			}
+			else if (this.type == 8)
+			{
+				remove = true;
+				tileMap.getExplosions().add(new Explosion(x, y, 1, 0, tileMap));
 			}
 			else if(this.type == 6)
 			{
