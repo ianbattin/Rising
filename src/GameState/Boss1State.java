@@ -108,7 +108,7 @@ public class Boss1State extends PlayState
 		}
 
 		//reset player from potential overlap
-		player.setCanMove(true);
+		player.setCanMove(false);
 		player.hidePlayerBanner();
 		player.doIntroFrame(false, false);
 	}
@@ -238,8 +238,6 @@ public class Boss1State extends PlayState
 	{		
 		if(!enemies.isEmpty() && enemies.get(0) instanceof PlaneBoss && planeBoss != null && !ending)
 		{
-			System.out.println("Stage: " + stage + "      Step: " + step +  "      Count: "+ count +"      PlaneXY: " + planeBoss.getX() + "   " + planeBoss.getY());
-			
 			//Player falling and being saved by plane
 			if(stage == 0)
 			{
@@ -340,6 +338,7 @@ public class Boss1State extends PlayState
 					}
 					else
 					{
+						player.setCanMove(true);
 						planeBoss.setAttack(0);
 						if(!done)
 						{
@@ -617,7 +616,6 @@ public class Boss1State extends PlayState
 				e.playerHurt(1000, false);
 			}
 			long elapsed2 = System.currentTimeMillis() - timer;
-			System.out.println(elapsed2 + " " + timer);
 			if(5000 <= elapsed2)
 			{
 				ending = true;
@@ -630,7 +628,6 @@ public class Boss1State extends PlayState
 		
 		if(ending)
 		{
-			System.out.println("Enging working");
 			switch(step)
 			{
 			case 0:
@@ -648,7 +645,7 @@ public class Boss1State extends PlayState
 					step = 1;
 				break;
 			case 1:
-				player.setPlayerBannerText("There's a Parachute!");
+				player.setPlayerBannerText("There's a Parachute! - Grab It!");
 				player.setSlowTime(true);
 				step = 2;
 				break;

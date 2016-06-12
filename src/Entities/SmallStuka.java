@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import Main.GamePanel;
 import Main.SoundPlayer;
 import TileMap.Tile;
 import TileMap.TileMap;
@@ -17,6 +18,7 @@ public class SmallStuka extends MapObject
 	//animation
 	private ArrayList<BufferedImage[]> stukaSprites;
 	private final int[] numFrames = { 2 };
+	private long timer;
 	
 	public SmallStuka(TileMap tm) 
 	{
@@ -81,6 +83,7 @@ public class SmallStuka extends MapObject
 		currentAction = 0;
 		animation.setFrames(stukaSprites.get(0));
 		animation.setDelay(1500);
+		timer = System.currentTimeMillis();
 	}
 
 	//Do anything before starting to show the stuka on the screen
@@ -137,7 +140,12 @@ public class SmallStuka extends MapObject
 		facingRight = false;
 		
 		dx = maxSpeedX;
-		dy = -1.5;
+		if(x >= GamePanel.WIDTH/2)
+		{
+			dy = 5.0;
+		}
+		else
+			dy = -1.5;
 		
 		x += dx;
 		y += dy;

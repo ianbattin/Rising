@@ -40,7 +40,13 @@ public class Background
 						pixelColors.add(color);
 				}
 			}
-			addCustomColors();
+			addCustomColors(new int[] {
+				(new Color(66, 76, 81).getRGB()),
+				(new Color(26, 40, 50).getRGB()),
+				(new Color(50, 64, 75).getRGB()),
+				(new Color(67, 82, 93).getRGB()),
+				(new Color(58, 83, 99).getRGB())
+			});
 			
 			moveScale = ms;
 		}
@@ -50,13 +56,10 @@ public class Background
 		}
 	}
 	
-	public void addCustomColors()
+	public void addCustomColors(int[] colors)
 	{
-		pixelColors.add(new Color(66, 76, 81).getRGB());
-		pixelColors.add(new Color(26, 40, 50).getRGB());
-		pixelColors.add(new Color(50, 64, 75).getRGB());
-		pixelColors.add(new Color(67, 82, 93).getRGB());
-		pixelColors.add(new Color(58, 83, 99).getRGB());
+		for(int i = 0; i < colors.length; i++)
+			pixelColors.add(colors[i]);
 	}
 	
 	public void setPosition(double x, double y)

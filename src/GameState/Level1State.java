@@ -102,7 +102,7 @@ public class Level1State extends PlayState
 		
 		super.init(); //requires the player to be initiated first
 		
-		pickups = new Pickups(player, tileMap, new int[]{Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST}, 7500000000L, 2500000000L);
+		pickups = new Pickups(player, tileMap, new int[]{Pickups.BIRDBOOST, Pickups.HEALBOOST, Pickups.GLIDEBOOST, Pickups.ARMORBOOST}, 7500000000L, 2500000000L);
 		tileStart = false;
 		score = 0;
 		
@@ -187,13 +187,13 @@ public class Level1State extends PlayState
 			}
 			PlayState.itemsToSpawn.remove(0);
 		}
-		if(player.getPoints() > 5000 && !stukaSpawned )
+		if(tileMap.getYMove() > 5000 && !stukaSpawned )
 		{
 			stuka.init();
 			mapObjects.add(stuka);
 			stukaSpawned = true;
 		}
-		else if(player.getPoints() > 7000)
+		else if(tileMap.getYMove() > 6000)
 			mapObjects.remove(stuka);
 			
 		if(player.getPlayerHealth() < 1 && timer > 1500000000.0)
@@ -232,6 +232,7 @@ public class Level1State extends PlayState
 					p.setX(1000);
 					p.setY(100);
 					enemies.add(p);
+					player.setPlayerBannerText("Look out! - Stuka!!");
 				}
 				else if(enemies.size() == 1 && enemies.get(0) instanceof PlaneBoss && ((PlaneBoss)enemies.get(0)).getMoveComplete() == false)
 				{

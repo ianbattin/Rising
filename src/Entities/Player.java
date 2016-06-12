@@ -743,7 +743,7 @@ public class Player extends MapObject
 		if(falling)
 		{
 			long elapsed = (System.nanoTime() - timer) / 1000000;
-			if(100 <= elapsed)
+			if(200 <= elapsed)
 			{
 				midAir = true;
 				timer = System.nanoTime();
@@ -1129,6 +1129,8 @@ public class Player extends MapObject
 
 				RescaleOp rop = new RescaleOp(scales, offsets, null);
 				BufferedImage fadIm = rop.filter(animation.getImage(), null);
+				
+				playState.getBackground().addCustomColors(fadIm.getRGB(0, 0, fadIm.getWidth(), fadIm.getHeight(), null, 0, fadIm.getWidth()));
 				
 				for(int i = 0; i < charBlurPos.size(); i+=2)
 				{
