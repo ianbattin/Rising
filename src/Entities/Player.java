@@ -835,14 +835,29 @@ public class Player extends MapObject
 			
 			if(left || right)
 			{
-				if(currentAction != WALKING  && !fallingAnim && currentAction != JUMPING && currentAction != DOUBLEJUMP)
+				if(!ending)
 				{
-					currentAction = WALKING;
-					animation.setFrames(playerSprites.get(WALKING));
-					width = 50;
-					height = 70;
-					animation.setDone(false);
-					animation.setDelay(150);
+					if(currentAction != WALKING  && !fallingAnim && currentAction != JUMPING && currentAction != DOUBLEJUMP)
+					{
+						currentAction = WALKING;
+						animation.setFrames(playerSprites.get(WALKING));
+						width = 50;
+						height = 70;
+						animation.setDone(false);
+						animation.setDelay(150);
+					}
+				}
+				else
+				{
+					if(currentAction != RUNNING  && !fallingAnim && currentAction != JUMPING && currentAction != DOUBLEJUMP)
+					{
+						currentAction = RUNNING;
+						animation.setFrames(playerSprites.get(RUNNING));
+						width = 50;
+						height = 70;
+						animation.setDone(false);
+						animation.setDelay(150);
+					}
 				}
 			}
 			if(jump)

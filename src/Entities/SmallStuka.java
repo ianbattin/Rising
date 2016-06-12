@@ -145,7 +145,7 @@ public class SmallStuka extends MapObject
 			dy = 5.0;
 		}
 		else
-			dy = -1.5;
+			dy = 1.0;
 		
 		x += dx;
 		y += dy;

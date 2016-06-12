@@ -193,7 +193,7 @@ public class Level1State extends PlayState
 			mapObjects.add(stuka);
 			stukaSpawned = true;
 		}
-		else if(tileMap.getYMove() > 6000)
+		else if(tileMap.getYMove() > 5500)
 			mapObjects.remove(stuka);
 			
 		if(player.getPlayerHealth() < 1 && timer > 1500000000.0)
