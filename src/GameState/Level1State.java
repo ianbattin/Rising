@@ -232,7 +232,6 @@ public class Level1State extends PlayState
 					p.setX(1000);
 					p.setY(100);
 					enemies.add(p);
-					player.setPlayerBannerText("Look out! - Stuka!!");
 				}
 				else if(enemies.size() == 1 && enemies.get(0) instanceof PlaneBoss && ((PlaneBoss)enemies.get(0)).getMoveComplete() == false)
 				{
