@@ -40,7 +40,7 @@ public class Boss1State extends PlayState
 	private PlaneBoss planeBoss;
 	private ArrayList<MapObject> mapObjects;
 	private boolean ending;
-	private boolean endTrigger;
+	//private boolean endTrigger;
 
 	public Boss1State(GameStateManager gsm)
 	{
@@ -60,7 +60,7 @@ public class Boss1State extends PlayState
 
 	public void init() 
 	{
-		tileMap = new TileMap("Resources/Maps/boss1.txt", "Boss 1", 0, gsm);
+		tileMap = new TileMap("boss1.txt", "Boss 1", 0, gsm);
 		tileMap.setVector(0, 0);
 		tileMap.setY(tileMap.getY() + 225);
 		mapObjects = new ArrayList<MapObject>();
@@ -184,7 +184,7 @@ public class Boss1State extends PlayState
 			player.setPosition(400, -350);
 			player.setTileMap(tileMap);
 			SoundPlayer.playClipWithLoops("B-17engine.wav", 0, 0);
-			endTrigger = false;
+			//endTrigger = false;
 			setUp = true;
 		}
 

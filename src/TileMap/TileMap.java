@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -62,7 +63,8 @@ public class TileMap
 			path = "/Sprites/Tiles/FullTileSet.png";
 			spritesheet = ImageIO.read(getClass().getResourceAsStream(path));
 			
-			BufferedReader br = new BufferedReader(new FileReader(s));
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/Maps/" + s)));
 			tileSize = Integer.parseInt(br.readLine());
 			width = Integer.parseInt(br.readLine()); //reads line 1 of the file for the width
 			height = Integer.parseInt(br.readLine()); //reads line 2 of the files for the height

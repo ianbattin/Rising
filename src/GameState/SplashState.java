@@ -21,7 +21,7 @@ public class SplashState extends GameState
 		elapsedTime = 0;
 		try
 		{
-			bg = new Background("/Backgrounds/splashscreen.jpg", 1);
+			bg = new Background("/Backgrounds/splashscreen.JPG", 1);
 		}
 		catch(Exception e)
 		{

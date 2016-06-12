@@ -47,7 +47,7 @@ public abstract class GameState
 	{
 		try
 		{
-			InputStream myStream = new BufferedInputStream(new FileInputStream("Resources/Text/Fonts/Munro.ttf"));
+			InputStream myStream = getClass().getResourceAsStream("/Text/Fonts/Munro.ttf");
 		    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		    ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, myStream));
 		} 

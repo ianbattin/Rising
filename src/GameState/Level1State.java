@@ -91,7 +91,7 @@ public class Level1State extends PlayState
 
 	public void init() 
 	{	
-		tileMap = new TileMap("Resources/Maps/level1final.txt", "Level 1", 2, gsm);
+		tileMap = new TileMap("level1final.txt", "Level 1", 2, gsm);
 		tileMap.setY(-300);
 		player = new Player(tileMap, this);
 		player.setPosition(375, -100);

@@ -49,7 +49,7 @@ public class MenuState extends GameState
 
 	public void init() 
 	{
-		music("La Foule.wav");
+		music("LaFoule.wav");
 	}
 
 	//Only thing being updated is the background for movement

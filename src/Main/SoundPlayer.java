@@ -1,7 +1,9 @@
 package Main;
 
 import javafx.scene.media.*;
-import java.io.File;
+
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import javax.sound.sampled.*;
@@ -44,7 +46,7 @@ public class SoundPlayer implements LineListener, Runnable
 		{
 			try
 			{
-				shootingClip = new AudioClip("file:Resources/Sound/shoot.wav");
+				shootingClip = new AudioClip(SoundPlayer.class.getResource("/Sound/shoot.wav").toExternalForm());
 			}
 			catch (Exception e)
 			{
@@ -63,7 +65,7 @@ public class SoundPlayer implements LineListener, Runnable
 	{
 		try
 		{
-			new AudioClip("file:Resources/Sound/" + fileName).play();
+			new AudioClip(SoundPlayer.class.getResource("/Sound/" + fileName).toExternalForm()).play();
 		}
 		catch (Exception e)
 		{
@@ -82,7 +84,8 @@ public class SoundPlayer implements LineListener, Runnable
 	{
 		try
 		{
-			AudioClip clip = new AudioClip("file:Resources/Sound/" + fileName);
+			
+			AudioClip clip = new AudioClip(SoundPlayer.class.getResource("/Sound/" + fileName).toExternalForm());
 			clip.setVolume(volume);
 			clip.play();
 		}
@@ -109,7 +112,7 @@ public class SoundPlayer implements LineListener, Runnable
 				clips = new ArrayList<AudioClip>();
 			}
 			
-			AudioClip clip = new AudioClip("file:Resources/Sound/" + fileName);
+			AudioClip clip = new AudioClip(SoundPlayer.class.getResource("/Sound/" + fileName).toExternalForm());
 			clip.setCycleCount((times == 0) ? AudioClip.INDEFINITE : times);
 			clip.play();
 			clips.add(identifier, clip);
@@ -144,7 +147,7 @@ public class SoundPlayer implements LineListener, Runnable
 	 */
 	public void startBackgroundMusic(String fileName, boolean willLoop)
 	{
-		this.backgroundFileName = "Resources/Sound/" + fileName;
+		this.backgroundFileName = "/Sound/" + fileName;
 		this.willLoopBackgroundMusic = willLoop;
 
 		if(IS_PLAYING)
@@ -176,7 +179,7 @@ public class SoundPlayer implements LineListener, Runnable
 		IS_PLAYING = true;
 		try
 		{
-			File mediaFile = new File(this.backgroundFileName);
+			InputStream mediaFile = new BufferedInputStream(SoundPlayer.class.getResourceAsStream(backgroundFileName));
 			while(IS_PLAYING)
 			{
 				AudioInputStream audioStream = AudioSystem.getAudioInputStream(mediaFile);
