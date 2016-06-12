@@ -507,7 +507,7 @@ public class PlaneBoss extends Enemy {
 			}
 		}
 		//Lots of exploding bullets - no damage
-		if(typeAttack == 0)
+		if(typeAttack == 5)
 		{
 			attacking = true;
 			for(Tile t: tileMap.getTiles())
