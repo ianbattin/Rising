@@ -13,6 +13,7 @@ public class CreditState extends GameState
 	private GameStateManager gsm;
 	private Background bgUpperHalf, bgLowerHalf;
 	private Color titleColor;
+	private final Color rectColor = new Color(0,0,0,220);
 	private Font titleFont, optionsFont, subTextFont;
 	private String[] creditsNames = {"GAME DESIGN & ART:", "Taage Storey", "", "PROGRAMMING:", 
 			"Ian Battin", "Maxence Weyrich", "", "Special Thanks to Rhea Bae, Rain MacDougall and Catherine Deeter", "", "InVox does not own copyright for \"Modero.\""};
@@ -46,7 +47,7 @@ public class CreditState extends GameState
 	public void draw(Graphics2D g) 
 	{
 		bgLowerHalf.draw(g);
-		g.setColor(new Color(0,0,0,220));
+		g.setColor(rectColor);
 		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 		bgUpperHalf.draw(g);
 		

@@ -15,6 +15,7 @@ public class ControlsState extends GameState {
 	private GameStateManager gsm;
 
 	private Color titleColor;
+	private final Color rectColor = new Color(0,0,0,220);
 	private Font titleFont, optionsFont, subTextFont, backupFont;
 	
 	private int selection;
@@ -66,7 +67,7 @@ public class ControlsState extends GameState {
 	public void draw(Graphics2D g) 
 	{
 		bgLowerHalf.draw(g);
-		g.setColor(new Color(0,0,0,220));
+		g.setColor(rectColor);
 		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 		bgUpperHalf.draw(g); //draw the background
 

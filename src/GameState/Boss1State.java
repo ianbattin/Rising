@@ -77,7 +77,7 @@ public class Boss1State extends PlayState
 		super.init(); //requires the player to be inited first
 
 		pickups = new Pickups(player, tileMap, new int[]{Pickups.HEALBOOST, Pickups.AMMOBOOST, Pickups.BIRDBOOST}, 20000000000L, 2500000000L);
-		pickups.setWind(0.5f, -500);
+		pickups.setWind(0.5f, -150, false);
 		tileStart = false;
 		try
 		{
@@ -278,6 +278,7 @@ public class Boss1State extends PlayState
 					step = 0;
 					stage = 1;
 					pickups.spawnPickup(Pickups.AMMOBOOST);
+					player.setCanMove(true);
 					break;
 				}
 			}
@@ -347,7 +348,6 @@ public class Boss1State extends PlayState
 					}
 					else
 					{
-						player.setCanMove(true);
 						planeBoss.setAttack(0);
 						if(!done)
 						{

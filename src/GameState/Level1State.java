@@ -416,7 +416,11 @@ public class Level1State extends PlayState
 		player.keyPressed(k);
 		if(k == GameStateManager.select)
 		{
-			start = true;
+			if(!start)
+			{	
+				start = true;
+				player.getAnimation();
+			}
 			/*if(!start)
 			{
 				start = true;

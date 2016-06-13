@@ -37,6 +37,7 @@ public class Pickups extends MapObject
 	private boolean willDrawPickup, isUnderEffect;
 	private double startingPositionOffset, tmDyPositionOffset, xShift, initialXShift;
 	private float windX;
+	private boolean willWeave;
 	
 	
 	public Pickups(Player player, TileMap tileMap, int[] avaliablePickups, long initialDelay, long frequency)
@@ -82,6 +83,7 @@ public class Pickups extends MapObject
 		}
 		animation = new Animation();
 		
+		willWeave = true;
 		init();
 	}
 	
@@ -121,7 +123,8 @@ public class Pickups extends MapObject
 			{
 				init();
 			}
-			x = tileMapWidth + (Math.sin((y-startingPositionOffset-tmDyPositionOffset)/100))*200;
+			if(willWeave)
+				x = tileMapWidth + (Math.sin((y-startingPositionOffset-tmDyPositionOffset)/100))*200;
 			xShift += tm.getDX() + windX;
 
 			checkCollision();
@@ -252,7 +255,7 @@ public class Pickups extends MapObject
 		return coolDown;
 	}
 	
-	public void setWind(float windX, double xShift)
+	public void setWind(float windX, double xShift, boolean willWeave)
 	{
 		this.windX = windX; 
 		this.initialXShift = xShift;
@@ -260,6 +263,7 @@ public class Pickups extends MapObject
 		{
 			this.xShift = xShift;
 		}
+		this.willWeave = willWeave;
 	}
 	
 	/**

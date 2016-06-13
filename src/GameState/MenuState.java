@@ -36,8 +36,8 @@ public class MenuState extends GameState
 		bottomFadeOut = false;		
 		secondaryFadingAlphaLevel = 0;
 		optionsFont = new Font("Munro", Font.PLAIN, 24);
-		bannerFont = new Font("Munro", Font.BOLD, 18);
-		backupFont = new Font("Times", Font.BOLD, 18);
+		bannerFont = new Font("Munro", Font.PLAIN, 20);
+		backupFont = new Font("Times", Font.PLAIN, 20);
 		
 		//This is going to try to set the background from a certain file path
 		//the bg takes a long time to init; and since it doesnt change we dont need to re-init it every time 
@@ -127,7 +127,7 @@ public class MenuState extends GameState
 		
 		g.setColor(Color.BLACK);
 		
-		String banner = "Use "+ KeyEvent.getKeyText(GameStateManager.up) + ", " + KeyEvent.getKeyText(GameStateManager.left) + ", " + KeyEvent.getKeyText(GameStateManager.down) + " and " + KeyEvent.getKeyText(GameStateManager.right) + " to change selection; "+ KeyEvent.getKeyText(GameStateManager.select) + " to select.";
+		String banner = "Use "+ KeyEvent.getKeyText(GameStateManager.left) + " and " + KeyEvent.getKeyText(GameStateManager.right) + " or " + KeyEvent.getKeyText(GameStateManager.up) + " and " + KeyEvent.getKeyText(GameStateManager.down) + " to change selection; "+ KeyEvent.getKeyText(GameStateManager.select) + " to confirm.";
 
 		g.setFont(bannerFont);
 		int offSet = 0;
