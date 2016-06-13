@@ -289,7 +289,7 @@ public class Boss1State extends PlayState
 				//Plane flies left to right at 1 speed
 				case 0:
 				{
-					planeBoss.setHealth(1);
+					planeBoss.setHealth(100);
 					drawBossHealth = true;
 
 					if(planeBoss.getMoveComplete() == false)

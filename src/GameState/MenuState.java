@@ -23,6 +23,8 @@ public class MenuState extends GameState
 	private Font bannerFont;
 	private int secondaryFadingAlphaLevel;
 	
+	private boolean bottomFadeOut;
+	
 	public MenuState(GameStateManager gsm)
 	{
 		super();
@@ -31,10 +33,11 @@ public class MenuState extends GameState
 		super.isFadingOut = false;
 		super.alphaLevel = 0;
 		
+		bottomFadeOut = false;		
 		secondaryFadingAlphaLevel = 0;
 		optionsFont = new Font("Munro", Font.PLAIN, 24);
-		bannerFont = new Font("Munro", Font.ITALIC, 24);
-		backupFont = new Font("Times", Font.ITALIC, 24);
+		bannerFont = new Font("Munro", Font.BOLD, 18);
+		backupFont = new Font("Times", Font.BOLD, 18);
 		
 		//This is going to try to set the background from a certain file path
 		//the bg takes a long time to init; and since it doesnt change we dont need to re-init it every time 
@@ -78,6 +81,28 @@ public class MenuState extends GameState
 				secondaryFadingAlphaLevel += 1;
 			}
 		}
+		
+		if(bottomFadeOut)
+		{
+			if (secondaryFadingAlphaLevel+5 <= 220)
+			{
+				secondaryFadingAlphaLevel += 5;
+			}
+			else
+			{
+				if(currentChoice == 1)
+				{
+					gsm.setState(GameStateManager.CONTROLSTATE);
+				}
+				else if(currentChoice == 2)
+				{
+					gsm.setState(GameStateManager.CREDITSTATE);
+				}
+				secondaryFadingAlphaLevel = 0;
+				bottomFadeOut = false;
+			}
+		}
+		
 	}
 
 
@@ -100,10 +125,9 @@ public class MenuState extends GameState
 			g.drawString(options[i], GamePanel.WIDTH/4 + 30 + i*(120)-(int)(g.getFontMetrics().getStringBounds(options[i], g).getWidth())/2, GamePanel.HEIGHT/2 + 80); //uses the i variable from the for loop to correctly position options on top of eachother
 		}
 		
-		g.setColor(Color.WHITE);
+		g.setColor(Color.BLACK);
 		
-		String banner = "Use "+ KeyEvent.getKeyText(GameStateManager.up) + ", " + KeyEvent.getKeyText(GameStateManager.left) + ", " + KeyEvent.getKeyText(GameStateManager.down) + " and " + KeyEvent.getKeyText(GameStateManager.right) + " to change selection.";
-		String bannerLine2 = "Use " + KeyEvent.getKeyText(GameStateManager.select) + " to select current option.";
+		String banner = "Use "+ KeyEvent.getKeyText(GameStateManager.up) + ", " + KeyEvent.getKeyText(GameStateManager.left) + ", " + KeyEvent.getKeyText(GameStateManager.down) + " and " + KeyEvent.getKeyText(GameStateManager.right) + " to change selection; "+ KeyEvent.getKeyText(GameStateManager.select) + " to select.";
 
 		g.setFont(bannerFont);
 		int offSet = 0;
@@ -115,33 +139,23 @@ public class MenuState extends GameState
 			else
 				g.setFont(bannerFont);
 
-			g.drawChars(banner.toCharArray(), j, 1, (int)(GamePanel.WIDTH/2 - pos + offSet), (int)(GamePanel.HEIGHT - 100));
+			g.drawChars(banner.toCharArray(), j, 1, (int)(GamePanel.WIDTH/2 - pos + offSet), (int)(GamePanel.HEIGHT - 10));
 			offSet += g.getFontMetrics().charWidth(banner.charAt(j));
 		}
-		
-		g.setFont(bannerFont);
-		offSet = 0;
-		pos = g.getFontMetrics().getStringBounds(bannerLine2, g).getWidth()/2;
-		for(int j = 0; j < bannerLine2.length(); j++)
-		{
-			if(!bannerFont.canDisplay(bannerLine2.charAt(j)))
-				g.setFont(backupFont);
-			else
-				g.setFont(bannerFont);
-
-			g.drawChars(bannerLine2.toCharArray(), j, 1, (int)(GamePanel.WIDTH/2 - pos + offSet), (int)(GamePanel.HEIGHT - 60));
-			offSet += g.getFontMetrics().charWidth(bannerLine2.charAt(j));
-		}
-				
+	
 		super.drawFade(g);
-		
+		if(bottomFadeOut)
+		{
+			g.setColor(new Color(0,0,0,secondaryFadingAlphaLevel));
+			g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+			topBg.draw(g);
+		}
 		if(super.isFadingOut)
 		{
 			topBg.draw(g);
 			g.setColor(new Color(0,0,0,secondaryFadingAlphaLevel));
 			g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 		}
-		
 	}
 
 	//Selects the current game state
@@ -155,11 +169,13 @@ public class MenuState extends GameState
 		}
 		if(currentChoice == 1)
 		{
-			gsm.setState(GameStateManager.CONTROLSTATE);
+			bottomFadeOut = true;
+			//gsm.setState(GameStateManager.CONTROLSTATE);
 		}
 		if(currentChoice == 2)
 		{
-			gsm.setState(GameStateManager.CREDITSTATE);
+			bottomFadeOut = true;
+			//gsm.setState(GameStateManager.CREDITSTATE);
 		}
 		if(currentChoice == 3)
 		{
@@ -170,7 +186,7 @@ public class MenuState extends GameState
 	public void keyPressed(int k) 
 	{
 		
-		if(k == GameStateManager.select && !super.isFadingOut)
+		if(k == GameStateManager.select && !super.isFadingOut && !bottomFadeOut)
 		{
 			select();
 		} 
@@ -186,7 +202,7 @@ public class MenuState extends GameState
 		}
 		
 		//prevents other changes/movements once play has been selected
-		if(!super.isFadingOut)
+		if(!super.isFadingOut && !bottomFadeOut)
 		{
 			//If you press the up key, the selected option go up
 			if(k == GameStateManager.up || k == GameStateManager.left)

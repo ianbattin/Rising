@@ -34,8 +34,8 @@ public class ControlsState extends GameState {
 		super();
 		this.gsm = gsm;
 		
-		bgLowerHalf = new Background("/Backgrounds/MenuBackgroundTop.png", 1);
-		bgUpperHalf = new Background("/Backgrounds/LowerBackground.png", 1);	
+		bgLowerHalf = new Background("/Backgrounds/MenuBackground.png", 1);
+		bgUpperHalf = new Background("/Backgrounds/MenuBackgroundTop.png", 1);	
 		
 		selection = 0;
 		resSelection = 0;
@@ -65,8 +65,11 @@ public class ControlsState extends GameState {
 	//draw the controls
 	public void draw(Graphics2D g) 
 	{
-		bgUpperHalf.draw(g); //draw the background
 		bgLowerHalf.draw(g);
+		g.setColor(new Color(0,0,0,220));
+		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+		bgUpperHalf.draw(g); //draw the background
+
 		
 		//set the style of the title of the page
 		g.setColor(titleColor);

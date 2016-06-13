@@ -21,8 +21,8 @@ public class CreditState extends GameState
 	{
 		super();
 		this.gsm = gsm;
-		bgLowerHalf = new Background("/Backgrounds/MenuBackgroundTop.png", 1);
-		bgUpperHalf = new Background("/Backgrounds/LowerBackground.png", 1);
+		bgLowerHalf = new Background("/Backgrounds/MenuBackground.png", 1);
+		bgUpperHalf = new Background("/Backgrounds/MenuBackgroundTop.png", 1);
 		//bg.setVector(0, -5.0); //moves the background
 		titleColor = new Color(255, 60 ,0);
 		titleFont = new Font("Munro", Font.BOLD, 40);
@@ -45,8 +45,10 @@ public class CreditState extends GameState
 	//draw the text
 	public void draw(Graphics2D g) 
 	{
-		bgUpperHalf.draw(g);
 		bgLowerHalf.draw(g);
+		g.setColor(new Color(0,0,0,220));
+		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+		bgUpperHalf.draw(g);
 		
 		g.setColor(titleColor);
 		g.setFont(titleFont);
@@ -67,6 +69,7 @@ public class CreditState extends GameState
 		g.drawString("Press " + KeyEvent.getKeyText(GameStateManager.reset) + " to return to Main Menu", 
 				GamePanel.centerStringX("Press " + KeyEvent.getKeyText(GameStateManager.reset) + " to return to Main Menu", 0, 600), GamePanel.HEIGHT-100);
 		 */
+		
 	}
 
 	//handle press of key

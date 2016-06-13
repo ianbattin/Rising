@@ -18,7 +18,7 @@ public class SmallStuka extends MapObject
 	//animation
 	private ArrayList<BufferedImage[]> stukaSprites;
 	private final int[] numFrames = { 2 };
-	private long timer;
+	//private long timer;
 	
 	public SmallStuka(TileMap tm) 
 	{
@@ -83,7 +83,7 @@ public class SmallStuka extends MapObject
 		currentAction = 0;
 		animation.setFrames(stukaSprites.get(0));
 		animation.setDelay(1500);
-		timer = System.currentTimeMillis();
+		//timer = System.currentTimeMillis();
 	}
 
 	//Do anything before starting to show the stuka on the screen
