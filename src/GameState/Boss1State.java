@@ -185,8 +185,21 @@ public class Boss1State extends PlayState
 		{
 			player.setPosition(400, -350);
 			player.setTileMap(tileMap);
+			SoundPlayer.playClip("B-17engine.wav");
+			new Timer().schedule(new TimerTask()
+			{
+				public void run()
+				{
+					SoundPlayer.playClipWithLoops("B-17engine2.wav", 0, 0);		
+				}
+			}, 6500);
 			//endTrigger = false;
 			setUp = true;
+		}
+
+		if(super.isFadingOut)
+		{
+			SoundPlayer.stopLoopingClip(0);
 		}
 		
 		bg.update();
@@ -693,6 +706,7 @@ public class Boss1State extends PlayState
 
 		if(k == GameStateManager.reset)
 		{
+			SoundPlayer.stopLoopingClip(0);
 			gsm.setState(GameStateManager.MENUSTATE);
 			gsm.resetState(GameStateManager.BOSS1STATE);
 		}
