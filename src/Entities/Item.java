@@ -29,8 +29,8 @@ public class Item extends MapObject
 		
 		width = 45;
 		height = 25;
-		cwidth = width;
-		cheight = height;
+		cwidth = width*10;
+		cheight = height*6;
 		
 		fallSpeed = 0.25;
 		maxFallSpeed = 5.0;
@@ -92,8 +92,8 @@ public class Item extends MapObject
 	{
 		if(physics)
 		{
-			if(collided) dy = 0.0;
-			else if(dy < maxFallSpeed) dy += fallSpeed;
+			//if(collided) dy = 0.0;
+			/*else*/ if(dy < maxFallSpeed) dy += fallSpeed;
 			else dy = maxFallSpeed;
 		}
 		
@@ -108,8 +108,8 @@ public class Item extends MapObject
 	
 	@Override
 	public void collided(int type, Tile t) {
-		dx = 0;
-		dy = 0;
+		//dx = 0;
+		//dy = 0;
 		collided = true;
 	}
 

@@ -1437,7 +1437,7 @@ public class Player extends MapObject
 	{
 		if(m instanceof Item)
 		{
-			if(m.getType() == 0)
+			if(m.getType() == 0 && m.getDY() > 0)
 			{
 				ending = true;
 			}

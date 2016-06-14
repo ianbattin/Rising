@@ -234,7 +234,7 @@ public class Jetpacker extends Enemy
 			long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 			if(fireDelay <= elapsed*(0.5*Enemy.slowDown))
 			{
-				bullets.add(new Projectile(x + this.gunPosX, y + this.gunPosY, angle, 2, tileMap));
+				bullets.add(new Projectile(x + this.gunPosX, y + this.gunPosY+20, angle, 2, tileMap));
 				fireTimer = System.nanoTime();
 			}
 		}
