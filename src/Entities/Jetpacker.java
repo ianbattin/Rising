@@ -206,12 +206,12 @@ public class Jetpacker extends Enemy
 		
 		g.drawImage(parachute, (int)(x+(25-(parachute.getWidth()/2))), (int)(y-33), parachute.getWidth(), parachute.getHeight(), null);
 		
+		drawGun(g);
+		
 		for(Projectile p: bullets)
 		{
 			p.draw(g);
 		}
-		
-		drawGun(g);
 	}
 	
 	public void getAttack()

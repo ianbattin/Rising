@@ -29,8 +29,8 @@ public class Item extends MapObject
 		
 		width = 45;
 		height = 25;
-		cwidth = width*10;
-		cheight = height*6;
+		cwidth = width*20;
+		cheight = height*10;
 		
 		fallSpeed = 0.25;
 		maxFallSpeed = 5.0;

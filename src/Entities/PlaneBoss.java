@@ -455,7 +455,7 @@ public class PlaneBoss extends Enemy {
 		cockpit.setLocation(cockpitX, cockpitY);
 		propeller.setLocation(propellerX, propellerY);
 		
-		if(cockpit.intersects(player.getRectangle()) && player.getDY() > 0 && player.getHealth() > 0)
+		if(cockpit.intersects(player.getRectangle()) && player.getDY() > 0 && player.getHealth() > 0 && health > 0)
 		{
 			if((int)(Math.random() * 2) == 1) SoundPlayer.playClip("cockpit1.wav");
 			else SoundPlayer.playClip("cockpit2.wav");

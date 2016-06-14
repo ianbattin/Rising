@@ -408,6 +408,7 @@ public class Player extends MapObject
 		{
 			g.setColor(Color.RED);
 			g.draw(this.getRectangle());
+			g.drawOval((int)(x + width/2), (int)(y + cheight), 5, 5);
 		}
 		
 		if(explosions != null)

@@ -208,9 +208,10 @@ public abstract class MapObject
 			
 			collisionLeft = t.left - 14;
 			collisionRight = t.right + 14;
-			collisionTop = t.top;
-			collisionBottom = t.bottom;
-			if((collisionLeft <= x + cwidth/2 && x + cwidth/2  <= collisionRight) && (collisionTop <= y + cheight && y + cheight <= collisionBottom))
+			collisionTop = t.top - 5;
+			collisionBottom = t.bottom + 5;
+			
+			if((collisionLeft <= x + width/2 && x + width/2  <= collisionRight) && (collisionTop <= y + cheight - 20 && y + cheight - 20 <= collisionBottom))
 				collided(t.getType(), t);
 		}
 	}

@@ -278,7 +278,6 @@ public class Boss1State extends PlayState
 					step = 0;
 					stage = 1;
 					pickups.spawnPickup(Pickups.AMMOBOOST);
-					player.setCanMove(true);
 					break;
 				}
 			}
@@ -350,6 +349,7 @@ public class Boss1State extends PlayState
 					else
 					{
 						planeBoss.setAttack(0);
+						player.setCanMove(true);
 						if(!done)
 						{
 							timer = System.currentTimeMillis();
