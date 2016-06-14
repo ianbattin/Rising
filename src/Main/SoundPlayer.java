@@ -95,48 +95,6 @@ public class SoundPlayer implements LineListener, Runnable
 		}
 	}
 
-	/**
-	 * Creates a clip that will loop for the number of times indicated. 0 creates an infinite loop.
-	 * Note that if the clip will be played once, or 
-	 * 
-	 * @param fileName String representation of the file name (located in the Resources/Sound folder)
-	 * @param times int representation of number of times to loop clip
-	 * @param identifier int representation of identifier to use. Must start with 0, and can only increment one at a time
-	 */
-	public static void playClipWithLoops(String fileName, int times, int identifier)
-	{
-		try 
-		{
-			if(clips == null)
-			{
-				clips = new ArrayList<AudioClip>();
-			}
-			
-			AudioClip clip = new AudioClip(SoundPlayer.class.getResource("/Sound/" + fileName).toExternalForm());
-			clip.setCycleCount((times == 0) ? AudioClip.INDEFINITE : times);
-			clip.play();
-			clips.add(identifier, clip);
-		}
-		catch (Exception e)
-		{
-			System.out.println(e.toString());
-		}
-	}
-	
-	/**
-	 * Stops the clip with the specified identifier. 
-	 * The identifier can be reused after stopping playback, and will not affect the others.
-	 * 
-	 * @param identifier int representation of the clip to stop looping
-	 */
-	public static void stopLoopingClip(int identifier)
-	{
-		if(clips.get(identifier) != null)
-		{
-			clips.get(identifier).stop();
-			clips.set(identifier, null);
-		}
-	}
 	
 	/**
 	 * To be used to play longer music, such as background theme songs, or other longer songs. This spawns a new thread to play in the background.
