@@ -192,7 +192,7 @@ public class Boss1State extends PlayState
 				{
 					SoundPlayer.playClipWithLoops("B-17engine2.wav", 0, 0);		
 				}
-			}, 4000);
+			}, 6500);
 			//endTrigger = false;
 			setUp = true;
 		}

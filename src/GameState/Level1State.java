@@ -193,8 +193,11 @@ public class Level1State extends PlayState
 			mapObjects.add(stuka);
 			stukaSpawned = true;
 		}
-		else if(tileMap.getYMove() > 5500)
+		else if(tileMap.getYMove() > 5500 && stukaSpawned)
+		{
+			stukaSpawned = false;
 			mapObjects.remove(stuka);
+		}
 			
 		if(player.getPlayerHealth() < 1 && timer > 1500000000.0)
 		{
@@ -216,6 +219,7 @@ public class Level1State extends PlayState
 			if(transitionDY > 0) transitionDY -= 0.1;
 			else
 			{
+				tileStart = false;
 				transitionDY = 0;
 				//removes all non-boss entities
 				for(int i = 0; i < enemies.size(); i++)
