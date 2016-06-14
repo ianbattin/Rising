@@ -28,14 +28,7 @@ public class Background
 		try
 		{
 			this.path = path;
-			try
-			{
-				image = ImageIO.read(getClass().getResourceAsStream(path));
-			}
-			catch (Exception e)
-			{
-				System.out.println(e.toString());
-			}
+			image = ImageIO.read(getClass().getResourceAsStream(path));
 			
 			pixelColors = new ArrayList<Integer>();
 			for(int i = 1; i < image.getWidth(); i++)

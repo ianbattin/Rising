@@ -868,6 +868,9 @@ public class PlaneBoss extends Enemy {
 					animation.changeFrames(planeSprites.get(1));
 			}
 		}
+		
+		
+		
 		animation.update();	
 	}
 
