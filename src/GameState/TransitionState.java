@@ -75,7 +75,7 @@ public class TransitionState extends GameState {
 				music("Prelude2.wav");
 				break;
 			case "WinOutro":
-				SoundPlayer.animVolume(-40.0F);
+				music("LaFoule2.wav");
 				break;
 		}
 	}

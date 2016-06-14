@@ -222,7 +222,7 @@ public class PlaneBoss extends Enemy {
 			
 			if(y < GamePanel.HEIGHT + height) deathAnimation++;
 
-			if((int)(Math.random()*300) - Math.min(deathAnimation, 75) <= 0)
+			if((int)(Math.random()*350) - Math.min(deathAnimation, 75) <= 0)
 			{
 				mapObjects.add(new Explosion(x + Math.random()*width, y + Math.random()*height, 3, 0,  tileMap));
 			}

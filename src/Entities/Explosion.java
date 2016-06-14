@@ -60,7 +60,7 @@ public class Explosion extends MapObject
 				height = 50;
 				cwidth = width*3;
 				cheight = height*3;
-				willDestroyBlocks  = true;
+				willDestroyBlocks = true;
 				SoundPlayer.playClip("bombexplosion.wav");
 				init();
 				break;
