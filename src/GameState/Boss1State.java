@@ -291,6 +291,7 @@ public class Boss1State extends PlayState
 				case 0:
 				{
 					planeBoss.setHealth(100);
+					planeBoss.setHealth(1);
 					drawBossHealth = true;
 
 					if(planeBoss.getMoveComplete() == false)
@@ -629,7 +630,7 @@ public class Boss1State extends PlayState
 			{
 				ending = true;
 				count = 0;
-				step = 0;
+				step = 1;
 				stage = 0;
 				timer = System.currentTimeMillis();
 			}
@@ -639,29 +640,9 @@ public class Boss1State extends PlayState
 		{
 			switch(step)
 			{
-			case 0:
-				long elapsed = System.currentTimeMillis() - timer;
-				if(3000 <= elapsed)
-				{
-					count++;
-					timer = System.currentTimeMillis();
-				}
-				if(count == 0)
-				{
-					player.setBannerColor(Color.BLACK);
-					player.setPlayerBannerText("\"Whew, that was close!\"");
-				}
-				else if(count == 1)
-				{
-					player.setBannerColor(Color.BLACK);
-					player.setPlayerBannerText("\"Now I just have to get off this plane!\"");
-				}
-				else
-					step = 1;
-				break;
 			case 1:
 				player.setBannerColor(Color.WHITE);
-				player.setPlayerBannerText("There's a Parachute! - Grab It!");
+				player.setPlayerBannerText("Grab the Parachute!");
 				player.setSlowTime(true);
 				step = 2;
 				break;
@@ -682,7 +663,7 @@ public class Boss1State extends PlayState
 				step = 4;
 				break;
 			case 4:
-				elapsed = System.currentTimeMillis() - timer;
+				long elapsed = System.currentTimeMillis() - timer;
 				if(250+Math.random()*250 <= elapsed)
 				{
 					mapObjects.add(new Explosion(120 + Math.random()*80, GamePanel.HEIGHT - 100, 3, 0, tileMap));
@@ -695,7 +676,7 @@ public class Boss1State extends PlayState
 		if(player.ending)
 		{
 			super.isFadingOut = true;
-			super.fadeOut(500000000, Color.WHITE, 5, gsm, GameStateManager.BOSS1STATE, GameStateManager.WINSTATE);
+			super.fadeOut(500000000, Color.WHITE, 10, gsm, GameStateManager.BOSS1STATE, GameStateManager.WINSTATE);
 		}
 	}
 
