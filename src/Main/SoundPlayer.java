@@ -4,7 +4,6 @@ import javafx.scene.media.*;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 import javax.sound.sampled.*;
 
@@ -21,7 +20,6 @@ public class SoundPlayer implements LineListener, Runnable
 	
 	//preload the most used sounds
 	private static AudioClip shootingClip;
-	private static ArrayList<AudioClip> clips;
 	
 	//thread that handles the background playback
 	private Thread backgroundPlaybackThread;
