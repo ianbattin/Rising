@@ -290,7 +290,6 @@ public class Boss1State extends PlayState
 				case 0:
 				{
 					planeBoss.setHealth(100);
-					planeBoss.setHealth(1);
 					drawBossHealth = true;
 
 					if(planeBoss.getMoveComplete() == false)
@@ -676,6 +675,8 @@ public class Boss1State extends PlayState
 		if(player.ending)
 		{
 			super.isFadingOut = true;
+			SoundPlayer.animVolume(-40.0F);
+			slowTimeEnd();
 			super.fadeOut(500000000, Color.WHITE, 10, gsm, GameStateManager.BOSS1STATE, GameStateManager.WINSTATE);
 		}
 	}
