@@ -43,7 +43,7 @@ public class TransitionState extends GameState {
 				totalFrames = 1;
 				break;
 			case "WinOutro":
-				timeModifierToUse = new int[] { 3, 7, 5, 5, 5 };
+				timeModifierToUse = new int[] { 2, 6, 5, 5, 9 };
 				totalFrames = 5;
 				break;
 		}
