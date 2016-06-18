@@ -17,7 +17,7 @@ public class TransitionState extends GameState {
 	private long timer, coolDownTimer;
 	private int currFrame, totalFrames;
 	
-	private Font scoreFont = new Font("Munro", Font.BOLD, 32);
+	private Font scoreFont = new Font("Munro", Font.BOLD, 30);
 	
 	private int[] timeModifierToUse;
 	

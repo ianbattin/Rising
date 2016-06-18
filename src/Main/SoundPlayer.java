@@ -134,9 +134,9 @@ public class SoundPlayer implements LineListener, Runnable
 		IS_PLAYING = true;
 		try
 		{
-			InputStream mediaFile = new BufferedInputStream(SoundPlayer.class.getResourceAsStream(backgroundFileName));
 			while(IS_PLAYING)
 			{
+				InputStream mediaFile = new BufferedInputStream(SoundPlayer.class.getResourceAsStream(backgroundFileName));
 				AudioInputStream audioStream = AudioSystem.getAudioInputStream(mediaFile);
 				AudioFormat audioFormat = audioStream.getFormat();
 				DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
