@@ -305,8 +305,16 @@ public class Player extends MapObject
 	{	
 		if (health > 0)
 		{
-			if(onScreen() && (y+height < GamePanel.HEIGHT - 10)) checkPixelColorCollision(tileMap);
-			else myCheckCollision();
+			try
+			{
+				if(onScreen() && (y+height < GamePanel.HEIGHT - 10)) checkPixelColorCollision(tileMap);
+				else myCheckCollision();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				myCheckCollision();
+			}
 			getAttack();
 		}
 		else

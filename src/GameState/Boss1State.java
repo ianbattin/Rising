@@ -76,7 +76,7 @@ public class Boss1State extends PlayState
 
 		super.init(); //requires the player to be inited first
 
-		pickups = new Pickups(player, tileMap, new int[]{Pickups.HEALBOOST, Pickups.AMMOBOOST, Pickups.BIRDBOOST}, 20000000000L, 2500000000L);
+		pickups = new Pickups(player, tileMap, new int[]{Pickups.HEALBOOST, Pickups.AMMOBOOST}, 20000000000L, 2500000000L);
 		pickups.setWind(0.5f, -150, false);
 		tileStart = false;
 		try
@@ -148,7 +148,8 @@ public class Boss1State extends PlayState
 		bg.draw(g);
 		tileMap.draw(g);
 		player.draw(g);
-		pickups.draw(g);
+		if(planeBoss.getHealth() > 0)
+			pickups.draw(g);
 		for(Enemy e: enemies)
 			e.draw(g);
 		for(MapObject m: mapObjects)
@@ -191,7 +192,8 @@ public class Boss1State extends PlayState
 
 		bg.update();
 		tileMap.update();
-		pickups.update();
+		if(planeBoss.getHealth() > 0)
+			pickups.update();
 		player.update();
 		super.aimUpdate();
 		super.backGroundParallaxUpdate();
@@ -276,13 +278,12 @@ public class Boss1State extends PlayState
 				//Plane flies left to right at 1 speed
 				case 0:
 				{
-					planeBoss.setHealth(100);
 					drawBossHealth = true;
 
 					if(planeBoss.getMoveComplete() == false)
 					{
 						planeBoss.setMovement(2400, 200, 2, 0);
-						planeBoss.setHealth(100);
+						planeBoss.setHealth(1);
 
 						if(planeBoss.getMoveComplete() == false)
 						{
@@ -629,7 +630,8 @@ public class Boss1State extends PlayState
 			case 1:
 				player.setBannerColor(Color.WHITE);
 				player.setPlayerBannerText("Grab the Parachute!");
-				player.setSlowTime(true);
+				//player.setSlowTime(true);
+				slowTimeStart();
 				step = 2;
 				break;
 			case 2:

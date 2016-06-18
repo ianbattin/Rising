@@ -929,7 +929,7 @@ public class PlaneBoss extends Enemy {
 
 	public void onDeath()
 	{
-		player.increasePoints(5000);
+		player.increasePoints(2000);
 	}
 	
 	public void setMoveComplete(boolean b) 

@@ -1,6 +1,7 @@
 package GameState;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 
@@ -15,6 +16,8 @@ public class TransitionState extends GameState {
 	
 	private long timer, coolDownTimer;
 	private int currFrame, totalFrames;
+	
+	private Font scoreFont = new Font("Munro", Font.BOLD, 32);
 	
 	private int[] timeModifierToUse;
 	
@@ -98,7 +101,7 @@ public class TransitionState extends GameState {
 					super.fadeIn(500000000.0, Color.BLACK, 5);
 					break;
 				case "WinOutro":
-					super.fadeIn(500000000.0, Color.BLACK, 5);
+					super.fadeIn(500000000.0, Color.WHITE, 5);
 					break;
 			}
 		}
@@ -141,6 +144,12 @@ public class TransitionState extends GameState {
 	public void draw(Graphics2D g) 
 	{
 		bg.draw(g);
+		if(path.equals("WinOutro") && currFrame == 5)
+		{
+			g.setFont(scoreFont);
+			g.setColor(Color.WHITE);
+			g.drawString("Score: " + score, centerStringX("Score: " + score, 0, GamePanel.WIDTH, g), 400);
+		}
 		super.drawFade(g);
 	}
 	
