@@ -187,7 +187,7 @@ public class Level1State extends PlayState
 			}
 			PlayState.itemsToSpawn.remove(0);
 		}
-		if(tileMap.getYMove() > 5000 && !stukaSpawned )
+		if(tileMap.getYMove() > 5000 && tileMap.getYMove() < 5500 && !stukaSpawned )
 		{
 			stuka.init();
 			mapObjects.add(stuka);

@@ -684,7 +684,6 @@ public class Player extends MapObject
 						y-=5;
 						falling = false;
 						jumpHeight = yFromBottom + (100*jumpHeightFactor);
-						System.out.println(jumpHeight);
 						if(!jumped) SoundPlayer.playClip("jump.wav");
 						jumped = true;
 						jumping = false;
@@ -706,7 +705,6 @@ public class Player extends MapObject
 				y-=5;
 				falling = false;
 				jumpHeight = yFromBottom + (100*jumpHeightFactor);
-				//System.out.println(jumpHeight);
 				if(!jumped) SoundPlayer.playClip("jump.wav");
 				jumped = true;
 				//jumping = false;

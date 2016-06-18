@@ -135,36 +135,7 @@ public abstract class GameState
     {   
 		soundPlayer.startBackgroundMusic(fileName, true);
 		SoundPlayer.setVolume(0);
-		/*
-		SoundPlayer sound = new SoundPlayer();
-		
-		AudioPlayer mediaPlayer = AudioPlayer.player;
-        AudioStream mediaStream;
-        AudioDataStream mediaData;
-        
-        try
-        {
-            InputStream music = new FileInputStream(fileName);
-            mediaStream = new AudioStream(music);
-            
-            mediaPlayer.start(mediaStream); 
-        }
-        catch(FileNotFoundException e)
-        {
-            System.out.print(e.toString());
-        }
-        catch(IOException e)
-        {
-            System.out.print(e.toString());
-        }
-        */
     }
-	
-	/*public void playSound(String fileName)
-	{
-		SoundPlayer.playClip(fileName);
-	}
-	*/
 	
 	public static <E> boolean containsInstance(List<E> list, Class<? extends E> clazz) {
 	    for (E e : list) {

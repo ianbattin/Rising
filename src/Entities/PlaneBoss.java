@@ -338,7 +338,6 @@ public class PlaneBoss extends Enemy {
 					if(bombFlashing)
 					{
 						flashTimes++;
-						System.out.println(flashTimes);
 						if(flashTimes == 5)
 						{
 							bombFlashing = !bombFlashing;
@@ -398,7 +397,6 @@ public class PlaneBoss extends Enemy {
 						g.drawImage(bombImage, (int)(this.x+cwidth/2+15), (int)(this.y+cheight-15), 53, 53, null);
 					}
 					flashTimes++;
-					System.out.println(flashTimes);
 					if(flashTimes == 5)
 					{
 						bombFlashing = !bombFlashing;
