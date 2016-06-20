@@ -363,7 +363,7 @@ public class Walker extends Enemy
 			}
 			else
 			{
-				if(animation.getFrame() == 2 && !hasPunched)
+				if(animation.getFrame() == 1 && !hasPunched)
 				{
 					hasPunched = true;
 					SoundPlayer.playClip("walkerpunch.wav");
