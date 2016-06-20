@@ -815,6 +815,11 @@ public class PlaneBoss extends Enemy {
 			recovering = true;
 			recoverTimer = System.nanoTime();
 
+			if(health <= 0)
+			{
+				this.onDeath();
+			}
+			
 			if(health <= 0 && brokenLevel != BROKEN_LEVEL3)
 			{
 				brokenLevel = BROKEN_LEVEL3;

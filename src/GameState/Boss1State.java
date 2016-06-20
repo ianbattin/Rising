@@ -81,7 +81,7 @@ public class Boss1State extends PlayState
 		tileStart = false;
 		try
 		{
-			bg = new Background("/Backgrounds/battlebackground.gif", 1);
+			bg = new Background("/Backgrounds/battlebackground.gif", 1, true);
 		}
 		catch(Exception e)
 		{
@@ -186,7 +186,7 @@ public class Boss1State extends PlayState
 		{
 			player.setPosition(400, -350);
 			player.setTileMap(tileMap);
-			//endTrigger = false;
+			player.setFacingRight(false);
 			setUp = true;
 		}
 
@@ -283,7 +283,7 @@ public class Boss1State extends PlayState
 					if(planeBoss.getMoveComplete() == false)
 					{
 						planeBoss.setMovement(2400, 200, 2, 0);
-						planeBoss.setHealth(1);
+						planeBoss.setHealth(100);
 
 						if(planeBoss.getMoveComplete() == false)
 						{

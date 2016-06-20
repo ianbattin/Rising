@@ -607,7 +607,7 @@ public class Player extends MapObject
 					fired = false;
 				}
 				
-			}, 800);
+			}, 600);
 			/*
 			long elapsed = (System.nanoTime() - fireTimer) / 1000000;
 			if(fireDelay <= elapsed)
@@ -1096,7 +1096,7 @@ public class Player extends MapObject
 			}
 			case Pickups.AMMOBOOST:
 			{
-				this.ammoCount += 15;
+				this.ammoCount += 6;
 				this.hasGun = true;
 				break;
 			}
@@ -1548,7 +1548,6 @@ public class Player extends MapObject
 	
 	public void hidePlayerBanner()
 	{
-		this.banner = null;
 		this.displayMessage = false;
 	}
 	
@@ -1563,6 +1562,7 @@ public class Player extends MapObject
 	}
 	
 	public boolean hasGun(){ return hasGun; }
+	public void setFacingRight(boolean b) { facingRight = b; }
 	
 
 }

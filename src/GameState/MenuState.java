@@ -38,16 +38,13 @@ public class MenuState extends GameState
 		optionsFont = new Font("Munro", Font.PLAIN, 24);
 		bannerFont = new Font("Munro", Font.PLAIN, 20);
 		backupFont = new Font("Times", Font.PLAIN, 20);
-		
 		//This is going to try to set the background from a certain file path
 		//the bg takes a long time to init; and since it doesnt change we dont need to re-init it every time 
 		if(bg == null || topBg == null)
 		{
-			bg = new Background("/Backgrounds/MenuBackground.png", 0);
-			topBg = new Background("/Backgrounds/MenuBackgroundTop.png", 0);
+			bg = new Background("/Backgrounds/MenuBackground.png", 0, false);
+			topBg = new Background("/Backgrounds/MenuBackgroundTop.png", 0, false);
 		}
-		
-		
 	}
 
 	public void init() 

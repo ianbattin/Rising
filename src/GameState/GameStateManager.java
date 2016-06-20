@@ -62,6 +62,7 @@ public class GameStateManager
 		gameStates.add(new TransitionState(this, "WinOutro"));
 	}
 	
+	
 	public void setState(int state)
 	{
 		gameStates.get(state).init();

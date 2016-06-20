@@ -57,7 +57,7 @@ public class TransitionState extends GameState {
 		
 		try
 		{
-			bg = new Background("/" + path + "/frame" + currFrame + ".gif", 1);
+			bg = new Background("/" + path + "/frame" + currFrame + ".gif", 1, false);
 		}
 		catch(Exception e)
 		{

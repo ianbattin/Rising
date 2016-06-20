@@ -48,7 +48,7 @@ public class Level1State extends PlayState
 		this.gsm = gsm;
 		try
 		{
-			bg = new Background("/Backgrounds/battlebackground.gif", 1);
+			bg = new Background("/Backgrounds/battlebackground.gif", 1, true);
 		}
 		catch(Exception e)
 		{

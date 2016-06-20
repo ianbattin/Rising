@@ -21,7 +21,7 @@ public class SplashState extends GameState
 		elapsedTime = 0;
 		try
 		{
-			bg = new Background("/Backgrounds/splashscreen.JPG", 1);
+			bg = new Background("/Backgrounds/splashscreen.JPG", 1, false);
 		}
 		catch(Exception e)
 		{
@@ -38,7 +38,7 @@ public class SplashState extends GameState
 	public void update() 
 	{
 		elapsedTime += GamePanel.getElapsedTime();
-		if(elapsedTime > 1000000.0) //time to wait before loading 
+		if(elapsedTime > 2000000000.0) //time to wait before loading 
 		{
 			gsm.gameStateManagerLoad();
 			gsm.setState(GameStateManager.MENUSTATE);

@@ -101,7 +101,7 @@ public abstract class MapObject
 		tileMap = tm;
 		tiles = tm.tiles;
 		tileSize = tm.getTileSize();
-		if(this instanceof Player) bgColors = new Background("/Backgrounds/battlebackground.gif", 1).getPixelColors();
+		if(this instanceof Player) bgColors = new Background("/Backgrounds/battlebackground.gif", 1, true).getPixelColors();
 	}
 	
 	public abstract void collided(int type, Tile t);

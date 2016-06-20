@@ -35,8 +35,8 @@ public class ControlsState extends GameState {
 		super();
 		this.gsm = gsm;
 		
-		bgLowerHalf = new Background("/Backgrounds/MenuBackground.png", 1);
-		bgUpperHalf = new Background("/Backgrounds/MenuBackgroundTop.png", 1);	
+		bgLowerHalf = new Background("/Backgrounds/MenuBackground.png", 1, false);
+		bgUpperHalf = new Background("/Backgrounds/MenuBackgroundTop.png", 1, false);	
 		
 		selection = 0;
 		resSelection = 0;

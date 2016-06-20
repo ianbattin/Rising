@@ -230,7 +230,7 @@ public class Explosion extends MapObject
 					}
 				}
 			}
-			if(this.intersects(PlayState.getPlayer()) && !(this.type == Explosion.NORMAL_EXPLOSION_NO_TILE_DAMAGE || this.type == Explosion.NORMAL_EXPLOSION_BIRD || this.type == Explosion.NORMAL_EXPLOSION_PROPGUN))
+			if(this.intersects(PlayState.getPlayer()) && !(this.type == Explosion.NORMAL_EXPLOSION_NO_TILE_DAMAGE || this.type == Explosion.NORMAL_EXPLOSION_BIRD || this.type == Explosion.NORMAL_EXPLOSION_PROPGUN) && this.playerDamage > 0)
 			{
 				PlayState.getPlayer().playerHurt(this.playerDamage);
 			}

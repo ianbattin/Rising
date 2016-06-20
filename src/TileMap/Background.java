@@ -23,21 +23,24 @@ public class Background
 	private double moveScale;
 	
 	//Constructor reads the image into the image variable
-	public Background(String path, double ms)
+	public Background(String path, double ms, boolean addToPixelColors)
 	{
 		try
 		{
 			this.path = path;
 			image = ImageIO.read(getClass().getResourceAsStream(path));
 			
-			pixelColors = new ArrayList<Integer>();
-			for(int i = 1; i < image.getWidth(); i++)
+			if(pixelColors == null) pixelColors = new ArrayList<Integer>();
+			if(addToPixelColors)
 			{
-				for(int j = 1; j < image.getHeight(); j++)
+				for(int i = 1; i < image.getWidth(); i++)
 				{
-					int color = image.getRGB(i, j);
-					if(!pixelColors.contains(color))
-						pixelColors.add(color);
+					for(int j = 1; j < image.getHeight(); j++)
+					{
+						int color = image.getRGB(i, j);
+						if(!pixelColors.contains(color))
+							pixelColors.add(color);
+					}
 				}
 			}
 			addCustomColors(new int[] {
@@ -47,7 +50,6 @@ public class Background
 				(new Color(67, 82, 93).getRGB()),
 				(new Color(58, 83, 99).getRGB())
 			});
-			
 			moveScale = ms;
 		}
 		catch(Exception e)
