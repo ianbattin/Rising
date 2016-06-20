@@ -124,7 +124,7 @@ public class MenuState extends GameState
 		
 		g.setColor(Color.BLACK);
 		
-		String banner = "Use "+ KeyEvent.getKeyText(GameStateManager.left) + " and " + KeyEvent.getKeyText(GameStateManager.right) + " or " + KeyEvent.getKeyText(GameStateManager.up) + " and " + KeyEvent.getKeyText(GameStateManager.down) + " to change selection; "+ KeyEvent.getKeyText(GameStateManager.select) + " to confirm.";
+		String banner = "Use "+ KeyEvent.getKeyText(GameStateManager.left) + " and " + KeyEvent.getKeyText(GameStateManager.right) + " to change selection; "+ KeyEvent.getKeyText(GameStateManager.select) + " to confirm.";
 
 		g.setFont(bannerFont);
 		int offSet = 0;

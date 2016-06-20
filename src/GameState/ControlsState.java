@@ -16,7 +16,7 @@ public class ControlsState extends GameState {
 
 	private Color titleColor;
 	private final Color rectColor = new Color(0,0,0,220);
-	private Font titleFont, optionsFont, subTextFont, backupFont;
+	private Font titleFont, optionsFont, subTextFont, backupFont, bannerFont, backupBannerFont;		
 	
 	private int selection;
 	private int resSelection;
@@ -49,6 +49,9 @@ public class ControlsState extends GameState {
 		titleFont = new Font("Munro", Font.BOLD, 40);
 		optionsFont = new Font("Munro", Font.PLAIN, 24);
 		subTextFont = new Font("Munro", Font.PLAIN, 20);
+		
+		bannerFont = new Font("Munro", Font.PLAIN, 20);
+		backupBannerFont = new Font("Times", Font.PLAIN, 20);
 	}
 	
 	//nothing to init
@@ -139,6 +142,24 @@ public class ControlsState extends GameState {
 		}
 		
 		g.drawString("Return to Menu", centerStringX("Return to Menu", 0, GamePanel.WIDTH, g), GamePanel.HEIGHT-100);
+	
+		
+		g.setColor(Color.GRAY);
+		String banner = "Use "+ KeyEvent.getKeyText(GameStateManager.up) + " and " + KeyEvent.getKeyText(GameStateManager.down) + " to change selection; "+ KeyEvent.getKeyText(GameStateManager.select) + " to confirm.";
+
+		g.setFont(bannerFont);
+		int offSet = 0;
+		double pos = g.getFontMetrics().getStringBounds(banner, g).getWidth()/2;
+		for(int j = 0; j < banner.length(); j++)
+		{
+			if(!bannerFont.canDisplay(banner.charAt(j)))
+				g.setFont(backupBannerFont);
+			else
+				g.setFont(bannerFont);
+
+			g.drawChars(banner.toCharArray(), j, 1, (int)(GamePanel.WIDTH/2 - pos + offSet), (int)(GamePanel.HEIGHT - 10));
+			offSet += g.getFontMetrics().charWidth(banner.charAt(j));
+		}		
 	}
 	
 	//when you select something, it changes to press so that you can set the controls

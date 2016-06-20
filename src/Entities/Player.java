@@ -519,6 +519,7 @@ public class Player extends MapObject
 	public void collided(int type, Tile t)
 	{
 		midAir = false;
+		timer = 0;
 		if(type == 17) 
 		{
 			playerHurt(1);
@@ -748,28 +749,31 @@ public class Player extends MapObject
 		}
 		
 		if(falling)
-		{
+		{		
 			long elapsed = (System.nanoTime() - timer) / 1000000;
-			if(200 <= elapsed)
+			if(100 <= elapsed)
 			{
 				midAir = true;
 				timer = System.nanoTime();
+				
+				if(!fallingAnim && dy > 3) fallingAnim = true;
+				
+				jump = false;
+				doubleJump = false;
 			}
-			jump = false;
-			doubleJump = false;
+			
 			if(dy > 0.0 && gliding)
 			{
 				dy = 1;
 			}
 			else if(dy < maxFallSpeed) dy += fallSpeed;
 			else dy = maxFallSpeed;
-			
-			if(!fallingAnim && dy > 3) fallingAnim = true;
 		}
 		else
 		{
 			fallingAnim = false;
 			midAir = false;
+			timer = System.nanoTime();
 		}
 		
 		moveTileMapX();
@@ -844,7 +848,7 @@ public class Player extends MapObject
 			{
 				if(!ending)
 				{
-					if(currentAction != WALKING  && !fallingAnim && currentAction != JUMPING && currentAction != DOUBLEJUMP)
+					if(currentAction != WALKING  && !(fallingAnim || midAir) && currentAction != JUMPING && currentAction != DOUBLEJUMP)
 					{
 						currentAction = WALKING;
 						animation.setFrames(playerSprites.get(WALKING));
@@ -856,7 +860,7 @@ public class Player extends MapObject
 				}
 				else
 				{
-					if(currentAction != RUNNING  && !fallingAnim && currentAction != JUMPING && currentAction != DOUBLEJUMP)
+					if(currentAction != RUNNING  && !(fallingAnim || midAir) && currentAction != JUMPING && currentAction != DOUBLEJUMP)
 					{
 						currentAction = RUNNING;
 						animation.setFrames(playerSprites.get(RUNNING));
@@ -891,7 +895,7 @@ public class Player extends MapObject
 					height = 70;
 				}
 			}
-			if(fallingAnim)
+			if(fallingAnim && midAir)
 			{
 				if(currentAction != FALLING)
 				{
