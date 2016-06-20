@@ -289,16 +289,16 @@ public class Level1State extends PlayState
 	{	
 		if (introTimer >= 0)
 		{
-			if (introTimer < 5000 && tileMap.getYMove() > -GamePanel.HEIGHT/4)
+			if (introTimer < 4500 && tileMap.getYMove() > -GamePanel.HEIGHT/4)
 			{
 				tileMap.setYVector(0.3);
-				if (introTimer < 2500)	
+				if (introTimer < 1800)	
 				{
 					player.setBannerColor(Color.BLACK);
 					player.setPlayerBannerText("\"Christine!\"");
 					
 				}
-				else if (introTimer < 4200)
+				else if (introTimer < 3500)
 				{
 					player.setBannerColor(Color.WHITE);
 					player.setPlayerBannerText("Use "+ KeyEvent.getKeyText(GameStateManager.left) + " and " + KeyEvent.getKeyText(GameStateManager.right) + " to move, " + KeyEvent.getKeyText(GameStateManager.up) + " to jump.");
@@ -311,7 +311,7 @@ public class Level1State extends PlayState
 				
 				introTimer += GamePanel.getElapsedTime()/1000000;
 			} 
-			else if (introTimer >= 5000)
+			else if (introTimer >= 4500)
 			{
 				player.setCanMove(true);
 				player.hidePlayerBanner();
