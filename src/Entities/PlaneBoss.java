@@ -276,12 +276,12 @@ public class PlaneBoss extends Enemy {
 				mapObjects.get(i).update();
 			}
 		}
-		for(int i = 0; i < bullets.size(); i++)
+		for(int i = bullets.size() - 1; i > 0; i--)
 		{	
 			if(bullets.get(i).getRemove())
 			{
 				bullets.remove(i);
-				i--;
+				//i--;
 			}
 			else
 			{
@@ -623,8 +623,11 @@ public class PlaneBoss extends Enemy {
 				long elapsed= (System.nanoTime() - fireTimer) / 1000000;
 				if(fireDelay <= elapsed*(0.5*Enemy.slowDown))
 				{
-					bullets.add(new Projectile(x+width/2, y+height, angle, 4, tileMap));
+					if(count != 3) bullets.add(new Projectile(x+width/2, y+height, angle, 4, tileMap));
 					fireTimer = System.nanoTime();
+					
+					count++;
+					if(count == 4) count = 0;
 				}
 			}
 		}

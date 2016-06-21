@@ -279,7 +279,6 @@ public class Boss1State extends PlayState
 				case 0:
 				{
 					drawBossHealth = true;
-
 					if(planeBoss.getMoveComplete() == false)
 					{
 						planeBoss.setMovement(2400, 200, 2, 0);
@@ -380,17 +379,6 @@ public class Boss1State extends PlayState
 				switch(step)
 				{
 				//Plane flies left to right at 1 speed and drops off 3 paratroopers
-				case 1:
-					if(planeBoss.getMoveComplete() == false)
-					{
-						planeBoss.setMovement(1500, 200, 2, 0);
-					}
-					else
-					{
-						step = 2;
-						planeBoss.setMoveComplete(false);
-					}
-					break;
 				case 0:
 					if(count == 0)
 					{
@@ -416,6 +404,12 @@ public class Boss1State extends PlayState
 						enemies.add(e);
 						count++;
 					}
+					else if(enemies.size() == 1 && count == 3)
+					{
+						player.hidePlayerBanner();
+						step = 1;
+						count = 0;
+					}
 					
 					long elapsed = (System.currentTimeMillis() - timer);
 					if(10000 <= elapsed)
@@ -425,11 +419,56 @@ public class Boss1State extends PlayState
 						count = 0;
 						player.hidePlayerBanner();
 						timer = System.currentTimeMillis();
+						for(int i = enemies.size() - 1; i > 1; i--)
+							enemies.remove(i);
 					}
 					break;
-
-					//Plane flies left and shoots fire bullets
+				case 1:
+					if(planeBoss.getMoveComplete() == false)
+					{
+						planeBoss.setMovement(1000, 200, 2, 0);
+					}
+					else
+					{
+						step = 2;
+						count = 0;
+						planeBoss.setMoveComplete(false);
+					}
+					break;
 				case 2:
+					if(count == 0)
+					{
+						Walker en = new Walker(-400, 100, tileMap, player);
+						en.setWind(6, 0, true);
+						enemies.add(en);
+						count++;
+					}
+					else if(count == 1)
+					{
+						Walker en = new Walker(-100, 0, tileMap, player);
+						en.setWind(6, 0, true);
+						enemies.add(en);
+						count++;
+					}
+					else if(enemies.size() == 1 && count == 2)
+					{
+						player.hidePlayerBanner();
+						step = 3;
+						count = 0;
+					}	
+					
+					elapsed = (System.currentTimeMillis() - timer);
+					if(10000 <= elapsed)
+					{
+						System.out.println("Worked");
+						planeBoss.setMoveComplete(false);
+						step = 3;
+						count = 0;
+						timer = System.currentTimeMillis();
+					}
+					break;
+					//Plane flies left and shoots fire bullets
+				case 3:
 					switch(count) 
 					{
 					case 0:
@@ -445,7 +484,7 @@ public class Boss1State extends PlayState
 
 					case 2:
 						elapsed = (System.currentTimeMillis() - timer);
-						if(10000 <= elapsed)
+						if(7000 <= elapsed)
 						{
 							count = 3;
 							planeBoss.setMoveComplete(false);
@@ -479,7 +518,7 @@ public class Boss1State extends PlayState
 						else
 						{
 							planeBoss.setAttack(0);
-							step = 3;
+							step = 4;
 							count = 0;
 						}
 						break;
@@ -487,37 +526,7 @@ public class Boss1State extends PlayState
 					break;
 
 					//Plane flies from right to middle low enough for player to jump on cockpit
-				case 3:
-					if(enemies.size() == 1 && count == 0)
-					{
-						Walker en = new Walker(-400, 100, tileMap, player);
-						en.setWind(6, 0, true);
-						enemies.add(en);
-						count++;
-					}
-					else if(enemies.size() == 2 && count == 1)
-					{
-						Walker en = new Walker(-100, 0, tileMap, player);
-						en.setWind(6, 0, true);
-						enemies.add(en);
-						count++;
-					}
-					else if(enemies.size() == 1)
-					{
-						player.hidePlayerBanner();
-						step = 4;
-						count = 0;
-					}	
-					
-					elapsed = (System.currentTimeMillis() - timer);
-					if(8000 <= elapsed)
-					{
-						planeBoss.setMoveComplete(false);
-						step = 4;
-						count = 0;
-						timer = System.currentTimeMillis();
-					}
-					break;
+				
 				case 4:
 					if(planeBoss.getMoveComplete() == false)
 						planeBoss.setMovement(1200, 200, 2, 0);
