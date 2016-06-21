@@ -92,7 +92,7 @@ public class Player extends MapObject
 
 	private boolean invincible;
 
-	private Date fireDelay;
+	private int fireDelay;
 	
 	//animation actions
 	public static final int IDLE = 0;
