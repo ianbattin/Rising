@@ -505,7 +505,7 @@ public class PlaneBoss extends Enemy {
 			}
 		}
 		//Lots of exploding bullets - no damage
-		if(typeAttack == 5)
+		else if(typeAttack == 5)
 		{
 			attacking = true;
 			for(Tile t: tileMap.getTiles())
@@ -542,7 +542,7 @@ public class PlaneBoss extends Enemy {
 			attacking = false;
 		}
 		//Lots of exploding bullets
-		if(typeAttack == 1)
+		else if(typeAttack == 1)
 		{
 			attacking = true;
 			for(Tile t: tileMap.getTiles())
@@ -959,6 +959,7 @@ public class PlaneBoss extends Enemy {
 	{
 		this.bombAttack = true;
 		bombTimer = System.currentTimeMillis();
+		typeAttack = 100;
 	}
 
 }

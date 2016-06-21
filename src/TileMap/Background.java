@@ -56,7 +56,8 @@ public class Background
 				(new Color(209, 146, 21).getRGB()),
 				(new Color(165, 159, 128).getRGB()),
 				(new Color(171, 154, 90).getRGB()),
-				(new Color(142, 117, 73).getRGB())
+				(new Color(142, 117, 73).getRGB()),
+				(new Color(48, 42, 41).getRGB())
 			});
 			moveScale = ms;
 		}

@@ -948,7 +948,6 @@ public class Player extends MapObject
 				animation.setDone(true);
 				animation.setDelay(150);
 			}
-			
 		}
 		
 		if (isFlashing)	

@@ -581,7 +581,7 @@ public class Boss1State extends PlayState
 							} 
 							else
 							{
-								planeBoss.setMovement(400-planeBoss.getCWidth()/2, 500, 1, 4);
+								planeBoss.setMovement(400-planeBoss.getCWidth()/2, 500, 1, 0);
 								//planeBoss.setDrawArrow(true, PlaneBoss.COCKPIT);
 							}
 							planeBoss.setMoveComplete(false);
