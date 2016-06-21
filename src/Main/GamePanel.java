@@ -9,8 +9,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.PrintStream;
 import java.awt.Toolkit;
+import java.util.Calendar;
+import java.util.Date;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import GameState.GameStateManager;
@@ -97,60 +102,89 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 		 * 60 FPS, it tells the program to just pause for some time
 		 * so we get consistent FPS, or however fast we can get.
 		 */
-		while(running)
+		try
 		{
-			startTime = System.nanoTime(); //gets current time in nano seconds
-			
-			//every time this runs, the game will do these three things
-			gameUpdate(); //
-			gameRender();
-			gameDrawToScreen();
-
-			int maxFrameCount = FPS;
-			long targetTime = 1000 / FPS;
-			URDTimeMillis = (System.nanoTime() - startTime) / 1000000;
-			waitTime = targetTime - URDTimeMillis;
-			
+		
+			while(running)
+			{
+				startTime = System.nanoTime(); //gets current time in nano seconds
+				
+				//every time this runs, the game will do these three things
+				gameUpdate(); //
+				gameRender();
+				gameDrawToScreen();
+	
+				int maxFrameCount = FPS;
+				long targetTime = 1000 / FPS;
+				URDTimeMillis = (System.nanoTime() - startTime) / 1000000;
+				waitTime = targetTime - URDTimeMillis;
+				
+				try
+				{
+					if(waitTime < 0) waitTime = 0;
+					Thread.sleep(waitTime);
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+				
+				totalTime += System.nanoTime() - startTime;
+				elapsedTime += System.nanoTime() - startTime - elapsedTime;
+				frameCount++;
+				if(frameCount == maxFrameCount)
+				{
+					averageFPS = 1000.0 / ((totalTime / frameCount) / 1000000.0);
+					frameCount = 0;
+					totalTime = 0;
+				}
+				
+				if(!Main.window.isFocused() && gsm.getCurrentState() > GameStateManager.INTROSTATE && gsm.getCurrentState() < GameStateManager.OUTROSTATE)
+				{
+					gsm.keyPressed(KeyEvent.VK_ESCAPE);
+					gsm.keyReleased(KeyEvent.VK_ESCAPE);
+				}
+				if (modifiedDimensions)
+				{
+					WIDTHSCALED = (int)(WIDTH*scaleWidth);
+					HEIGHTSCALED = (int)(HEIGHT*scaleHeight);
+					
+					setPreferredSize(new Dimension((int)(WIDTH*scaleWidth), (int)(HEIGHT*scaleHeight)));
+					Main.window.pack();
+					removeKeyListener(this);
+					removeMouseListener(this);
+					removeMouseMotionListener(this);
+					
+					init();
+					modifiedDimensions = false;
+				}
+				
+			}
+		
+		}		
+		catch (Exception e)
+		{
+			File crashReportFile = new File("MMIPCrashReport[" +Calendar.getInstance().get(Calendar.HOUR)+";"+Calendar.getInstance().get(Calendar.MINUTE)+"]"+ (Calendar.getInstance().get(Calendar.MONTH)+1) +"_"+Calendar.getInstance().get(Calendar.DAY_OF_MONTH)+"_"+Calendar.getInstance().get(Calendar.YEAR)+".txt");
+			String message = "Oops, it looks like the game crashed!\n\nIf you want to report this error to the developers, please send us the file\n"+ crashReportFile.getAbsolutePath() +"\n\nTechnical Details\nException message: " + e.getMessage();
+			for(StackTraceElement elem : e.getStackTrace())
+			{
+				message += "\n" + elem.toString();
+			}
 			try
 			{
-				if(waitTime < 0) waitTime = 0;
-				Thread.sleep(waitTime);
+				PrintStream ps = new PrintStream(crashReportFile);
+				ps.println(message);
+				ps.println("\n\nMeet Me In Paris game\nCrash timestamp: " + new Date().toString());
+				ps.close();
 			}
-			catch(Exception e)
+			catch(Exception err)
 			{
-				e.printStackTrace();
+				System.out.println(err.toString());
 			}
 			
-			totalTime += System.nanoTime() - startTime;
-			elapsedTime += System.nanoTime() - startTime - elapsedTime;
-			frameCount++;
-			if(frameCount == maxFrameCount)
-			{
-				averageFPS = 1000.0 / ((totalTime / frameCount) / 1000000.0);
-				frameCount = 0;
-				totalTime = 0;
-			}
+			JOptionPane.showMessageDialog(null, message, "Game Crashed Report", JOptionPane.ERROR_MESSAGE);
 			
-			if(!Main.window.isFocused() && gsm.getCurrentState() > GameStateManager.INTROSTATE && gsm.getCurrentState() < GameStateManager.OUTROSTATE)
-			{
-				gsm.keyPressed(KeyEvent.VK_ESCAPE);
-				gsm.keyReleased(KeyEvent.VK_ESCAPE);
-			}
-			if (modifiedDimensions)
-			{
-				WIDTHSCALED = (int)(WIDTH*scaleWidth);
-				HEIGHTSCALED = (int)(HEIGHT*scaleHeight);
-				
-				setPreferredSize(new Dimension((int)(WIDTH*scaleWidth), (int)(HEIGHT*scaleHeight)));
-				Main.window.pack();
-				removeKeyListener(this);
-				removeMouseListener(this);
-				removeMouseMotionListener(this);
-				
-				init();
-				modifiedDimensions = false;
-			}
-			
+			System.exit(0);
 		}
 	}
 	
