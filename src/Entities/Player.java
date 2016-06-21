@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -90,6 +91,8 @@ public class Player extends MapObject
 	private long timer;
 
 	private boolean invincible;
+
+	private Date fireDelay;
 	
 	//animation actions
 	public static final int IDLE = 0;
@@ -119,6 +122,8 @@ public class Player extends MapObject
 		
 		recoverLength = 3000;
 		coolDownTime = 0;
+		
+		fireDelay = 75;
 		
 		moveSpeedLeft = 0.3;
 		moveSpeedRight = 0.3;
@@ -604,7 +609,7 @@ public class Player extends MapObject
 					//if(ammoCount <= 0) hasGun = false;
 				}
 				
-			}, 150);
+			}, fireDelay);
 			new Timer().schedule(new TimerTask()
 			{
 				public void run()
