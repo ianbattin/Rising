@@ -454,7 +454,7 @@ public class Level1State extends PlayState
 		{
 			start = false;
 		}
-		if(k == KeyEvent.VK_N)
+		/*if(k == KeyEvent.VK_N)
 		{
 			gsm.setState(GameStateManager.BOSS1STATE);
 			gsm.resetState(GameStateManager.LEVEL1STATE);
@@ -462,7 +462,7 @@ public class Level1State extends PlayState
 		if(k == KeyEvent.VK_L)
 		{
 			mapObjects.add(new Projectile(400, 100, 45, 7, tileMap));
-		}
+		}*/
 	}
 
 	public void keyReleased(int k) 

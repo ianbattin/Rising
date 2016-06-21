@@ -638,6 +638,7 @@ public class Boss1State extends PlayState
 			{
 			case 1:
 				player.setBannerColor(Color.WHITE);
+				player.setInvincible(true);
 				player.setPlayerBannerText("Grab the Parachute!");
 				//player.setSlowTime(true);
 				slowTimeStart();

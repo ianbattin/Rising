@@ -88,6 +88,8 @@ public class Player extends MapObject
 	private boolean midAir;
 
 	private long timer;
+
+	private boolean invincible;
 	
 	//animation actions
 	public static final int IDLE = 0;
@@ -299,6 +301,8 @@ public class Player extends MapObject
 		charBlurPos = new ArrayList<Integer>();
 		backupFont = new Font("Times", Font.PLAIN, 20);
 		bannerFont = new Font("Munro", Font.PLAIN, 20);	
+		
+		invincible = false;
 	}
 	
 	public void update()
@@ -1035,49 +1039,52 @@ public class Player extends MapObject
 	}
 	public void playerHurt(int amount)
 	{
-		if(recovering)
+		if(!invincible)
 		{
-			long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
-			if(recoverLength <= elapsed)
+			if(recovering)
 			{
-				recovering = false;
-			}
-		}
-		else
-		{
-			if (hasArmor) 
-			{
-				armorBoostHealth -= amount;
-				if(armorBoostHealth < 0)
+				long elapsed = (System.nanoTime() - recoverTimer) / 1000000;
+				if(recoverLength <= elapsed)
 				{
-					health += armorBoostHealth;
+					recovering = false;
 				}
-				recovering = true;
-				recoverTimer = System.nanoTime();
-				numOfFramesToAnimHealth = 0;
-				if(armorBoostHealth == 0)
-					hasArmor = false;
 			}
 			else
 			{
-				health -= amount;
-				dy = -2.0;
-				if(dx >= 0) dx = -2.0;
-				else dx = 2.0;
-				recovering = true;
-				numOfFramesToAnimHealth = 0;
-				if(health > 0)
+				if (hasArmor) 
+				{
+					armorBoostHealth -= amount;
+					if(armorBoostHealth < 0)
+					{
+						health += armorBoostHealth;
+					}
+					recovering = true;
 					recoverTimer = System.nanoTime();
+					numOfFramesToAnimHealth = 0;
+					if(armorBoostHealth == 0)
+						hasArmor = false;
+				}
 				else
 				{
-					numOfFramesToAnimHealth = -500;
-					recoverTimer = System.nanoTime();
+					health -= amount;
+					dy = -2.0;
+					if(dx >= 0) dx = -2.0;
+					else dx = 2.0;
+					recovering = true;
+					numOfFramesToAnimHealth = 0;
+					if(health > 0)
+						recoverTimer = System.nanoTime();
+					else
+					{
+						numOfFramesToAnimHealth = -500;
+						recoverTimer = System.nanoTime();
+					}
 				}
+				if(health > 0)
+					SoundPlayer.playClip("hurt.wav");
+				else
+					SoundPlayer.playClip("dies.wav");
 			}
-			if(health > 0)
-				SoundPlayer.playClip("hurt.wav");
-			else
-				SoundPlayer.playClip("dies.wav");
 		}
 	}
 		
@@ -1342,9 +1349,9 @@ public class Player extends MapObject
 			}
 			if(k == GameStateManager.down)
 			{
-				falling = true;
-				drop = true;
-				idle = false;
+				//falling = true;
+				//drop = true;
+				//idle = false;
 			}
 			if(k == GameStateManager.left)
 			{
@@ -1392,7 +1399,7 @@ public class Player extends MapObject
 					}
 				}
 			}
-			if(k == KeyEvent.VK_T)
+			/*if(k == KeyEvent.VK_T)
 			{
 				if(tileMap.getShowCollisonBox())
 				{
@@ -1400,8 +1407,7 @@ public class Player extends MapObject
 				}
 				else
 					tileMap.setShowCollisonBox(true);
-			}
-			
+			}*/
 		}
 	}
 	
@@ -1491,6 +1497,11 @@ public class Player extends MapObject
 	public double getTotalHeight() 
 	{
 		return yFromBottom;
+	}
+	
+	public void setInvincible(boolean b)
+	{
+		invincible = b;
 	}
 	
 	public boolean onScreen()
