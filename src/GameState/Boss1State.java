@@ -70,7 +70,12 @@ public class Boss1State extends PlayState
 		player.setTileMap(tileMap);
 		player.updateTileMap(tileMap);
 		player.setPlayState(this);
-		if(player.getHealth() <= 0) { player = new Player(tileMap, this); }
+		//if the player is continuing from the boss stage
+		if(player.getHealth() <= 0) 
+		{ 
+			player = new Player(tileMap, this); 
+			score = 0;
+		}
 		
 		((OutroState)gsm.getState(GameStateManager.OUTROSTATE)).setLevel(GameStateManager.BOSS1STATE);
 
@@ -460,7 +465,6 @@ public class Boss1State extends PlayState
 					elapsed = (System.currentTimeMillis() - timer);
 					if(10000 <= elapsed)
 					{
-						System.out.println("Worked");
 						planeBoss.setMoveComplete(false);
 						step = 3;
 						count = 0;
@@ -703,7 +707,7 @@ public class Boss1State extends PlayState
 	{
 		player.keyPressed(k);
 
-		if(k == GameStateManager.reset)
+		if(k == GameStateManager.reset && !start)
 		{
 			gsm.setState(GameStateManager.MENUSTATE);
 			gsm.resetState(GameStateManager.BOSS1STATE);

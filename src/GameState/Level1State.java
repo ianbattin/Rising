@@ -445,7 +445,7 @@ public class Level1State extends PlayState
 				}
 			}*/
 		}
-		if(k == GameStateManager.reset)
+		if(k == GameStateManager.reset && !start)
 		{
 			gsm.setState(GameStateManager.MENUSTATE);
 			gsm.resetState(GameStateManager.LEVEL1STATE);
