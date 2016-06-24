@@ -16,6 +16,7 @@ public class TransitionState extends GameState {
 	
 	private long timer, coolDownTimer;
 	private int currFrame, totalFrames;
+	private boolean keyReleased;
 	
 	private Font scoreFont = new Font("Munro", Font.BOLD, 30);
 	
@@ -27,6 +28,7 @@ public class TransitionState extends GameState {
 		this.gsm = gsm;
 		this.path = path;
 		
+		keyReleased = false;
 		coolDownTimer = 0;
 		timer = 0;
 		currFrame = 1; //set the starting frame number.
@@ -164,16 +166,16 @@ public class TransitionState extends GameState {
 					gsm.setState(GameStateManager.LEVEL1STATE);
 					gsm.resetState(GameStateManager.INTROSTATE);
 				}
-				if(currFrame < totalFrames)
+				if(currFrame < totalFrames && keyReleased)
 				{
+					keyReleased = false;
 					timer += timeModifierToUse[currFrame-1]*1000000000.0;
 				}
-				else
+				else if (currFrame == totalFrames)
 				{
 					gsm.setState(GameStateManager.LEVEL1STATE);
 					gsm.resetState(GameStateManager.INTROSTATE);
-				}
-				coolDownTimer = System.currentTimeMillis();
+				}	
 			} 
 			if (k == GameStateManager.reset)
 			{
@@ -190,11 +192,12 @@ public class TransitionState extends GameState {
 					gsm.setState(GameStateManager.BOSS1STATE);
 					gsm.resetState(GameStateManager.TRANSITION_INTERLUDESTATE1);
 				}
-				if(currFrame < totalFrames)
+				if(currFrame < totalFrames && keyReleased)
 				{
+					keyReleased = false;
 					timer += timeModifierToUse[currFrame-1]*1000000000.0;
 				}
-				else
+				else if (currFrame == totalFrames)
 				{
 					gsm.setState(GameStateManager.BOSS1STATE);
 					gsm.resetState(GameStateManager.TRANSITION_INTERLUDESTATE1);
@@ -216,11 +219,12 @@ public class TransitionState extends GameState {
 					gsm.setState(GameStateManager.MENUSTATE);
 					gsm.resetState(GameStateManager.WINSTATE);
 				}
-				if(currFrame < totalFrames)
+				if(currFrame < totalFrames && keyReleased)
 				{
+					keyReleased = false;
 					timer += timeModifierToUse[currFrame-1]*1000000000.0;
 				}
-				else
+				else if (currFrame == totalFrames)
 				{
 					gsm.setState(GameStateManager.MENUSTATE);
 					gsm.resetState(GameStateManager.WINSTATE);
@@ -237,6 +241,11 @@ public class TransitionState extends GameState {
 		
 	public void keyReleased(int k) 
 	{
+		if(k == GameStateManager.select)
+		{
+			coolDownTimer = System.currentTimeMillis();
+			keyReleased = true;
+		}
 	}
 
 	@Override
