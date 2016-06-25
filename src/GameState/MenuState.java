@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import Main.GamePanel;
 import Main.SoundPlayer;
@@ -176,7 +178,13 @@ public class MenuState extends GameState
 		}
 		if(currentChoice == 3)
 		{
-			System.exit(0);
+			new Timer().schedule(new TimerTask()
+			{
+				public void run()
+				{
+					System.exit(0);		
+				}
+			}, 200);
 		}
 	}
 	
@@ -187,7 +195,7 @@ public class MenuState extends GameState
 		{
 			select();
 		} 
-		else if (k == GameStateManager.select)
+		else if (k == GameStateManager.select && currentChoice == 0)
 		{
 			gsm.setState(GameStateManager.INTROSTATE);
 			gsm.resetState(GameStateManager.MENUSTATE);
@@ -230,7 +238,10 @@ public class MenuState extends GameState
 
 	public void keyReleased(int k) 
 	{
-
+		if(k == GameStateManager.select && currentChoice == 3)
+		{
+			System.exit(0);
+		}
 	}
 
 	@Override
