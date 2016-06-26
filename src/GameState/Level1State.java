@@ -326,14 +326,14 @@ public class Level1State extends PlayState
 	//update and draw the debris
 	public void debris(Graphics2D g)
 	{
+		int xLoc = (int)((player.getX()+player.getWidth()/2));
+		int yLoc = (int)((player.getY()+player.getCHeight()+1));
 		int highestLoc = debrisInfo[0][1];
 		for(int[] array : debrisInfo)
 		{
 			if(array[1] > 0 && array[1] < GamePanel.HEIGHT)
 			{
-				int xLoc = (int)((player.getX()+player.getWidth()/2));
-				int yLoc = (int)((player.getY()+player.getCHeight()+1));
-				if ((xLoc > array[0] + array[2]+10 || xLoc < array[0]-10) || (yLoc > array[1] + (int)(array[2]*2.25) + 10 || yLoc < array[1] - 10))
+				if ((xLoc > array[0] + array[2]+10 || xLoc < array[0]-10) || (yLoc > array[1] + 10 || yLoc < array[1] - 10))
 				{
 					g.setColor(colors.get(array[3]));
 					g.fillRect(array[0], array[1], array[2], (int)(array[2]*2.25));
@@ -350,26 +350,32 @@ public class Level1State extends PlayState
 		if (highestLoc > GamePanel.HEIGHT)
 		{
 			debrisAlternator = !debrisAlternator;
-			for (int[] array : debrisInfo)
-			{
-				array[0] = (int)(Math.random()*GamePanel.WIDTH);
-				array[1] = -2000 + (int)((Math.random()*2000)-1000);
-				array[2] = (int)(Math.random()*5)+2;
-				array[3] = (int)(Math.random()*130);
-			}
+			
+			new Thread(new Runnable(){
+				public void run()
+				{
+					for (int[] array : debrisInfo)
+					{
+						array[0] = (int)(Math.random()*GamePanel.WIDTH);
+						array[1] = -2000 + (int)((Math.random()*2000)-1000);
+						array[2] = (int)(Math.random()*5)+2;
+						array[3] = (int)(Math.random()*130);
+					}
+				}
+			}).start();
 		}
 	}
 	
 	public void smallDebris(Graphics2D g)
 	{
+		int xLoc = (int)((player.getX()+player.getWidth()/2));
+		int yLoc = (int)((player.getY()+player.getCHeight()+1));
 		int highestLoc = smallDebrisInfo[0][1];
 		for(int array[] : smallDebrisInfo)
 		{
 			if(array[1] > 0 && array[1] < GamePanel.HEIGHT)
 			{
-				int xLoc = (int)((player.getX()+player.getWidth()/2));
-				int yLoc = (int)((player.getY()+player.getCHeight()+1));
-				if ((xLoc > array[0] + (int)(array[2]*0.75) + 10 || xLoc < array[0]-10) || (yLoc > array[1] + (int)(array[2]*2.25) + 10 || yLoc < array[1] - 10))
+				if ((xLoc > array[0] + (int)(array[2]*0.75) + 10 || xLoc < array[0]-10) || (yLoc > array[1] + 10 || yLoc < array[1] - 10))
 				{
 					g.setColor(colors.get(array[3]));
 					g.fillRect(array[0], array[1], (int)(array[2]*0.75), (int)(array[2]*2.25));
@@ -387,13 +393,18 @@ public class Level1State extends PlayState
 		if (highestLoc > GamePanel.HEIGHT)
 		{
 			debrisAlternator = !debrisAlternator;
-			for(int[] array : smallDebrisInfo)
-			{
-				array[0] = (int)(Math.random()*GamePanel.WIDTH);
-				array[1] = -2000 + (int)((Math.random()*2000)-1000);
-				array[2] = (int)(Math.random()*5)+2;
-				array[3] = (int)(Math.random()*130);
-			}
+			new Thread(new Runnable(){
+				public void run()
+				{
+					for(int[] array : smallDebrisInfo)
+					{
+						array[0] = (int)(Math.random()*GamePanel.WIDTH);
+						array[1] = -2000 + (int)((Math.random()*2000)-1000);
+						array[2] = (int)(Math.random()*5)+2;
+						array[3] = (int)(Math.random()*130);
+					}
+				}
+			}).start();
 		}
 	}
 	

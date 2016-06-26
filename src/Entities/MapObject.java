@@ -197,7 +197,11 @@ public abstract class MapObject
 						while(!bgColors.contains(openColor))
 						{
 							newY--;
-							openColor = GamePanel.getImage().getRGB(yCol, newY);
+							if(newY < 0)
+							{
+								return;
+							}
+							openColor = GamePanel.getImage().getRGB(xCol, newY);
 						}
 						
 						y = (newY - cheight)*1/GamePanel.scaleHeight + (cheight/GamePanel.scaleHeight - cheight) + 1;

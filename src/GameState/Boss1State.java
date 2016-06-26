@@ -462,16 +462,30 @@ public class Boss1State extends PlayState
 						en.setWind(6, 0, true);
 						enemies.add(en);
 						count++;
+						timer = System.currentTimeMillis();
 					}
-					else if(enemies.size() == 1 && count == 2)
+					else if(count == 2)
 					{
-						player.hidePlayerBanner();
-						step = 3;
-						count = 0;
+						boolean walkersPresent = false;
+						for(Enemy en : enemies)
+						{
+							if(en instanceof Walker) 
+							{
+								System.out.println(en);
+								walkersPresent = true;
+								break;
+							}
+						}
+						if(!walkersPresent)
+						{
+							player.hidePlayerBanner();
+							step = 3;
+							count = 0;
+						}
 					}	
 					
 					elapsed = (System.currentTimeMillis() - timer);
-					if(8000 <= elapsed)
+					if(8000 <= elapsed && count == 2)
 					{
 						planeBoss.setMoveComplete(false);
 						step = 3;
@@ -631,7 +645,7 @@ public class Boss1State extends PlayState
 		{
 			for(Enemy e: enemies)
 			{
-				e.playerHurt(1000, false);
+				e.playerHurt(1000, true);
 			}
 			long elapsed2 = System.currentTimeMillis() - timer;
 			if(5000 <= elapsed2)
