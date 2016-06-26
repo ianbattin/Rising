@@ -89,7 +89,7 @@ public class SmallStuka extends MapObject
 	//Do anything before starting to show the stuka on the screen
 	public void init()
 	{
-		SoundPlayer.playClipWithVolume("stukaDiving.wav", 1);
+		SoundPlayer.playClip("Stukadiving.wav");
 	}
 	
 	@Override

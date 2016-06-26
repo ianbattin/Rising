@@ -71,6 +71,7 @@ public class SoundPlayer implements LineListener, Runnable
 		}
 	}
 	
+	 
 	/**
 	 * To be used to play short sound clips. This method is static, and does not need a SoundPlayer object.
 	 * Allows for a clip to be played at a specified volume
@@ -78,6 +79,7 @@ public class SoundPlayer implements LineListener, Runnable
 	 * @param fileName String representation of the file name (located in the Resources/Sound folder)
 	 * @param volume Double representation of the volume the clip is to be played at (volume <= 1.0 && volume >= 0.0)
 	 */
+	/* APPEARS TO BE BUGGY IN THE JAR FILE
 	public static void playClipWithVolume(String fileName, double volume)
 	{
 		try
@@ -92,6 +94,7 @@ public class SoundPlayer implements LineListener, Runnable
 			System.out.println(e.toString());
 		}
 	}
+	*/
 
 	/**
 	 * To be used to play longer music, such as background theme songs, or other longer songs. This spawns a new thread to play in the background.
