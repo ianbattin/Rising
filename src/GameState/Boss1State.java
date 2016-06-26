@@ -54,6 +54,7 @@ public class Boss1State extends PlayState
 
 		this.gsm = gsm;
 		start = true;
+		ending = false;
 		deathTimer = 0;
 
 		super.isFadingIn = true;
