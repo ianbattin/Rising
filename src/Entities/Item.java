@@ -12,6 +12,7 @@ import TileMap.TileMap;
 public class Item extends MapObject
 {
 	private boolean physics;
+	private boolean itemDraw;
 
 	private ArrayList<BufferedImage[]> entitySprites;
 
@@ -35,6 +36,7 @@ public class Item extends MapObject
 		fallSpeed = 0.25;
 		maxFallSpeed = 5.0;
 		
+		itemDraw = true;
 		this.physics = physics;
 		
 		try
@@ -73,13 +75,16 @@ public class Item extends MapObject
 	@Override
 	public void draw(Graphics2D g) 
 	{
-		if(facingRight)
+		if(itemDraw)
 		{
-			g.drawImage(animation.getImage(), (int)(x + xmap), (int)(y + ymap), width, height, null);
-		}
-		else
-		{
-			g.drawImage(animation.getImage(), (int)(x + xmap) + width, (int)(y + ymap), -width, height, null);
+			if(facingRight)
+			{
+				g.drawImage(animation.getImage(), (int)(x + xmap), (int)(y + ymap), width, height, null);
+			}
+			else
+			{
+				g.drawImage(animation.getImage(), (int)(x + xmap) + width, (int)(y + ymap), -width, height, null);
+			}
 		}
 	}
 
@@ -101,6 +106,16 @@ public class Item extends MapObject
 		y += dy*Enemy.slowDown;
 	}
 
+	public void setDraw(boolean b)
+	{
+		itemDraw = b;
+	}
+	
+	public boolean getDraw()
+	{
+		return itemDraw;
+	}
+	
 	private void getAttack() {
 		// TODO Auto-generated method stub
 		

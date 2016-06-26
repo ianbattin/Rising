@@ -152,7 +152,7 @@ public class Jetpacker extends Enemy
 		x += tileMap.getDX();
 		y += tileMap.getDY()/2;
 		
-		if (y > GamePanel.HEIGHT + 400)
+		if (y > GamePanel.HEIGHT + 200)
 		{
 			//remove enemy as it is too low
 			this.remove = true;

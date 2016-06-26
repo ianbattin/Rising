@@ -28,7 +28,7 @@ public class TransitionState extends GameState {
 		this.gsm = gsm;
 		this.path = path;
 		
-		keyReleased = false;
+		keyReleased = true;
 		coolDownTimer = 0;
 		timer = 0;
 		currFrame = 1; //set the starting frame number.

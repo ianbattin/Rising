@@ -191,13 +191,13 @@ public abstract class MapObject
 				if(collided)
 				{
 					if(!bgColors.contains(otherColor))
-					{
+					{						
 						int openColor = GamePanel.getImage().getRGB(xCol, yCol);
 						int newY = yCol;
 						while(!bgColors.contains(openColor))
 						{
 							newY--;
-							openColor = GamePanel.getImage().getRGB(xCol, newY);
+							openColor = GamePanel.getImage().getRGB(yCol, newY);
 						}
 						
 						y = (newY - cheight)*1/GamePanel.scaleHeight + (cheight/GamePanel.scaleHeight - cheight) + 1;

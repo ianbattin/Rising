@@ -320,6 +320,6 @@ public class Explosion extends MapObject
 	@Override
 	public void collided(MapObject m) 
 	{
-		m.playerHurt(20, false);
+		
 	}
 }

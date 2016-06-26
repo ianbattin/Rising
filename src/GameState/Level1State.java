@@ -235,6 +235,7 @@ public class Level1State extends PlayState
 					PlaneBoss p = new PlaneBoss(2000, 200, tileMap, player, 1);
 					p.setX(1000);
 					p.setY(100);
+					p.setCockpitCollision(false);
 					enemies.add(p);
 				}
 				else if(enemies.size() == 1 && enemies.get(0) instanceof PlaneBoss && ((PlaneBoss)enemies.get(0)).getMoveComplete() == false)
@@ -454,7 +455,8 @@ public class Level1State extends PlayState
 		{
 			start = false;
 		}
-		/*if(k == KeyEvent.VK_N)
+		/*
+		if(k == KeyEvent.VK_N)
 		{
 			gsm.setState(GameStateManager.BOSS1STATE);
 			gsm.resetState(GameStateManager.LEVEL1STATE);
@@ -462,7 +464,8 @@ public class Level1State extends PlayState
 		if(k == KeyEvent.VK_L)
 		{
 			mapObjects.add(new Projectile(400, 100, 45, 7, tileMap));
-		}*/
+		}
+		*/
 	}
 
 	public void keyReleased(int k) 

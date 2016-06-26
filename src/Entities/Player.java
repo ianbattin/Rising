@@ -1460,6 +1460,9 @@ public class Player extends MapObject
 			if(m.getType() == 0 && m.getDY() > 0)
 			{
 				ending = true;
+				((Item)m).setDraw(false);
+				this.setMaxSpeedX(0.5);
+				this.setMaxSpeedX(0.5);
 			}
 		}
 	}

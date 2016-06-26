@@ -385,6 +385,15 @@ public class Boss1State extends PlayState
 				{
 				//Plane flies left to right at 1 speed and drops off 3 paratroopers
 				case 0:
+					//remove walkers??
+					for(Enemy e: enemies)
+					{
+						if(e instanceof Walker)
+						{
+							e.setDown(true);
+						}
+					}
+					
 					if(count == 0)
 					{
 						Jetpacker e = new Jetpacker(-200-(int)(Math.random()*100), -50 + (Math.random()*400), tileMap, player);
@@ -417,15 +426,13 @@ public class Boss1State extends PlayState
 					}
 					
 					long elapsed = (System.currentTimeMillis() - timer);
-					if(10000 <= elapsed)
+					if(12000 <= elapsed)
 					{
 						planeBoss.setMoveComplete(false);
 						step = 1;
 						count = 0;
 						player.hidePlayerBanner();
 						timer = System.currentTimeMillis();
-						for(int i = enemies.size() - 1; i > 1; i--)
-							enemies.remove(i);
 					}
 					break;
 				case 1:
@@ -463,7 +470,7 @@ public class Boss1State extends PlayState
 					}	
 					
 					elapsed = (System.currentTimeMillis() - timer);
-					if(10000 <= elapsed)
+					if(8000 <= elapsed)
 					{
 						planeBoss.setMoveComplete(false);
 						step = 3;
@@ -649,7 +656,7 @@ public class Boss1State extends PlayState
 				step = 2;
 				break;
 			case 2:
-				mapObjects.add(new Explosion(170, GamePanel.HEIGHT - 120, 3, 0, tileMap));
+				mapObjects.add(new Explosion(170, GamePanel.HEIGHT - 120, Explosion.NORMAL_EXPLOSION_NO_TILE_DAMAGE, 0, tileMap));
 				tileMap.setTiles(new int[][]{
 					{6, 27, 654},
 					{7, 27, 655},
@@ -668,7 +675,7 @@ public class Boss1State extends PlayState
 				long elapsed = System.currentTimeMillis() - timer;
 				if(250+Math.random()*250 <= elapsed)
 				{
-					mapObjects.add(new Explosion(120 + Math.random()*80, GamePanel.HEIGHT - 100, 3, 0, tileMap));
+					mapObjects.add(new Explosion(120 + Math.random()*80, GamePanel.HEIGHT - 100, Explosion.NORMAL_EXPLOSION_NO_TILE_DAMAGE, 0, tileMap));
 					timer = System.currentTimeMillis();
 				}
 				break;
