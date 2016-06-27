@@ -471,7 +471,6 @@ public class Boss1State extends PlayState
 						{
 							if(en instanceof Walker) 
 							{
-								System.out.println(en);
 								walkersPresent = true;
 								break;
 							}

@@ -242,9 +242,15 @@ public class Walker extends Enemy
 		
 		if (player.getY() < this.getY()+150 && player.getY() > this.getY()-100 && !(player.getX() < this.getX()+ 20 && player.getX() > this.getX()-20))
 		{
-			right = canGoRight() && this.facingRight;
-			left = canGoLeft() && !this.facingRight;
-			idle = false;
+			new Thread(new Runnable()
+			{
+				public void run()
+				{
+					right = canGoRight() && facingRight;
+					left = canGoLeft() && !facingRight;
+					idle = false;
+				}
+			}).start();
 		}
 		else
 		{
