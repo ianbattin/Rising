@@ -1140,13 +1140,22 @@ public class Player extends MapObject
 	//resets the effects
 	public void resetEffects()
 	{
-		playState.slowTimeEnd();
+		if(slowTime) 
+		{
+			playState.slowTimeEnd();
+			slowTime = false;
+			charBlurPos = new ArrayList<Integer>();
+		}
+		if(canGlide)
+		{
+			canGlide = gliding = false;
+			jumpHeightFactor = 1;
+		}
+		if(healthPos != 0)
+		{
+			healthPos = 0;
+		}
 		isUnderEffect = false;
-		slowTime = false;
-		canGlide = gliding = false;
-		charBlurPos = new ArrayList<Integer>();
-		jumpHeightFactor = 1;
-		healthPos = 0;
 	}
 	
 	public void drawEffects(Graphics2D g)
@@ -1462,7 +1471,7 @@ public class Player extends MapObject
 				ending = true;
 				((Item)m).setDraw(false);
 				this.setMaxSpeedX(0.5);
-				this.setMaxSpeedX(0.5);
+				this.setMaxSpeedY(0.5);
 			}
 		}
 	}

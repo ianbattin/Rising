@@ -184,7 +184,7 @@ public class MenuState extends GameState
 				{
 					System.exit(0);		
 				}
-			}, 200);
+			}, 500);
 		}
 	}
 	

@@ -5,8 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import Entities.Walker;
 import Entities.Enemy;
@@ -119,6 +117,7 @@ public class Boss1State extends PlayState
 		player.setCanMove(false);
 		player.hidePlayerBanner();
 		player.doIntroFrame(false, false);
+		this.slowTimeEnd();
 	}
 
 	public void update()
@@ -701,14 +700,10 @@ public class Boss1State extends PlayState
 			super.isFadingOut = true;
 			SoundPlayer.animVolume(-40.0F);
 			super.fadeOut(500000000, Color.WHITE, 10, gsm, GameStateManager.BOSS1STATE, GameStateManager.WINSTATE);
-			new Timer().schedule(new TimerTask()
+			if(super.alphaLevel >= 255)
 			{
-				public void run()
-				{	
-					slowTimeEnd();
-				}
-				
-			}, 2000);
+				slowTimeEnd();
+			}
 		}
 	}
 

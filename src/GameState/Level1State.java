@@ -125,6 +125,7 @@ public class Level1State extends PlayState
 			}, 10);
 		}
 		start = true;
+		this.slowTimeEnd();
 	}
 
 	public void update()
