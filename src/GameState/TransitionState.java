@@ -36,7 +36,7 @@ public class TransitionState extends GameState {
 		switch(path)
 		{
 			case "Intro":
-				timeModifierToUse = new int[] { 5, 6, 5, 5, 6, 5, 4, 5 };
+				timeModifierToUse = new int[] { 5, 5, 5, 5, 6, 5, 4, 5 };
 				totalFrames = 8;
 				break;
 			case "Interlude":

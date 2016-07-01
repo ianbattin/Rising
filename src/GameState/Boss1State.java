@@ -347,7 +347,7 @@ public class Boss1State extends PlayState
 							done = true;
 						}
 						long elapsed = (System.currentTimeMillis() - timer);
-						if(3000 <= elapsed)
+						if(2000 <= elapsed)
 						{
 							planeBoss.setMoveComplete(false);
 							done = false;
